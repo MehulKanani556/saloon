@@ -42,7 +42,7 @@ export default function Staff() {
       email: Yup.string().email('Invalid email').required('Required'),
       services: Yup.array().min(1, 'Select at least one ritual'),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       const formData = new FormData();
       formData.append('name', values.name);
       formData.append('email', values.email);
@@ -57,12 +57,16 @@ export default function Staff() {
         formData.append('profileImage', values.profileImage);
       }
 
-      if (selectedExpert) {
-        dispatch(updateStaffMember({ id: selectedExpert._id, staffMember: formData }));
-      } else {
-        dispatch(addStaff(formData));
+      try {
+        if (selectedExpert) {
+          await dispatch(updateStaffMember({ id: selectedExpert._id, staffMember: formData })).unwrap();
+        } else {
+          await dispatch(addStaff(formData)).unwrap();
+        }
+        handleCloseDrawer();
+      } catch (err) {
+        console.error('Expert setup failed:', err);
       }
-      handleCloseDrawer();
     }
   });
 
@@ -276,6 +280,7 @@ export default function Staff() {
                         className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/30 rounded-2xl px-6 py-5 text-sm font-bold outline-none transition-all dark:text-white shadow-inner"
                         placeholder="e.g. Master Barber"
                       />
+                      {formik.touched.name && formik.errors.name && <p className="text-red-500 text-[10px] font-bold ml-2 uppercase italic">{formik.errors.name}</p>}
                     </div>
 
                     <div className="space-y-4">
@@ -287,33 +292,49 @@ export default function Staff() {
                         className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/30 rounded-2xl px-6 py-5 text-sm font-bold outline-none transition-all dark:text-white shadow-inner"
                         placeholder="artisan@glowsaloon.com"
                       />
+                      {formik.touched.email && formik.errors.email && <p className="text-red-500 text-[10px] font-bold ml-2 uppercase italic">{formik.errors.email}</p>}
                     </div>
 
                     <div className="space-y-4">
                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Work Specializations</label>
-                      <div className="grid grid-cols-1 gap-3 max-h-[400px] overflow-y-auto pr-2">
-                        {services.map(s => (
-                          <label key={s._id} className={`flex items-center justify-between p-4 rounded-2xl cursor-pointer transition-all border-2 ${formik.values.services.includes(s._id) ? 'bg-saloon-50 border-saloon-500 text-saloon-700' : 'bg-slate-50 dark:bg-slate-800/80 border-transparent text-slate-400'}`}>
-                            <span className="text-xs font-black uppercase tracking-widest">{s.name}</span>
-                            <input
-                              type="checkbox"
-                              name="services"
-                              value={s._id}
-                              checked={formik.values.services.includes(s._id)}
-                              onChange={(e) => {
-                                const checked = e.target.checked;
-                                if (checked) {
-                                  formik.setFieldValue('services', [...formik.values.services, s._id]);
-                                } else {
-                                  formik.setFieldValue('services', formik.values.services.filter(id => id !== s._id));
-                                }
-                              }}
-                              className="hidden"
-                            />
-                            {formik.values.services.includes(s._id) && <Sparkles size={16} />}
-                          </label>
-                        ))}
+                      <div className="grid grid-cols-1 gap-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                        {services.length > 0 ? (
+                          services.map(s => (
+                            <label key={s._id} className={`flex items-center justify-between p-4 rounded-2xl cursor-pointer transition-all border-2 ${formik.values.services.includes(s._id) ? 'bg-saloon-50 border-saloon-500 text-saloon-700' : 'bg-slate-50 dark:bg-slate-800/80 border-transparent text-slate-400'}`}>
+                              <span className="text-xs font-black uppercase tracking-widest">{s.name}</span>
+                              <input
+                                type="checkbox"
+                                name="services"
+                                value={s._id}
+                                checked={formik.values.services.includes(s._id)}
+                                onChange={(e) => {
+                                  const checked = e.target.checked;
+                                  if (checked) {
+                                    formik.setFieldValue('services', [...formik.values.services, s._id]);
+                                  } else {
+                                    formik.setFieldValue('services', formik.values.services.filter(id => id !== s._id));
+                                  }
+                                }}
+                                className="hidden"
+                              />
+                              {formik.values.services.includes(s._id) && <Sparkles size={16} />}
+                            </label>
+                          ))
+                        ) : (
+                          <div className="p-8 border-2 border-dashed border-slate-100 dark:border-white/5 rounded-2xl text-center space-y-4 bg-slate-50/50 dark:bg-slate-800/30">
+                            <Star size={32} className="mx-auto text-saloon-400 opacity-30" />
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">No services found. <br />Please create services before onboarding experts.</p>
+                            <button
+                              type="button"
+                              onClick={() => { navigate('/services'); handleCloseDrawer(); }}
+                              className="text-[9px] font-black text-saloon-600 uppercase tracking-widest underline decoration-2 underline-offset-4"
+                            >
+                              Go to Services Protocol
+                            </button>
+                          </div>
+                        )}
                       </div>
+                      {formik.touched.services && formik.errors.services && <p className="text-red-500 text-[10px] font-bold ml-2 uppercase italic">{formik.errors.services}</p>}
                     </div>
 
                     <button
