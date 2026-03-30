@@ -190,7 +190,7 @@ const ServiceForm = ({ onClose, initialData }) => {
               <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Service Image</label>
               <div className="relative aspect-video rounded-2xl bg-slate-50 dark:bg-slate-800/60 border-2 border-dashed border-slate-200 dark:border-white/10 overflow-hidden group cursor-pointer shadow-inner">
                 {preview ? (
-                  <img src={preview.startsWith('blob') ? preview : `${IMAGE_URL}${preview}`} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  <img src={preview.startsWith('blob') || !preview.startsWith('/uploads') ? preview : `${IMAGE_URL}${preview}`} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                 ) : (
                   <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-300 pointer-events-none">
                     <ImageIcon size={48} strokeWidth={1} className="mb-4 opacity-50" />

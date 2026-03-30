@@ -1,7 +1,8 @@
 const multer = require('multer');
 const sharp = require('sharp');
-const path = require('path');
-const fs = require('fs');
+const { Upload } = require('@aws-sdk/lib-storage');
+const s3Client = require('../config/s3');
+require('dotenv').config();
 
 // Storage in memory for processing
 const storage = multer.memoryStorage();
@@ -17,34 +18,43 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
   storage: storage,
   fileFilter: fileFilter,
-  limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
+  limits: { fileSize: 50 * 1024 * 1024 } // 5MB limit
 });
 
 const processAndStoreImage = (section) => async (req, res, next) => {
   if (!req.file) return next();
 
   try {
-    const uploadDir = path.join(process.cwd(), 'uploads', section);
-    
-    // Ensure section-based directory exists
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-
     const filename = `${section}-${Date.now()}-${Math.round(Math.random() * 1E9)}.webp`;
-    const outputPath = path.join(uploadDir, filename);
 
     // High-fidelity webp compression using Sharp
-    await sharp(req.file.buffer)
+    const processedImage = await sharp(req.file.buffer)
       .resize(1200, 800, { fit: 'cover', position: 'center' }) // Optimized viewport sizing
       .webp({ quality: 80, effort: 6 }) // Elite compression level
-      .toFile(outputPath);
+      .toBuffer();
 
-    // Attach dynamic relative path to request body
+    // AWS S3 Upload
+    const upload = new Upload({
+      client: s3Client,
+      params: {
+        Bucket: process.env.S3_BUCKET_NAME,
+        Key: `${section}/${filename}`,
+        Body: processedImage,
+        ContentType: 'image/webp',
+        ACL: 'public-read' // Assumes bucket allows public-read
+      }
+    });
+
+    await upload.done();
+
+    // S3 Object URL
+    const s3Url = `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${section}/${filename}`;
+
+    // Attach dynamic S3 path to request body
     if (section === 'staff' || section === 'clients') {
-      req.body.profileImage = `/uploads/${section}/${filename}`;
+      req.body.profileImage = s3Url;
     } else {
-      req.body.image = `/uploads/${section}/${filename}`;
+      req.body.image = s3Url;
     }
     next();
   } catch (err) {

@@ -248,7 +248,7 @@ export default function Staff() {
                       <div className="w-40 h-40 rounded-2xl bg-slate-50 dark:bg-slate-800 border-4 border-dashed border-slate-200 dark:border-white/10 flex items-center justify-center overflow-hidden transition-all group-hover:border-saloon-500">
                         {imagePreview ? (
                           <img
-                            src={imagePreview}
+                            src={imagePreview.startsWith('blob') || !imagePreview.startsWith('/uploads') ? imagePreview : `${IMAGE_URL}${imagePreview}`}
                             className="w-full h-full object-cover"
                           />
                         ) : (

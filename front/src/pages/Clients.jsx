@@ -163,7 +163,7 @@ export default function Clients() {
                       <div className="flex items-center gap-5">
                         <div className="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 p-0.5 border border-slate-200/50 dark:border-white/10 group-hover:rotate-6 transition-transform">
                           <img
-                            src={client.profileImage ? `${IMAGE_URL}${client.profileImage}` : `https://api.dicebear.com/7.x/avataaars/svg?seed=${client.name}`}
+                            src={client.profileImage ? (client.profileImage.startsWith('/uploads') ? `${IMAGE_URL}${client.profileImage}` : client.profileImage) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${client.name}`}
                             alt={client.name}
                             className="w-full h-full rounded-[14px] object-cover"
                           />
@@ -270,7 +270,7 @@ export default function Clients() {
                     <div className="relative group">
                       <div className="w-40 h-40 rounded-2xl bg-slate-50 dark:bg-slate-800 border-4 border-slate-100 dark:border-white/5 flex items-center justify-center text-slate-300 dark:text-slate-600 shadow-inner overflow-hidden transition-all group-hover:border-saloon-500/20">
                         {imagePreview ? (
-                          <img src={imagePreview} className="w-full h-full object-cover" alt="Preview" />
+                          <img src={imagePreview.startsWith('blob') || !imagePreview.startsWith('/uploads') ? imagePreview : `${IMAGE_URL}${imagePreview}`} className="w-full h-full object-cover" alt="Preview" />
                         ) : (
                           <User size={64} strokeWidth={1} />
                         )}
@@ -421,7 +421,7 @@ export default function Clients() {
               >
                 <div className="relative h-72 w-full overflow-hidden">
                   <img
-                    src={profileClient.profileImage ? `${IMAGE_URL}${profileClient.profileImage}` : `https://api.dicebear.com/7.x/avataaars/svg?seed=${profileClient.name}`}
+                    src={profileClient.profileImage ? (profileClient.profileImage.startsWith('/uploads') ? `${IMAGE_URL}${profileClient.profileImage}` : profileClient.profileImage) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${profileClient.name}`}
                     className="w-full h-full object-cover grayscale-[40%] hover:grayscale-0 transition-all duration-700"
                     alt={profileClient.name}
                   />

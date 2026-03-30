@@ -1,6 +1,5 @@
 const Staff = require('../models/Staff');
-const fs = require('fs');
-const path = require('path');
+const { deleteFromS3 } = require('../utils/s3Utils');
 
 const getStaff = async (req, res) => {
     const staff = await Staff.find({}).populate('services');
@@ -21,12 +20,9 @@ const createStaff = async (req, res) => {
 const updateStaff = async (req, res) => {
     const staff = await Staff.findById(req.params.id);
     if (staff) {
-        // If image changed, delete old one
+        // If image changed, delete old one from S3
         if (req.body.profileImage && staff.profileImage && req.body.profileImage !== staff.profileImage) {
-            const oldPath = path.join(__dirname, '..', staff.profileImage.replace(/^\/+/, ''));
-            if (fs.existsSync(oldPath)) {
-                fs.unlinkSync(oldPath);
-            }
+            await deleteFromS3(staff.profileImage);
         }
         
         if (req.body.services) {
@@ -50,16 +46,13 @@ const updateStaff = async (req, res) => {
 const deleteStaff = async (req, res) => {
     const staff = await Staff.findById(req.params.id);
     if (staff) {
-        // Delete image before removing record
+        // Delete image from S3 before removing record
         if (staff.profileImage) {
-            const imagePath = path.join(__dirname, '..', staff.profileImage.replace(/^\/+/, ''));
-            if (fs.existsSync(imagePath)) {
-                fs.unlinkSync(imagePath);
-            }
+            await deleteFromS3(staff.profileImage);
         }
         
         await staff.deleteOne();
-        res.json({ message: 'Staff removed and image purged' });
+        res.json({ message: 'Staff removed and image purged from S3' });
     } else {
         res.status(404).json({ message: 'Staff not found' });
     }

@@ -1,6 +1,5 @@
 const Service = require('../models/Service');
-const fs = require('fs');
-const path = require('path');
+const { deleteFromS3 } = require('../utils/s3Utils');
 
 const getServices = async (req, res) => {
     const services = await Service.find({}).populate('category');
@@ -19,12 +18,9 @@ const updateService = async (req, res) => {
     const { name, price, duration, category, image, isActive } = req.body;
     const service = await Service.findById(req.params.id);
     if (service) {
-        // If image changed, delete old one
+        // If image changed, delete old one from S3
         if (image && service.image && image !== service.image) {
-            const oldPath = path.join(__dirname, '..', service.image.replace(/^\/+/, ''));
-            if (fs.existsSync(oldPath)) {
-                fs.unlinkSync(oldPath);
-            }
+            await deleteFromS3(service.image);
         }
         
         service.name = name || service.name;
@@ -46,14 +42,11 @@ const deleteService = async (req, res) => {
     if (service) {
         // Delete image before removing record
         if (service.image) {
-            const imagePath = path.join(__dirname, '..', service.image.replace(/^\/+/, ''));
-            if (fs.existsSync(imagePath)) {
-                fs.unlinkSync(imagePath);
-            }
+            await deleteFromS3(service.image);
         }
         
         await service.deleteOne();
-        res.json({ message: 'Service and physical masterpiece removed' });
+        res.json({ message: 'Service and physical masterpiece removed from S3' });
     } else {
         res.status(404).json({ message: 'Service not found' });
     }

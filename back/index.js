@@ -16,7 +16,11 @@ app.use(cors({
     origin: process.env.CLIENT_URL || 'http://localhost:5173', // Adjust host for frontend
     credentials: true
 }));
-app.use(express.json());
+
+// Augmented payload capacity for high-fidelity data transfers
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+
 app.use(cookieParser());
 app.use(morgan('dev'));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

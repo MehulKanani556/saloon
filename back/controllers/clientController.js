@@ -1,6 +1,5 @@
 const Client = require('../models/Client');
-const fs = require('fs');
-const path = require('path');
+const { deleteFromS3 } = require('../utils/s3Utils');
 
 // @desc Get all clients
 const getClients = async (req, res) => {
@@ -57,12 +56,9 @@ const updateClient = async (req, res) => {
             });
         }
 
-        // If image changed, delete old one
+        // If image changed, delete old one from S3
         if (profileImage && targetClient.profileImage && profileImage !== targetClient.profileImage) {
-            const oldPath = path.join(__dirname, '..', targetClient.profileImage.replace(/^\/+/, ''));
-            if (fs.existsSync(oldPath)) {
-                fs.unlinkSync(oldPath);
-            }
+            await deleteFromS3(targetClient.profileImage);
         }
 
         targetClient.name = name || targetClient.name;
@@ -81,16 +77,13 @@ const updateClient = async (req, res) => {
 const deleteClient = async (req, res) => {
     const client = await Client.findById(req.params.id);
     if (client) {
-        // Delete image before removing record
+        // Delete image from S3 before removing record
         if (client.profileImage) {
-            const imagePath = path.join(__dirname, '..', client.profileImage.replace(/^\/+/, ''));
-            if (fs.existsSync(imagePath)) {
-                fs.unlinkSync(imagePath);
-            }
+            await deleteFromS3(client.profileImage);
         }
         
         await client.deleteOne();
-        res.json({ message: 'Client record and identity purged' });
+        res.json({ message: 'Client record and identity purged from S3' });
     } else {
         res.status(404).json({ message: 'Client not found' });
     }
