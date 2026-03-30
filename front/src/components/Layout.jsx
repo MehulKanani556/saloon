@@ -36,7 +36,7 @@ export default function Layout({ children }) {
 
       <div className="flex-1 flex flex-col relative w-full min-w-0">
         {/* Background Ambient Glow */}
-        <div className="fixed top-0 right-0 w-[40%] h-[30%] bg-parlour-100/10 dark:bg-parlour-900/10 blur-[120px] rounded-full pointer-events-none z-0" />
+        <div className="fixed top-0 right-0 w-[40%] h-[30%] bg-saloon-100/10 dark:bg-saloon-900/10 blur-[120px] rounded-full pointer-events-none z-0" />
         <div className="fixed bottom-0 left-0 w-[30%] h-[20%] bg-rosegold-100/10 dark:bg-rosegold-900/5 blur-[80px] rounded-full pointer-events-none z-0" />
 
         <div className="p-4 flex-1 relative z-10 flex flex-col w-full">

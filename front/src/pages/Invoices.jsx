@@ -49,7 +49,7 @@ const InvoiceDetailModal = ({ appointment, onClose }) => {
           {/* Modal Header */}
           <div className="p-8 border-b border-slate-100 dark:border-white/5 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/30">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-parlour-500/10 flex items-center justify-center text-parlour-600 shadow-inner">
+              <div className="w-12 h-12 rounded-2xl bg-saloon-500/10 flex items-center justify-center text-saloon-600 shadow-inner">
                 <FileText size={24} />
               </div>
               <div>
@@ -60,7 +60,7 @@ const InvoiceDetailModal = ({ appointment, onClose }) => {
             <div className="flex gap-4">
               <button
                 onClick={handleExportPDF}
-                className="p-3 bg-white dark:bg-slate-800 border border-slate-100 dark:border-white/5 rounded-2xl text-slate-400 hover:text-parlour-500 transition-all shadow-sm group"
+                className="p-3 bg-white dark:bg-slate-800 border border-slate-100 dark:border-white/5 rounded-2xl text-slate-400 hover:text-saloon-500 transition-all shadow-sm group"
               >
                 <Download size={20} className="group-hover:translate-y-0.5 transition-transform" />
               </button>
@@ -78,13 +78,13 @@ const InvoiceDetailModal = ({ appointment, onClose }) => {
             <div className="grid grid-cols-2 gap-20 mb-20">
               <div className="space-y-8">
                 <div>
-                  <h1 className="text-4xl font-black tracking-tighter italic uppercase text-parlour-600 mb-2">Glow & Elegance</h1>
-                  <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 italic">Luxury Salon & Spa Narrative</p>
+                  <h1 className="text-4xl font-black tracking-tighter italic uppercase text-saloon-600 mb-2">Glow Saloon</h1>
+                  <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 italic">Luxury Saloon & Spa Narrative</p>
                 </div>
                 <div className="space-y-1 text-sm font-bold text-slate-500 italic">
                   <p>123 Luxury Lane, Diamond District</p>
                   <p>Mumbai, Maharashtra - 400001</p>
-                  <p>contact@glowelegance.com</p>
+                  <p>contact@glowsaloon.com</p>
                   <p>+91 98765 43210</p>
                 </div>
               </div>
@@ -142,7 +142,7 @@ const InvoiceDetailModal = ({ appointment, onClose }) => {
                     <p className="font-black text-sm italic">{format(new Date(appointment.appointmentDate), 'MMM dd, HH:mm')}</p>
                   </td>
                   <td className="py-8 px-4 text-right align-top">
-                    <p className="font-black text-lg italic text-parlour-600">${appointment.totalPrice.toLocaleString()}</p>
+                    <p className="font-black text-lg italic text-saloon-600">${appointment.totalPrice.toLocaleString()}</p>
                   </td>
                 </tr>
               </tbody>
@@ -158,7 +158,7 @@ const InvoiceDetailModal = ({ appointment, onClose }) => {
                   <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 italic">Protocol Tax (0%)</span>
                   <span className="font-black italic">$0</span>
                 </div>
-                <div className="flex justify-between items-center p-6 bg-parlour-600 rounded-2xl text-white shadow-xl shadow-parlour-600/20">
+                <div className="flex justify-between items-center p-6 bg-saloon-600 rounded-2xl text-white shadow-xl shadow-saloon-600/20">
                   <span className="text-[11px] font-black uppercase tracking-[0.2em] italic">Total Extraction</span>
                   <span className="text-2xl font-black italic tracking-tighter">${appointment.totalPrice.toLocaleString()}</span>
                 </div>
@@ -226,7 +226,7 @@ export default function Invoices() {
 
   if (loading && !appointments.length) return (
     <div className="flex items-center justify-center h-[60vh]">
-      <div className="w-12 h-12 border-4 border-slate-200 border-t-parlour-600 rounded-full animate-spin" />
+      <div className="w-12 h-12 border-4 border-slate-200 border-t-saloon-600 rounded-full animate-spin" />
     </div>
   ); 
 
@@ -235,7 +235,7 @@ export default function Invoices() {
       {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-12">
         <div className="flex items-center gap-4 md:gap-6 relative z-10 transition-all">
-          <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-white dark:bg-slate-900 border border-parlour-100 dark:border-white/10 flex items-center justify-center text-parlour-500 shadow-glass shrink-0 transition-transform hover:rotate-6">
+          <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-white dark:bg-slate-900 border border-saloon-100 dark:border-white/10 flex items-center justify-center text-saloon-500 shadow-glass shrink-0 transition-transform hover:rotate-6">
             <FileText size={24} md:size={32} strokeWidth={2.5} />
           </div>
           <div className="min-w-0">
@@ -249,7 +249,7 @@ export default function Invoices() {
         </div>
 
         <div className="relative group w-full lg:w-96">
-          <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none text-slate-400 group-focus-within:text-parlour-500 transition-colors">
+          <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none text-slate-400 group-focus-within:text-saloon-500 transition-colors">
             <Search size={18} md:size={20} />
           </div>
           <input
@@ -257,7 +257,7 @@ export default function Invoices() {
             placeholder="Search Intelligence Archive..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-2xl px-14 md:px-16 py-4 md:py-5 text-sm font-bold outline-none focus:border-parlour-500/50 shadow-2xl transition-all dark:text-white"
+            className="w-full bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-2xl px-14 md:px-16 py-4 md:py-5 text-sm font-bold outline-none focus:border-saloon-500/50 shadow-2xl transition-all dark:text-white"
           />
         </div>
       </div>
@@ -348,7 +348,7 @@ export default function Invoices() {
                           <>
                             <button
                               onClick={() => setSelectedInvoice(invoice)}
-                              className="p-3 bg-white dark:bg-slate-800 border border-slate-100 dark:border-white/5 rounded-2xl text-slate-400 hover:text-parlour-500 shadow-sm transition-all hover:scale-110 active:scale-90"
+                              className="p-3 bg-white dark:bg-slate-800 border border-slate-100 dark:border-white/5 rounded-2xl text-slate-400 hover:text-saloon-500 shadow-sm transition-all hover:scale-110 active:scale-90"
                             >
                               <Eye size={16} />
                             </button>

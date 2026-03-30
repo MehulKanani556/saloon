@@ -25,8 +25,8 @@ const generateInvoicePDF = async (req, res) => {
       doc.pipe(res);
 
         const colors = {
-            brand: '#ef1a7c',    // Parlour 600
-            accent: '#ff3d9f',   // Parlour 500
+            brand: '#d97706',    // Saloon 600 (Amber)
+            accent: '#f59e0b',   // Saloon 500 (Amber)
             void: '#0f172a',     // Slate 900
             neutral: '#64748b',  // Slate 500
             wash: '#f8fafc',
@@ -44,12 +44,12 @@ const generateInvoicePDF = async (req, res) => {
         doc.fillColor(colors.brand)
            .fontSize(32)
            .font('Helvetica-BoldOblique')
-           .text('GLOW & ELEGANCE', 50, 60, { characterSpacing: -1 });
+           .text('GLOW SALOON', 50, 60, { characterSpacing: -1 });
 
         doc.fillColor(colors.neutral)
            .fontSize(10)
            .font('Helvetica-Bold')
-           .text('LUXURY SALON & SPA NARRATIVE', 51, 95, { characterSpacing: 3 });
+           .text('LUXURY SALOON & SPA NARRATIVE', 51, 95, { characterSpacing: 3 });
 
         // Tactical Metadata
         doc.fillColor(colors.neutral)
@@ -68,7 +68,7 @@ const generateInvoicePDF = async (req, res) => {
         // Origin Protocol
         doc.fillColor(colors.brand).fontSize(8).font('Helvetica-Bold').text('RITUAL ORIGIN', 50, metaY, { characterSpacing: 2 });
         doc.fillColor(colors.void).fontSize(10).font('Helvetica-Bold')
-           .text('Glow & Elegance Luxury Hub', 50, metaY + 15)
+           .text('Glow Saloon Luxury Hub', 50, metaY + 15)
            .font('Helvetica').fillColor(colors.neutral)
            .text('123 Luxury Lane, Diamond District', 50, metaY + 30)
            .text('Mumbai, MH 400001', 50, metaY + 43);
@@ -115,7 +115,7 @@ const generateInvoicePDF = async (req, res) => {
                .text(service.name.toUpperCase(), 50, currentY);
             
             doc.fillColor(colors.brand).fontSize(16).font('Helvetica-BoldOblique')
-               .text(`INR ${service.price.toLocaleString()}`, 0, currentY, { align: 'right' });
+               .text(`$ ${service.price.toLocaleString()}`, 0, currentY, { align: 'right' });
 
             doc.fillColor(colors.neutral).fontSize(8).font('Helvetica-Bold')
                .text(service.category?.name?.toUpperCase() || 'PREMIUM PROTOCOL', 50, currentY + 18, { characterSpacing: 1 });
@@ -135,7 +135,7 @@ const generateInvoicePDF = async (req, res) => {
            .text('AGGREGATE RITUAL TOTAL', 300, totalY + 15, { characterSpacing: 1 });
 
         doc.fillColor(colors.brand).fontSize(32).font('Helvetica-BoldOblique')
-           .text(`INR ${appointment.totalPrice.toLocaleString()}`, 300, totalY + 30, { align: 'right', width: 250, characterSpacing: -1 });
+           .text(`$ ${appointment.totalPrice.toLocaleString()}`, 300, totalY + 30, { align: 'right', width: 250, characterSpacing: -1 });
 
         // --- Footer Protocol ---
         const footerY = 760;
@@ -143,7 +143,7 @@ const generateInvoicePDF = async (req, res) => {
            .text('VALIDATED FINANCIAL INTELLIGENCE • LUXURY MANAGEMENT', 50, footerY, { align: 'center', characterSpacing: 3 });
 
         doc.fillColor(colors.brand).fontSize(10).font('Helvetica-BoldOblique')
-           .text('GLOW & ELEGANCE', 50, footerY + 12, { align: 'center' });
+           .text('GLOW SALOON', 50, footerY + 12, { align: 'center' });
 
         doc.end();
 

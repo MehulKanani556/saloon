@@ -135,7 +135,7 @@ export default function Appointments() {
 
   if (appointmentsLoading) return (
     <div className="flex items-center justify-center h-[60vh]">
-      <div className="w-12 h-12 border-4 border-parlour-100 border-t-parlour-500 rounded-full animate-spin" />
+      <div className="w-12 h-12 border-4 border-saloon-100 border-t-saloon-500 rounded-full animate-spin" />
     </div>
   );
 
@@ -145,12 +145,12 @@ export default function Appointments() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
           <div className="flex items-center gap-4 lg:gap-6 relative z-10 transition-all">
-            <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-white dark:bg-slate-900 border border-parlour-100 dark:border-white/10 flex items-center justify-center text-parlour-500 shadow-glass shrink-0 transition-transform hover:rotate-6">
+            <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-white dark:bg-slate-900 border border-saloon-100 dark:border-white/10 flex items-center justify-center text-saloon-500 shadow-glass shrink-0 transition-transform hover:rotate-6">
               <CalendarIcon size={24} md:size={32} strokeWidth={2.5} />
             </div>
             <div className="min-w-0">
               <h1 className="text-xl sm:text-3xl lg:text-4xl font-black text-slate-800 dark:text-white tracking-tighter uppercase leading-none truncate md:whitespace-normal">Appointment Bookings</h1>
-              <p className="text-slate-400 font-black text-[8px] sm:text-[9px] lg:text-[10px] uppercase tracking-[0.15em] lg:tracking-[0.25em] mt-2 lg:mt-4 opacity-70 group-hover:opacity-100 transition-opacity">Manage your parlour bookings here</p>
+              <p className="text-slate-400 font-black text-[8px] sm:text-[9px] lg:text-[10px] uppercase tracking-[0.15em] lg:tracking-[0.25em] mt-2 lg:mt-4 opacity-70 group-hover:opacity-100 transition-opacity">Manage your saloon bookings here</p>
             </div>
           </div>
           <button
@@ -160,7 +160,7 @@ export default function Appointments() {
               formik.resetForm();
               setIsDrawerOpen(true);
             }}
-            className="flex items-center gap-2 px-6 py-3 lg:px-10 lg:py-5 bg-gradient-to-r from-parlour-500 via-parlour-600 to-rosegold-500 text-white lg:rounded-2xl rounded-xl font-black uppercase text-xs tracking-[0.2em] shadow-xl shadow-parlour-500/20 hover:scale-[1.05] transition-all group"
+            className="flex items-center gap-2 px-6 py-3 lg:px-10 lg:py-5 bg-gradient-to-r from-saloon-500 via-saloon-600 to-rosegold-500 text-white lg:rounded-2xl rounded-xl font-black uppercase text-xs tracking-[0.2em] shadow-xl shadow-saloon-500/20 hover:scale-[1.05] transition-all group"
           >
             <Plus size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
             Add New Booking
@@ -171,23 +171,23 @@ export default function Appointments() {
           {/* Calendar Column */}
           <div className="xl:col-span-8 space-y-8">
             <div className="glass-card p-4 dark:bg-slate-900/40 border-white/60 shadow-2xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-parlour-500/5 blur-[80px] rounded-full" />
+              <div className="absolute top-0 right-0 w-64 h-64 bg-saloon-500/5 blur-[80px] rounded-full" />
 
               <div className="flex flex-col sm:flex-row gap-2 sm:gap-0 sm:items-center justify-between mb-4 sm:mb-10 mt-4 px-3 md:px-6 relative z-10">
                 <div className="flex flex-col">
-                  <span className="text-[9px] md:text-[10px] font-black text-parlour-500 uppercase tracking-widest leading-none mb-1 md:mb-2">Calendar View</span>
+                  <span className="text-[9px] md:text-[10px] font-black text-saloon-500 uppercase tracking-widest leading-none mb-1 md:mb-2">Calendar View</span>
                   <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-slate-800 dark:text-white uppercase tracking-tighter italic">{format(currentDate, 'MMMM yyyy')}</h3>
                 </div>
                 <div className="flex gap-2 md:gap-3">
                   <button 
                     onClick={() => setCurrentDate(subMonths(currentDate, 1))} 
-                    className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-xl md:rounded-2xl hover:bg-parlour-500 hover:text-white transition-all shadow-sm active:scale-95"
+                    className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-xl md:rounded-2xl hover:bg-saloon-500 hover:text-white transition-all shadow-sm active:scale-95"
                   >
                     <StepBack size={18} md:size={20} />
                   </button>
                   <button 
                     onClick={() => setCurrentDate(addMonths(currentDate, 1))} 
-                    className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-xl md:rounded-2xl hover:bg-parlour-500 hover:text-white transition-all shadow-sm active:scale-95"
+                    className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-xl md:rounded-2xl hover:bg-saloon-500 hover:text-white transition-all shadow-sm active:scale-95"
                   >
                     <StepForward size={18} md:size={20} />
                   </button>
@@ -211,14 +211,14 @@ export default function Appointments() {
                       transition={{ delay: i * 0.01 }}
                       className={`
                       aspect-square rounded-2xl flex flex-col items-center justify-center relative cursor-pointer group transition-all duration-300
-                      ${isSelected ? 'bg-parlour-500 text-white shadow-2xl scale-105 z-20' : 'hover:bg-slate-100 dark:hover:bg-slate-800 dark:text-slate-300'}
+                      ${isSelected ? 'bg-saloon-500 text-white shadow-2xl scale-105 z-20' : 'hover:bg-slate-100 dark:hover:bg-slate-800 dark:text-slate-300'}
                       ${!isSameMonth(day, monthStart) ? 'opacity-20 hover:opacity-100' : ''}
-                      ${isToday(day) && !isSelected ? 'border-2 border-parlour-200' : ''}
+                      ${isToday(day) && !isSelected ? 'border-2 border-saloon-200' : ''}
                     `}
                     >
                       <span className={`text-base font-black ${isSelected ? 'text-white' : 'text-slate-800 dark:text-white'}`}>{format(day, 'd')}</span>
                       {hasApps && (
-                        <div className={`w-1.5 h-1.5 rounded-full absolute bottom-4 ${isSelected ? 'bg-white' : 'bg-parlour-500 animate-pulse'}`} />
+                        <div className={`w-1.5 h-1.5 rounded-full absolute bottom-4 ${isSelected ? 'bg-white' : 'bg-saloon-500 animate-pulse'}`} />
                       )}
                     </motion.div>
                   );
@@ -234,7 +234,7 @@ export default function Appointments() {
                 <h3 className="text-2xl font-black text-slate-800 dark:text-white tracking-tighter uppercase leading-none">Today's Bookings</h3>
                 <p className="text-slate-400 font-black text-[9px] uppercase tracking-widest mt-3">Bookings for {format(selectedDate, 'MMM do')}</p>
               </div>
-              <div className="w-10 h-10 rounded-2xl bg-parlour-500/10 flex items-center justify-center text-parlour-500 font-black text-sm border border-parlour-500/20">
+              <div className="w-10 h-10 rounded-2xl bg-saloon-500/10 flex items-center justify-center text-saloon-500 font-black text-sm border border-saloon-500/20">
                 {filteredAppointments.length}
               </div>
             </div>
@@ -246,11 +246,11 @@ export default function Appointments() {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  className="glass-card p-4 sm:p-5 border-white/60 dark:bg-slate-900/40 hover-lift shadow-xl group border-l-4 border-l-parlour-500 overflow-hidden"
+                  className="glass-card p-4 sm:p-5 border-white/60 dark:bg-slate-900/40 hover-lift shadow-xl group border-l-4 border-l-saloon-500 overflow-hidden"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 sm:gap-0">
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-parlour-50 dark:bg-slate-800 overflow-hidden border border-white dark:border-white/5 p-0.5 shadow-sm shrink-0">
+                      <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-saloon-50 dark:bg-slate-800 overflow-hidden border border-white dark:border-white/5 p-0.5 shadow-sm shrink-0">
                         <img
                           src={app.client.profileImage ? `${IMAGE_URL}${app.client.profileImage}` : `https://api.dicebear.com/9.x/adventurer/svg?seed=${app.client?.name}`}
                           alt={app.client?.name}
@@ -260,7 +260,7 @@ export default function Appointments() {
                       <div className="min-w-0 flex-1">
                         <h4 className="font-black text-slate-800 dark:text-white tracking-tighter uppercase text-xs sm:text-sm truncate">{app.client?.name}</h4>
                         <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mt-2">
-                          <div className="flex items-center gap-1.5 sm:gap-2 text-[8px] sm:text-[10px] font-black text-parlour-500 uppercase tracking-widest bg-parlour-50 dark:bg-parlour-900/20 px-1.5 sm:px-2 py-1 rounded-lg w-fit shrink-0">
+                          <div className="flex items-center gap-1.5 sm:gap-2 text-[8px] sm:text-[10px] font-black text-saloon-500 uppercase tracking-widest bg-saloon-50 dark:bg-saloon-900/20 px-1.5 sm:px-2 py-1 rounded-lg w-fit shrink-0">
                             <Clock size={10} sm:size={12} strokeWidth={3} />
                             {format(new Date(app.appointmentDate), 'hh:mm a')}
                           </div>
@@ -283,7 +283,7 @@ export default function Appointments() {
                       <button onClick={() => navigate(`/invoices?id=${app._id}`)} className="p-2 sm:p-2.5 bg-slate-50 dark:bg-slate-800 text-slate-400 hover:text-indigo-500 rounded-xl transition-all shadow-sm">
                         <FileText size={14} />
                       </button>
-                      <button onClick={() => handleEdit(app)} className="p-2 sm:p-2.5 bg-slate-50 dark:bg-slate-800 text-slate-400 hover:text-parlour-500 rounded-xl transition-all shadow-sm">
+                      <button onClick={() => handleEdit(app)} className="p-2 sm:p-2.5 bg-slate-50 dark:bg-slate-800 text-slate-400 hover:text-saloon-500 rounded-xl transition-all shadow-sm">
                         <Edit3 size={14} />
                       </button>
                       <button onClick={() => openDeleteModal(app)} className="p-2 sm:p-2.5 bg-slate-50 dark:bg-slate-800 text-slate-400 hover:text-red-500 rounded-xl transition-all shadow-sm">
@@ -291,11 +291,11 @@ export default function Appointments() {
                       </button>
                     </div>
                   </div>
-                  <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-100 dark:border-white/5 space-y-2 sm:space-y-3 group-hover:bg-slate-900 dark:group-hover:bg-parlour-500 transition-all duration-300">
+                  <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-100 dark:border-white/5 space-y-2 sm:space-y-3 group-hover:bg-slate-900 dark:group-hover:bg-saloon-500 transition-all duration-300">
                     {app.services?.map((s, idx) => (
                       <div key={s._id} className="flex items-center justify-between group-hover:text-white gap-2">
                         <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-                          <div className="w-1.5 h-1.5 rounded-full bg-parlour-500 group-hover:bg-white shrink-0" />
+                          <div className="w-1.5 h-1.5 rounded-full bg-saloon-500 group-hover:bg-white shrink-0" />
                           <span className="text-[10px] sm:text-[11px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest group-hover:text-white truncate">{s.name}</span>
                         </div>
                         <span className="text-[9px] sm:text-[10px] font-black opacity-60 shrink-0">${s.price}</span>
@@ -303,7 +303,7 @@ export default function Appointments() {
                     ))}
                     <div className="pt-2 border-t border-slate-200 dark:border-white/10 flex items-center justify-between group-hover:border-white/20">
                       <span className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest group-hover:text-white/60">Final Total</span>
-                      <span className="text-xs sm:text-sm font-black text-parlour-500 group-hover:text-white">${app.totalPrice}</span>
+                      <span className="text-xs sm:text-sm font-black text-saloon-500 group-hover:text-white">${app.totalPrice}</span>
                     </div>
                   </div>
                 </motion.div>
@@ -317,7 +317,7 @@ export default function Appointments() {
                   <p className="text-slate-400 font-black uppercase tracking-widest text-[10px]">No bookings for this date</p>
                   <button
                     onClick={() => setIsDrawerOpen(true)}
-                    className="mt-6 text-parlour-500 font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 mx-auto"
+                    className="mt-6 text-saloon-500 font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 mx-auto"
                   >
                     <Plus size={14} /> Add Booking
                   </button>
@@ -355,7 +355,7 @@ export default function Appointments() {
                       {selectedAppointment ? 'Update booking details' : 'Enter customer details for booking'}
                     </p>
                   </div>
-                  <button onClick={() => setIsDrawerOpen(false)} className="p-3 bg-slate-100 dark:bg-slate-800 rounded-2xl text-slate-400 hover:text-parlour-500 transition-all">
+                  <button onClick={() => setIsDrawerOpen(false)} className="p-3 bg-slate-100 dark:bg-slate-800 rounded-2xl text-slate-400 hover:text-saloon-500 transition-all">
                     <X size={24} />
                   </button>
                 </div>
@@ -412,7 +412,7 @@ export default function Appointments() {
                               name="clientName"
                               onChange={formik.handleChange}
                               value={formik.values.clientName}
-                              className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-parlour-500/30 rounded-2xl px-6 py-5 text-sm font-bold outline-none transition-all dark:text-white shadow-inner"
+                              className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/30 rounded-2xl px-6 py-5 text-sm font-bold outline-none transition-all dark:text-white shadow-inner"
                               placeholder="e.g. Liam Smith"
                             />
                             {formik.errors.clientName && <p className="text-[9px] text-red-500 font-bold uppercase ml-4">{formik.errors.clientName}</p>}
@@ -424,7 +424,7 @@ export default function Appointments() {
                               name="clientEmail"
                               onChange={formik.handleChange}
                               value={formik.values.clientEmail}
-                              className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-parlour-500/30 rounded-2xl px-6 py-5 text-sm font-bold outline-none transition-all dark:text-white shadow-inner"
+                              className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/30 rounded-2xl px-6 py-5 text-sm font-bold outline-none transition-all dark:text-white shadow-inner"
                               placeholder="liam@example.com"
                             />
                             {formik.errors.clientEmail && <p className="text-[9px] text-red-500 font-bold uppercase ml-4">{formik.errors.clientEmail}</p>}
@@ -436,7 +436,7 @@ export default function Appointments() {
                               name="clientPhone"
                               onChange={formik.handleChange}
                               value={formik.values.clientPhone}
-                              className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-parlour-500/30 rounded-2xl px-6 py-5 text-sm font-bold outline-none transition-all dark:text-white shadow-inner"
+                              className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/30 rounded-2xl px-6 py-5 text-sm font-bold outline-none transition-all dark:text-white shadow-inner"
                               placeholder="e.g. +91 9876543210"
                             />
                             {formik.errors.clientPhone && <p className="text-[9px] text-red-500 font-bold uppercase ml-4">{formik.errors.clientPhone}</p>}
@@ -492,7 +492,7 @@ export default function Appointments() {
                       <button
                         type="submit"
                         disabled={formik.isSubmitting}
-                        className="w-full py-6 bg-slate-950 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-black uppercase tracking-[0.3em] shadow-xl hover:bg-parlour-600 dark:hover:bg-slate-100 transition-all flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50"
+                        className="w-full py-6 bg-slate-950 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-black uppercase tracking-[0.3em] shadow-xl hover:bg-saloon-600 dark:hover:bg-slate-100 transition-all flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50"
                       >
                         {formik.isSubmitting ? 'Saving...' : selectedAppointment ? 'Update Booking' : 'Confirm Booking'}
                         <Sparkles size={20} />

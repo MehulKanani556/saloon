@@ -5,9 +5,9 @@
 @tailwind utilities;
 
 :root {
-  --brand-pink: #ff3d9f;
+  --brand-pink: #f59e0b;
   --brand-rosegold: #b57e65;
-  --brand-pastel: #fdf2f8;
+  --brand-pastel: #fffbeb;
 }
 
 @layer base {
@@ -38,7 +38,7 @@
   }
   
   .premium-gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-parlour-500 to-rosegold-500;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-saloon-500 to-rosegold-500;
   }
 
   .premium-button {
@@ -46,7 +46,7 @@
   }
   
   .premium-button-primary {
-    @apply premium-button bg-gradient-to-r from-parlour-500 to-rosegold-400 text-white hover:shadow-md hover:shadow-parlour-200;
+    @apply premium-button bg-gradient-to-r from-saloon-500 to-rosegold-400 text-white hover:shadow-md hover:shadow-saloon-200;
   }
 }
 
@@ -68,8 +68,8 @@
 /* Dark Mode Overrides */
 /* Dark Mode Surface Overrides */
 .dark .bg-white { @apply bg-slate-900 border-white/10; }
-.dark .bg-parlour-50 { @apply bg-slate-800; }
-.dark .border-parlour-100 { @apply border-white/5; }
+.dark .bg-saloon-50 { @apply bg-slate-800; }
+.dark .border-saloon-100 { @apply border-white/5; }
 .dark .shadow-glass { @apply shadow-none; }
 .dark .shadow-premium { @apply shadow-none; }
 

@@ -32,14 +32,14 @@ export default function Navbar({ darkMode, setDarkMode, onMenuClick }) {
       <div className="flex items-center gap-3 md:gap-8">
         <button
           onClick={onMenuClick}
-          className="p-1.5 sm:p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-white/5 rounded-lg sm:rounded-2xl text-slate-500 xl:hidden hover:text-parlour-500 transition-colors"
+          className="p-1.5 sm:p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-white/5 rounded-lg sm:rounded-2xl text-slate-500 xl:hidden hover:text-saloon-500 transition-colors"
         >
           <Menu size={18} />
         </button>
 
         <div className="hidden lg:flex items-center gap-6 px-1 py-1">
           <div className="flex flex-col">
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] leading-none mb-1">Glow Parlour</p>
+            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] leading-none mb-1">Glow Saloon</p>
             <div className="flex items-center gap-2">
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-pulse" />
               <p className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest italic">System: Online</p>
@@ -68,14 +68,14 @@ export default function Navbar({ darkMode, setDarkMode, onMenuClick }) {
               <ShieldCheck size={8} /> {adminInfo?.role}
             </p>
           </div>
-          <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-gradient-to-br from-parlour-400 to-rosegold-500 p-[2px]">
-            <div className="w-full h-full rounded-[10px] bg-white dark:bg-slate-900 flex items-center justify-center text-parlour-500 font-black text-xs md:text-sm uppercase tracking-tighter">
+          <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-gradient-to-br from-saloon-400 to-rosegold-500 p-[2px]">
+            <div className="w-full h-full rounded-[10px] bg-white dark:bg-slate-900 flex items-center justify-center text-saloon-500 font-black text-xs md:text-sm uppercase tracking-tighter">
               {adminInfo?.name?.charAt(0)}
             </div>
           </div>
           <ChevronDown
             size={16}
-            className={`text-slate-400 group-hover:text-parlour-500 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`}
+            className={`text-slate-400 group-hover:text-saloon-500 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`}
           />
         </button>
 
@@ -93,7 +93,7 @@ export default function Navbar({ darkMode, setDarkMode, onMenuClick }) {
                 <div className="flex items-center gap-2 p-1.5 bg-slate-50 dark:bg-slate-800/80 rounded-2xl border border-slate-100 dark:border-white/5">
                   <button
                     onClick={() => setDarkMode(false)}
-                    className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-xl transition-all font-black text-[10px] uppercase tracking-widest ${!darkMode ? 'bg-white shadow-premium text-parlour-500' : 'text-slate-400 hover:text-slate-200'}`}
+                    className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-xl transition-all font-black text-[10px] uppercase tracking-widest ${!darkMode ? 'bg-white shadow-premium text-saloon-500' : 'text-slate-400 hover:text-slate-200'}`}
                   >
                     <Sun size={14} /> Light
                   </button>
@@ -108,10 +108,10 @@ export default function Navbar({ darkMode, setDarkMode, onMenuClick }) {
 
               <div className="flex flex-col gap-1">
                 {/* <button
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-parlour-50 dark:hover:bg-parlour-900/10 text-slate-600 dark:text-slate-300 transition-all group"
+                  className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-saloon-50 dark:hover:bg-saloon-900/10 text-slate-600 dark:text-slate-300 transition-all group"
                   onClick={() => setIsDropdownOpen(false)}
                 >
-                  <User size={18} className="group-hover:text-parlour-500" />
+                  <User size={18} className="group-hover:text-saloon-500" />
                   <span className="text-[11px] font-black uppercase tracking-widest">Protocol Profile</span>
                 </button> */}
                 <button

@@ -17,7 +17,7 @@ const dashboardSlice = createSlice({
   name: 'dashboard',
   initialState: {
     data: {
-      stats: { totalClients: 0, totalAppointments: 0, totalRevenue: 0, activeServices: 0 },
+      stats: { totalClients: 0, totalAppointments: 0, totalRevenue: 0, todayRevenue: 0, activeServices: 0 },
       financialVelocity: [],
       serviceHierarchy: [],
       eliteTalent: [],

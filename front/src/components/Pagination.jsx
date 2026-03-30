@@ -28,7 +28,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 text-slate-400 hover:text-parlour-500 hover:border-parlour-500/50 disabled:opacity-30 disabled:hover:border-transparent transition-all shadow-sm"
+        className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 text-slate-400 hover:text-saloon-500 hover:border-saloon-500/50 disabled:opacity-30 disabled:hover:border-transparent transition-all shadow-sm"
       >
         <ChevronLeft size={20} strokeWidth={2.5} />
       </button>
@@ -47,7 +47,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
                 className={`
                   w-10 h-10 rounded-xl font-black text-xs transition-all duration-300 flex items-center justify-center
                   ${currentPage === page 
-                    ? 'bg-parlour-500 text-white shadow-lg shadow-parlour-500/30 scale-110' 
+                    ? 'bg-saloon-500 text-white shadow-lg shadow-saloon-500/30 scale-110' 
                     : 'text-slate-400 hover:text-slate-800 dark:hover:text-white hover:bg-white dark:hover:bg-slate-800'}
                 `}
               >
@@ -61,7 +61,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 text-slate-400 hover:text-parlour-500 hover:border-parlour-500/50 disabled:opacity-30 disabled:hover:border-transparent transition-all shadow-sm"
+        className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 text-slate-400 hover:text-saloon-500 hover:border-saloon-500/50 disabled:opacity-30 disabled:hover:border-transparent transition-all shadow-sm"
       >
         <ChevronRight size={20} strokeWidth={2.5} />
       </button>

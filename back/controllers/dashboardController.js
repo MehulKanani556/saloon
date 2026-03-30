@@ -18,6 +18,9 @@ const getDashboardInsights = async (req, res) => {
         const totalRevenue = appointments
             .filter(app => app.paymentStatus === 'Paid' && app.status !== 'Cancelled')
             .reduce((sum, app) => sum + (app.totalPrice || 0), 0);
+        const todayRevenue = appointments
+            .filter(app => moment(app.date || app.appointmentDate).isSame(moment(), 'day') && app.paymentStatus === 'Paid' && app.status !== 'Cancelled')
+            .reduce((sum, app) => sum + (app.totalPrice || 0), 0);
         const activeServices = services.filter(s => s.isActive).length;
 
         // 2. Financial Velocity (Last 7 Days)
@@ -77,6 +80,7 @@ const getDashboardInsights = async (req, res) => {
                 totalClients: clients,
                 totalAppointments: totalConfirmedAppointments,
                 totalRevenue,
+                todayRevenue,
                 activeServices
             },
             financialVelocity: last7Days,

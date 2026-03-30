@@ -120,7 +120,7 @@ export default function Staff() {
 
   if (loading) return (
     <div className="flex items-center justify-center h-[60vh]">
-      <div className="w-12 h-12 border-4 border-parlour-200 border-t-parlour-600 rounded-full animate-spin" />
+      <div className="w-12 h-12 border-4 border-saloon-200 border-t-saloon-600 rounded-full animate-spin" />
     </div>
   );
 
@@ -128,17 +128,17 @@ export default function Staff() {
     <div className="space-y-10">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 md:gap-0">
         <div className="flex items-center gap-4 lg:gap-6 relative z-10 transition-all">
-          <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-white dark:bg-slate-900 border border-parlour-100 dark:border-white/10 flex items-center justify-center text-parlour-500 shadow-glass shrink-0 transition-transform hover:rotate-6">
+          <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-white dark:bg-slate-900 border border-saloon-100 dark:border-white/10 flex items-center justify-center text-saloon-500 shadow-glass shrink-0 transition-transform hover:rotate-6">
             <LayoutGrid size={24} md:size={32} strokeWidth={2.5} />
           </div>
           <div className="min-w-0">
             <h1 className="text-xl sm:text-3xl lg:text-4xl font-black text-slate-800 dark:text-white tracking-tighter uppercase leading-none truncate md:whitespace-normal">Our Staff</h1>
-            <p className="text-slate-400 font-black text-[8px] sm:text-[9px] lg:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.25em] mt-2 lg:mt-4 opacity-70 group-hover:opacity-100 transition-opacity">List of people who work in your parlour</p>
+            <p className="text-slate-400 font-black text-[8px] sm:text-[9px] lg:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.25em] mt-2 lg:mt-4 opacity-70 group-hover:opacity-100 transition-opacity">List of people who work in your saloon</p>
           </div>
         </div>
         <button
           onClick={() => setIsDrawerOpen(true)}
-          className="flex items-center gap-3 px-6 py-3 lg:px-10 lg:py-5 bg-gradient-to-r from-parlour-500 via-parlour-600 to-rosegold-500 text-white lg:rounded-2xl rounded-xl font-black uppercase text-xs tracking-[0.2em] shadow-xl shadow-parlour-500/20 hover:scale-[1.05] transition-all group"
+          className="flex items-center gap-3 px-6 py-3 lg:px-10 lg:py-5 bg-gradient-to-r from-saloon-500 via-saloon-600 to-rosegold-500 text-white lg:rounded-2xl rounded-xl font-black uppercase text-xs tracking-[0.2em] shadow-xl shadow-saloon-500/20 hover:scale-[1.05] transition-all group"
         >
           <Plus size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
           Add Staff Member
@@ -152,9 +152,9 @@ export default function Staff() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1, type: 'spring', damping: 20 }}
-            className="group relative bg-white dark:bg-slate-900 rounded-2xl p-8 border border-slate-100 dark:border-white/5 shadow-2xl hover:shadow-parlour-500/10 transition-all duration-500 overflow-hidden"
+            className="group relative bg-white dark:bg-slate-900 rounded-2xl p-8 border border-slate-100 dark:border-white/5 shadow-2xl hover:shadow-saloon-500/10 transition-all duration-500 overflow-hidden"
           >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-parlour-500/5 to-transparent rounded-bl-2xl -mr-10 -mt-10 group-hover:scale-150 transition-transform duration-700" />
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-saloon-500/5 to-transparent rounded-bl-2xl -mr-10 -mt-10 group-hover:scale-150 transition-transform duration-700" />
 
             <div className="relative z-10 flex items-start justify-between">
               <div className="relative">
@@ -165,7 +165,7 @@ export default function Staff() {
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
                 </div>
-                <div className="absolute bottom-0 right-2 bg-parlour-500 text-white px-3 py-1 rounded-full text-[10px] font-black tracking-tighter shadow-lg ring-4 ring-white dark:ring-slate-800">
+                <div className="absolute bottom-0 right-2 bg-saloon-500 text-white px-3 py-1 rounded-full text-[10px] font-black tracking-tighter shadow-lg ring-4 ring-white dark:ring-slate-800">
                   {member.ratings.toFixed(1)}
                 </div>
               </div>
@@ -186,10 +186,10 @@ export default function Staff() {
             </div>
 
             <div className="mt-8">
-              <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter uppercase italic group-hover:text-parlour-500 transition-colors">{member.name}</h3>
+              <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter uppercase italic group-hover:text-saloon-500 transition-colors">{member.name}</h3>
               <div className="flex flex-wrap gap-2 mt-4">
                 {member.services.map(s => (
-                  <span key={s._id} className="px-3 py-1 bg-parlour-50 dark:bg-parlour-900/20 text-parlour-600 dark:text-parlour-400 text-[9px] font-black uppercase tracking-widest rounded-lg border border-parlour-100 dark:border-parlour-500/20">
+                  <span key={s._id} className="px-3 py-1 bg-saloon-50 dark:bg-saloon-900/20 text-saloon-600 dark:text-saloon-400 text-[9px] font-black uppercase tracking-widest rounded-lg border border-saloon-100 dark:border-saloon-500/20">
                     {s.name}
                   </span>
                 ))}
@@ -203,7 +203,7 @@ export default function Staff() {
               </div>
               <button
                 onClick={() => { setProfileExpert(member); setIsProfileOpen(true); }}
-                className="px-5 py-2.5 bg-slate-900 dark:bg-white dark:text-slate-900 text-white text-[10px] font-black rounded-xl uppercase tracking-widest hover:bg-parlour-500 dark:hover:bg-parlour-500 dark:hover:text-white transition-all shadow-lg active:scale-95"
+                className="px-5 py-2.5 bg-slate-900 dark:bg-white dark:text-slate-900 text-white text-[10px] font-black rounded-xl uppercase tracking-widest hover:bg-saloon-500 dark:hover:bg-saloon-500 dark:hover:text-white transition-all shadow-lg active:scale-95"
               >
                 Profile
               </button>
@@ -237,7 +237,7 @@ export default function Staff() {
                     </h2>
                     <p className="text-slate-400 font-black text-[10px] uppercase tracking-widest mt-4">Add or update staff information</p>
                   </div>
-                  <button onClick={handleCloseDrawer} className="p-3 bg-slate-100 dark:bg-slate-800 rounded-2xl text-slate-400 hover:text-parlour-500 transition-all">
+                  <button onClick={handleCloseDrawer} className="p-3 bg-slate-100 dark:bg-slate-800 rounded-2xl text-slate-400 hover:text-saloon-500 transition-all">
                     <X size={24} />
                   </button>
                 </div>
@@ -245,7 +245,7 @@ export default function Staff() {
                 <div className="flex-1 overflow-y-auto p-10 space-y-12 custom-scrollbar">
                   <div className="flex flex-col items-center">
                     <div className="relative group">
-                      <div className="w-40 h-40 rounded-2xl bg-slate-50 dark:bg-slate-800 border-4 border-dashed border-slate-200 dark:border-white/10 flex items-center justify-center overflow-hidden transition-all group-hover:border-parlour-500">
+                      <div className="w-40 h-40 rounded-2xl bg-slate-50 dark:bg-slate-800 border-4 border-dashed border-slate-200 dark:border-white/10 flex items-center justify-center overflow-hidden transition-all group-hover:border-saloon-500">
                         {imagePreview ? (
                           <img
                             src={imagePreview}
@@ -273,7 +273,7 @@ export default function Staff() {
                         name="name"
                         onChange={formik.handleChange}
                         value={formik.values.name}
-                        className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-parlour-500/30 rounded-2xl px-6 py-5 text-sm font-bold outline-none transition-all dark:text-white shadow-inner"
+                        className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/30 rounded-2xl px-6 py-5 text-sm font-bold outline-none transition-all dark:text-white shadow-inner"
                         placeholder="e.g. Master Barber"
                       />
                     </div>
@@ -284,8 +284,8 @@ export default function Staff() {
                         name="email"
                         onChange={formik.handleChange}
                         value={formik.values.email}
-                        className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-parlour-500/30 rounded-2xl px-6 py-5 text-sm font-bold outline-none transition-all dark:text-white shadow-inner"
-                        placeholder="artisan@elegance.com"
+                        className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/30 rounded-2xl px-6 py-5 text-sm font-bold outline-none transition-all dark:text-white shadow-inner"
+                        placeholder="artisan@glowsaloon.com"
                       />
                     </div>
 
@@ -293,7 +293,7 @@ export default function Staff() {
                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Work Specializations</label>
                       <div className="grid grid-cols-1 gap-3 max-h-[400px] overflow-y-auto pr-2">
                         {services.map(s => (
-                          <label key={s._id} className={`flex items-center justify-between p-4 rounded-2xl cursor-pointer transition-all border-2 ${formik.values.services.includes(s._id) ? 'bg-parlour-50 border-parlour-500 text-parlour-700' : 'bg-slate-50 dark:bg-slate-800/80 border-transparent text-slate-400'}`}>
+                          <label key={s._id} className={`flex items-center justify-between p-4 rounded-2xl cursor-pointer transition-all border-2 ${formik.values.services.includes(s._id) ? 'bg-saloon-50 border-saloon-500 text-saloon-700' : 'bg-slate-50 dark:bg-slate-800/80 border-transparent text-slate-400'}`}>
                             <span className="text-xs font-black uppercase tracking-widest">{s.name}</span>
                             <input
                               type="checkbox"
@@ -319,7 +319,7 @@ export default function Staff() {
                     <button
                       type="submit"
                       disabled={loading}
-                      className="w-full py-6 px-2 dark:bg-slate-800 bg-slate-900 text-white rounded-2xl text-sm font-black uppercase tracking-[0.3em] hover:bg-parlour-600 transition-all shadow-2xl active:scale-95 disabled:opacity-50"
+                      className="w-full py-6 px-2 dark:bg-slate-800 bg-slate-900 text-white rounded-2xl text-sm font-black uppercase tracking-[0.3em] hover:bg-saloon-600 transition-all shadow-2xl active:scale-95 disabled:opacity-50"
                     >
                       {selectedExpert ? 'Save Changes' : 'Add Staff Member'}
                     </button>
@@ -358,12 +358,12 @@ export default function Staff() {
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
                   <button
                     onClick={() => { setIsProfileOpen(false); setProfileExpert(null); }}
-                    className="absolute top-8 right-8 p-3 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl text-white hover:bg-parlour-500 transition-all"
+                    className="absolute top-8 right-8 p-3 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl text-white hover:bg-saloon-500 transition-all"
                   >
                     <X size={20} />
                   </button>
                   <div className="absolute bottom-10 left-10">
-                    <div className="px-3 py-1 bg-parlour-500 text-white text-[9px] font-black uppercase tracking-widest rounded-lg inline-block mb-3">Team Member</div>
+                    <div className="px-3 py-1 bg-saloon-500 text-white text-[9px] font-black uppercase tracking-widest rounded-lg inline-block mb-3">Team Member</div>
                     <h2 className="text-4xl font-black text-white tracking-tighter uppercase italic">{profileExpert.name}</h2>
                   </div>
                 </div>
@@ -371,7 +371,7 @@ export default function Staff() {
                 <div className="flex-1 overflow-y-auto px-10 py-8 space-y-12 custom-scrollbar text-slate-800 dark:text-white">
                   <div className="grid grid-cols-2 gap-6">
                     <div className="p-6 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-100 dark:border-white/5">
-                      <div className="flex items-center gap-3 text-parlour-500 mb-2">
+                      <div className="flex items-center gap-3 text-saloon-500 mb-2">
                         <Star size={16} fill="currentColor" />
                         <span className="text-[10px] font-black uppercase tracking-widest">Total Rating</span>
                       </div>
@@ -396,7 +396,7 @@ export default function Staff() {
                       {profileExpert.services.map(s => (
                         <div key={s._id} className="group relative px-6 py-4 bg-white dark:bg-slate-800 border border-slate-100 dark:border-white/5 rounded-2xl shadow-sm hover:shadow-md transition-all">
                           <div className="text-xs font-black text-slate-800 dark:text-white uppercase tracking-tighter">{s.name}</div>
-                          <div className="text-[9px] font-black text-parlour-500 uppercase tracking-widest mt-1">Specialized</div>
+                          <div className="text-[9px] font-black text-saloon-500 uppercase tracking-widest mt-1">Specialized</div>
                         </div>
                       ))}
                     </div>
@@ -419,7 +419,7 @@ export default function Staff() {
                 <div className="p-10 border-t border-slate-100 dark:border-white/5 flex gap-4">
                   <button
                     onClick={() => { setIsProfileOpen(false); handleEdit(profileExpert); }}
-                    className="flex-1 py-5 bg-parlour-500 text-white rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-parlour-600 transition-all shadow-xl shadow-parlour-500/20 active:scale-95"
+                    className="flex-1 py-5 bg-saloon-500 text-white rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-saloon-600 transition-all shadow-xl shadow-saloon-500/20 active:scale-95"
                   >
                     Edit Information
                   </button>
@@ -461,7 +461,7 @@ export default function Staff() {
 
                   <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter uppercase mb-4">Remove Staff?</h2>
                   <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em] mb-10 leading-relaxed px-4">
-                    Are you sure you want to remove <span className="text-red-500 italic">{expertToDelete.name}</span> from the parlour?
+                    Are you sure you want to remove <span className="text-red-500 italic">{expertToDelete.name}</span> from the saloon?
                   </p>
 
                   <div className="flex flex-col gap-3">

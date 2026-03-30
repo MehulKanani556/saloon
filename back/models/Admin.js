@@ -8,7 +8,7 @@ const adminSchema = new mongoose.Schema({
     role: { type: String, enum: ['Admin'], default: 'Admin' },
     profileImage: { type: String },
     salonInfo: {
-        name: { type: String, default: 'Luxury Beauty Parlour' },
+        name: { type: String, default: 'Luxury Saloon' },
         logo: { type: String },
         contact: { type: String },
         workingHours: { type: String }

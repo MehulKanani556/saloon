@@ -74,23 +74,23 @@ const CustomSelect = ({
           w-full flex items-center justify-between gap-4 px-8 py-4 
           bg-white dark:bg-slate-800/80 border border-slate-100 dark:border-white/5 
           rounded-2xl text-[10px] font-black uppercase tracking-widest 
-          hover:border-parlour-500 shadow-sm transition-all group
+          hover:border-saloon-500 shadow-sm transition-all group
           ${isFilter ? 'min-w-[200px]' : ''}
         `}
       >
         <span className="flex items-center gap-2 truncate text-slate-900 dark:text-white">
-          {Icon && <Icon size={14} className="text-parlour-600" />}
+          {Icon && <Icon size={14} className="text-saloon-600" />}
           {getLabel()}
         </span>
         <div className="flex items-center gap-3">
           {isMulti && Array.isArray(value) && value.length > 0 && (
-            <span className="px-2 py-0.5 bg-parlour-600 text-white text-[8px] rounded-md animate-pulse">
+            <span className="px-2 py-0.5 bg-saloon-600 text-white text-[8px] rounded-md animate-pulse">
               {value.length}
             </span>
           )}
           <ChevronDown 
             size={14} 
-            className={`text-slate-400 group-hover:text-parlour-600 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} 
+            className={`text-slate-400 group-hover:text-saloon-600 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} 
           />
         </div>
       </button>
@@ -118,13 +118,13 @@ const CustomSelect = ({
                     w-full flex items-center justify-between px-6 py-4 
                     text-[10px] font-black uppercase tracking-widest whitespace-nowrap
                     hover:bg-slate-50 dark:hover:bg-slate-800 transition-all text-left
-                    ${isSelected(option.value) ? 'text-parlour-600' : 'text-slate-400'}
+                    ${isSelected(option.value) ? 'text-saloon-600' : 'text-slate-400'}
                   `}
                 >
                   <span>{option.label}</span>
                   {isSelected(option.value) && (
-                    <div className="box-content p-1 bg-parlour-600/10 rounded-lg">
-                      <Check size={14} className="text-parlour-600" />
+                    <div className="box-content p-1 bg-saloon-600/10 rounded-lg">
+                      <Check size={14} className="text-saloon-600" />
                     </div>
                   )}
                 </button>

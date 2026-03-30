@@ -70,9 +70,9 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.2 }}
-                className="text-2xl font-black tracking-tighter bg-gradient-to-r from-parlour-600 to-rosegold-500 bg-clip-text text-transparent leading-none uppercase"
+                className="text-2xl font-black tracking-tighter bg-gradient-to-r from-saloon-600 to-rosegold-500 bg-clip-text text-transparent leading-none uppercase"
               >
-                GLOW ADMIN
+                SALOON ADMIN
               </motion.div>
             )}
           </AnimatePresence>
@@ -80,7 +80,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
           <motion.button
             layout
             onClick={() => isDrawerMode ? setIsOpen(false) : setIsCollapsed(!isCollapsed)}
-            className="p-2.5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 shadow-sm rounded-2xl transition-colors text-rosegold-400 group hover:bg-parlour-500 hover:text-white"
+            className="p-2.5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 shadow-sm rounded-2xl transition-colors text-rosegold-400 group hover:bg-saloon-500 hover:text-white"
           >
             {isCollapsed && !isDrawerMode ? <Menu size={22} strokeWidth={2.5} /> : <X size={22} strokeWidth={2.5} />}
           </motion.button>
@@ -98,8 +98,8 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                 <div className={`
                   flex items-center ${(isCollapsed && !isDrawerMode) ? 'justify-center' : 'gap-4'} px-4 py-4 rounded-2xl transition-all duration-300 group relative
                   ${isActive
-                    ? 'bg-gradient-to-r from-parlour-500 to-parlour-600 text-white border-none'
-                    : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-parlour-600'
+                    ? 'bg-gradient-to-r from-saloon-500 to-saloon-600 text-white border-none'
+                    : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-saloon-600'
                   }
                 `}>
                   <item.icon size={22} strokeWidth={isActive ? 3 : 2} className="shrink-0" />
@@ -141,7 +141,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
               ${(isCollapsed && !isDrawerMode) ? 'justify-center border-none' : ''}
             `}
           >
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-parlour-500 to-rosegold-600 p-[2px] shadow-lg shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-saloon-500 to-rosegold-600 p-[2px] shadow-lg shrink-0">
               <div className="w-full h-full rounded-[14px] bg-white dark:bg-slate-800 overflow-hidden">
                 <img
                   src={`https://api.dicebear.com/9.x/adventurer/svg?seed=jaygandhi`}
