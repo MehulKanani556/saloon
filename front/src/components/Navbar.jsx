@@ -39,15 +39,15 @@ export default function Navbar({ darkMode, setDarkMode, onMenuClick }) {
 
         <div className="hidden lg:flex items-center gap-6 px-1 py-1">
           <div className="flex flex-col">
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] leading-none mb-1">Lumina Protocol</p>
+            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] leading-none mb-1">Glow Parlour</p>
             <div className="flex items-center gap-2">
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-pulse" />
-              <p className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest italic">System: Operational</p>
+              <p className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest italic">System: Online</p>
             </div>
           </div>
           <div className="h-8 w-[1px] bg-slate-200 dark:bg-white/10" />
           <div className="flex flex-col">
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] leading-none mb-1 italic">Protocol Time</p>
+            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] leading-none mb-1 italic">Today's Time</p>
             <p className="text-xs font-black text-rosegold-500 uppercase tracking-widest transition-all">
               {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}
             </p>
@@ -122,7 +122,7 @@ export default function Navbar({ darkMode, setDarkMode, onMenuClick }) {
                   className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-red-50 dark:hover:bg-red-900/10 text-red-500 transition-all group"
                 >
                   <LogOut size={18} className="group-hover:translate-x-1 transition-transform" />
-                  <span className="text-[11px] font-black uppercase tracking-widest">Terminate Session</span>
+                  <span className="text-[11px] font-black uppercase tracking-widest">Logout Now</span>
                 </button>
               </div>
             </motion.div>

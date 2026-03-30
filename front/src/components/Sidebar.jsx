@@ -18,14 +18,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector } from 'react-redux';
 
 const sidebarItems = [
-  { icon: LayoutDashboard, label: 'Dashboard', path: '/' },
-  { icon: CalendarCheck2, label: 'Appointments', path: '/appointments' },
-  { icon: Scissors, label: 'Services', path: '/services' },
-  { icon: LayoutGrid, label: 'Categories', path: '/categories' },
-  { icon: Users, label: 'Staff', path: '/staff' },
-  { icon: UserSquare2, label: 'Clients', path: '/clients' },
-  { icon: TrendingUp, label: 'Sales & Revenue', path: '/sales' },
-  { icon: FileText, label: 'Invoices', path: '/invoices' },
+  { icon: LayoutDashboard, label: 'Home', path: '/' },
+  { icon: CalendarCheck2, label: 'Bookings', path: '/appointments' },
+  { icon: Scissors, label: 'Service List', path: '/services' },
+  { icon: LayoutGrid, label: 'Service Types', path: '/categories' },
+  { icon: Users, label: 'Staff Members', path: '/staff' },
+  { icon: UserSquare2, label: 'Customers', path: '/clients' },
+  { icon: TrendingUp, label: 'Business Report', path: '/sales' },
+  { icon: FileText, label: 'Bills', path: '/invoices' },
   { icon: Settings, label: 'Settings', path: '/settings' },
 ];
 

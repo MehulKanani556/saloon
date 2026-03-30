@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { IndianRupee, TrendingUp, TrendingDown, Target, Wallet, CreditCard, ChevronRight, X, AlertCircle } from 'lucide-react';
+import { DollarSign, TrendingUp, TrendingDown, Target, Wallet, CreditCard, ChevronRight, X, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchFinancialMatrix } from '../redux/slices/salesSlice';
@@ -27,7 +27,7 @@ export default function Sales() {
     validationSchema: Yup.object({
       amount: Yup.number()
         .required('Amount required')
-        .min(1000, 'Minimum withdrawal ₹1,000')
+        .min(10, 'Minimum withdrawal $10')
         .max(matrix.totalRevenue || 0, 'Insufficient vault balance'),
       bankAccount: Yup.string()
         .required('Bank tether required')
@@ -35,7 +35,7 @@ export default function Sales() {
       notes: Yup.string().max(100, 'Keep it concise')
     }),
     onSubmit: (values) => {
-      toast.success(`Withdrawal protocol initiated: ₹${values.amount}`);
+      toast.success(`Withdrawal protocol initiated: $${values.amount}`);
       setIsWithdrawModalOpen(false);
       withdrawalFormik.resetForm();
     }
@@ -72,8 +72,8 @@ export default function Sales() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {[
-          { label: 'Net Vault Revenue', value: `₹${matrix.totalRevenue.toLocaleString()}`, icon: IndianRupee, trend: '+12.4%', color: 'parlour' },
-          { label: 'Daily Momentum', value: `₹${Math.round(matrix.dailyAvg).toLocaleString()}`, icon: TrendingUp, trend: '+8.4%', color: 'blue' },
+          { label: 'Net Vault Revenue', value: `$${matrix.totalRevenue.toLocaleString()}`, icon: DollarSign, trend: '+12.4%', color: 'parlour' },
+          { label: 'Daily Momentum', value: `$${Math.round(matrix.dailyAvg).toLocaleString()}`, icon: TrendingUp, trend: '+8.4%', color: 'blue' },
           { label: 'Growth Trajectory', value: `${matrix.growth}%`, icon: Target, trend: '+2.1%', color: 'green' },
         ].map((stat, i) => (
           <div key={i} className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-50 dark:border-white/5 shadow-2xl relative group hover:scale-[1.02] transition-transform overflow-hidden">
@@ -120,7 +120,7 @@ export default function Sales() {
                       return (
                         <div className="bg-slate-900/90 backdrop-blur-xl border border-white/10 p-4 rounded-2xl shadow-2xl z-[1000] relative">
                           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 italic">{payload[0].payload.name} Forecast</p>
-                          <p className="text-xl font-black text-parlour-500 italic">₹{payload[0].value.toLocaleString()}</p>
+                          <p className="text-xl font-black text-parlour-500 italic">${payload[0].value.toLocaleString()}</p>
                         </div>
                       );
                     }
@@ -167,7 +167,7 @@ export default function Sales() {
                               {payload[0].payload.count} Rituals
                             </span>
                           </div>
-                          <p className="text-lg font-black text-rosegold-500 italic leading-none">₹{payload[0].value.toLocaleString()}</p>
+                          <p className="text-lg font-black text-rosegold-500 italic leading-none">${payload[0].value.toLocaleString()}</p>
                         </div>
                       );
                     }
@@ -187,7 +187,7 @@ export default function Sales() {
                 <div className="w-2 h-2 md:w-3 md:h-3 rounded-full shadow-lg shrink-0" style={{ backgroundColor: item.color }} />
                 <div className="flex-1 min-w-0">
                   <p className="text-[8px] md:text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] truncate">{item.name}</p>
-                  <p className="text-[10px] md:text-xs font-black text-slate-900 dark:text-white">₹{item.value.toLocaleString()}</p>
+                  <p className="text-[10px] md:text-xs font-black text-slate-900 dark:text-white">${item.value.toLocaleString()}</p>
                 </div>
               </div>
             ))}
@@ -227,14 +227,14 @@ export default function Sales() {
                     <div className="p-6 md:p-8 bg-parlour-600 rounded-xl md:rounded-2xl text-white flex items-center justify-between shadow-xl shadow-parlour-600/20">
                       <div className="space-y-1">
                         <p className="text-[8px] md:text-[10px] font-black uppercase tracking-widest opacity-60 italic leading-none">In Vault</p>
-                        <p className="text-2xl md:text-4xl font-black tracking-tighter italic leading-none">₹{matrix.totalRevenue.toLocaleString()}</p>
+                        <p className="text-2xl md:text-4xl font-black tracking-tighter italic leading-none">${matrix.totalRevenue.toLocaleString()}</p>
                       </div>
                       <Wallet size={32} md:size={48} className="opacity-20" />
                     </div>
 
                     <form onSubmit={withdrawalFormik.handleSubmit} className="space-y-8">
                       <div className="space-y-4">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2 italic">Extraction Amount (₹)</label>
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2 italic">Extraction Amount ($)</label>
                         <input
                           name="amount"
                           type="number"

@@ -112,8 +112,8 @@ export default function Clients() {
             <User2 size={24} md:size={32} strokeWidth={2.5} />
           </div>
           <div className="min-w-0">
-            <h1 className="text-xl sm:text-3xl lg:text-4xl font-black text-slate-800 dark:text-white tracking-tighter uppercase leading-none truncate md:whitespace-normal">Client Directory</h1>
-            <p className="text-slate-400 font-black text-[8px] sm:text-[9px] lg:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.25em] mt-2 lg:mt-4 opacity-70 group-hover:opacity-100 transition-opacity">Curating premium relationships with discerning gentlemen</p>
+            <h1 className="text-xl sm:text-3xl lg:text-4xl font-black text-slate-800 dark:text-white tracking-tighter uppercase leading-none truncate md:whitespace-normal">Customer List</h1>
+            <p className="text-slate-400 font-black text-[8px] sm:text-[9px] lg:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.25em] mt-2 lg:mt-4 opacity-70 group-hover:opacity-100 transition-opacity">List of all customers who visit your parlour</p>
           </div>
         </div>
         <div className="flex flex-col md:flex-row gap-4">
@@ -132,7 +132,7 @@ export default function Clients() {
             className="flex items-center gap-3 px-6 py-3 lg:px-10 lg:py-5 bg-gradient-to-r from-parlour-500 via-parlour-600 to-rosegold-500 text-white lg:rounded-2xl rounded-xl font-black uppercase text-xs tracking-[0.2em] shadow-xl shadow-parlour-500/20 hover:scale-[1.05] transition-all group"
           >
             <Plus size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
-            Onboard Client
+            Add New Customer
           </button>
         </div>
       </div>
@@ -142,9 +142,9 @@ export default function Clients() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-slate-50/50 dark:bg-slate-800/20">
-                <th className="px-4 md:px-8 md:py-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 italic whitespace-nowrap">Client Identity</th>
-                <th className="px-4 md:px-8 md:py-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 italic whitespace-nowrap">Contact Tether</th>
-                <th className="px-4 md:px-8 md:py-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 italic whitespace-nowrap">Ritual Frequency</th>
+                <th className="px-4 md:px-8 md:py-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 italic whitespace-nowrap">Customer Name</th>
+                <th className="px-4 md:px-8 md:py-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 italic whitespace-nowrap">Phone & Email</th>
+                <th className="px-4 md:px-8 md:py-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 italic whitespace-nowrap">Total Visits</th>
                 <th className="px-4 md:px-8 md:py-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 italic whitespace-nowrap">Actions</th>
               </tr>
             </thead>
@@ -256,9 +256,9 @@ export default function Clients() {
                 <div className="p-10 border-b border-slate-100 dark:border-white/5 flex items-center justify-between">
                   <div>
                     <h2 className="text-3xl font-black text-slate-800 dark:text-white tracking-tighter uppercase leading-none">
-                      {selectedClient ? 'Update Profile' : 'Onboard Client'}
+                      {selectedClient ? 'Edit Info' : 'New Customer'}
                     </h2>
-                    <p className="text-slate-400 font-black text-[10px] uppercase tracking-widest mt-4">Documenting a new grooming legacy</p>
+                    <p className="text-slate-400 font-black text-[10px] uppercase tracking-widest mt-4">Add or update customer details</p>
                   </div>
                   <button onClick={handleCloseDrawer} className="p-3 bg-slate-100 dark:bg-slate-800 rounded-2xl text-slate-400 hover:text-parlour-500 transition-all">
                     <X size={24} />
@@ -291,12 +291,12 @@ export default function Clients() {
                         <Plus size={20} />
                       </div>
                     </div>
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-6 italic">Customer Digital Frame</p>
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-6 italic">Customer Photo</p>
                   </div>
 
                   <form onSubmit={formik.handleSubmit} className="space-y-10">
                     <div className="space-y-4">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2 italic">Client Full Name</label>
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2 italic">Full Name</label>
                       <input
                         name="name"
                         onChange={formik.handleChange}
@@ -308,7 +308,7 @@ export default function Clients() {
                     </div>
 
                     <div className="space-y-4">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2 italic">Digital Signature (Email)</label>
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2 italic">Email Address</label>
                       <input
                         name="email"
                         onChange={formik.handleChange}
@@ -320,7 +320,7 @@ export default function Clients() {
                     </div>
 
                     <div className="space-y-4">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2 italic">Contact Tether (Phone)</label>
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2 italic">Phone Number</label>
                       <input
                         name="phone"
                         onChange={formik.handleChange}
@@ -336,7 +336,7 @@ export default function Clients() {
                       disabled={loading}
                       className="w-full py-6 dark:bg-slate-800 bg-slate-900 text-white rounded-2xl text-sm font-black uppercase tracking-[0.3em] hover:bg-parlour-600 transition-all shadow-2xl active:scale-95 disabled:opacity-50"
                     >
-                      {selectedClient ? 'Confirm Profile Update' : 'Finalize Onboarding'}
+                      {selectedClient ? 'Save Changes' : 'Add Customer'}
                     </button>
                   </form>
                 </div>
@@ -370,7 +370,7 @@ export default function Clients() {
                       <Trash2 size={40} />
                     </div>
                     <div className="space-y-4">
-                      <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter uppercase italic">Purge Identity?</h3>
+                      <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter uppercase italic">Delete Customer?</h3>
                       <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">
                         You are about to eliminate the digital footprint of <span className="text-red-500">{clientToDelete.name}</span>. Historical rituals will persist, but the contact tether will be surgically removed.
                       </p>
@@ -383,7 +383,7 @@ export default function Clients() {
                         }}
                         className="w-full py-5 bg-red-500 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] hover:bg-red-600 transition-all shadow-xl shadow-red-500/20 active:scale-95"
                       >
-                        Confirm Eradication
+                        Confirm Delete
                       </button>
                       <button
                         onClick={() => setIsDeleteModalOpen(false)}
@@ -511,7 +511,7 @@ export default function Clients() {
                                 </div>
                                 <div className="text-right">
                                   <p className="text-[8px] font-mono text-slate-300 dark:text-slate-600 mb-1 tracking-widest">ID: {app._id.slice(-6).toUpperCase()}</p>
-                                  <p className="text-sm font-black text-parlour-600 italic">₹{app.totalPrice?.toLocaleString()}</p>
+                                  <p className="text-sm font-black text-parlour-600 italic">${app.totalPrice?.toLocaleString()}</p>
                                 </div>
                               </div>
                             </div>

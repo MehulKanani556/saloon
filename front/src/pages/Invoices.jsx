@@ -142,7 +142,7 @@ const InvoiceDetailModal = ({ appointment, onClose }) => {
                     <p className="font-black text-sm italic">{format(new Date(appointment.appointmentDate), 'MMM dd, HH:mm')}</p>
                   </td>
                   <td className="py-8 px-4 text-right align-top">
-                    <p className="font-black text-lg italic text-parlour-600">₹{appointment.totalPrice.toLocaleString()}</p>
+                    <p className="font-black text-lg italic text-parlour-600">${appointment.totalPrice.toLocaleString()}</p>
                   </td>
                 </tr>
               </tbody>
@@ -152,15 +152,15 @@ const InvoiceDetailModal = ({ appointment, onClose }) => {
               <div className="w-1/3 space-y-6">
                 <div className="flex justify-between items-center px-4">
                   <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 italic">Sub-Total Value</span>
-                  <span className="font-black italic">₹{appointment.totalPrice.toLocaleString()}</span>
+                  <span className="font-black italic">${appointment.totalPrice.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between items-center px-4">
                   <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 italic">Protocol Tax (0%)</span>
-                  <span className="font-black italic">₹0</span>
+                  <span className="font-black italic">$0</span>
                 </div>
                 <div className="flex justify-between items-center p-6 bg-parlour-600 rounded-2xl text-white shadow-xl shadow-parlour-600/20">
                   <span className="text-[11px] font-black uppercase tracking-[0.2em] italic">Total Extraction</span>
-                  <span className="text-2xl font-black italic tracking-tighter">₹{appointment.totalPrice.toLocaleString()}</span>
+                  <span className="text-2xl font-black italic tracking-tighter">${appointment.totalPrice.toLocaleString()}</span>
                 </div>
               </div>
             </div>
@@ -319,7 +319,7 @@ export default function Invoices() {
                       </div>
                     </td>
                     <td className="px-4 md:px-8 md:py-8 py-4">
-                      <p className="text-lg font-black text-slate-900 dark:text-white tracking-tighter italic">₹{invoice.totalPrice.toLocaleString()}</p>
+                      <p className="text-lg font-black text-slate-900 dark:text-white tracking-tighter italic">${invoice.totalPrice.toLocaleString()}</p>
                     </td>
                     <td className="px-4 md:px-8 md:py-8 py-4">
                       <div className="flex flex-col gap-2 italic">

@@ -132,8 +132,8 @@ export default function Staff() {
             <LayoutGrid size={24} md:size={32} strokeWidth={2.5} />
           </div>
           <div className="min-w-0">
-            <h1 className="text-xl sm:text-3xl lg:text-4xl font-black text-slate-800 dark:text-white tracking-tighter uppercase leading-none truncate md:whitespace-normal">Master Artisans</h1>
-            <p className="text-slate-400 font-black text-[8px] sm:text-[9px] lg:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.25em] mt-2 lg:mt-4 opacity-70 group-hover:opacity-100 transition-opacity">The collective genius behind every grooming masterpiece</p>
+            <h1 className="text-xl sm:text-3xl lg:text-4xl font-black text-slate-800 dark:text-white tracking-tighter uppercase leading-none truncate md:whitespace-normal">Our Staff</h1>
+            <p className="text-slate-400 font-black text-[8px] sm:text-[9px] lg:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.25em] mt-2 lg:mt-4 opacity-70 group-hover:opacity-100 transition-opacity">List of people who work in your parlour</p>
           </div>
         </div>
         <button
@@ -141,7 +141,7 @@ export default function Staff() {
           className="flex items-center gap-3 px-6 py-3 lg:px-10 lg:py-5 bg-gradient-to-r from-parlour-500 via-parlour-600 to-rosegold-500 text-white lg:rounded-2xl rounded-xl font-black uppercase text-xs tracking-[0.2em] shadow-xl shadow-parlour-500/20 hover:scale-[1.05] transition-all group"
         >
           <Plus size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
-          Onboard Artisan
+          Add Staff Member
         </button>
       </div>
 
@@ -198,7 +198,7 @@ export default function Staff() {
 
             <div className="mt-10 pt-6 border-t border-slate-50 dark:border-white/5 flex items-center justify-between">
               <div className="space-y-1">
-                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block">Operational Window</span>
+                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block">Working Hours</span>
                 <span className="text-xs font-black text-slate-700 dark:text-slate-300 uppercase tracking-tighter">{member.availability}</span>
               </div>
               <button
@@ -233,9 +233,9 @@ export default function Staff() {
                 <div className="p-10 border-b border-slate-100 dark:border-white/5 flex items-center justify-between">
                   <div>
                     <h2 className="text-3xl font-black text-slate-800 dark:text-white tracking-tighter uppercase leading-none">
-                      {selectedExpert ? 'Refine Profile' : 'Artisan Onboarding'}
+                      {selectedExpert ? 'Edit Staff' : 'Add Staff'}
                     </h2>
-                    <p className="text-slate-400 font-black text-[10px] uppercase tracking-widest mt-4">Defining the legacy of excellence</p>
+                    <p className="text-slate-400 font-black text-[10px] uppercase tracking-widest mt-4">Add or update staff information</p>
                   </div>
                   <button onClick={handleCloseDrawer} className="p-3 bg-slate-100 dark:bg-slate-800 rounded-2xl text-slate-400 hover:text-parlour-500 transition-all">
                     <X size={24} />
@@ -254,7 +254,7 @@ export default function Staff() {
                         ) : (
                           <div className="flex flex-col items-center text-slate-400">
                             <Upload size={32} />
-                            <span className="text-[10px] font-black uppercase tracking-widest mt-4">Upload Masterpiece</span>
+                            <span className="text-[10px] font-black uppercase tracking-widest mt-4">Upload Photo</span>
                           </div>
                         )}
                       </div>
@@ -268,7 +268,7 @@ export default function Staff() {
 
                   <form onSubmit={formik.handleSubmit} className="space-y-10">
                     <div className="space-y-4">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Artisan Name</label>
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Staff Member Name</label>
                       <input
                         name="name"
                         onChange={formik.handleChange}
@@ -279,7 +279,7 @@ export default function Staff() {
                     </div>
 
                     <div className="space-y-4">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Digital Signature (Email)</label>
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Email Address</label>
                       <input
                         name="email"
                         onChange={formik.handleChange}
@@ -290,7 +290,7 @@ export default function Staff() {
                     </div>
 
                     <div className="space-y-4">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Ritual Specializations</label>
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Work Specializations</label>
                       <div className="grid grid-cols-1 gap-3 max-h-[400px] overflow-y-auto pr-2">
                         {services.map(s => (
                           <label key={s._id} className={`flex items-center justify-between p-4 rounded-2xl cursor-pointer transition-all border-2 ${formik.values.services.includes(s._id) ? 'bg-parlour-50 border-parlour-500 text-parlour-700' : 'bg-slate-50 dark:bg-slate-800/80 border-transparent text-slate-400'}`}>
@@ -321,7 +321,7 @@ export default function Staff() {
                       disabled={loading}
                       className="w-full py-6 px-2 dark:bg-slate-800 bg-slate-900 text-white rounded-2xl text-sm font-black uppercase tracking-[0.3em] hover:bg-parlour-600 transition-all shadow-2xl active:scale-95 disabled:opacity-50"
                     >
-                      {selectedExpert ? 'Confirm Profile' : 'Finalize Onboarding'}
+                      {selectedExpert ? 'Save Changes' : 'Add Staff Member'}
                     </button>
                   </form>
                 </div>
@@ -363,7 +363,7 @@ export default function Staff() {
                     <X size={20} />
                   </button>
                   <div className="absolute bottom-10 left-10">
-                    <div className="px-3 py-1 bg-parlour-500 text-white text-[9px] font-black uppercase tracking-widest rounded-lg inline-block mb-3">Master Artisan</div>
+                    <div className="px-3 py-1 bg-parlour-500 text-white text-[9px] font-black uppercase tracking-widest rounded-lg inline-block mb-3">Team Member</div>
                     <h2 className="text-4xl font-black text-white tracking-tighter uppercase italic">{profileExpert.name}</h2>
                   </div>
                 </div>
@@ -373,7 +373,7 @@ export default function Staff() {
                     <div className="p-6 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-100 dark:border-white/5">
                       <div className="flex items-center gap-3 text-parlour-500 mb-2">
                         <Star size={16} fill="currentColor" />
-                        <span className="text-[10px] font-black uppercase tracking-widest">Global Rating</span>
+                        <span className="text-[10px] font-black uppercase tracking-widest">Total Rating</span>
                       </div>
                       <div className="text-2xl font-black text-slate-800 dark:text-white">{profileExpert.ratings.toFixed(1)} / 5.0</div>
                     </div>
@@ -388,7 +388,7 @@ export default function Staff() {
 
                   <div className="space-y-6">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Art Rituals Mastery</span>
+                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Skills & Expertise</span>
                       <span className="h-[2px] flex-1 bg-slate-100 dark:bg-white/5 mx-6" />
                       <Award size={16} className="text-slate-400" />
                     </div>
@@ -404,7 +404,7 @@ export default function Staff() {
 
                   <div className="space-y-6">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Artisanal Availability</span>
+                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Working Hours</span>
                       <span className="h-[2px] flex-1 bg-slate-100 dark:bg-white/5 mx-6" />
                       <Sparkles size={16} className="text-slate-400" />
                     </div>
@@ -421,7 +421,7 @@ export default function Staff() {
                     onClick={() => { setIsProfileOpen(false); handleEdit(profileExpert); }}
                     className="flex-1 py-5 bg-parlour-500 text-white rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-parlour-600 transition-all shadow-xl shadow-parlour-500/20 active:scale-95"
                   >
-                    Refine Identity
+                    Edit Information
                   </button>
                   <button
                     onClick={() => { setIsProfileOpen(false); setProfileExpert(null); }}
@@ -459,9 +459,9 @@ export default function Staff() {
                     <Trash2 size={32} />
                   </div>
 
-                  <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter uppercase mb-4">Dissolve Protocol?</h2>
+                  <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter uppercase mb-4">Remove Staff?</h2>
                   <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em] mb-10 leading-relaxed px-4">
-                    Are you prepared to permanently remove <span className="text-red-500 italic">{expertToDelete.name}</span> from the artisanal archives?
+                    Are you sure you want to remove <span className="text-red-500 italic">{expertToDelete.name}</span> from the parlour?
                   </p>
 
                   <div className="flex flex-col gap-3">
@@ -469,13 +469,13 @@ export default function Staff() {
                       onClick={confirmDelete}
                       className="w-full py-5 bg-red-500 text-white rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-red-600 transition-all shadow-xl shadow-red-500/20 active:scale-95"
                     >
-                      Confirm Dissolution
+                      Confirm Removal
                     </button>
                     <button
                       onClick={() => setIsDeleteModalOpen(false)}
                       className="w-full py-5 bg-slate-100 dark:bg-slate-800 text-slate-400 rounded-2xl text-[11px] font-black uppercase tracking-widest hover:text-slate-600 dark:hover:text-white transition-all"
                     >
-                      Abort Protocol
+                      Cancel
                     </button>
                   </div>
                 </motion.div>

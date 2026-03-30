@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Users,
   CalendarCheck2,
-  IndianRupee,
+  DollarSign,
   TrendingUp,
   Scissors,
   CheckCircle2,
@@ -54,7 +54,7 @@ export default function Dashboard() {
       {/* Cinematic Header Section */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 md:gap-8 pt-4">
         <div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tighter uppercase leading-none italic drop-shadow-sm">Business Pulse</h1>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tighter uppercase leading-none italic drop-shadow-sm">Business Summary</h1>
           <div className="flex items-center gap-3 mt-4">
             <div className="flex gap-1">
               {[1, 2, 3].map(i => (
@@ -66,14 +66,14 @@ export default function Dashboard() {
                 />
               ))}
             </div>
-            <p className="text-slate-400 font-bold text-[8px] sm:text-[10px] uppercase tracking-[0.2em] sm:tracking-[0.3em] italic">Live Intelligence Stream | Synchronized</p>
+            <p className="text-slate-400 font-bold text-[8px] sm:text-[10px] uppercase tracking-[0.2em] sm:tracking-[0.3em] italic">Parlour Live Status | Connected</p>
           </div>
         </div>
         <div className="flex items-center gap-4 sm:gap-8">
           <div className="hidden lg:block h-12 w-[1px] bg-slate-100 dark:bg-white/10" />
           <div className="text-left">
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-2 md:mb-3 italic">Vault Momentum</p>
-            <p className="text-2xl sm:text-3xl font-black text-parlour-600 tracking-tighter italic">₹ {data.stats.totalRevenue.toLocaleString()}</p>
+            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-2 md:mb-3 italic">Total Collection</p>
+            <p className="text-2xl sm:text-3xl font-black text-parlour-600 tracking-tighter italic">$ {data.stats.totalRevenue.toLocaleString()}</p>
           </div>
         </div>
       </div>
@@ -81,9 +81,9 @@ export default function Dashboard() {
       {/* Industrial Matrix Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
         {[
-          { label: 'Total Clients', value: data.stats.totalClients, icon: Users, color: 'parlour', trend: '12.5%' },
-          { label: 'Total Appointments', value: data.stats.totalAppointments, icon: CalendarCheck2, color: 'blue', trend: '4.2%' },
-          { label: 'Total Revenue', value: `₹${(data.stats.totalRevenue / 1000).toFixed(1)}K`, icon: IndianRupee, color: 'green', trend: '18.1%' },
+          { label: 'Total Customers', value: data.stats.totalClients, icon: Users, color: 'parlour', trend: '12.5%' },
+          { label: 'Total Bookings', value: data.stats.totalAppointments, icon: CalendarCheck2, color: 'blue', trend: '4.2%' },
+          { label: 'Today Collections', value: `$${(data.stats.totalRevenue / 1000).toFixed(1)}K`, icon: DollarSign, color: 'green', trend: '18.1%' },
           { label: 'Active Services', value: data.stats.activeServices, icon: Scissors, color: 'indigo', trend: '2.0%' },
         ].map((stat, i) => (
           <motion.div
@@ -118,9 +118,9 @@ export default function Dashboard() {
             <div>
               <h3 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white tracking-tighter uppercase mb-2 italic flex items-center gap-3">
                 <TrendingUp className="text-parlour-500" />
-                Financial Trajectory
+                Earnings Report
               </h3>
-              <p className="text-slate-400 font-bold text-[9px] md:text-[10px] uppercase tracking-[0.2em] italic">Revenue Velocity | Performance Logic</p>
+              <p className="text-slate-400 font-bold text-[9px] md:text-[10px] uppercase tracking-[0.2em] italic">Sales Growth | Success Graph</p>
             </div>
           </div>
           <div className="h-[250px] sm:h-[300px] md:h-[380px] w-full">
@@ -149,7 +149,7 @@ export default function Dashboard() {
 
         <div className="space-y-6 md:space-y-8">
           <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-50 dark:border-white/5 shadow-2xl relative">
-            <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tighter uppercase mb-8 md:mb-10 italic">Portfolio Hierarchy</h3>
+            <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tighter uppercase mb-8 md:mb-10 italic">Popular Services</h3>
             <div className="space-y-6 md:space-y-8 max-h-[642px] overflow-y-auto custom-scrollbar pr-2">
               {data.serviceHierarchy.map((service, i) => (
                 <div key={i} className="space-y-3">
@@ -177,8 +177,8 @@ export default function Dashboard() {
         <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-50 dark:border-white/5 shadow-2xl relative overflow-hidden group">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10 md:mb-12 relative z-10">
             <div>
-              <h3 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white tracking-tighter uppercase mb-2 italic">Ritual Archive</h3>
-              <p className="text-slate-400 font-bold text-[9px] md:text-[10px] uppercase tracking-[0.2em] italic">Historical Booking Trace</p>
+              <h3 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white tracking-tighter uppercase mb-2 italic">Previous Bookings</h3>
+              <p className="text-slate-400 font-bold text-[9px] md:text-[10px] uppercase tracking-[0.2em] italic">Recent customer visits</p>
             </div>
           </div>
           <div className="space-y-4 md:space-y-6 relative z-10">
@@ -194,7 +194,7 @@ export default function Dashboard() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-xs font-black text-slate-900 dark:text-white italic">₹{app.totalPrice}</p>
+                  <p className="text-xs font-black text-slate-900 dark:text-white italic">${app.totalPrice}</p>
                   <span className={`text-[8px] md:text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-lg border ${app.status === 'Completed' ? 'bg-green-500/10 text-green-500 border-green-500/20' :
                     app.status === 'Cancelled' ? 'bg-red-500/10 text-red-500 border-red-500/20' :
                       app.status === 'Confirmed' ? 'bg-blue-500/10 text-blue-500 border-blue-500/20' :
@@ -211,8 +211,8 @@ export default function Dashboard() {
         <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-50 dark:border-white/5 shadow-2xl relative overflow-hidden group">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10 md:mb-12 relative z-10">
             <div>
-              <h3 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white tracking-tighter uppercase mb-2 italic">Immediate Rituals</h3>
-              <p className="text-slate-400 font-bold text-[9px] md:text-[10px] uppercase tracking-[0.2em] italic">Today's Scheduled Masterpieces</p>
+              <h3 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white tracking-tighter uppercase mb-2 italic">Today's Bookings</h3>
+              <p className="text-slate-400 font-bold text-[9px] md:text-[10px] uppercase tracking-[0.2em] italic">Customers arriving today</p>
             </div>
             <div className="w-10 h-10 rounded-2xl bg-parlour-500/10 flex items-center justify-center text-parlour-500 font-black text-sm border border-parlour-500/20 shadow-inner">
               {data.upcomingRituals.length}
@@ -233,7 +233,7 @@ export default function Dashboard() {
                 <div className="flex items-center gap-4">
                   <div className="text-right">
                     <p className="text-[10px] font-black uppercase tracking-widest opacity-40 italic">Magnitude</p>
-                    <p className="text-sm font-black italic">₹{app.totalPrice}</p>
+                    <p className="text-sm font-black italic">${app.totalPrice}</p>
                   </div>
                   <ArrowRight size={18} className="opacity-40 group-hover:opacity-100 transition-opacity" />
                 </div>
@@ -251,8 +251,8 @@ export default function Dashboard() {
       <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-50 dark:border-white/5 shadow-2xl relative overflow-hidden">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10 md:mb-16">
           <div>
-            <h3 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white tracking-tighter uppercase mb-2 italic">Temporal Intensity</h3>
-            <p className="text-slate-400 font-bold text-[9px] md:text-[10px] uppercase tracking-[0.2em] italic">Peak Operational Flux Analytics</p>
+            <h3 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white tracking-tighter uppercase mb-2 italic">Busy Hours</h3>
+            <p className="text-slate-400 font-bold text-[9px] md:text-[10px] uppercase tracking-[0.2em] italic">Peak footfall analysis</p>
           </div>
         </div>
         <div className="h-[250px] w-full">

@@ -86,7 +86,7 @@ const ServiceForm = ({ onClose, initialData }) => {
               {initialData ? 'Edit Service' : 'Add Service'}
             </h2>
             <p className="text-slate-400 font-black text-[10px] uppercase tracking-widest mt-4">
-              {initialData ? 'Refine service details' : 'Create a new service profile'}
+              {initialData ? 'Update service information' : 'Add a new service to your list'}
             </p>
           </div>
           <button onClick={onClose} className="p-3 bg-slate-100 dark:bg-slate-800 rounded-2xl text-slate-400 hover:text-parlour-500 transition-all">
@@ -177,7 +177,7 @@ const ServiceForm = ({ onClose, initialData }) => {
                 />
               </div>
               <div className="space-y-4">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Price (₹)</label>
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Price ($)</label>
                 <input
                   type="number"
                   {...formik.getFieldProps('price')}
@@ -248,22 +248,22 @@ const DeleteModal = ({ isOpen, onClose, onConfirm, itemName }) => (
             <div className="w-24 h-24 bg-red-500/10 text-red-500 rounded-2xl flex items-center justify-center mx-auto mb-10 shadow-inner">
               <Trash2 size={48} strokeWidth={1.5} />
             </div>
-            <h3 className="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tighter italic mb-4 leading-none">Eradicate Asset</h3>
+            <h3 className="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tighter italic mb-4 leading-none">Delete Service?</h3>
             <p className="text-slate-400 font-bold text-[11px] uppercase tracking-[0.2em] leading-relaxed mb-12 px-2">
-              You are about to permanently purge <span className="text-red-500">"{itemName}"</span> from the global portfolio registry.
+              You are about to permanently delete <span className="text-red-500">"{itemName}"</span> from your list.
             </p>
             <div className="grid grid-cols-2 gap-4">
               <button
                 onClick={onClose}
                 className="py-5 bg-slate-100 dark:bg-slate-800 text-slate-400 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:text-slate-900 dark:hover:text-white transition-all active:scale-95"
               >
-                Abort Protocol
+                Cancel
               </button>
               <button
                 onClick={onConfirm}
                 className="py-5 bg-red-500 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-xl shadow-red-500/20 hover:bg-red-600 transition-all active:scale-95"
               >
-                Confirm Purge
+                Delete Now
               </button>
             </div>
           </motion.div>
@@ -347,8 +347,8 @@ export default function Services() {
             <Scissors size={24} md:size={32} strokeWidth={2.5} />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-800 dark:text-white tracking-tighter uppercase leading-none underline-pink">Service Portfolio</h1>
-            <p className="text-slate-400 font-black text-[8px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.25em] mt-2 md:mt-4">Curate Luxury and Distinction</p>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-800 dark:text-white tracking-tighter uppercase leading-none underline-pink">Our Services</h1>
+            <p className="text-slate-400 font-black text-[8px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.25em] mt-2 md:mt-4">Manage all services provided by your parlour</p>
           </div>
         </div>
         <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
@@ -370,7 +370,7 @@ export default function Services() {
             className="flex items-center justify-center gap-3 px-6 md:px-8 py-3 md:py-4 bg-gradient-to-r from-slate-900 to-slate-800 dark:from-white dark:to-slate-100 dark:text-slate-900 text-white rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-widest shadow-2xl hover:scale-[1.05] transition-all group"
           >
             <Plus size={18} md:size={22} strokeWidth={3} className="group-hover:rotate-90 transition-transform" />
-            Curate New
+            Add New Service
           </button>
         </div>
       </div>
@@ -416,7 +416,7 @@ export default function Services() {
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest italic">
                       <Clock size={12} className="text-parlour-500" />
-                      {service.duration} MIN PROTOCOL
+                      {service.duration} MINUTES
                     </div>
                     <span className="text-[10px] font-mono text-slate-300 dark:text-slate-600">ID: {service._id.slice(-6)}</span>
                   </div>
@@ -427,8 +427,8 @@ export default function Services() {
 
                   <div className="flex items-center justify-between pt-6 border-t border-slate-50 dark:border-white/5">
                     <div className="flex flex-col">
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Ritual Value</p>
-                      <p className="text-2xl md:text-3xl font-black text-rosegold-500 tracking-tighter italic">₹{service.price.toLocaleString()}</p>
+                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Price</p>
+                      <p className="text-2xl md:text-3xl font-black text-rosegold-500 tracking-tighter italic">${service.price.toLocaleString()}</p>
                     </div>
 
                     <div className="flex gap-2">
@@ -470,7 +470,7 @@ export default function Services() {
       {!filteredServices.length && (
         <div className="flex flex-col items-center justify-center py-40 space-y-6 opacity-30">
           <Target size={80} strokeWidth={1} />
-          <p className="text-[11px] font-black uppercase tracking-[0.4em]">No ritual assets found in registry</p>
+          <p className="text-[11px] font-black uppercase tracking-[0.4em]">No services found.</p>
         </div>
       )}
     </div>

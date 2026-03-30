@@ -118,7 +118,7 @@ export default function Appointments() {
   const handleDelete = async () => {
     try {
       await dispatch(deleteAppointment(appointmentToDelete._id)).unwrap();
-      toast.success('Ritual scheduling dissolved');
+      toast.success('Booking cancelled');
       setIsDeleteModalOpen(false);
     } catch (error) {
       toast.error(error.message || 'Dissolution failed');
@@ -149,8 +149,8 @@ export default function Appointments() {
               <CalendarIcon size={24} md:size={32} strokeWidth={2.5} />
             </div>
             <div className="min-w-0">
-              <h1 className="text-xl sm:text-3xl lg:text-4xl font-black text-slate-800 dark:text-white tracking-tighter uppercase leading-none truncate md:whitespace-normal">Booking Schedule</h1>
-              <p className="text-slate-400 font-black text-[8px] sm:text-[9px] lg:text-[10px] uppercase tracking-[0.15em] lg:tracking-[0.25em] mt-2 lg:mt-4 opacity-70 group-hover:opacity-100 transition-opacity">Temporal Logistics Platform</p>
+              <h1 className="text-xl sm:text-3xl lg:text-4xl font-black text-slate-800 dark:text-white tracking-tighter uppercase leading-none truncate md:whitespace-normal">Appointment Bookings</h1>
+              <p className="text-slate-400 font-black text-[8px] sm:text-[9px] lg:text-[10px] uppercase tracking-[0.15em] lg:tracking-[0.25em] mt-2 lg:mt-4 opacity-70 group-hover:opacity-100 transition-opacity">Manage your parlour bookings here</p>
             </div>
           </div>
           <button
@@ -163,7 +163,7 @@ export default function Appointments() {
             className="flex items-center gap-2 px-6 py-3 lg:px-10 lg:py-5 bg-gradient-to-r from-parlour-500 via-parlour-600 to-rosegold-500 text-white lg:rounded-2xl rounded-xl font-black uppercase text-xs tracking-[0.2em] shadow-xl shadow-parlour-500/20 hover:scale-[1.05] transition-all group"
           >
             <Plus size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
-            Book New Ritual
+            Add New Booking
           </button>
         </div>
 
@@ -175,7 +175,7 @@ export default function Appointments() {
 
               <div className="flex flex-col sm:flex-row gap-2 sm:gap-0 sm:items-center justify-between mb-4 sm:mb-10 mt-4 px-3 md:px-6 relative z-10">
                 <div className="flex flex-col">
-                  <span className="text-[9px] md:text-[10px] font-black text-parlour-500 uppercase tracking-widest leading-none mb-1 md:mb-2">Schedule View</span>
+                  <span className="text-[9px] md:text-[10px] font-black text-parlour-500 uppercase tracking-widest leading-none mb-1 md:mb-2">Calendar View</span>
                   <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-slate-800 dark:text-white uppercase tracking-tighter italic">{format(currentDate, 'MMMM yyyy')}</h3>
                 </div>
                 <div className="flex gap-2 md:gap-3">
@@ -231,8 +231,8 @@ export default function Appointments() {
           <div className="xl:col-span-4 space-y-6 lg:mt-0">
             <div className="flex items-center justify-between px-2 mb-8">
               <div>
-                <h3 className="text-2xl font-black text-slate-800 dark:text-white tracking-tighter uppercase leading-none">Upcoming Today</h3>
-                <p className="text-slate-400 font-black text-[9px] uppercase tracking-widest mt-3">Active list for {format(selectedDate, 'MMM do')}</p>
+                <h3 className="text-2xl font-black text-slate-800 dark:text-white tracking-tighter uppercase leading-none">Today's Bookings</h3>
+                <p className="text-slate-400 font-black text-[9px] uppercase tracking-widest mt-3">Bookings for {format(selectedDate, 'MMM do')}</p>
               </div>
               <div className="w-10 h-10 rounded-2xl bg-parlour-500/10 flex items-center justify-center text-parlour-500 font-black text-sm border border-parlour-500/20">
                 {filteredAppointments.length}
@@ -298,12 +298,12 @@ export default function Appointments() {
                           <div className="w-1.5 h-1.5 rounded-full bg-parlour-500 group-hover:bg-white shrink-0" />
                           <span className="text-[10px] sm:text-[11px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest group-hover:text-white truncate">{s.name}</span>
                         </div>
-                        <span className="text-[9px] sm:text-[10px] font-black opacity-60 shrink-0">₹{s.price}</span>
+                        <span className="text-[9px] sm:text-[10px] font-black opacity-60 shrink-0">${s.price}</span>
                       </div>
                     ))}
                     <div className="pt-2 border-t border-slate-200 dark:border-white/10 flex items-center justify-between group-hover:border-white/20">
-                      <span className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest group-hover:text-white/60">Aggregate Ritual</span>
-                      <span className="text-xs sm:text-sm font-black text-parlour-500 group-hover:text-white">₹{app.totalPrice}</span>
+                      <span className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest group-hover:text-white/60">Final Total</span>
+                      <span className="text-xs sm:text-sm font-black text-parlour-500 group-hover:text-white">${app.totalPrice}</span>
                     </div>
                   </div>
                 </motion.div>
@@ -314,12 +314,12 @@ export default function Appointments() {
                   className="p-16 text-center glass-card border-dashed border-slate-200 dark:border-white/10"
                 >
                   <Clock className="mx-auto text-slate-200 mb-4" size={48} />
-                  <p className="text-slate-400 font-black uppercase tracking-widest text-[10px]">No masterpieces scheduled for this date</p>
+                  <p className="text-slate-400 font-black uppercase tracking-widest text-[10px]">No bookings for this date</p>
                   <button
                     onClick={() => setIsDrawerOpen(true)}
                     className="mt-6 text-parlour-500 font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 mx-auto"
                   >
-                    <Plus size={14} /> Schedule Now
+                    <Plus size={14} /> Add Booking
                   </button>
                 </motion.div>
               )}
@@ -349,10 +349,10 @@ export default function Appointments() {
                 <div className="p-10 border-b border-slate-100 dark:border-white/5 flex items-center justify-between">
                   <div>
                     <h2 className="text-3xl font-black text-slate-800 dark:text-white tracking-tighter uppercase leading-none">
-                      {selectedAppointment ? 'Refine Ritual' : 'Schedule Session'}
+                      {selectedAppointment ? 'Edit Booking' : 'New Booking'}
                     </h2>
                     <p className="text-slate-400 font-black text-[10px] uppercase tracking-widest mt-4">
-                      {selectedAppointment ? 'Adjusting the client masterpiece' : 'Curate a new client experience'}
+                      {selectedAppointment ? 'Update booking details' : 'Enter customer details for booking'}
                     </p>
                   </div>
                   <button onClick={() => setIsDrawerOpen(false)} className="p-3 bg-slate-100 dark:bg-slate-800 rounded-2xl text-slate-400 hover:text-parlour-500 transition-all">
@@ -392,7 +392,7 @@ export default function Appointments() {
                         }}
                         options={[
                           { label: 'Choose Profile...', value: '' },
-                          ...(!selectedAppointment ? [{ label: '+ Add New Masterpiece (Client)', value: 'new' }] : []),
+                          ...(!selectedAppointment ? [{ label: '+ Add New Customer', value: 'new' }] : []),
                           ...clients.map(c => ({ label: `${c.name}`, value: c._id }))
                         ]}
                       />
@@ -407,7 +407,7 @@ export default function Appointments() {
                           className="space-y-10 overflow-hidden"
                         >
                           <div className="space-y-4">
-                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Client Identity</label>
+                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Customer Name</label>
                             <input
                               name="clientName"
                               onChange={formik.handleChange}
@@ -419,7 +419,7 @@ export default function Appointments() {
                           </div>
 
                           <div className="space-y-4">
-                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Digital Connection (Email)</label>
+                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Email Address</label>
                             <input
                               name="clientEmail"
                               onChange={formik.handleChange}
@@ -431,7 +431,7 @@ export default function Appointments() {
                           </div>
 
                           <div className="space-y-4">
-                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Voice Contact (Phone)</label>
+                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Phone Number</label>
                             <input
                               name="clientPhone"
                               onChange={formik.handleChange}
@@ -447,20 +447,20 @@ export default function Appointments() {
 
                     <div className="">
                       <CustomSelect
-                        label="Ritual / Service Portfolio"
+                        label="Select Services"
                         name="services"
                         value={formik.values.services}
                         onChange={formik.handleChange}
                         isMulti={true}
                         options={[
-                          ...services.map(s => ({ label: `${s.name} - ₹${s.price}`, value: s._id }))
+                          ...services.map(s => ({ label: `${s.name} - $${s.price}`, value: s._id }))
                         ]}
                       />
                       {formik.errors.services && <p className="text-[9px] text-red-500 font-bold uppercase ml-4 mt-1">{formik.errors.services}</p>}
                     </div>
 
                     <div className="space-y-4">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Timing Configuration</label>
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Date & Time</label>
                       <input
                         name="date"
                         type="datetime-local"
@@ -473,7 +473,7 @@ export default function Appointments() {
 
                     <div className="grid grid-cols-2 gap-8">
                       <CustomSelect
-                        label="Ritual Status"
+                        label="Booking Status"
                         name="status"
                         value={formik.values.status}
                         onChange={formik.handleChange}
@@ -494,7 +494,7 @@ export default function Appointments() {
                         disabled={formik.isSubmitting}
                         className="w-full py-6 bg-slate-950 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-black uppercase tracking-[0.3em] shadow-xl hover:bg-parlour-600 dark:hover:bg-slate-100 transition-all flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50"
                       >
-                        {formik.isSubmitting ? 'Sychnronizing...' : selectedAppointment ? 'Update Masterpiece' : 'Confirm Masterpiece'}
+                        {formik.isSubmitting ? 'Saving...' : selectedAppointment ? 'Update Booking' : 'Confirm Booking'}
                         <Sparkles size={20} />
                       </button>
                     </div>
@@ -530,15 +530,15 @@ export default function Appointments() {
                     <AlertTriangle size={40} strokeWidth={2.5} />
                   </div>
                   <div>
-                    <h3 className="text-3xl font-black text-slate-800 dark:text-white uppercase tracking-tighter leading-none">Dissolve Ritual?</h3>
-                    <p className="text-slate-400 font-black text-[10px] uppercase tracking-widest mt-4">This scheduling masterpiece will be permanently removed</p>
+                    <h3 className="text-3xl font-black text-slate-800 dark:text-white uppercase tracking-tighter leading-none">Delete Booking?</h3>
+                    <p className="text-slate-400 font-black text-[10px] uppercase tracking-widest mt-4">This booking will be deleted forever.</p>
                   </div>
                   <div className="flex gap-4 p-2 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-white/5">
                     <div className="w-12 h-12 rounded-2xl bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-slate-400">
                       <User size={20} />
                     </div>
                     <div className="text-left">
-                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Client Identity</p>
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Customer Name</p>
                       <p className="text-sm font-black text-slate-700 dark:text-white uppercase truncate max-w-[200px]">{appointmentToDelete?.client?.name}</p>
                     </div>
                   </div>
@@ -547,7 +547,7 @@ export default function Appointments() {
                       onClick={() => setIsDeleteModalOpen(false)}
                       className="py-5 bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-300 rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-slate-200 dark:hover:bg-white dark:hover:text-slate-900 transition-all active:scale-95"
                     >
-                      Preserve
+                      Keep
                     </button>
                     <button
                       onClick={handleDelete}

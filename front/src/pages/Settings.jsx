@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Save, Building2, Clock, CreditCard, Globe, IndianRupee, Loader2, ShieldCheck, Mail, Phone, MapPin } from 'lucide-react';
+import { Save, Building2, Clock, CreditCard, Globe, DollarSign, Loader2, ShieldCheck, Mail, Phone, MapPin } from 'lucide-react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
@@ -207,7 +207,7 @@ export default function Settings() {
                 <div key={method.name} className="flex xl:flex-row lg:flex-col flex-row xl:items-center lg:items-start items-center justify-between p-4 md:p-6 rounded-2xl border border-slate-50 dark:border-white/5 bg-slate-50/50 dark:bg-slate-800/20 group hover:border-parlour-200 transition-all gap-4">
                   <div className="flex items-center gap-4 flex-1 min-w-0">
                     <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-white dark:bg-slate-900 flex items-center justify-center text-rosegold-500 shadow-sm border border-slate-100 dark:border-white/10 shrink-0">
-                      <IndianRupee size={18} md:size={22} />
+                      <DollarSign size={18} md:size={22} />
                     </div>
                     <span className="text-[12px] md:text-sm font-black text-slate-700 dark:text-white uppercase tracking-tighter italic group-hover:text-parlour-600 transition-colors leading-tight">
                       {method.name}
