@@ -12,6 +12,7 @@ import Sales from './pages/Sales'
 import Settings from './pages/Settings'
 import Invoices from './pages/Invoices'
 import Login from './pages/Login'
+import Signup from './pages/Signup'
 import { Toaster } from 'react-hot-toast'
 import './index.css'
 
@@ -19,17 +20,17 @@ const AppContent = () => {
   const { adminInfo } = useSelector((state) => state.auth);
   const location = useLocation();
   const navigate = useNavigate();
-  const isLoginPage = location.pathname === '/login';
+  const isAuthPage = ['/login', '/signup'].includes(location.pathname);
 
   useEffect(() => {
-    // If we're not logged in and not on login page, redirect to login
-    if (!adminInfo && !isLoginPage) {
+    // If we're not logged in and not on an auth page, redirect to login
+    if (!adminInfo && !isAuthPage) {
       navigate('/login');
     }
-  }, [adminInfo, isLoginPage, navigate]);
+  }, [adminInfo, isAuthPage, navigate]);
 
   const WrappedLayout = ({ children }) => {
-    if (isLoginPage) return <>{children}</>;
+    if (isAuthPage) return <>{children}</>;
     return <Layout>{children}</Layout>;
   };
 
@@ -37,6 +38,7 @@ const AppContent = () => {
     <WrappedLayout>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
         
         {/* Protected Routes */}
         <Route path="/" element={adminInfo ? <Dashboard /> : <Navigate to="/login" />} />

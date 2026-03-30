@@ -3,6 +3,8 @@ const cors = require('cors');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
+const cookieParser = require('cookie-parser');
+const path = require('path');
 
 dotenv.config();
 
@@ -10,23 +12,17 @@ connectDB();
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin: process.env.CLIENT_URL || 'http://localhost:5173', // Adjust host for frontend
+    credentials: true
+}));
 app.use(express.json());
+app.use(cookieParser());
 app.use(morgan('dev'));
-const path = require('path');
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Routes (placeholder)
-app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api/appointments', require('./routes/appointmentRoutes'));
-app.use('/api/services', require('./routes/serviceRoutes'));
-app.use('/api/staff', require('./routes/staffRoutes'));
-app.use('/api/clients', require('./routes/clientRoutes'));
-app.use('/api/sales', require('./routes/salesRoutes'));
-app.use('/api/settings', require('./routes/settingRoutes'));
-app.use('/api/dashboard', require('./routes/dashboardRoutes'));
-app.use('/api/categories', require('./routes/categoryRoutes'));
-app.use('/api/invoices', require('./routes/invoiceRoutes'));
+// Routes (centralized in routes/indexRoute.js)
+app.use('/api', require('./routes/indexRoute'));
 
 app.get('/', (req, res) => {
     res.send('API is running...');

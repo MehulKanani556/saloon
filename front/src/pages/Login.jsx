@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Mail, Lock, Sparkles, ArrowRight, AlertCircle } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginAdmin } from '../redux/slices/authSlice';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
@@ -111,6 +111,13 @@ export default function Login() {
             )}
           </button>
         </form>
+
+        <div className="mt-8 text-center">
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+            New to Glow Luxe? 
+            <Link to="/signup" className="text-parlour-500 ml-2 hover:underline">Establish Identity</Link>
+          </p>
+        </div>
 
         <p className="mt-10 text-center text-[9px] font-black text-slate-300 uppercase tracking-[0.3em] leading-relaxed">
           Proprietary Intelligence Suite <br/> Sia Elegance Collective

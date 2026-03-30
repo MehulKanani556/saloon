@@ -7,24 +7,32 @@ const protect = async (req, res, next) => {
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         try {
             token = req.headers.authorization.split(' ')[1];
-            const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret');
+            const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET || 'access_secret');
+            
             req.admin = await Admin.findById(decoded.id).select('-password');
-            next();
+            
+            if (!req.admin) {
+                return res.status(401).json({ message: 'Not authorized, user not found' });
+            }
+
+            return next();
         } catch (error) {
-            console.error(error);
-            res.status(401).json({ message: 'Not authorized, token failed' });
+            console.error('JWT Verification Error:', error.message);
+            return res.status(401).json({ message: 'Not authorized, token failed' });
         }
     }
 
     if (!token) {
-        res.status(401).json({ message: 'Not authorized, no token' });
+        return res.status(401).json({ message: 'Not authorized, no token' });
     }
 };
 
 const authorize = (...roles) => {
     return (req, res, next) => {
-        if (!roles.includes(req.admin.role)) {
-            return res.status(403).json({ message: `Role ${req.admin.role} is not authorized to access this route` });
+        if (!req.admin || !roles.includes(req.admin.role)) {
+            return res.status(403).json({ 
+                message: `Role ${req.admin ? req.admin.role : 'None'} is not authorized to access this route` 
+            });
         }
         next();
     };
