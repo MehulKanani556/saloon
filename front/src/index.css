@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --brand-pink: #ff3d9f;
+  --brand-rosegold: #b57e65;
+  --brand-pastel: #fdf2f8;
+}
+
+@layer base {
+  body {
+    @apply bg-[#FAF8F6] text-slate-800 font-sans transition-colors duration-500;
+  }
+  
+  .dark body {
+    @apply bg-slate-950 text-slate-50;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/70 backdrop-blur-md border border-white/40 shadow-glass rounded-2xl transition-all;
+  }
+  
+  .dark .glass-card {
+    @apply bg-slate-900/40 border-white/10 shadow-none;
+  }
+  
+  .glass-sidebar {
+    @apply bg-white/40 backdrop-blur-lg border-r border-white/30 transition-all;
+  }
+  
+  .dark .glass-sidebar {
+    @apply bg-slate-900/40 border-r-white/5;
+  }
+  
+  .premium-gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-parlour-500 to-rosegold-500;
+  }
+
+  .premium-button {
+    @apply relative overflow-hidden px-6 py-2.5 rounded-xl font-medium transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-sm;
+  }
+  
+  .premium-button-primary {
+    @apply premium-button bg-gradient-to-r from-parlour-500 to-rosegold-400 text-white hover:shadow-md hover:shadow-parlour-200;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-rosegold-200 rounded-full;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-rosegold-300;
+}
+
+/* Dark Mode Overrides */
+/* Dark Mode Surface Overrides */
+.dark .bg-white { @apply bg-slate-900 border-white/10; }
+.dark .bg-parlour-50 { @apply bg-slate-800; }
+.dark .border-parlour-100 { @apply border-white/5; }
+.dark .shadow-glass { @apply shadow-none; }
+.dark .shadow-premium { @apply shadow-none; }
+
+.dark .text-slate-800, .dark .text-slate-700 { color: #f1f5f9; }
+.dark .text-slate-600, .dark .text-slate-500 { color: #cbd5e1; }
+.dark .text-slate-400 { color: #94a3b8; }

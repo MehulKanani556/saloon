@@ -1,0 +1,68 @@
+const Staff = require('../models/Staff');
+const fs = require('fs');
+const path = require('path');
+
+const getStaff = async (req, res) => {
+    const staff = await Staff.find({}).populate('services');
+    res.json(staff);
+};
+
+const createStaff = async (req, res) => {
+    let { name, email, services, profileImage, availability, ratings } = req.body;
+    if (services) {
+        services = Array.isArray(services) ? services : [services];
+    }
+    const staff = new Staff({ name, email, services, profileImage, availability, ratings });
+    let createdStaff = await staff.save();
+    createdStaff = await createdStaff.populate('services');
+    res.status(201).json(createdStaff);
+};
+
+const updateStaff = async (req, res) => {
+    const staff = await Staff.findById(req.params.id);
+    if (staff) {
+        // If image changed, delete old one
+        if (req.body.profileImage && staff.profileImage && req.body.profileImage !== staff.profileImage) {
+            const oldPath = path.join(__dirname, '..', staff.profileImage.replace(/^\/+/, ''));
+            if (fs.existsSync(oldPath)) {
+                fs.unlinkSync(oldPath);
+            }
+        }
+        
+        if (req.body.services) {
+            staff.services = Array.isArray(req.body.services) ? req.body.services : [req.body.services];
+        }
+        
+        staff.name = req.body.name || staff.name;
+        staff.email = req.body.email || staff.email;
+        staff.profileImage = req.body.profileImage || staff.profileImage;
+        staff.availability = req.body.availability || staff.availability;
+        staff.ratings = req.body.ratings || staff.ratings;
+        staff.isActive = req.body.isActive !== undefined ? req.body.isActive : staff.isActive;
+        let updatedStaff = await staff.save();
+        updatedStaff = await updatedStaff.populate('services');
+        res.json(updatedStaff);
+    } else {
+        res.status(404).json({ message: 'Staff not found' });
+    }
+};
+
+const deleteStaff = async (req, res) => {
+    const staff = await Staff.findById(req.params.id);
+    if (staff) {
+        // Delete image before removing record
+        if (staff.profileImage) {
+            const imagePath = path.join(__dirname, '..', staff.profileImage.replace(/^\/+/, ''));
+            if (fs.existsSync(imagePath)) {
+                fs.unlinkSync(imagePath);
+            }
+        }
+        
+        await staff.deleteOne();
+        res.json({ message: 'Staff removed and image purged' });
+    } else {
+        res.status(404).json({ message: 'Staff not found' });
+    }
+};
+
+module.exports = { getStaff, createStaff, updateStaff, deleteStaff };

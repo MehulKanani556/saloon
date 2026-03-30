@@ -1,0 +1,94 @@
+const Appointment = require('../models/Appointment');
+const Client = require('../models/Client');
+const Service = require('../models/Service');
+const Staff = require('../models/Staff');
+const moment = require('moment');
+
+// @desc Get Dashboard Collective Intelligence
+const getDashboardInsights = async (req, res) => {
+    try {
+        const [appointments, clients, services, staff] = await Promise.all([
+            Appointment.find().populate('client services'),
+            Client.countDocuments(),
+            Service.find().populate('category'),
+            Staff.find().limit(2)
+        ]);
+
+        // 1. Core Matrix Stats
+        const totalRevenue = appointments
+            .filter(app => app.paymentStatus === 'Paid' && app.status !== 'Cancelled')
+            .reduce((sum, app) => sum + (app.totalPrice || 0), 0);
+        const activeServices = services.filter(s => s.isActive).length;
+
+        // 2. Financial Velocity (Last 7 Days)
+        const last7Days = [];
+        for (let i = 6; i >= 0; i--) {
+            const date = moment().subtract(i, 'days');
+            const dayRevenue = appointments
+                .filter(app => moment(app.date || app.appointmentDate).isSame(date, 'day') && app.paymentStatus === 'Paid' && app.status !== 'Cancelled')
+                .reduce((sum, app) => sum + (app.totalPrice || 0), 0);
+
+            last7Days.push({
+                name: date.format('ddd'),
+                revenue: dayRevenue
+            });
+        }
+
+        // 3. Service Hierarchy (Niche Distribution)
+        const categories = {};
+        services.forEach(s => {
+            const catName = s.category?.name || 'Uncategorized';
+            categories[catName] = (categories[catName] || 0) + 1;
+        });
+
+        const totalCategoriesCount = services.length;
+        const serviceData = Object.keys(categories).map((cat, i) => ({
+            name: cat,
+            value: Math.round((categories[cat] / totalCategoriesCount) * 100),
+            color: ['#ff3d9f', '#b57e65', '#6366f1', '#10b981', '#f59e0b'][i % 5]
+        }));
+
+        const totalConfirmedAppointments = appointments.filter(app => ['Confirmed', 'Completed'].includes(app.status)).length;
+
+        // 4. Temporal Occupancy (Peak Hours)
+        const hourCounts = new Array(24).fill(0);
+        appointments.forEach(app => {
+            const hour = moment(app.date || app.appointmentDate).hour();
+            hourCounts[hour]++;
+        });
+
+        const occupancyTrends = hourCounts.map((count, hour) => ({
+            hour: `${hour.toString().padStart(2, '0')}:00`,
+            intensity: count
+        })).filter(h => h.intensity > 0 || (parseInt(h.hour) >= 9 && parseInt(h.hour) <= 21));
+
+        // 5. Immediate Rituals (Upcoming Today)
+        const today = moment().startOf('day');
+        const upcomingRituals = appointments
+            .filter(app => 
+                moment(app.date || app.appointmentDate).isSame(today, 'day') && 
+                ['Pending', 'Confirmed'].includes(app.status)
+            )
+            .sort((a, b) => new Date(a.date || a.appointmentDate) - new Date(b.date || b.appointmentDate))
+            .slice(0, 5);
+
+        res.json({
+            stats: {
+                totalClients: clients,
+                totalAppointments: totalConfirmedAppointments,
+                totalRevenue,
+                activeServices
+            },
+            financialVelocity: last7Days,
+            serviceHierarchy: serviceData,
+            recentBookings: appointments.sort((a, b) => new Date(b.date || b.appointmentDate) - new Date(a.date || a.appointmentDate)).slice(0, 5),
+            occupancyTrends,
+            upcomingRituals,
+            eliteTalent: staff,
+        });
+    } catch (err) {
+        res.status(500).json({ message: 'Insight retrieval failed', error: err.message });
+    }
+};
+
+module.exports = { getDashboardInsights };
