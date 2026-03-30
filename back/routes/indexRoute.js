@@ -12,6 +12,7 @@ const settingController = require('../controllers/settingController');
 const dashboardController = require('../controllers/dashboardController');
 const categoryController = require('../controllers/categoryController');
 const invoiceController = require('../controllers/invoiceController');
+const reportsController = require('../controllers/reportsController');
 
 // Middleware
 const { protect, authorize } = require('../middleware/authMiddleware');
@@ -63,6 +64,7 @@ router.delete('/clients/:id', protect, authorize('Admin'), clientController.dele
 // SALES ROUTES
 // ==========================================
 router.get('/sales/matrix', protect, authorize('Admin'), salesController.getFinancialMatrix);
+router.post('/sales/withdraw', protect, authorize('Admin'), salesController.processWithdrawal);
 
 // ==========================================
 // SETTINGS ROUTES
@@ -86,6 +88,11 @@ router.delete('/categories/:id', protect, authorize('Admin'), categoryController
 // ==========================================
 // INVOICE ROUTES
 // ==========================================
-router.get('/invoices/export-pdf/:id', invoiceController.generateInvoicePDF);
+router.get('/invoices/export-pdf/:id', protect, authorize('Admin'), invoiceController.generateInvoicePDF);
+
+// ==========================================
+// REPORTS ROUTES
+// ==========================================
+router.get('/reports/intel', protect, authorize('Admin'), reportsController.getReportIntel);
 
 module.exports = router;

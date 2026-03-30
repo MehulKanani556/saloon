@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
-import { Save, Building2, Clock, CreditCard, Globe, DollarSign, Loader2, ShieldCheck, Mail, Phone, MapPin } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { Save, Building2, Clock, CreditCard, Globe, DollarSign, Loader2, ShieldCheck, Mail, Phone, MapPin, Upload } from 'lucide-react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSettings, updateSettings } from '../redux/slices/settingSlice';
 import toast from 'react-hot-toast';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 const SettingsSchema = Yup.object().shape({
   salonName: Yup.string().required('Required'),
@@ -18,6 +18,8 @@ const SettingsSchema = Yup.object().shape({
 export default function Settings() {
   const dispatch = useDispatch();
   const { settings, loading } = useSelector((state) => state.settings);
+  const logoInputRef = useRef(null);
+  const [logoPreview, setLogoPreview] = useState(null);
 
   useEffect(() => {
     dispatch(fetchSettings());
@@ -184,17 +186,36 @@ export default function Settings() {
         <div className="space-y-6 md:space-y-10">
           <div className="bg-white dark:bg-slate-900 p-6 md:p-10 rounded-2xl border border-slate-50 dark:border-white/5 shadow-2xl group text-center flex flex-col items-center">
             <h3 className="text-md md:text-lg font-black text-slate-900 dark:text-white mb-6 md:mb-10 uppercase tracking-tighter italic">Visual Landmark (Logo)</h3>
-            <div className="w-32 h-32 md:w-48 md:h-48 rounded-2xl bg-slate-50 dark:bg-slate-800 border-4 border-dashed border-slate-100 dark:border-white/5 flex flex-col items-center justify-center text-slate-300 mb-6 md:mb-8 cursor-pointer hover:bg-saloon-50 transition-all group overflow-hidden relative">
-              {formik.values.logo ? (
-                <img src={formik.values.logo} alt="Logo" className="w-full h-full object-cover p-4" />
+            <div
+              onClick={() => logoInputRef.current?.click()}
+              className="w-32 h-32 md:w-48 md:h-48 rounded-2xl bg-slate-50 dark:bg-slate-800 border-4 border-dashed border-slate-100 dark:border-white/5 flex flex-col items-center justify-center text-slate-300 mb-6 md:mb-8 cursor-pointer hover:bg-saloon-50 transition-all group overflow-hidden relative"
+            >
+              {logoPreview || formik.values.logo ? (
+                <img src={logoPreview || formik.values.logo} alt="Logo" className="w-full h-full object-cover p-4" />
               ) : (
                 <>
-                  <Building2 size={32} md:size={48} className="group-hover:scale-110 transition-all duration-700 text-slate-200" />
-                  <span className="text-[8px] md:text-[10px] font-black mt-3 md:mt-4 uppercase tracking-[0.2em] italic">Encrypt Asset</span>
+                  <Upload size={32} className="group-hover:scale-110 transition-all duration-700 text-slate-200" />
+                  <span className="text-[8px] md:text-[10px] font-black mt-3 md:mt-4 uppercase tracking-[0.2em] italic">Upload Logo</span>
                 </>
               )}
               <div className="absolute inset-0 bg-saloon-600/10 opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
+            <input
+              ref={logoInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                  setLogoPreview(reader.result);
+                  formik.setFieldValue('logo', reader.result);
+                };
+                reader.readAsDataURL(file);
+              }}
+            />
             <p className="text-[10px] text-slate-400 font-bold leading-loose uppercase tracking-widest italic shadow-sm">
               Requirement Mapping:<br />512x512px Asset Frame<br />SVG or Transparent PNG
             </p>

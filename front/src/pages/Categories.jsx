@@ -249,15 +249,21 @@ export default function Categories() {
                   <div className="flex flex-col gap-1">
                     <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-0.5">Protocol Status</p>
                     <div className="flex items-center gap-1.5">
-                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
-                      <span className="text-[10px] font-black text-slate-900 dark:text-slate-300 uppercase tracking-tighter">Active Sync</span>
+                      <div className={`w-1.5 h-1.5 rounded-full ${cat.isActive ? 'bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-slate-300'}`} />
+                      <span className="text-[10px] font-black text-slate-900 dark:text-slate-300 uppercase tracking-tighter">
+                        {cat.isActive ? 'Active' : 'Inactive'}
+                      </span>
                     </div>
                   </div>
-                  <div className="bg-saloon-50/50 dark:bg-saloon-900/10 px-3 py-1.5 rounded-xl border border-saloon-100 dark:border-saloon-900/20 shadow-sm">
-                    <span className="text-[9px] font-black text-saloon-500 uppercase tracking-widest italic">
-                      Institutional
-                    </span>
-                  </div>
+                  <button
+                    onClick={() => dispatch(updateCategory({ id: cat._id, categoryData: { isActive: !cat.isActive } }))}
+                    className={`w-12 h-6 rounded-full relative transition-all duration-500 shadow-inner p-1 ${cat.isActive ? 'bg-green-500 shadow-lg shadow-green-500/20' : 'bg-slate-200 dark:bg-slate-700'}`}
+                  >
+                    <motion.div
+                      animate={{ x: cat.isActive ? 24 : 0 }}
+                      className="w-4 h-4 bg-white rounded-full shadow-lg"
+                    />
+                  </button>
                 </div>
               </div>
             </motion.div>

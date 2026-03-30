@@ -59,12 +59,12 @@ const getFinancialMatrix = async (req, res) => {
                 $match: {
                     status: 'Completed',
                     paymentStatus: 'Paid',
-                    createdAt: { $gte: sevenDaysAgo }
+                    appointmentDate: { $gte: sevenDaysAgo }
                 }
             },
             {
                 $group: {
-                    _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+                    _id: { $dateToString: { format: "%Y-%m-%d", date: "$appointmentDate" } },
                     revenue: { $sum: "$totalPrice" }
                 }
             },
@@ -73,8 +73,24 @@ const getFinancialMatrix = async (req, res) => {
 
         res.json({
             totalRevenue,
-            dailyAvg: totalRevenue / 30, // Rough estimate
-            growth: 12.4, // Static for now
+            dailyAvg: totalRevenue / 30,
+            growth: (() => {
+                // Compare this month vs last month
+                const now = new Date();
+                const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+                const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+                const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0);
+
+                const thisMonthRev = appointments
+                    .filter(a => new Date(a.createdAt) >= thisMonthStart)
+                    .reduce((sum, a) => sum + (a.totalPrice || 0), 0);
+                const lastMonthRev = appointments
+                    .filter(a => new Date(a.createdAt) >= lastMonthStart && new Date(a.createdAt) <= lastMonthEnd)
+                    .reduce((sum, a) => sum + (a.totalPrice || 0), 0);
+
+                if (!lastMonthRev) return 0;
+                return parseFloat(((thisMonthRev - lastMonthRev) / lastMonthRev * 100).toFixed(1));
+            })(),
             categoryData,
             chartData: chartDataRaw.map(d => {
                 const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -87,4 +103,28 @@ const getFinancialMatrix = async (req, res) => {
     }
 };
 
-module.exports = { getFinancialMatrix };
+// @desc Process Withdrawal Request
+// @route POST /sales/withdraw
+// @access Private/Admin
+const processWithdrawal = async (req, res) => {
+    try {
+        const { amount, bankAccount, notes } = req.body;
+        if (!amount || !bankAccount) {
+            return res.status(400).json({ message: 'Amount and bank account are required' });
+        }
+        // In a real system this would integrate with a payment gateway
+        // For now we log and confirm the request
+        res.json({
+            success: true,
+            message: 'Withdrawal request received',
+            reference: `WD-${Date.now().toString(36).toUpperCase()}`,
+            amount,
+            bankAccount: `****${bankAccount.slice(-4)}`,
+            notes: notes || ''
+        });
+    } catch (err) {
+        res.status(500).json({ message: 'Withdrawal protocol failed', error: err.message });
+    }
+};
+
+module.exports = { getFinancialMatrix, processWithdrawal };

@@ -17,12 +17,9 @@ const reportSlice = createSlice({
   name: 'reports',
   initialState: {
     intel: {
-      stats: {
-        active: 0,
-        downloads: 0,
-        shared: 0,
-        archiveSize: '0 GB'
-      },
+      stats: { active: 0, downloads: 0, shared: 0, archiveSize: '0 K' },
+      summary: { totalRevenue: 0, totalAppointments: 0, totalClients: 0, activeServices: 0, totalStaff: 0 },
+      monthlyData: [],
       recentLogs: []
     },
     loading: false,
@@ -31,9 +28,7 @@ const reportSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchReportIntel.pending, (state) => {
-        state.loading = true;
-      })
+      .addCase(fetchReportIntel.pending, (state) => { state.loading = true; state.error = null; })
       .addCase(fetchReportIntel.fulfilled, (state, action) => {
         state.loading = false;
         state.intel = action.payload;

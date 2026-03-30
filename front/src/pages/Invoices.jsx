@@ -133,18 +133,20 @@ const InvoiceDetailModal = ({ appointment, onClose }) => {
                 </tr>
               </thead>
               <tbody>
-                <tr className="group">
-                  <td className="py-8 px-4">
-                    <p className="font-black text-lg tracking-tight uppercase italic">{appointment.service?.name}</p>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase mt-2 italic">{appointment.service?.category?.name || 'General Ritual'}</p>
-                  </td>
-                  <td className="py-8 px-4 text-right align-top">
-                    <p className="font-black text-sm italic">{format(new Date(appointment.appointmentDate), 'MMM dd, HH:mm')}</p>
-                  </td>
-                  <td className="py-8 px-4 text-right align-top">
-                    <p className="font-black text-lg italic text-saloon-600">${appointment.totalPrice.toLocaleString()}</p>
-                  </td>
-                </tr>
+                {appointment.services?.map((service, idx) => (
+                  <tr key={service._id || idx} className="group">
+                    <td className="py-8 px-4">
+                      <p className="font-black text-lg tracking-tight uppercase italic">{service.name}</p>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase mt-2 italic">{service.category?.name || 'General Ritual'}</p>
+                    </td>
+                    <td className="py-8 px-4 text-right align-top">
+                      <p className="font-black text-sm italic">{format(new Date(appointment.appointmentDate), 'MMM dd, HH:mm')}</p>
+                    </td>
+                    <td className="py-8 px-4 text-right align-top">
+                      <p className="font-black text-lg italic text-saloon-600">${service.price?.toLocaleString()}</p>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
 
@@ -203,7 +205,7 @@ export default function Invoices() {
 
   const filteredInvoices = appointments.filter(app =>
     app.client?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    app.service?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    app.services?.some(s => s.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
     app._id.toLowerCase().includes(searchTerm.toLowerCase())
   );
 

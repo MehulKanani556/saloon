@@ -3,11 +3,10 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { DollarSign, TrendingUp, TrendingDown, Target, Wallet, CreditCard, ChevronRight, X, AlertCircle, Plus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchFinancialMatrix } from '../redux/slices/salesSlice';
+import { fetchFinancialMatrix, processWithdrawal } from '../redux/slices/salesSlice';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { createPortal } from 'react-dom';
-import toast from 'react-hot-toast';
 
 export default function Sales() {
   const dispatch = useDispatch();
@@ -34,10 +33,16 @@ export default function Sales() {
         .matches(/^[0-9]+$/, 'Invalid digital sequence (Numeric only)'),
       notes: Yup.string().max(100, 'Keep it concise')
     }),
-    onSubmit: (values) => {
-      toast.success(`Withdrawal protocol initiated: $${values.amount}`);
-      setIsWithdrawModalOpen(false);
-      withdrawalFormik.resetForm();
+    onSubmit: async (values) => {
+      const result = await dispatch(processWithdrawal({
+        amount: values.amount,
+        bankAccount: values.bankAccount,
+        notes: values.notes
+      }));
+      if (!result.error) {
+        setIsWithdrawModalOpen(false);
+        withdrawalFormik.resetForm();
+      }
     }
   });
 

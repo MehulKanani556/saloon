@@ -5,7 +5,8 @@ const Category = require('../models/Category');
 // @access  Public
 exports.getCategories = async (req, res) => {
   try {
-    const categories = await Category.find({ isActive: true });
+    // Return all categories so admin can manage inactive ones too
+    const categories = await Category.find({});
     res.json(categories);
   } catch (err) {
     res.status(500).json({ message: 'Server Protocol Failure' });

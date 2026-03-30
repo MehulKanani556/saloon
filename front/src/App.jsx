@@ -11,6 +11,7 @@ import Categories from './pages/Categories'
 import Sales from './pages/Sales'
 import Settings from './pages/Settings'
 import Invoices from './pages/Invoices'
+import Reports from './pages/Reports'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import { Toaster } from 'react-hot-toast'
@@ -49,6 +50,7 @@ const AppContent = () => {
         <Route path="/categories" element={adminInfo ? <Categories /> : <Navigate to="/login" />} />
         <Route path="/sales" element={adminInfo ? <Sales /> : <Navigate to="/login" />} />
         <Route path="/invoices" element={adminInfo ? <Invoices /> : <Navigate to="/login" />} />
+        <Route path="/reports" element={adminInfo ? <Reports /> : <Navigate to="/login" />} />
         <Route path="/settings" element={adminInfo ? <Settings /> : <Navigate to="/login" />} />
       </Routes>
     </WrappedLayout>
