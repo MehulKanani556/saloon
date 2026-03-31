@@ -66,7 +66,7 @@ export default function Dashboard() {
                 />
               ))}
             </div>
-            <p className="text-slate-400 font-bold text-[8px] sm:text-[10px] uppercase tracking-[0.2em] sm:tracking-[0.3em] italic">Saloon Live Status | Connected</p>
+            <p className="text-slate-400 font-bold text-[8px] sm:text-[10px] uppercase tracking-[0.2em] sm:tracking-[0.3em] italic">Glow & Elegance Live Status | Connected</p>
           </div>
         </div>
         <div className="flex items-center gap-4 sm:gap-8">

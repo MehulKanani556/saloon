@@ -18,15 +18,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector } from 'react-redux';
 
 const sidebarItems = [
-  { icon: LayoutDashboard, label: 'Home', path: '/' },
-  { icon: CalendarCheck2, label: 'Bookings', path: '/appointments' },
-  { icon: Scissors, label: 'Service List', path: '/services' },
-  { icon: LayoutGrid, label: 'Service Types', path: '/categories' },
-  { icon: Users, label: 'Staff Members', path: '/staff' },
-  { icon: UserSquare2, label: 'Customers', path: '/clients' },
-  { icon: TrendingUp, label: 'Business Report', path: '/sales' },
-  { icon: FileText, label: 'Bills', path: '/invoices' },
-  { icon: Settings, label: 'Settings', path: '/settings' },
+  { icon: LayoutDashboard, label: 'Dashboard', path: '/admin/dashboard' },
+  { icon: CalendarCheck2, label: 'Bookings', path: '/admin/appointments' },
+  { icon: Scissors, label: 'Service List', path: '/admin/services' },
+  { icon: LayoutGrid, label: 'Category', path: '/admin/categories' },
+  { icon: Users, label: 'Staff Members', path: '/admin/staff' },
+  { icon: UserSquare2, label: 'Customers', path: '/admin/clients' },
+  { icon: TrendingUp, label: 'Business Report', path: '/admin/sales' },
+  { icon: FileText, label: 'Bills', path: '/admin/invoices' },
+  { icon: Settings, label: 'Settings', path: '/admin/settings' },
 ];
 
 export default function Sidebar({ isOpen, setIsOpen }) {
@@ -72,7 +72,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                 transition={{ duration: 0.2 }}
                 className="text-2xl font-black tracking-tighter bg-gradient-to-r from-saloon-600 to-rosegold-500 bg-clip-text text-transparent leading-none uppercase"
               >
-                SALOON ADMIN
+                GLOW & ELEGANCE
               </motion.div>
             )}
           </AnimatePresence>

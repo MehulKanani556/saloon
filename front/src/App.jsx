@@ -20,6 +20,7 @@ import Home from './pages/Home'
 import PublicServices from './pages/PublicServices'
 import About from './pages/About'
 import BookAppointment from './pages/BookAppointment'
+import Contact from './pages/Contact'
 import AdminServices from './pages/AdminServices'
 
 const AppContent = () => {
@@ -27,7 +28,7 @@ const AppContent = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const isAuthPage = ['/login', '/signup'].includes(location.pathname);
-  const isLandingPage = ['/', '/services', '/about', '/book'].includes(location.pathname);
+  const isLandingPage = ['/', '/services', '/about', '/book', '/contact'].includes(location.pathname);
 
   useEffect(() => {
     // If we're not logged in and not on an auth or landing page, redirect to login
@@ -48,20 +49,21 @@ const AppContent = () => {
         <Route path="/services" element={<PublicServices />} />
         <Route path="/about" element={<About />} />
         <Route path="/book" element={<BookAppointment />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         
         {/* Protected Routes */}
-        <Route path="/dashboard" element={adminInfo ? <Dashboard /> : <Navigate to="/login" />} />
-        <Route path="/appointments" element={adminInfo ? <Appointments /> : <Navigate to="/login" />} />
+        <Route path="/admin/dashboard" element={adminInfo ? <Dashboard /> : <Navigate to="/login" />} />
+        <Route path="/admin/appointments" element={adminInfo ? <Appointments /> : <Navigate to="/login" />} />
         <Route path="/admin/services" element={adminInfo ? <AdminServices /> : <Navigate to="/login" />} />
-        <Route path="/staff" element={adminInfo ? <Staff /> : <Navigate to="/login" />} />
-        <Route path="/clients" element={adminInfo ? <Clients /> : <Navigate to="/login" />} />
-        <Route path="/categories" element={adminInfo ? <Categories /> : <Navigate to="/login" />} />
-        <Route path="/sales" element={adminInfo ? <Sales /> : <Navigate to="/login" />} />
-        <Route path="/invoices" element={adminInfo ? <Invoices /> : <Navigate to="/login" />} />
-        <Route path="/reports" element={adminInfo ? <Reports /> : <Navigate to="/login" />} />
-        <Route path="/settings" element={adminInfo ? <Settings /> : <Navigate to="/login" />} />
+        <Route path="/admin/staff" element={adminInfo ? <Staff /> : <Navigate to="/login" />} />
+        <Route path="/admin/clients" element={adminInfo ? <Clients /> : <Navigate to="/login" />} />
+        <Route path="/admin/categories" element={adminInfo ? <Categories /> : <Navigate to="/login" />} />
+        <Route path="/admin/sales" element={adminInfo ? <Sales /> : <Navigate to="/login" />} />
+        <Route path="/admin/invoices" element={adminInfo ? <Invoices /> : <Navigate to="/login" />} />
+        <Route path="/admin/reports" element={adminInfo ? <Reports /> : <Navigate to="/login" />} />
+        <Route path="/admin/settings" element={adminInfo ? <Settings /> : <Navigate to="/login" />} />
       </Routes>
     </WrappedLayout>
   );

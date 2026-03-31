@@ -39,7 +39,7 @@ export default function Navbar({ darkMode, setDarkMode, onMenuClick }) {
 
         <div className="hidden lg:flex items-center gap-6 px-1 py-1">
           <div className="flex flex-col">
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] leading-none mb-1">Glow Saloon</p>
+            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] leading-none mb-1">Glow & Elegance Status</p>
             <div className="flex items-center gap-2">
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-pulse" />
               <p className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest italic">System: Online</p>
