@@ -38,8 +38,8 @@ const InvoiceDetailModal = ({ appointment, onClose }) => {
       subtitle={`Ref: INV-${appointment._id.substring(0, 8).toUpperCase()}`}
       maxWidth="max-w-4xl"
     >
-      <div className="flex flex-col max-h-[70vh] -mx-10 -my-10">
-        <div className="p-8 md:p-12 overflow-y-auto custom-scrollbar bg-white dark:bg-slate-900 printable-area text-slate-900 dark:text-white">
+      <div className="flex flex-col max-h-[70vh] -my-10">
+        <div className="p-8 md:p-12 bg-white dark:bg-slate-900 printable-area text-slate-900 dark:text-white">
           <div className="flex flex-col md:flex-row justify-between gap-10 mb-16">
             <div className="space-y-6">
               <div>
