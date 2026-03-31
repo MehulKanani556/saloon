@@ -167,9 +167,9 @@ export default function Invoices() {
   }, [initialId, appointments]);
 
   const filteredInvoices = appointments.filter(app =>
-    app.client?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    app.services?.some(s => s.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
-    app._id.toLowerCase().includes(searchTerm.toLowerCase())
+    app.client?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    app.services?.some(s => s.name?.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    app._id?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleQuickExport = async (id) => {
@@ -261,8 +261,8 @@ export default function Invoices() {
                       <div className="flex items-center gap-4">
                         <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 p-0.5 border border-slate-200/50 dark:border-white/10 shadow-sm transition-transform group-hover:-rotate-3">
                           <img
-                            src={invoice.client?.profileImage ? `${IMAGE_URL}${invoice.client?.profileImage}` : `https://api.dicebear.com/9.x/adventurer/svg?seed=${invoice.client?.name}`}
-                            alt={invoice.client?.name}
+                            src={invoice.client?.profileImage ? `${IMAGE_URL}${invoice.client.profileImage}` : `https://api.dicebear.com/9.x/adventurer/svg?seed=${invoice.client?.name || 'Client'}`}
+                            alt={invoice.client?.name || 'Client'}
                             className="w-full h-full rounded-lg object-cover"
                           />
                         </div>

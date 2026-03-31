@@ -134,18 +134,16 @@ export default function PublicServices() {
 
   return (
     <div className="relative selection:bg-saloon-500 selection:text-white bg-white dark:bg-slate-950 font-sans min-h-screen">
-      <PublicNavbar />
-      
+      <PublicNavbar />      
       <main>
         <PageHero />
-
         {/* Filter Bar */}
-        <section className="sticky top-[60px] md:top-[80px] z-[50] bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-100 dark:border-white/5 py-4">
+        <section className="sticky top-[60px] md:top-[57px] z-[50] bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-100 dark:border-white/5 py-4">
           <div className="container mx-auto px-6">
             <div className="flex items-center gap-4 overflow-x-auto pb-2 no-scrollbar">
               <button 
                 onClick={() => setActiveCategory("All")}
-                className={`px-8 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap border-2 ${
+                className={`px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap border-2 ${
                   activeCategory === "All" 
                     ? "bg-saloon-500 border-saloon-500 text-white shadow-lg shadow-saloon-500/20" 
                     : "bg-white dark:bg-slate-900 border-transparent text-slate-500 hover:border-saloon-500/30"
@@ -157,7 +155,7 @@ export default function PublicServices() {
                 <button 
                   key={cat._id}
                   onClick={() => setActiveCategory(cat._id)}
-                  className={`px-8 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap border-2 ${
+                  className={`px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap border-2 ${
                     activeCategory === cat._id
                       ? "bg-saloon-500 border-saloon-500 text-white shadow-lg shadow-saloon-500/20" 
                       : "bg-white dark:bg-slate-900 border-transparent text-slate-500 hover:border-saloon-500/30"
@@ -255,10 +253,8 @@ export default function PublicServices() {
             </AnimatePresence>
           </div>
         </section>
-
         <BookingCTA />
       </main>
-
       <PublicFooter />
     </div>
   );
