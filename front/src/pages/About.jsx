@@ -4,14 +4,13 @@ import {
   Target, Eye, Heart, Star, Mail, Clock, CreditCard, MapPin, 
   ChevronRight, Calendar, Users, Award, Sparkles, Phone
 } from 'lucide-react';
-import { useSelector } from 'react-redux';
-import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchStaff } from '../redux/slices/staffSlice';
+import { fetchSettings } from '../redux/slices/settingSlice';
 import PublicNavbar from '../components/public/PublicNavbar';
 import PublicFooter from '../components/public/PublicFooter';
 import StatsBanner from '../components/public/StatsBanner';
-
-const BASE_URL = 'http://localhost:5000/api';
-const IMAGE_URL = 'http://localhost:5000';
+import { IMAGE_URL } from '../utils/BASE_URL';
 
 // --- Sub-components ---
 
@@ -139,22 +138,12 @@ const MissionValues = () => {
 };
 
 const TeamSection = () => {
-  const [staff, setStaff] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+  const { staff, loading } = useSelector(state => state.staff);
 
   useEffect(() => {
-    const fetchStaff = async () => {
-      try {
-        const res = await axios.get(`${BASE_URL}/staff`);
-        setStaff(Array.isArray(res.data) ? res.data : []);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchStaff();
-  }, []);
+    dispatch(fetchStaff());
+  }, [dispatch]);
 
   return (
     <section className="py-24 bg-background">
@@ -225,24 +214,14 @@ const TeamSection = () => {
 };
 
 const SalonInfo = () => {
-  const [settings, setSettings] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+  const { settings, loading } = useSelector(state => state.settings);
 
   useEffect(() => {
-    const fetchSettings = async () => {
-      try {
-        const res = await axios.get(`${BASE_URL}/settings`);
-        setSettings(res.data);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchSettings();
-  }, []);
+    dispatch(fetchSettings());
+  }, [dispatch]);
 
-  const businessHours = settings?.businessHours || [
+  const businessHours = (settings?.businessHours?.length > 0) ? settings.businessHours : [
     { day: "Monday", open: "09:00 AM", close: "08:00 PM" },
     { day: "Tuesday", open: "09:00 AM", close: "08:00 PM" },
     { day: "Wednesday", open: "09:00 AM", close: "08:00 PM" },

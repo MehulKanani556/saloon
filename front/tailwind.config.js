@@ -48,7 +48,7 @@ export default {
       },
       fontFamily: {
         sans: ['Inter', 'Poppins', 'sans-serif'],
-        luxury: ['Playfair Display', 'serif'],
+        luxury: ['Poppins', 'Inter', 'sans-serif'],
       },
       backgroundImage: {
         'luxury-gradient': 'linear-gradient(135deg, #C9A227 0%, #B08D20 100%)',

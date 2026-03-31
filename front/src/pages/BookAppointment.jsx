@@ -6,15 +6,14 @@ import {
 } from 'lucide-react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
+import { useDispatch, useSelector } from 'react-redux';
 import PublicNavbar from '../components/public/PublicNavbar';
 import PublicFooter from '../components/public/PublicFooter';
-import { BASE_URL, IMAGE_URL } from '../utils/BASE_URL';
-
-// const BASE_URL = 'http://localhost:5000/api';
-// const IMAGE_URL = 'http://localhost:5000';
+import { IMAGE_URL } from '../utils/BASE_URL';
+import { fetchServices } from '../redux/slices/serviceSlice';
+import { fetchStaff } from '../redux/slices/staffSlice';
+import { addAppointment, fetchOccupiedSlots } from '../redux/slices/appointmentSlice';
+import { useNavigate } from 'react-router-dom';
 
 // --- Validation Schema ---
 const appointmentSchema = Yup.object().shape({
@@ -88,35 +87,23 @@ const SuccessModal = ({ data, onClose }) => {
 
 export default function BookAppointment() {
   const [step, setStep] = useState(1);
-  const [services, setServices] = useState([]);
   const [selectedServices, setSelectedServices] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [occupiedSlots, setOccupiedSlots] = useState([]);
   const [slotsLoading, setSlotsLoading] = useState(false);
   const [bookingResponse, setBookingResponse] = useState(null);
-  const [allStaff, setAllStaff] = useState([]);
-  const [staffAssignments, setStaffAssignments] = useState({}); // { serviceId: staffId }
+  const [staffAssignments, setStaffAssignments] = useState({});
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { services, loading: servicesLoading } = useSelector(state => state.services);
+  const { staff: allStaff, loading: staffLoading } = useSelector(state => state.staff);
 
   useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const [sRes, stRes] = await Promise.all([
-          axios.get(`${BASE_URL}/services`),
-          axios.get(`${BASE_URL}/staff`)
-        ]);
-        setServices(Array.isArray(sRes.data) ? sRes.data : []);
-        setAllStaff(Array.isArray(stRes.data) ? stRes.data : []);
-      } catch (err) {
-        toast.error("Failed to load salon assets");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchServices();
-  }, []);
+    dispatch(fetchServices());
+    dispatch(fetchStaff());
+  }, [dispatch]);
 
   const formik = useFormik({
     initialValues: {
@@ -140,18 +127,19 @@ export default function BookAppointment() {
         const body = {
           clientName: values.clientName,
           clientEmail: values.clientEmail,
-          clientPhone: `+1 ${values.clientPhone}`, // Added space for "+1 XXX-XXX-XXXX" format
+          clientPhone: `+1 ${values.clientPhone}`,
           assignments: selectedServices.map(s => ({
             service: s._id,
-            staff: staffAssignments[s._id] || null // null triggers auto-assignment
+            staff: staffAssignments[s._id] || null
           })),
           date: new Date(`${values.date}T${time24}:00`).toISOString(),
         };
-        const res = await axios.post(`${BASE_URL}/appointments`, body);
-        setBookingResponse(res.data);
+        const res = await dispatch(addAppointment(body)).unwrap();
+        setBookingResponse(res);
         setShowSuccess(true);
       } catch (err) {
-        toast.error(err.response?.data?.message || "Booking failed. Please try again.");
+        // Redux slices handle toast errors, but specifically for UI flow:
+        console.error("Booking Error:", err);
       } finally {
         setIsSubmitting(false);
       }
@@ -159,20 +147,18 @@ export default function BookAppointment() {
   });
 
   useEffect(() => {
-    const fetchOccupiedSlots = async () => {
+    const getSlots = async () => {
       if (formik.values.date && selectedServices.length > 0) {
         setSlotsLoading(true);
         try {
           const serviceIds = selectedServices.map(s => s._id).join(',');
           const staffIds = Object.values(staffAssignments).filter(id => id).join(',');
-          const res = await axios.get(`${BASE_URL}/appointments/occupied-slots`, {
-            params: { 
-              date: formik.values.date,
-              serviceIds,
-              staffIds
-            }
-          });
-          setOccupiedSlots(res.data.occupiedSlots || []);
+          const slots = await dispatch(fetchOccupiedSlots({
+            date: formik.values.date,
+            serviceIds,
+            staffIds
+          })).unwrap();
+          setOccupiedSlots(slots);
         } catch (err) {
           console.error("Failed to load availability matrix");
         } finally {
@@ -180,8 +166,8 @@ export default function BookAppointment() {
         }
       }
     };
-    fetchOccupiedSlots();
-  }, [formik.values.date, selectedServices, staffAssignments]);
+    getSlots();
+  }, [formik.values.date, selectedServices, staffAssignments, dispatch]);
 
   const handlePhoneChange = (e) => {
     let val = e.target.value.replace(/\D/g, '').substring(0, 10);
@@ -299,7 +285,7 @@ export default function BookAppointment() {
                     className="space-y-10"
                   >
                     <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                      {loading ? (
+                      {(servicesLoading || staffLoading) ? (
                         [...Array(6)].map((_, i) => (
                           <div key={i} className="aspect-square bg-background rounded-3xl animate-pulse" />
                         ))

@@ -40,6 +40,17 @@ export const deleteAppointment = createAsyncThunk('appointments/delete', async (
     }
 });
 
+export const fetchOccupiedSlots = createAsyncThunk('appointments/fetchOccupiedSlots', async ({ date, serviceIds, staffIds }, { rejectWithValue }) => {
+    try {
+        const { data } = await api.get('/appointments/occupied-slots', {
+            params: { date, serviceIds, staffIds }
+        });
+        return data.occupiedSlots || [];
+    } catch (err) {
+        return rejectWithValue(err.response?.data || 'Failed to fetch slots');
+    }
+});
+
 export const exportInvoicePDF = createAsyncThunk('appointments/exportPDF', async (id, { rejectWithValue }) => {
     try {
         const response = await api.get(`/invoices/export-pdf/${id}`, {
@@ -55,6 +66,7 @@ const appointmentSlice = createSlice({
     name: 'appointments',
     initialState: {
         appointments: [],
+        occupiedSlots: [],
         loading: false,
         error: null
     },
@@ -83,6 +95,10 @@ const appointmentSlice = createSlice({
             // Delete
             .addCase(deleteAppointment.fulfilled, (state, action) => {
                 state.appointments = state.appointments.filter(a => a._id !== action.payload);
+            })
+            // Occupied slots
+            .addCase(fetchOccupiedSlots.fulfilled, (state, action) => {
+                state.occupiedSlots = action.payload;
             });
     }
 });

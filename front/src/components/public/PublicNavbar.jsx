@@ -71,7 +71,7 @@ const PublicNavbar = () => {
             <Link
               key={link}
               to={link === 'Home' ? '/' : link === 'Book' ? '/book' : `/${link.toLowerCase()}`}
-              className={`text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:text-primary ${showSolid ? 'text-white' : 'text-white/80'
+              className={`text-[10px] font-medium uppercase tracking-[0.2em] transition-all hover:text-primary ${showSolid ? 'text-white' : 'text-white/80'
                 }`}
             >
               {link === 'Book' ? 'Book Appointment' : link}

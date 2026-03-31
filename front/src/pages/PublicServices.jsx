@@ -4,13 +4,13 @@ import {
   Scissors, Clock, Sparkles, ChevronRight, ChevronLeft, Search, Target, LayoutGrid
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchServices } from '../redux/slices/serviceSlice';
+import { fetchCategories } from '../redux/slices/categorySlice';
 import PublicNavbar from '../components/public/PublicNavbar';
 import PublicFooter from '../components/public/PublicFooter';
+import { IMAGE_URL } from '../utils/BASE_URL';
 
-const BASE_URL = 'http://localhost:5000/api';
-const IMAGE_URL = 'http://localhost:5000';
 const ITEMS_PER_PAGE = 9;
 
 // --- Sub-components ---
@@ -31,9 +31,9 @@ const PageHero = () => {
 
       <div className="container mx-auto px-6 relative z-10 text-center">
         <motion.div
-           initial={{ opacity: 0, y: -10 }}
-           animate={{ opacity: 1, y: 0 }}
-           className="inline-flex items-center gap-3 px-4 py-1.5 bg-primary/10 border border-primary/20 rounded-full mb-6"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="inline-flex items-center gap-3 px-4 py-1.5 bg-primary/10 border border-primary/20 rounded-full mb-6"
         >
           <Sparkles size={12} className="text-primary" />
           <span className="text-[9px] font-black text-primary uppercase tracking-[0.3em]">Pure Elegance</span>
@@ -82,7 +82,7 @@ const BookingCTA = () => {
         >
           <div className="absolute inset-0 opacity-5 pointer-events-none"
             style={{ backgroundImage: 'radial-gradient(circle at 1.5px 1.5px, #C9A227 1px, transparent 0)', backgroundSize: '32px 32px' }} />
-          
+
           <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/5 blur-[120px] rounded-full" />
           <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-primary/5 blur-[120px] rounded-full" />
 
@@ -115,32 +115,20 @@ const BookingCTA = () => {
 };
 
 export default function PublicServices() {
-  const [categories, setCategories] = useState([]);
-  const [services, setServices] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [activeCategory, setActiveCategory] = useState("All");
-  const [currentPage, setCurrentPage] = useState(1);
-  
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { userInfo } = useSelector((state) => state.auth);
 
+  const { services, loading: servicesLoading } = useSelector(state => state.services);
+  const { categories, loading: categoriesLoading } = useSelector(state => state.categories);
+
+  const [activeCategory, setActiveCategory] = useState("All");
+  const [currentPage, setCurrentPage] = useState(1);
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [catRes, serRes] = await Promise.all([
-          axios.get(`${BASE_URL}/categories`),
-          axios.get(`${BASE_URL}/services`)
-        ]);
-        setCategories(Array.isArray(catRes.data) ? catRes.data : []);
-        setServices(Array.isArray(serRes.data) ? serRes.data : []);
-      } catch (err) {
-        console.error("Error fetching data:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+    dispatch(fetchServices());
+    dispatch(fetchCategories());
+  }, [dispatch]);
 
   // Filter Logic
   const filteredServices = services.filter(s =>
@@ -177,8 +165,8 @@ export default function PublicServices() {
               <button
                 onClick={() => handleCategoryChange("All")}
                 className={`px-8 py-3 rounded-full text-[9px] font-black uppercase tracking-[0.2em] transition-all whitespace-nowrap border ${activeCategory === "All"
-                    ? "bg-primary border-primary text-secondary shadow-2xl shadow-primary/20"
-                    : "bg-secondary border-white/10 text-muted hover:border-primary/40"
+                  ? "bg-primary border-primary text-secondary shadow-2xl shadow-primary/20"
+                  : "bg-secondary border-white/10 text-muted hover:border-primary/40"
                   }`}
               >
                 All Rituals
@@ -188,8 +176,8 @@ export default function PublicServices() {
                   key={cat._id}
                   onClick={() => handleCategoryChange(cat._id)}
                   className={`px-8 py-3 rounded-full text-[9px] font-black uppercase tracking-[0.2em] transition-all whitespace-nowrap border ${activeCategory === cat._id
-                      ? "bg-primary border-primary text-secondary shadow-2xl shadow-primary/20"
-                      : "bg-secondary border-white/10 text-muted hover:border-primary/40"
+                    ? "bg-primary border-primary text-secondary shadow-2xl shadow-primary/20"
+                    : "bg-secondary border-white/10 text-muted hover:border-primary/40"
                     }`}
                 >
                   {cat.name}
@@ -209,7 +197,7 @@ export default function PublicServices() {
                   <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Available Experiences</p>
                 </div>
                 <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter font-luxury">
-                   {activeCategory === 'All' ? 'The Collection' : categories.find(c => c._id === activeCategory)?.name}
+                  {activeCategory === 'All' ? 'The Collection' : categories.find(c => c._id === activeCategory)?.name}
                 </h2>
               </div>
               <p className="text-muted text-[10px] font-black uppercase tracking-widest bg-secondary/50 px-5 py-2.5 rounded-xl border border-white/5">
@@ -226,7 +214,7 @@ export default function PublicServices() {
                 transition={{ duration: 0.5, ease: "circOut" }}
                 className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12"
               >
-                {loading ? (
+                {(servicesLoading || categoriesLoading) ? (
                   [...Array(6)].map((_, i) => (
                     <div key={i} className="bg-secondary rounded-[2.5rem] overflow-hidden shadow-sm animate-pulse border border-white/5">
                       <div className="aspect-[4/3] bg-white/5" />
@@ -303,7 +291,7 @@ export default function PublicServices() {
             </AnimatePresence>
 
             {/* Pagination UI */}
-            {!loading && totalPages > 1 && (
+            {!(servicesLoading || categoriesLoading) && totalPages > 1 && (
               <div className="mt-24 flex flex-col items-center gap-8">
                 <div className="flex items-center gap-3">
                   <button
@@ -321,11 +309,10 @@ export default function PublicServices() {
                         <button
                           key={pageNum}
                           onClick={() => handlePageChange(pageNum)}
-                          className={`w-10 h-10 rounded-xl text-[10px] font-black transition-all ${
-                            currentPage === pageNum
-                              ? "bg-primary text-secondary shadow-lg shadow-primary/20 scale-110"
-                              : "text-muted/50 hover:text-primary hover:bg-white/5"
-                          }`}
+                          className={`w-10 h-10 rounded-xl text-[10px] font-black transition-all ${currentPage === pageNum
+                            ? "bg-primary text-secondary shadow-lg shadow-primary/20 scale-110"
+                            : "text-muted/50 hover:text-primary hover:bg-white/5"
+                            }`}
                         >
                           {pageNum < 10 ? `0${pageNum}` : pageNum}
                         </button>
@@ -341,9 +328,9 @@ export default function PublicServices() {
                     <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
                   </button>
                 </div>
-                
+
                 <p className="text-[9px] font-black text-muted/40 uppercase tracking-[0.5em] italic">
-                   Chronicle Page {currentPage} of {totalPages}
+                  Chronicle Page {currentPage} of {totalPages}
                 </p>
               </div>
             )}
