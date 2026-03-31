@@ -25,13 +25,15 @@ import Contact from './pages/Contact'
 import AdminServices from './pages/AdminServices'
 import Profile from './pages/Profile'
 import MyAppointments from './pages/MyAppointments'
+import ChangePassword from './pages/ChangePassword'
+import DeleteAccount from './pages/DeleteAccount'
 
 const AppContent = () => {
   const { userInfo } = useSelector((state) => state.auth);
   const location = useLocation();
   const navigate = useNavigate();
   const isAuthPage = ['/login', '/signup'].includes(location.pathname);
-  const isLandingPage = ['/', '/services', '/about', '/book', '/contact'].includes(location.pathname);
+  const isLandingPage = ['/', '/services', '/about', '/book', '/contact', '/profile', '/my-appointments', '/change-password', '/delete-account'].includes(location.pathname);
 
   useEffect(() => {
     // If we're not logged in and not on an auth or landing page, redirect to login
@@ -75,6 +77,8 @@ const AppContent = () => {
         {/* Client/General Auth Routes */}
         <Route path="/profile" element={<PrivateRoute roles={['User', 'Admin', 'Staff']}><Profile /></PrivateRoute>} />
         <Route path="/my-appointments" element={<PrivateRoute roles={['User', 'Admin', 'Staff']}><MyAppointments /></PrivateRoute>} />
+        <Route path="/change-password" element={<PrivateRoute roles={['User', 'Admin', 'Staff']}><ChangePassword /></PrivateRoute>} />
+        <Route path="/delete-account" element={<PrivateRoute roles={['User', 'Admin', 'Staff']}><DeleteAccount /></PrivateRoute>} />
       </Routes>
     </WrappedLayout>
   );

@@ -86,6 +86,7 @@ const SuccessModal = ({ data, onClose }) => {
 };
 
 export default function BookAppointment() {
+  const { userInfo } = useSelector((state) => state.auth);
   const [step, setStep] = useState(1);
   const [selectedServices, setSelectedServices] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -107,9 +108,9 @@ export default function BookAppointment() {
 
   const formik = useFormik({
     initialValues: {
-      clientName: '',
-      clientEmail: '',
-      clientPhone: '',
+      clientName: userInfo?.name || '',
+      clientEmail: userInfo?.email || '',
+      clientPhone: userInfo?.phone ? userInfo.phone.replace('+1 ', '') : '',
       date: '',
       time: '',
     },
@@ -145,6 +146,17 @@ export default function BookAppointment() {
       }
     },
   });
+
+  // Watch for userInfo changes to refill if needed (e.g. login while on page)
+  useEffect(() => {
+    if (userInfo) {
+      if (!formik.values.clientName) formik.setFieldValue('clientName', userInfo.name);
+      if (!formik.values.clientEmail) formik.setFieldValue('clientEmail', userInfo.email);
+      if (!formik.values.clientPhone && userInfo.phone) {
+         formik.setFieldValue('clientPhone', userInfo.phone.replace('+1 ', ''));
+      }
+    }
+  }, [userInfo]);
 
   useEffect(() => {
     const getSlots = async () => {

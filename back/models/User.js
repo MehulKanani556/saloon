@@ -6,14 +6,14 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     customId: { type: String, unique: true, sparse: true }, // SKU-style ID: ADM-NAME-1234
     password: { type: String }, // Required for Admin/others who login
-    role: { 
-        type: String, 
-        enum: ['Admin', 'Staff', 'User'], 
-        default: 'User' 
+    role: {
+        type: String,
+        enum: ['Admin', 'Staff', 'User'],
+        default: 'User'
     },
     phone: { type: String },
     profileImage: { type: String },
-    
+
     // Staff specific fields
     services: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Service' }],
     isActive: { type: Boolean, default: true },
@@ -29,7 +29,9 @@ const userSchema = new mongoose.Schema({
         workingHours: { type: String }
     },
     otp: { type: String },
-    otpExpires: { type: Date }
+    otpExpires: { type: Date },
+    isDeleted: { type: Boolean, default: false },
+    deletedAt: { type: Date }
 }, { timestamps: true });
 
 userSchema.pre('save', async function (next) {

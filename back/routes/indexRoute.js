@@ -26,7 +26,10 @@ router.post('/auth/send-otp', authController.sendOTP);
 router.post('/auth/login', authController.loginUser);
 router.post('/auth/refresh', authController.refresh);
 router.post('/auth/logout', authController.logoutUser);
-router.put('/auth/profile', protect, authController.updateUserProfile);
+router.get('/auth/me', protect, authController.getMe);
+router.put('/auth/profile', protect, upload.single('image'), processAndStoreImage('profile pic'), authController.updateUserProfile);
+router.put('/auth/change-password', protect, authController.changePassword);
+router.delete('/auth/profile', protect, authController.softDeleteUser);
 
 // ==========================================
 // APPOINTMENT ROUTES

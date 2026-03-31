@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, Clock, MapPin, User, ChevronRight, Hash, AlertTriangle, RefreshCw } from 'lucide-react';
+import { Calendar, Clock, MapPin, User, ChevronRight, Hash, AlertTriangle, RefreshCw, Sparkles, Filter } from 'lucide-react';
 import api from '../utils/api';
 import toast from 'react-hot-toast';
 import { format } from 'date-fns';
+import UserPanelLayout from '../components/public/UserPanelLayout';
 
 export default function MyAppointments() {
   const [appointments, setAppointments] = useState([]);
@@ -33,9 +34,10 @@ export default function MyAppointments() {
   };
 
   return (
-    <div className="pb-12 h-full">
-      <div className="max-w-5xl mx-auto px-4 md:px-0">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-12">
+    <UserPanelLayout title="Order History">
+      <div className="flex flex-col gap-10">
+        {/* Header Area */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-10 border-b border-white/5">
           <div>
             <h1 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight italic mb-2 font-luxury">My Scheduled Rituals</h1>
             <p className="text-muted text-[10px] uppercase font-black tracking-[0.3em] flex items-center gap-2">
@@ -43,7 +45,7 @@ export default function MyAppointments() {
               Chronological records of aesthetic journey
             </p>
           </div>
-          <button 
+          <button
             onClick={fetchAppointments}
             className="p-3 bg-secondary border border-white/5 rounded-2xl shadow-premium hover:shadow-primary/5 hover:-translate-y-1 transition-all"
           >
@@ -57,7 +59,7 @@ export default function MyAppointments() {
             <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted animate-pulse">Archival Exploration...</p>
           </div>
         ) : appointments.length === 0 ? (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             className="bg-secondary p-12 text-center rounded-[2.5rem] border border-dashed border-white/10"
@@ -72,18 +74,18 @@ export default function MyAppointments() {
             </button>
           </motion.div>
         ) : (
-          <div className="grid gap-6">
+          <div className="grid gap-8">
             <AnimatePresence mode="popLayout">
               {appointments.map((app, index) => (
                 <motion.div
                   key={app._id}
-                  initial={{ opacity: 0, x: -20 }}
+                  initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1 }}
                   className="bg-secondary p-6 md:p-8 border border-white/5 shadow-2xl rounded-[2.5rem] hover:shadow-primary/5 transition-all group flex flex-col md:flex-row md:items-center gap-8 relative overflow-hidden"
                 >
                   <div className="absolute top-0 left-0 w-1 h-full bg-primary opacity-0 group-hover:opacity-100 transition-opacity" />
-                  
+
                   {/* Temporal Identifier */}
                   <div className="flex flex-col items-center justify-center min-w-[100px] py-4 bg-background rounded-2xl border border-white/5 group-hover:bg-primary/5 transition-all shadow-inner">
                     <span className="text-[9px] font-black text-muted uppercase tracking-widest mb-1">{format(new Date(app.appointmentDate), 'MMM')}</span>
@@ -91,14 +93,14 @@ export default function MyAppointments() {
                     <span className="text-[10px] font-bold text-primary mt-1 uppercase tracking-widest">{format(new Date(app.appointmentDate), 'HH:mm')}</span>
                   </div>
 
-                  <div className="flex-1 space-y-5">
-                    <div className="flex flex-wrap items-center gap-3">
+                  <div className="flex-1 space-y-6">
+                    <div className="flex flex-wrap items-center gap-4">
                       {app.assignments.map((asm, i) => (
                         <span key={i} className="px-3 py-1.5 bg-background text-primary text-[10px] font-black uppercase tracking-widest rounded-lg border border-white/5 shadow-inner">
                           {asm.service?.name}
                         </span>
                       ))}
-                      <div className={`ml-auto px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border border-current shadow-sm ${statusColors[app.status]}`}>
+                      <div className={`ml-auto px-5 py-2 rounded-full text-[9px] font-black uppercase tracking-[0.2em] border shadow-lg ${statusColors[app.status]}`}>
                         {app.status}
                       </div>
                     </div>
@@ -146,8 +148,8 @@ export default function MyAppointments() {
             </AnimatePresence>
           </div>
         )
-}
+        }
       </div>
-    </div>
+    </UserPanelLayout>
   );
 }

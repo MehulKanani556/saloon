@@ -90,8 +90,8 @@ const PublicNavbar = () => {
                 <div className="w-8 h-8 rounded-full bg-luxury-gradient flex items-center justify-center text-secondary font-black text-xs shadow-lg">
                   {userInfo.name.charAt(0).toUpperCase()}
                 </div>
-                <span className="text-[10px] font-black uppercase tracking-widest hidden xl:block">Menu</span>
-                <ChevronDown size={14} className={`transition-transform duration-300 ${isProfileOpen ? 'rotate-180' : ''}`} />
+                {/* <span className="text-[10px] font-black uppercase tracking-widest hidden xl:block">Menu</span>
+                <ChevronDown size={14} className={`transition-transform duration-300 ${isProfileOpen ? 'rotate-180' : ''}`} /> */}
               </button>
 
               <AnimatePresence>

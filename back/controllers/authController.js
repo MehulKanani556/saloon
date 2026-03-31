@@ -77,7 +77,7 @@ const sendOTP = async (req, res) => {
         // Relay logic disabled for testing as requested by user's manual edit
         console.log(`Test OTP for ${identity}: ${otp}`);
 
-        res.status(200).json({ message: 'OTP sent successfully (Test Mode: 123456)' });
+        res.status(200).json({ message: 'OTP sent successfully' });
     } catch (error) {
         console.error('OTP Sending Error:', error);
         res.status(500).json({ message: error.message || 'System failed to relay code. Operation aborted.' });
@@ -96,6 +96,10 @@ const loginUser = async (req, res) => {
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
+        }
+
+        if (user.isDeleted) {
+            return res.status(401).json({ message: 'This identity has been dissolved. Access denied.' });
         }
 
         let isAuth = false;
@@ -127,7 +131,10 @@ const loginUser = async (req, res) => {
                 name: user.name,
                 email: user.email,
                 role: user.role,
+                phone: user.phone,
                 salonInfo: user.salonInfo,
+                customId: user.customId,
+                profileImage: user.profileImage,
                 accessToken
             });
         } else {
@@ -185,8 +192,10 @@ const updateUserProfile = async (req, res) => {
         const user = await User.findById(req.user._id);
         if (user) {
             user.name = req.body.name || user.name;
-            user.email = req.body.email || user.email;
-            user.phone = req.body.phone || user.phone;
+            // email and phone remain static as per tenant security requirements
+            if (req.body.profileImage) {
+                user.profileImage = req.body.profileImage;
+            }
             
             const updatedUser = await user.save();
             res.json({
@@ -196,6 +205,7 @@ const updateUserProfile = async (req, res) => {
                 role: updatedUser.role,
                 phone: updatedUser.phone,
                 customId: updatedUser.customId,
+                profileImage: updatedUser.profileImage,
                 accessToken: generateAccessToken(updatedUser._id)
             });
         } else {
@@ -206,4 +216,64 @@ const updateUserProfile = async (req, res) => {
     }
 };
 
-module.exports = { registerUser, loginUser, refresh, logoutUser, sendOTP, updateUserProfile };
+// @desc Change Password
+// @route PUT /api/auth/change-password
+// @access Private
+const changePassword = async (req, res) => {
+    const { currentPassword, newPassword } = req.body;
+    try {
+        const user = await User.findById(req.user._id);
+        if (!user) return res.status(404).json({ message: 'Identity not found' });
+
+        // If user has a password, verify it. If not (OTP user), allow setting new one directly
+        if (user.password) {
+            const isMatch = await user.matchPassword(currentPassword);
+            if (!isMatch) return res.status(400).json({ message: 'Invalid current password' });
+        }
+
+        user.password = newPassword;
+        await user.save();
+        res.json({ message: 'Security credentials synchronized successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @desc Soft Delete User
+// @route DELETE /api/auth/profile
+// @access Private
+const softDeleteUser = async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id);
+        if (!user) return res.status(404).json({ message: 'Identity not found' });
+
+        user.isDeleted = true;
+        user.deletedAt = Date.now();
+        await user.save();
+
+        res.clearCookie('refreshToken', {
+            httpOnly: true,
+            sameSite: 'strict',
+            secure: process.env.NODE_ENV === 'production'
+        });
+
+        res.json({ message: 'Identity dissolved successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @desc Get Current User Profile
+// @route GET /api/auth/me
+// @access Private
+const getMe = async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id);
+        if (!user) return res.status(404).json({ message: 'Identity not found' });
+        res.json(user);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+module.exports = { registerUser, loginUser, refresh, logoutUser, sendOTP, updateUserProfile, changePassword, softDeleteUser, getMe };

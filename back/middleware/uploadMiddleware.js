@@ -41,7 +41,7 @@ const processAndStoreImage = (section) => async (req, res, next) => {
         Key: `${section}/${filename}`,
         Body: processedImage,
         ContentType: 'image/webp',
-        ACL: 'public-read' // Assumes bucket allows public-read
+        ACL: 'public-read'
       }
     });
 
@@ -50,8 +50,8 @@ const processAndStoreImage = (section) => async (req, res, next) => {
     // S3 Object URL
     const s3Url = `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${section}/${filename}`;
 
-    // Attach dynamic S3 path to request body
-    if (section === 'staff' || section === 'clients') {
+  
+    if (section === 'profile pic' || section === 'staff' || section === 'clients') {
       req.body.profileImage = s3Url;
     } else {
       req.body.image = s3Url;
