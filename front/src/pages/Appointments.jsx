@@ -103,7 +103,7 @@ export default function Appointments() {
       clientName: app.client?.name || '',
       clientEmail: app.client?.email || '',
       clientPhone: app.client?.phone || '',
-      services: app.services?.map(s => s._id) || [],
+      services: app.assignments?.map(a => (a.service?._id || a.service)) || [],
       date: format(appDate, "yyyy-MM-dd'T'HH:mm"),
       status: app.status || 'Pending',
       paymentStatus: app.paymentStatus || 'Pending',
@@ -253,7 +253,7 @@ export default function Appointments() {
                     <div className="flex items-center gap-3 min-w-0">
                       <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-saloon-50 dark:bg-slate-800 overflow-hidden border border-white dark:border-white/5 p-0.5 shadow-sm shrink-0">
                         <img
-                          src={app.client.profileImage ? `${IMAGE_URL}${app.client.profileImage}` : `https://api.dicebear.com/9.x/adventurer/svg?seed=${app.client?.name}`}
+                          src={app.client?.profileImage ? `${IMAGE_URL}${app.client.profileImage}` : `https://api.dicebear.com/9.x/adventurer/svg?seed=${app.client?.name}`}
                           alt={app.client?.name}
                           className="w-full h-full rounded-[14px] object-cover"
                         />
@@ -293,15 +293,19 @@ export default function Appointments() {
                     </div>
                   </div>
                   <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-100 dark:border-white/5 space-y-2 sm:space-y-3 group-hover:bg-slate-900 dark:group-hover:bg-saloon-500 transition-all duration-300">
-                    {app.services?.map((s, idx) => (
-                      <div key={s._id} className="flex items-center justify-between group-hover:text-white gap-2">
-                        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-                          <div className="w-1.5 h-1.5 rounded-full bg-saloon-500 group-hover:bg-white shrink-0" />
-                          <span className="text-[10px] sm:text-[11px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest group-hover:text-white truncate">{s.name}</span>
+                    {app.assignments?.map((asm, idx) => {
+                      const s = asm.service;
+                      if (!s) return null;
+                      return (
+                        <div key={s._id || idx} className="flex items-center justify-between group-hover:text-white gap-2">
+                          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                            <div className="w-1.5 h-1.5 rounded-full bg-saloon-500 group-hover:bg-white shrink-0" />
+                            <span className="text-[10px] sm:text-[11px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest group-hover:text-white truncate">{s.name}</span>
+                          </div>
+                          <span className="text-[9px] sm:text-[10px] font-black opacity-60 shrink-0">${s.price}</span>
                         </div>
-                        <span className="text-[9px] sm:text-[10px] font-black opacity-60 shrink-0">${s.price}</span>
-                      </div>
-                    ))}
+                      );
+                    })}
                     <div className="pt-2 border-t border-slate-200 dark:border-white/10 flex items-center justify-between group-hover:border-white/20">
                       <span className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest group-hover:text-white/60">Final Total</span>
                       <span className="text-xs sm:text-sm font-black text-saloon-500 group-hover:text-white">${app.totalPrice}</span>

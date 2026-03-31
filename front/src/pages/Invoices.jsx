@@ -96,21 +96,25 @@ const InvoiceDetailModal = ({ appointment, onClose }) => {
                   <th className="pb-4 text-right text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 italic px-2">Value</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-50 dark:divide-white/5">
-                {appointment.services?.map((service, idx) => (
-                  <tr key={service._id || idx}>
-                    <td className="py-6 px-2">
-                      <p className="font-black text-sm tracking-tight uppercase italic">{service.name}</p>
-                      <p className="text-[9px] font-bold text-slate-400 uppercase mt-1 italic">{service.category?.name || 'General Ritual'}</p>
-                    </td>
-                    <td className="py-6 px-2 text-right">
-                      <p className="font-black text-[10px] italic">{format(new Date(appointment.appointmentDate), 'MMM dd, HH:mm')}</p>
-                    </td>
-                    <td className="py-6 px-2 text-right">
-                      <p className="font-black text-sm italic text-saloon-600">${service.price?.toLocaleString()}</p>
-                    </td>
-                  </tr>
-                ))}
+               <tbody className="divide-y divide-slate-50 dark:divide-white/5">
+                {appointment.assignments?.map((asm, idx) => {
+                  const service = asm.service;
+                  if (!service) return null;
+                  return (
+                    <tr key={service._id || idx}>
+                      <td className="py-6 px-2">
+                        <p className="font-black text-sm tracking-tight uppercase italic">{service.name}</p>
+                        <p className="text-[9px] font-bold text-slate-400 uppercase mt-1 italic">{service.category?.name || 'General Ritual'}</p>
+                      </td>
+                      <td className="py-6 px-2 text-right">
+                        <p className="font-black text-[10px] italic">{format(new Date(appointment.appointmentDate), 'MMM dd, HH:mm')}</p>
+                      </td>
+                      <td className="py-6 px-2 text-right">
+                        <p className="font-black text-sm italic text-saloon-600">${service.price?.toLocaleString()}</p>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -273,7 +277,7 @@ export default function Invoices() {
                       </div>
                     </td>
                     <td className="px-4 md:px-8 md:py-8 py-4">
-                      <p className="text-[11px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-[0.1em] italic whitespace-nowrap">{invoice.services.map(s => s.name).join(', ')}</p>
+                      <p className="text-[11px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-[0.1em] italic whitespace-nowrap">{invoice.assignments?.map(a => a.service?.name).join(', ')}</p>
                     </td>
                     <td className="px-4 md:px-8 md:py-8 py-4">
                       <div className="flex flex-col">
