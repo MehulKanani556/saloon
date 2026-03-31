@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Mail, Phone, ShoppingBag, Plus, Star, Trash2, Edit3, X, User, Eye, Calendar, Clock, Award, FileText, User2 } from 'lucide-react';
+import { Search, Mail, Phone, ShoppingBag, Plus, Star, Trash2, Edit3, X, User, Eye, Calendar, Clock, Award, FileText, User2, CameraIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
@@ -100,104 +100,109 @@ export default function Clients() {
 
   if (loading) return (
     <div className="flex items-center justify-center h-[60vh]">
-      <div className="w-12 h-12 border-4 border-saloon-200 border-t-saloon-600 rounded-full animate-spin" />
+      <div className="w-12 h-12 border-4 border-white/5 border-t-primary rounded-full animate-spin" />
     </div>
   );
 
   return (
-    <div className="space-y-6 md:space-y-12">
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-        <div className="flex items-center gap-4 md:gap-6 relative z-10 transition-all">
-          <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-white dark:bg-slate-900 border border-saloon-100 dark:border-white/10 flex items-center justify-center text-saloon-500 shadow-glass shrink-0 transition-transform hover:rotate-6">
-            <User2 size={24} md:size={32} strokeWidth={2.5} />
+    <div className="space-y-12">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-10">
+        <div className="flex items-center gap-6 group">
+          <div className="w-16 h-16 rounded-2xl bg-secondary border border-white/10 flex items-center justify-center text-primary shadow-premium shrink-0 transition-transform hover:rotate-6">
+            <User2 size={32} strokeWidth={2.5} />
           </div>
           <div className="min-w-0">
-            <h1 className="text-xl sm:text-3xl lg:text-4xl font-black text-slate-800 dark:text-white tracking-tighter uppercase leading-none truncate md:whitespace-normal">Customer List</h1>
-            <p className="text-slate-400 font-black text-[8px] sm:text-[9px] lg:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.25em] mt-2 lg:mt-4 opacity-70 group-hover:opacity-100 transition-opacity">List of all customers who visit your saloon</p>
+            <h1 className="text-3xl lg:text-4xl font-black text-white tracking-tighter uppercase leading-none truncate md:whitespace-normal font-luxury italic">Customer Archives</h1>
+            <p className="text-[10px] font-black text-muted uppercase tracking-[0.3em] mt-3 opacity-60 italic">Cataloging Eternal Beauty Profiles</p>
           </div>
         </div>
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="bg-white dark:bg-slate-900 px-5 py-3.5 rounded-2xl border border-slate-100 dark:border-white/5 shadow-2xl flex items-center gap-4 w-full md:w-80 group focus-within:border-saloon-500/50 transition-all">
-            <Search size={18} className="text-slate-400 group-focus-within:text-saloon-500 transition-colors" />
+
+        <div className="flex flex-col md:flex-row gap-6">
+          <div className="bg-secondary/40 backdrop-blur-md px-6 py-4 rounded-2xl border border-white/5 shadow-2xl flex items-center gap-4 w-full md:w-96 group focus-within:border-primary/40 transition-all">
+            <Search size={20} className="text-muted group-focus-within:text-primary transition-colors" />
             <input
               type="text"
-              placeholder="Search by name, email, phone..."
+              placeholder="Query by name, signal, email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="bg-transparent border-none outline-none text-sm w-full font-bold dark:text-white placeholder:text-slate-300 dark:placeholder:text-slate-600"
+              className="bg-transparent border-none outline-none text-[11px] w-full font-black uppercase tracking-widest text-white placeholder:text-white/10"
             />
           </div>
           <button
             onClick={() => setIsDrawerOpen(true)}
-            className="flex items-center gap-3 px-6 py-3 lg:px-10 lg:py-5 bg-gradient-to-r from-saloon-500 via-saloon-600 to-rosegold-500 text-white lg:rounded-2xl rounded-xl font-black uppercase text-xs tracking-[0.2em] shadow-xl shadow-saloon-500/20 hover:scale-[1.05] transition-all group"
+            className="flex items-center gap-4 px-10 py-5 bg-primary text-secondary rounded-2xl font-black uppercase text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group"
           >
             <Plus size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
-            Add New Customer
+            INDuct NEW PROTOCOL
           </button>
         </div>
       </div>
 
-      <div className="bg-white dark:bg-slate-900 rounded-2xl overflow-hidden shadow-2xl border border-slate-50 dark:border-white/5">
+      <div className="bg-secondary/30 backdrop-blur-sm rounded-[2.5rem] overflow-hidden shadow-3xl border border-white/5 relative">
+        <div className="absolute top-0 left-0 w-full h-[1px] bg-luxury-gradient opacity-10" />
         <div className="overflow-x-auto custom-scrollbar">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-slate-50/50 dark:bg-slate-800/20">
-                <th className="px-4 md:px-8 md:py-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 italic whitespace-nowrap">Customer Name</th>
-                <th className="px-4 md:px-8 md:py-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 italic whitespace-nowrap">Phone & Email</th>
-                <th className="px-4 md:px-8 md:py-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 italic whitespace-nowrap">Total Visits</th>
-                <th className="px-4 md:px-8 md:py-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 italic whitespace-nowrap">Actions</th>
+              <tr className="bg-background/80">
+                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary italic whitespace-nowrap">Identity</th>
+                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary italic whitespace-nowrap">Tethers & Signals</th>
+                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary italic whitespace-nowrap text-center">Frequency</th>
+                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary italic whitespace-nowrap text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-50 dark:divide-white/5">
+            <tbody className="divide-y divide-white/5">
               <AnimatePresence mode="popLayout">
                 {filteredClients.map((client, index) => (
                   <motion.tr
                     key={client._id}
-                    initial={{ opacity: 0, x: -10 }}
+                    initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 10 }}
-                    transition={{ delay: index * 0.03 }}
-                    className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-all group"
+                    exit={{ opacity: 0, x: 20 }}
+                    transition={{ delay: index * 0.02, ease: "easeOut" }}
+                    className="hover:bg-white/5 transition-all group"
                   >
-                    <td className="px-4 md:px-8 md:py-8 py-4">
-                      <div className="flex items-center gap-5">
-                        <div className="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 p-0.5 border border-slate-200/50 dark:border-white/10 group-hover:rotate-6 transition-transform">
+                    <td className="px-10 py-8">
+                      <div className="flex items-center gap-6">
+                        <div className="w-16 h-16 rounded-[1.5rem] bg-background p-1 border border-white/10 group-hover:rotate-6 transition-all duration-500 shadow-2xl relative overflow-hidden">
                           <img
                             src={client.profileImage ? (client.profileImage.startsWith('/uploads') ? `${IMAGE_URL}${client.profileImage}` : client.profileImage) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${client.name}`}
                             alt={client.name}
-                            className="w-full h-full rounded-[14px] object-cover"
+                            className="w-full h-full rounded-2xl object-cover grayscale transition-all duration-700 group-hover:grayscale-0"
                           />
                         </div>
                         <div>
-                          <p className="font-black text-slate-900 dark:text-white tracking-tighter uppercase italic whitespace-nowrap">{client.name}</p>
-                          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-2 px-2 py-0.5 bg-slate-50 dark:bg-slate-800 rounded-lg inline-block whitespace-nowrap">Since {new Date(client.createdAt).getFullYear()}</p>
+                          <p className="font-black text-white text-base tracking-tighter uppercase italic whitespace-nowrap font-luxury group-hover:text-primary transition-colors leading-none mb-3">{client.name}</p>
+                          <div className="flex items-center gap-2">
+                            <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                            <p className="text-[9px] font-black text-muted uppercase tracking-[0.2em] whitespace-nowrap">Protocol Est. {new Date(client.createdAt).getFullYear()}</p>
+                          </div>
                         </div>
                       </div>
                     </td>
-                    <td className="px-4 md:px-8 md:py-8 py-4">
+                    <td className="px-10 py-8">
                       <div className="space-y-3">
-                        <p className="text-[11px] font-bold text-slate-600 dark:text-slate-300 flex items-center gap-3 whitespace-nowrap">
-                          <Mail size={14} className="text-saloon-500" />
+                        <p className="text-[10px] font-black text-muted group-hover:text-white transition-colors flex items-center gap-4 whitespace-nowrap tracking-widest uppercase">
+                          <Mail size={14} className="text-primary/40 group-hover:text-primary" />
                           {client.email}
                         </p>
-                        <p className="text-[11px] font-bold text-slate-600 dark:text-slate-300 flex items-center gap-3 whitespace-nowrap">
-                          <Phone size={14} className="text-saloon-500" />
+                        <p className="text-[10px] font-black text-muted group-hover:text-white transition-colors flex items-center gap-4 whitespace-nowrap tracking-widest uppercase">
+                          <Phone size={14} className="text-primary/40 group-hover:text-primary" />
                           {client.phone}
                         </p>
                       </div>
                     </td>
 
-                    <td className="px-4 md:px-8 md:py-8 py-4 text-center">
-                      <div className="inline-flex flex-col items-center">
-                        <span className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter whitespace-nowrap">{(client.bookingHistory?.length || 0).toString().padStart(2, '0')}</span>
-                        <span className="text-[8px] font-black text-slate-300 dark:text-slate-600 uppercase tracking-widest mt-1 whitespace-nowrap">Engagements</span>
+                    <td className="px-10 py-8 text-center">
+                      <div className="inline-flex flex-col items-center bg-background/50 px-6 py-4 rounded-3xl border border-white/5 group-hover:bg-primary transition-all duration-500">
+                        <span className="text-xl font-black text-white tracking-tighter whitespace-nowrap group-hover:text-secondary">{(client.bookingHistory?.length || 0).toString().padStart(2, '0')}</span>
+                        <span className="text-[8px] font-black text-primary uppercase tracking-[0.3em] mt-1 whitespace-nowrap group-hover:text-secondary group-hover:opacity-40 italic">Rituals</span>
                       </div>
                     </td>
-                    <td className="px-4 md:px-8 md:py-8 py-4 text-right">
-                      <div className="flex items-center justify-start gap-2 transition-opacity">
+                    <td className="px-10 py-8 text-right">
+                      <div className="flex items-center justify-end gap-3 translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-500">
                         <button
                           onClick={() => navigate(`/admin/invoices?id=${client.name}`)}
-                          className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl text-slate-400 hover:text-indigo-500 transition-all border border-transparent hover:border-indigo-500/20"
+                          className="p-4 bg-background border border-white/5 rounded-2xl text-muted hover:text-white transition-all shadow-xl"
                         >
                           <FileText size={18} />
                         </button>
@@ -206,13 +211,13 @@ export default function Clients() {
                             setProfileClient(client);
                             setIsProfileOpen(true);
                           }}
-                          className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl text-slate-400 hover:text-saloon-500 transition-all border border-transparent hover:border-saloon-500/20"
+                          className="p-4 bg-background border border-white/5 rounded-2xl text-muted hover:text-primary transition-all shadow-xl"
                         >
                           <Eye size={18} />
                         </button>
                         <button
                           onClick={() => handleEdit(client)}
-                          className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl text-slate-400 hover:text-blue-500 transition-all border border-transparent hover:border-blue-500/20"
+                          className="p-4 bg-background border border-white/5 rounded-2xl text-muted hover:text-primary transition-all shadow-xl"
                         >
                           <Edit3 size={18} />
                         </button>
@@ -221,7 +226,7 @@ export default function Clients() {
                             setClientToDelete(client);
                             setIsDeleteModalOpen(true);
                           }}
-                          className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl text-slate-400 hover:text-red-500 transition-all border border-transparent hover:border-red-500/20"
+                          className="p-4 bg-background border border-rose-500/10 rounded-2xl text-muted hover:text-rose-500 transition-all shadow-xl"
                         >
                           <Trash2 size={18} />
                         </button>
@@ -238,17 +243,20 @@ export default function Clients() {
       <Modal
         isOpen={isDrawerOpen}
         onClose={handleCloseDrawer}
-        title={selectedClient ? 'Edit Info' : 'New Customer'}
-        subtitle="Customer Management"
+        title={selectedClient ? 'Edit Identity' : 'INDuct PROTOCOL'}
+        subtitle="Customer Matrix Management"
       >
-        <div className="flex flex-col items-center mb-8">
+        <div className="flex flex-col items-center mb-12">
           <div className="relative group">
-            <div className="w-32 h-32 rounded-2xl bg-slate-50 dark:bg-slate-800 border-4 border-slate-100 dark:border-white/5 flex items-center justify-center text-slate-300 dark:text-slate-600 shadow-inner overflow-hidden transition-all group-hover:border-saloon-500/20">
+            <div className="w-40 h-40 rounded-[2.5rem] bg-background border-4 border-white/5 flex items-center justify-center text-white/5 shadow-inner overflow-hidden transition-all duration-500 group-hover:border-primary/20 group-hover:scale-105">
               {imagePreview ? (
-                <img src={imagePreview.startsWith('blob') || !imagePreview.startsWith('/uploads') ? imagePreview : `${IMAGE_URL}${imagePreview}`} className="w-full h-full object-cover" alt="Preview" />
+                <img src={imagePreview.startsWith('blob') || !imagePreview.startsWith('/uploads') ? imagePreview : `${IMAGE_URL}${imagePreview}`} className="w-full h-full object-cover grayscale transition-all duration-700 group-hover:grayscale-0" alt="Preview" />
               ) : (
-                <User size={48} strokeWidth={1} />
+                <User size={64} strokeWidth={1} />
               )}
+              <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                <CameraIcon size={32} className="text-secondary" />
+              </div>
               <input
                 type="file"
                 accept="image/*"
@@ -262,86 +270,93 @@ export default function Clients() {
                 className="absolute inset-0 opacity-0 cursor-pointer z-10"
               />
             </div>
+            <div className="absolute -bottom-4 -right-4 w-12 h-12 bg-primary rounded-2xl flex items-center justify-center text-secondary shadow-xl group-hover:scale-110 transition-transform">
+              <Plus size={24} strokeWidth={3} />
+            </div>
           </div>
-          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-4 italic">Customer Identity</p>
+          <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em] mt-8 italic">Geometric Identity Signature</p>
         </div>
 
-        <form onSubmit={formik.handleSubmit} className="space-y-6">
-          <div className="space-y-3.5">
-            <label className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2 italic">Full Name</label>
+        <form onSubmit={formik.handleSubmit} className="space-y-10">
+          <div className="space-y-4">
+            <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 italic underline decoration-primary/30 decoration-2 underline-offset-8">Legal Identity</label>
             <input
               name="name"
               onChange={formik.handleChange}
               value={formik.values.name}
-              className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/30 rounded-xl px-5 py-4 text-xs font-bold outline-none transition-all dark:text-white shadow-inner"
-              placeholder="John Doe"
+              className="w-full bg-secondary border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.2em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5 italic"
+              placeholder="ENTER NOMENCLATURE"
             />
-            {formik.touched.name && formik.errors.name && <p className="text-red-500 text-[9px] font-bold ml-2 uppercase italic">{formik.errors.name}</p>}
+            {formik.touched.name && formik.errors.name && <p className="text-rose-500 text-[9px] font-black ml-4 uppercase italic tracking-widest">{formik.errors.name}</p>}
           </div>
 
-          <div className="space-y-3.5">
-            <label className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2 italic">Email Address</label>
-            <input
-              name="email"
-              onChange={formik.handleChange}
-              value={formik.values.email}
-              className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/30 rounded-xl px-5 py-4 text-xs font-bold outline-none transition-all dark:text-white shadow-inner"
-              placeholder="john@example.com"
-            />
-            {formik.touched.email && formik.errors.email && <p className="text-red-500 text-[9px] font-bold ml-2 uppercase italic">{formik.errors.email}</p>}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 italic">Digital Beacon (Email)</label>
+              <input
+                name="email"
+                onChange={formik.handleChange}
+                value={formik.values.email}
+                className="w-full bg-secondary border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.2em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5"
+                placeholder="EMAIL@MATRIX.COM"
+              />
+              {formik.touched.email && formik.errors.email && <p className="text-rose-500 text-[9px] font-black ml-4 uppercase italic tracking-widest">{formik.errors.email}</p>}
+            </div>
+
+            <div className="space-y-4">
+              <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 italic">Tether Signal (Phone)</label>
+              <input
+                name="phone"
+                onChange={formik.handleChange}
+                value={formik.values.phone}
+                className="w-full bg-secondary border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.2em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5"
+                placeholder="+XX XXXXX XXXXX"
+              />
+              {formik.touched.phone && formik.errors.phone && <p className="text-rose-500 text-[9px] font-black ml-4 uppercase italic tracking-widest">{formik.errors.phone}</p>}
+            </div>
           </div>
 
-          <div className="space-y-3.5">
-            <label className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2 italic">Phone Number</label>
-            <input
-              name="phone"
-              onChange={formik.handleChange}
-              value={formik.values.phone}
-              className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/30 rounded-xl px-5 py-4 text-xs font-bold outline-none transition-all dark:text-white shadow-inner"
-              placeholder="+1 234 567 890"
-            />
-            {formik.touched.phone && formik.errors.phone && <p className="text-red-500 text-[9px] font-bold ml-2 uppercase italic">{formik.errors.phone}</p>}
+          <div className="pt-8">
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-6 bg-primary text-secondary rounded-[2.5rem] text-[10px] font-black uppercase tracking-[0.5em] hover:bg-primary/90 transition-all shadow-2xl shadow-primary/20 active:scale-[0.98] disabled:opacity-50 font-luxury italic"
+            >
+              {selectedClient ? 'COMMIT IDENTITY UPDATE' : 'AUTHORIZE PROTOCOL ENTRY'}
+            </button>
           </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-5 dark:bg-slate-800 dark:hover:bg-saloon-600 bg-slate-900 text-white rounded-xl text-xs font-black uppercase tracking-[0.3em] hover:bg-saloon-600 transition-all shadow-2xl active:scale-95 disabled:opacity-50"
-          >
-            {selectedClient ? 'Save Changes' : 'Add Customer Member'}
-          </button>
         </form>
       </Modal>
 
       <Modal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
-        title="Delete Customer?"
-        subtitle="Administrative Action"
+        title="DISSOLVE IDENTITY?"
+        subtitle="Final Administrative Liquidation"
         maxWidth="max-w-sm"
       >
-        <div className="text-center">
-          <div className="w-16 h-16 bg-red-50 dark:bg-red-500/10 rounded-2xl flex items-center justify-center mx-auto text-red-500 mb-6">
-            <Trash2 size={32} />
+        <div className="text-center p-4">
+          <div className="w-24 h-24 bg-rose-500/10 border border-rose-500/20 rounded-[2.5rem] flex items-center justify-center mx-auto text-rose-500 mb-10 shadow-2xl shadow-rose-500/20">
+            <Trash2 size={48} strokeWidth={1} />
           </div>
-          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-relaxed mb-8">
-            Eliminating the digital footprint of <span className="text-red-500">{clientToDelete?.name}</span>. <br />Historical rituals will persist in archive.
+          <p className="text-muted font-black text-[10px] uppercase tracking-[0.3em] leading-relaxed mb-10 italic">
+            Eliminating digital signature of <br /><span className="text-rose-500 text-base font-luxury italic underline decoration-rose-500/30 decoration-2 underline-offset-4">{clientToDelete?.name}</span> <br /> from active records.
           </p>
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-4">
             <button
               onClick={() => {
                 dispatch(deleteClient(clientToDelete._id));
                 setIsDeleteModalOpen(false);
               }}
-              className="w-full py-4 bg-red-500 text-white rounded-xl text-[10px] font-black uppercase tracking-[0.2em] hover:bg-red-600 transition-all shadow-xl active:scale-95"
+              className="w-full py-5 bg-rose-500 text-white rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:bg-rose-600 transition-all shadow-xl active:scale-95 font-luxury italic"
             >
-              Confirm Delete
+              CONFIRM DISSOLUTION
             </button>
             <button
               onClick={() => setIsDeleteModalOpen(false)}
-              className="w-full py-4 bg-slate-100 dark:bg-slate-800 text-slate-400 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] hover:text-slate-900 transition-all border border-slate-200 dark:border-white/5"
+              className="w-full py-5 bg-white/5 text-muted rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:text-white transition-all font-luxury italic"
             >
-              Abort Protocol
+              ABORT OPERATION
             </button>
           </div>
         </div>
@@ -351,80 +366,88 @@ export default function Clients() {
         isOpen={isProfileOpen}
         onClose={() => { setIsProfileOpen(false); setProfileClient(null); }}
         title={profileClient?.name}
-        subtitle="Premium Client"
+        subtitle="ETERNAL MEMBER"
         headerImage={profileClient?.profileImage ? (profileClient.profileImage.startsWith('/uploads') ? `${IMAGE_URL}${profileClient.profileImage}` : profileClient.profileImage) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${profileClient?.name}`}
         footer={(
           <>
             <button
               onClick={() => { setIsProfileOpen(false); handleEdit(profileClient); }}
-              className="flex-1 py-4 bg-slate-900 dark:bg-slate-800 text-white rounded-xl text-[10px] font-black uppercase tracking-[0.2em] hover:bg-saloon-600 transition-all shadow-xl active:scale-95"
+              className="flex-1 py-5 bg-primary text-secondary rounded-[2.5rem] text-[10px] font-black uppercase tracking-[0.4em] hover:bg-primary/90 transition-all shadow-xl active:scale-95 font-luxury italic"
             >
-              Refine Identity
+              REDEFINE PROTOCOL
             </button>
             <button
               onClick={() => { setIsProfileOpen(false); setProfileClient(null); }}
-              className="px-6 flex items-center justify-center bg-white dark:bg-slate-700 rounded-xl text-slate-400 hover:text-red-500 transition-all border border-slate-100 dark:border-white/5"
+              className="w-14 h-14 flex items-center justify-center bg-background rounded-2xl text-muted hover:text-rose-500 transition-all border border-white/5 active:scale-95"
             >
-              <X size={18} />
+              <X size={20} strokeWidth={3} />
             </button>
           </>
         )}
       >
         {profileClient && (
-          <div className="space-y-8">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-100 dark:border-white/5">
-                <div className="flex items-center gap-2 text-saloon-500 mb-2">
-                  <ShoppingBag size={14} />
-                  <span className="text-[9px] font-black uppercase tracking-widest">Rituals</span>
+          <div className="space-y-12 p-2">
+            <div className="grid grid-cols-2 gap-6">
+              <div className="p-6 bg-secondary/50 rounded-[2.5rem] border border-white/5 shadow-inner">
+                <div className="flex items-center gap-3 text-primary mb-4 italic">
+                  <ShoppingBag size={14} strokeWidth={2.5} />
+                  <span className="text-[9px] font-black uppercase tracking-[0.3em]">Rituals</span>
                 </div>
-                <div className="text-lg font-black text-slate-800 dark:text-white">{(profileClient.bookingHistory?.length || 0).toString().padStart(2, '0')} Count</div>
+                <div className="text-3xl font-black text-white italic font-luxury leading-none">{(profileClient.bookingHistory?.length || 0).toString().padStart(2, '0')}</div>
               </div>
-              <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-100 dark:border-white/5">
-                <div className="flex items-center gap-2 text-blue-500 mb-2">
-                  <Mail size={14} />
-                  <span className="text-[9px] font-black uppercase tracking-widest">Email</span>
+              <div className="p-6 bg-secondary/50 rounded-[2.5rem] border border-white/5 shadow-inner">
+                <div className="flex items-center gap-3 text-primary mb-4 italic">
+                  <Award size={14} strokeWidth={2.5} />
+                  <span className="text-[9px] font-black uppercase tracking-[0.3em]">Status</span>
                 </div>
-                <div className="text-[10px] font-bold text-slate-800 dark:text-slate-300 truncate">{profileClient.email}</div>
+                <div className="text-sm font-black text-white italic font-luxury leading-none uppercase tracking-tighter">PREMIUM</div>
               </div>
             </div>
 
-            <div className="p-6 bg-slate-50 dark:bg-slate-800 rounded-xl flex items-center justify-between group">
-              <div>
-                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1 italic">Tether</p>
-                <p className="text-lg font-black text-slate-900 dark:text-white tracking-tighter">{profileClient.phone}</p>
+            <div className="p-8 bg-background/50 rounded-[3rem] border border-white/5 flex items-center justify-between group shadow-3xl hover:border-primary/20 transition-all duration-500">
+              <div className="space-y-4">
+                <p className="text-[9px] font-black text-muted uppercase tracking-[0.5em] italic">Active Tether</p>
+                <p className="text-2xl font-black text-white tracking-tighter italic font-luxury group-hover:text-primary transition-all">{profileClient.phone}</p>
               </div>
-              <div className="w-10 h-10 bg-white dark:bg-slate-700 rounded-xl flex items-center justify-center text-slate-400">
-                <Phone size={18} />
+              <div className="w-16 h-16 bg-secondary rounded-[2rem] flex items-center justify-center text-muted group-hover:bg-primary group-hover:text-secondary transition-all duration-500 shadow-xl border border-white/5">
+                <Phone size={24} strokeWidth={2.5} />
               </div>
             </div>
 
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Ritual Archive</span>
-                <span className="h-[1px] flex-1 bg-slate-100 dark:bg-white/5 mx-4" />
-                <Calendar size={14} className="text-slate-400" />
+            <div className="space-y-6">
+              <div className="flex items-center justify-between px-2">
+                <div className="flex items-center gap-4">
+                  <Calendar size={16} className="text-primary" />
+                  <span className="text-[10px] font-black text-white uppercase tracking-[0.4em] italic leading-none">Ritual Archive</span>
+                </div>
+                <span className="h-[1px] flex-1 bg-white/5 mx-6" />
               </div>
 
-              <div className="space-y-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+              <div className="space-y-4 max-h-[350px] overflow-y-auto pr-4 custom-scrollbar">
                 {appointments.filter(app => app.client?._id === profileClient._id).map((app) => (
-                  <div key={app._id} className="p-4 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-100 dark:border-white/5">
-                    <div className="flex items-center justify-between mb-3">
-                      <p className="text-[10px] font-black text-slate-800 dark:text-white uppercase tracking-tighter">
-                        {new Date(app.appointmentDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                      </p>
-                      <div className={`px-3 py-1 rounded-md text-[7px] font-black uppercase tracking-widest ${app.status === 'Completed' ? 'bg-green-500/10 text-green-500' : 'bg-blue-500/10 text-blue-500'}`}>
+                  <div key={app._id} className="p-6 bg-secondary/30 rounded-[2.5rem] border border-white/5 hover:border-white/10 transition-all group">
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="flex items-center gap-3">
+                        <div className="w-2 h-2 rounded-full bg-primary" />
+                        <p className="text-[11px] font-black text-white uppercase tracking-tighter italic font-luxury leading-none">
+                          {format(new Date(app.appointmentDate), 'MMM dd, yyyy')}
+                        </p>
+                      </div>
+                      <div className={`px-4 py-2 rounded-xl text-[8px] font-black uppercase tracking-[0.2em] italic border ${app.status === 'Completed' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : 'bg-primary/10 text-primary border-primary/20'}`}>
                         {app.status}
                       </div>
                     </div>
-                    <div className="flex items-center justify-between text-[9px] font-bold text-slate-400">
-                      <span className="truncate max-w-[150px]">{app.services?.map(s => s.name).join(', ')}</span>
-                      <span className="text-saloon-600 font-black italic">${app.totalPrice}</span>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-black text-muted uppercase tracking-widest truncate max-w-[180px] italic">{app.services?.map(s => s.name).join(', ')}</span>
+                      <span className="text-lg font-black text-primary font-luxury italic leading-none">${app.totalPrice}</span>
                     </div>
                   </div>
                 ))}
                 {appointments.filter(app => app.client?._id === profileClient._id).length === 0 && (
-                  <div className="py-10 text-center opacity-30 italic text-[10px] uppercase font-black tracking-widest">No archives found</div>
+                  <div className="py-20 text-center bg-white/5 rounded-[3rem] border border-dashed border-white/10">
+                    <Clock className="mx-auto text-white/5 mb-6" size={48} strokeWidth={1} />
+                    <p className="text-muted/40 italic text-[10px] uppercase font-black tracking-[0.4em]">No archives found in matrix</p>
+                  </div>
                 )}
               </div>
             </div>
@@ -434,3 +457,4 @@ export default function Clients() {
     </div>
   );
 }
+

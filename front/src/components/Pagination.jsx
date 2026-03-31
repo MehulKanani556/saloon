@@ -28,16 +28,16 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 text-slate-400 hover:text-saloon-500 hover:border-saloon-500/50 disabled:opacity-30 disabled:hover:border-transparent transition-all shadow-sm"
+        className="w-12 h-12 flex items-center justify-center rounded-2xl bg-secondary border border-white/5 text-muted hover:text-primary hover:border-primary/30 disabled:opacity-20 disabled:hover:border-white/5 transition-all shadow-premium group"
       >
-        <ChevronLeft size={20} strokeWidth={2.5} />
+        <ChevronLeft size={20} strokeWidth={2.5} className="group-hover:-translate-x-0.5 transition-transform" />
       </button>
 
-      <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 dark:bg-slate-900/40 rounded-2xl border border-slate-100 dark:border-white/5 shadow-inner">
+      <div className="flex items-center gap-2 px-4 py-2 bg-secondary/40 rounded-2xl border border-white/5 shadow-inner">
         {getPageNumbers().map((page, index) => (
           <React.Fragment key={index}>
             {page === '...' ? (
-              <div className="w-10 flex items-center justify-center text-slate-400">
+              <div className="w-10 flex items-center justify-center text-muted/30">
                 <MoreHorizontal size={16} />
               </div>
             ) : (
@@ -45,13 +45,13 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
                 whileTap={{ scale: 0.95 }}
                 onClick={() => onPageChange(page)}
                 className={`
-                  w-10 h-10 rounded-xl font-black text-xs transition-all duration-300 flex items-center justify-center
+                  w-10 h-10 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all duration-300 flex items-center justify-center
                   ${currentPage === page 
-                    ? 'bg-saloon-500 text-white shadow-lg shadow-saloon-500/30 scale-110' 
-                    : 'text-slate-400 hover:text-slate-800 dark:hover:text-white hover:bg-white dark:hover:bg-slate-800'}
+                    ? 'bg-primary text-secondary shadow-xl shadow-primary/20 scale-110' 
+                    : 'text-muted hover:text-white hover:bg-white/5'}
                 `}
               >
-                {page}
+                {page < 10 ? `0${page}` : page}
               </motion.button>
             )}
           </React.Fragment>
@@ -61,9 +61,9 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 text-slate-400 hover:text-saloon-500 hover:border-saloon-500/50 disabled:opacity-30 disabled:hover:border-transparent transition-all shadow-sm"
+        className="w-12 h-12 flex items-center justify-center rounded-2xl bg-secondary border border-white/5 text-muted hover:text-primary hover:border-primary/30 disabled:opacity-20 disabled:hover:border-white/5 transition-all shadow-premium group"
       >
-        <ChevronRight size={20} strokeWidth={2.5} />
+        <ChevronRight size={20} strokeWidth={2.5} className="group-hover:translate-x-0.5 transition-transform" />
       </button>
     </div>
   );

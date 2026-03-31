@@ -74,7 +74,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
           damping: 30,
           mass: 1
         }}
-        className={`h-screen glass-sidebar flex flex-col p-4 z-[110] fixed xl:sticky top-0 overflow-hidden ${isDrawerMode && !isOpen ? 'pointer-events-none' : ''}`}
+        className={`h-screen bg-secondary border-r border-white/5 flex flex-col p-4 z-[110] fixed xl:sticky top-0 overflow-hidden ${isDrawerMode && !isOpen ? 'pointer-events-none' : ''}`}
       >
         {/* Header Section */}
         <div className="flex items-center justify-between mb-12 px-2 mt-4 min-h-[40px]">
@@ -88,7 +88,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                 transition={{ duration: 0.3 }}
                 className="flex items-center gap-2"
               >
-                <img src={Logo} alt="Logo" className="h-10 w-auto object-contain dark:brightness-0 dark:invert" />
+                <img src={Logo} alt="Logo" className="h-10 w-auto object-contain brightness-0 invert shadow-primary/20 drop-shadow-[0_0_8px_rgba(201,162,39,0.2)]" />
               </motion.div>
             )}
           </AnimatePresence>
@@ -96,9 +96,9 @@ export default function Sidebar({ isOpen, setIsOpen }) {
           <motion.button
             layout
             onClick={() => isDrawerMode ? setIsOpen(false) : setIsCollapsed(!isCollapsed)}
-            className="p-2.5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 shadow-sm rounded-2xl transition-colors text-rosegold-400 group hover:bg-saloon-500 hover:text-white"
+            className="p-2.5 bg-background border border-white/5 rounded-2xl shadow-premium text-primary hover:scale-105 active:scale-95 transition-all group"
           >
-            {isCollapsed && !isDrawerMode ? <Menu size={22} strokeWidth={2.5} /> : <X size={22} strokeWidth={2.5} />}
+            {isCollapsed && !isDrawerMode ? <Menu size={20} strokeWidth={2.5} /> : <X size={20} className="text-primary" strokeWidth={2.5} />}
           </motion.button>
         </div>
 
@@ -114,11 +114,11 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                 <div className={`
                   flex items-center ${(isCollapsed && !isDrawerMode) ? 'justify-center' : 'gap-4'} px-4 py-4 rounded-2xl transition-all duration-300 group relative
                   ${isActive
-                    ? 'bg-gradient-to-r from-saloon-500 to-saloon-600 text-white border-none'
-                    : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-saloon-600'
+                    ? 'bg-primary text-secondary shadow-xl shadow-primary/10'
+                    : 'text-muted hover:bg-white/5 hover:text-white'
                   }
                 `}>
-                  <item.icon size={22} strokeWidth={isActive ? 3 : 2} className="shrink-0" />
+                  <item.icon size={20} strokeWidth={2} className="shrink-0" />
 
                   <AnimatePresence mode="wait">
                     {(!isCollapsed || isDrawerMode) && (
@@ -153,16 +153,16 @@ export default function Sidebar({ isOpen, setIsOpen }) {
           <motion.div
             layout
             className={`
-              flex items-center gap-3 p-3 rounded-2xl bg-white/60 dark:bg-slate-900 border border-white/40 dark:border-white/5 shadow-premium overflow-hidden
+              flex items-center gap-3 p-3 rounded-2xl bg-background border border-white/5 shadow-premium overflow-hidden
               ${(isCollapsed && !isDrawerMode) ? 'justify-center border-none' : ''}
             `}
           >
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-saloon-500 to-rosegold-600 p-[2px] shadow-lg shrink-0">
-              <div className="w-full h-full rounded-[14px] bg-white dark:bg-slate-800 overflow-hidden">
+            <div className="w-12 h-12 rounded-2xl bg-luxury-gradient p-[1px] shadow-lg shrink-0">
+              <div className="w-full h-full rounded-2xl bg-secondary overflow-hidden flex items-center justify-center p-[2px]">
                 <img
-                  src={`https://api.dicebear.com/9.x/adventurer/svg?seed=jaygandhi`}
+                  src={userInfo?.avatar || `https://api.dicebear.com/9.x/adventurer/svg?seed=${userInfo?.name || 'Artisan'}`}
                   alt="Admin Profile"
-                  className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                  className="w-full h-full object-cover hover:scale-110 transition-transform duration-500 rounded-[10px]"
                 />
               </div>
             </div>
@@ -175,10 +175,10 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                   exit={{ opacity: 0, x: -20 }}
                   className="overflow-hidden min-w-[120px]"
                 >
-                  <p className="text-xs font-black text-rosegold-500 truncate uppercase tracking-tight mb-1">{userInfo?.name || 'Artisan'}</p>
+                  <p className="text-xs font-black text-primary truncate uppercase tracking-tight mb-1 leading-none">{userInfo?.name || 'Artisan'}</p>
                   <div className="flex items-center gap-1.5">
-                    <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                    <p className="text-[9px] font-black text-slate-400 truncate uppercase tracking-widest">{userInfo?.role || 'Staff'}</p>
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                    <p className="text-[9px] font-black text-muted truncate uppercase tracking-[0.2em]">{userInfo?.role || 'Staff'}</p>
                   </div>
                 </motion.div>
               )}

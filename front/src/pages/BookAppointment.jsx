@@ -34,12 +34,12 @@ const SuccessModal = ({ data, onClose }) => {
     <motion.div 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="fixed inset-0 z-[1000] flex items-center justify-center p-6 bg-slate-950/80 backdrop-blur-xl"
+      className="fixed inset-0 z-[1000] flex items-center justify-center p-6 bg-background/95 backdrop-blur-2xl"
     >
       <motion.div 
         initial={{ scale: 0.9, y: 20 }}
         animate={{ scale: 1, y: 0 }}
-        className="w-full max-w-lg bg-white dark:bg-slate-900 rounded-[3rem] p-12 text-center shadow-2xl relative overflow-hidden"
+        className="w-full max-w-lg bg-secondary rounded-[3rem] p-12 text-center shadow-2xl relative border border-white/5 overflow-hidden"
       >
         {/* Simple CSS Confetti Burst Placeholder Animation */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -49,35 +49,35 @@ const SuccessModal = ({ data, onClose }) => {
               initial={{ y: 500, x: 0, opacity: 1 }}
               animate={{ y: -100, x: (i - 10) * 20, opacity: 0 }}
               transition={{ duration: 2, repeat: Infinity, delay: i * 0.1 }}
-              className="absolute w-2 h-2 bg-saloon-500 rounded-full"
+              className="absolute w-2 h-2 bg-primary rounded-full"
               style={{ left: '50%' }}
             />
           ))}
         </div>
 
-        <div className="w-24 h-24 bg-green-100 dark:bg-green-500/10 text-green-500 rounded-full flex items-center justify-center mx-auto mb-8">
+        <div className="w-24 h-24 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-8 border border-primary/20 shadow-inner">
           <CheckCircle2 size={56} strokeWidth={1.5} />
         </div>
         
-        <h2 className="text-4xl font-black text-slate-900 dark:text-white uppercase tracking-tighter mb-4 italic">Ritual Confirmed!</h2>
-        <p className="text-slate-400 font-bold text-[10px] uppercase tracking-widest leading-relaxed mb-10">
+        <h2 className="text-4xl font-black text-white uppercase tracking-tighter mb-4 italic font-luxury">Ritual Confirmed!</h2>
+        <p className="text-muted font-bold text-[10px] uppercase tracking-widest leading-relaxed mb-10">
           Your transformation at Glow & Elegance is officially in the chronicles. We've sent a detailed confirmation to your email.
         </p>
 
-        <div className="bg-slate-50 dark:bg-slate-800/40 rounded-3xl p-6 mb-10 text-left space-y-4">
+        <div className="bg-background rounded-3xl p-6 mb-10 text-left space-y-4 border border-white/5">
           <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
-            <span className="text-slate-400">Reference:</span>
-            <span className="text-slate-900 dark:text-white">#{data.id || 'N/A'}</span>
+            <span className="text-muted">Reference:</span>
+            <span className="text-white">#{data.id || 'N/A'}</span>
           </div>
           <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
-            <span className="text-slate-400">Schedule:</span>
-            <span className="text-slate-900 dark:text-white">{data.date.toLocaleDateString()} at {data.time}</span>
+            <span className="text-muted">Schedule:</span>
+            <span className="text-white">{data.date.toLocaleDateString()} at {data.time}</span>
           </div>
         </div>
 
         <button 
           onClick={onClose}
-          className="w-full py-5 bg-saloon-600 text-white rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl hover:bg-saloon-700 transition-all active:scale-95"
+          className="w-full py-5 bg-primary text-secondary rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl hover:bg-primary/90 transition-all active:scale-95"
         >
           Return to Sanctuary
         </button>
@@ -224,36 +224,36 @@ export default function BookAppointment() {
   ];
 
   return (
-    <div className="relative selection:bg-saloon-500 selection:text-white bg-slate-50 dark:bg-slate-950 font-sans min-h-screen">
+    <div className="relative selection:bg-primary selection:text-secondary bg-background font-sans min-h-screen">
       <PublicNavbar />
       
       <main className="pt-32 pb-24">
         <div className="container mx-auto px-6 mb-16 text-center">
           <div className="flex justify-center mb-6">
-            <div className="w-16 h-16 rounded-[2rem] bg-slate-900 dark:bg-white text-white dark:text-slate-950 flex items-center justify-center shadow-xl">
+            <div className="w-16 h-16 rounded-[2rem] bg-secondary text-primary flex items-center justify-center shadow-xl border border-white/10">
               <Scissors size={28} />
             </div>
           </div>
-          <h1 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white uppercase tracking-tighter italic">Book Your Ritual</h1>
-          <p className="text-slate-400 font-black text-[10px] uppercase tracking-[0.3em] mt-4">Secure your spot in our sanctuary of elegance.</p>
+          <h1 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter italic font-luxury">Book Your Ritual</h1>
+          <p className="text-muted font-black text-[10px] uppercase tracking-[0.3em] mt-4">Secure your spot in our sanctuary of elegance.</p>
         </div>
 
         <div className="container px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 max-w-7xl mx-auto">
           
           {/* Main Form Area */}
           <div className="lg:col-span-8">
-            <div className="bg-white dark:bg-slate-900 rounded-[3rem] p-8 md:p-12 shadow-2xl border border-slate-100 dark:border-white/5 overflow-hidden">
+            <div className="bg-secondary rounded-[3rem] p-8 md:p-12 shadow-2xl border border-white/5 overflow-hidden">
               
               {/* Step Indicator */}
               <div className="flex items-center justify-between mb-20 relative px-4 md:px-10">
                  {/* Connection Pipe */}
-                 <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-slate-100 dark:bg-white/10 -translate-y-1/2 z-0 mx-10 md:mx-20" />
+                 <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-white/5 -translate-y-1/2 z-0 mx-10 md:mx-20" />
                  
                  {/* Progress Pipe */}
                  <motion.div 
                     initial={{ width: 0 }}
                     animate={{ width: `calc(${((step - 1) / (steps.length - 1)) * 100}% - ${step === steps.length ? '0px' : '40px'})` }}
-                    className="absolute top-1/2 left-10 md:left-20 h-[2px] bg-saloon-500 -translate-y-1/2 z-0 transition-all duration-700 ease-in-out" 
+                    className="absolute top-1/2 left-10 md:left-20 h-[2px] bg-primary -translate-y-1/2 z-0 transition-all duration-700 ease-in-out" 
                  />
  
                  {steps.map((s, i) => {
@@ -266,8 +266,8 @@ export default function BookAppointment() {
                            initial={false}
                            animate={{ 
                              scale: isActive ? 1.2 : 1,
-                             backgroundColor: isCompleted ? "#10b981" : isActive ? "#f59e0b" : "rgba(255,255,255,1)",
-                             borderColor: isCompleted ? "#10b981" : isActive ? "#f59e0b" : "#e2e8f0"
+                             backgroundColor: isCompleted ? "#10b981" : isActive ? "#C9A227" : "rgba(255,255,255,0.05)",
+                             borderColor: isCompleted ? "#10b981" : isActive ? "#C9A227" : "rgba(255,255,255,0.1)"
                            }}
                            className={`w-10 h-10 md:w-14 md:h-14 rounded-2xl border-2 flex items-center justify-center transition-all duration-500 shadow-xl ${
                              isActive ? 'rotate-12' : ''
@@ -279,7 +279,7 @@ export default function BookAppointment() {
                         </motion.div>
                         
                         <div className="absolute -bottom-10 whitespace-nowrap text-center">
-                           <span className={`text-[8px] font-black uppercase tracking-[0.2em] transition-colors duration-500 ${isActive ? 'text-saloon-600' : 'text-slate-400'}`}>
+                           <span className={`text-[8px] font-black uppercase tracking-[0.2em] transition-colors duration-500 ${isActive ? 'text-primary' : 'text-muted'}`}>
                              {s.title}
                            </span>
                         </div>
@@ -301,7 +301,7 @@ export default function BookAppointment() {
                     <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-6">
                       {loading ? (
                         [...Array(6)].map((_, i) => (
-                          <div key={i} className="aspect-square bg-slate-50 dark:bg-slate-800 rounded-3xl animate-pulse" />
+                          <div key={i} className="aspect-square bg-background rounded-3xl animate-pulse" />
                         ))
                       ) : services.map((service) => {
                         const isSelected = selectedServices.find(s => s._id === service._id);
@@ -312,8 +312,8 @@ export default function BookAppointment() {
                             onClick={() => toggleService(service)}
                             className={`group cursor-pointer relative p-6 rounded-3xl border-2 transition-all duration-300 ${
                               isSelected 
-                                ? 'bg-saloon-500/5 border-saloon-500 shadow-xl shadow-saloon-500/10' 
-                                : 'bg-white dark:bg-slate-800 border-transparent hover:border-slate-200 dark:hover:border-white/10'
+                                ? 'bg-primary/5 border-primary shadow-xl shadow-primary/10' 
+                                : 'bg-background border-white/5 hover:border-primary/20 shadow-inner'
                             }`}
                           >
                             <div className="aspect-video rounded-xl overflow-hidden mb-4 relative">
@@ -323,17 +323,17 @@ export default function BookAppointment() {
                                 className="w-full h-full object-cover transition-transform group-hover:scale-110"
                               />
                               {isSelected && (
-                                <div className="absolute inset-0 bg-saloon-500/40 backdrop-blur-[2px] flex items-center justify-center">
-                                  <div className="w-10 h-10 bg-white text-saloon-500 rounded-full flex items-center justify-center shadow-lg">
+                                <div className="absolute inset-0 bg-primary/40 backdrop-blur-[2px] flex items-center justify-center">
+                                  <div className="w-10 h-10 bg-white text-primary rounded-full flex items-center justify-center shadow-lg">
                                     <Check size={20} strokeWidth={4} />
                                   </div>
                                 </div>
                               )}
                             </div>
-                            <h4 className="text-xs font-black text-slate-800 dark:text-white uppercase tracking-tight mb-2 truncate">{service.name}</h4>
+                            <h4 className="text-xs font-black text-white uppercase tracking-tight mb-2 truncate font-luxury">{service.name}</h4>
                             <div className="flex items-center justify-between">
-                              <span className="text-[10px] font-black text-saloon-600">${service.price}</span>
-                              <div className="flex items-center gap-1.5 text-[8px] font-black text-slate-400 uppercase">
+                              <span className="text-[10px] font-black text-primary font-luxury">${service.price}</span>
+                              <div className="flex items-center gap-1.5 text-[8px] font-black text-muted uppercase">
                                 <Clock size={10} />
                                 {service.duration} Min
                               </div>
@@ -343,19 +343,19 @@ export default function BookAppointment() {
                       })}
                     </div>
 
-                    <div className="pt-8 border-t border-slate-100 dark:border-white/5 flex items-center justify-between">
+                    <div className="pt-8 border-t border-white/5 flex items-center justify-between">
                       <div className="hidden md:flex items-center gap-4">
-                         <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-white/5 flex items-center justify-center text-saloon-500">
+                         <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-primary">
                              <Sparkles size={18} />
                          </div>
-                         <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">
+                         <p className="text-[9px] font-black text-muted uppercase tracking-widest leading-relaxed">
                             Select multiple rituals for a <br/> complete transformation.
                          </p>
                       </div>
                       <button 
                         onClick={nextStep}
                         disabled={selectedServices.length === 0}
-                        className="px-10 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-saloon-600 dark:hover:bg-saloon-500 dark:hover:text-white transition-all flex items-center gap-3"
+                        className="px-10 py-4 bg-primary text-secondary rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-all flex items-center gap-3"
                       >
                         Next Chapter
                         <ChevronRight size={18} />
@@ -374,14 +374,14 @@ export default function BookAppointment() {
                   >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                       <div className="space-y-3">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-3">Full Master Name</label>
+                        <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Full Master Name</label>
                         <div className="relative">
-                          <User size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-saloon-400" />
+                          <User size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-primary" />
                           <input 
                             {...formik.getFieldProps('clientName')}
                             placeholder="e.g. Alexander Pierce"
-                            className={`w-full bg-slate-50 dark:bg-slate-800/80 border-2 rounded-2xl px-14 py-4 text-sm font-bold outline-none transition-all dark:text-white ${
-                              formik.touched.clientName && formik.errors.clientName ? 'border-red-500/30' : 'border-transparent focus:border-saloon-500/20'
+                            className={`w-full bg-background border-2 rounded-2xl px-14 py-4 text-sm font-bold outline-none transition-all text-white ${
+                              formik.touched.clientName && formik.errors.clientName ? 'border-red-500/30' : 'border-transparent focus:border-primary/20'
                             }`}
                           />
                         </div>
@@ -391,13 +391,13 @@ export default function BookAppointment() {
                       </div>
 
                       <div className="space-y-3">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-3">Email Transmission</label>
+                        <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Email Transmission</label>
                         <div className="relative">
-                          <Mail size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-saloon-400" />
+                          <Mail size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-primary" />
                           <input 
                             {...formik.getFieldProps('clientEmail')}
                             placeholder="ritual@glow.com"
-                            className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/20 rounded-2xl px-14 py-4 text-sm font-bold outline-none transition-all dark:text-white"
+                            className="w-full bg-background border-2 border-transparent focus:border-primary/20 rounded-2xl px-14 py-4 text-sm font-bold outline-none transition-all text-white"
                           />
                         </div>
                         {formik.touched.clientEmail && formik.errors.clientEmail && (
@@ -406,10 +406,10 @@ export default function BookAppointment() {
                       </div>
 
                       <div className="space-y-3">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-3">Contact Signal</label>
-                        <div className="flex bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus-within:border-saloon-500/20 rounded-2xl transition-all overflow-hidden">
-                           <div className="flex items-center pl-6 pr-4 border-r border-slate-200 dark:border-white/5 bg-slate-100/30 dark:bg-white/5">
-                              <span className="text-sm font-black text-slate-400 leading-none">+1</span>
+                        <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Contact Signal</label>
+                        <div className="flex bg-background border-2 border-transparent focus-within:border-primary/20 rounded-2xl transition-all overflow-hidden shadow-inner">
+                           <div className="flex items-center pl-6 pr-4 border-r border-white/5 bg-white/5">
+                              <span className="text-sm font-black text-muted leading-none">+1</span>
                            </div>
                            <div className="relative flex-1">
                              <input 
@@ -428,34 +428,34 @@ export default function BookAppointment() {
                       </div>
 
                       <div className="space-y-3">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-3">Appointed Date</label>
+                        <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Appointed Date</label>
                         <div className="relative">
-                          <Calendar size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-saloon-400" />
+                          <Calendar size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-primary" />
                           <input 
                             type="date"
                             {...formik.getFieldProps('date')}
                             min={new Date().toISOString().split('T')[0]}
-                            className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/20 rounded-2xl px-14 py-4 text-sm font-bold outline-none transition-all dark:text-white"
+                            className="w-full bg-background border-2 border-transparent focus:border-primary/20 rounded-2xl px-14 py-4 text-sm font-bold outline-none transition-all text-white [color-scheme:dark]"
                           />
                         </div>
                       </div>
 
                       {/* Staff Selection Section */}
-                      <div className="md:col-span-2 space-y-4 pt-6 border-t border-slate-100 dark:border-white/5">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-3">Select Your Master (Specialize for each ritual)</label>
+                      <div className="md:col-span-2 space-y-4 pt-6 border-t border-white/5">
+                        <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Select Your Master (Specialize for each ritual)</label>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           {selectedServices.map(service => {
                             const eligibleStaff = allStaff.filter(s => s.services?.some(ser => (typeof ser === 'string' ? ser === service._id : ser._id === service._id)));
                             return (
-                              <div key={service._id} className="bg-white dark:bg-slate-800/40 p-4 rounded-3xl border border-slate-50 dark:border-white/5 flex items-center justify-between shadow-sm">
+                              <div key={service._id} className="bg-background p-4 rounded-3xl border border-white/5 flex items-center justify-between shadow-sm">
                                 <div className="flex flex-col">
-                                  <span className="text-[10px] font-black uppercase text-saloon-600 dark:text-saloon-400 truncate max-w-[120px]">{service.name}</span>
-                                  <span className="text-[8px] text-slate-400 font-black uppercase tracking-tighter">performed by</span>
+                                  <span className="text-[10px] font-black uppercase text-primary truncate max-w-[120px] font-luxury">{service.name}</span>
+                                  <span className="text-[8px] text-muted font-black uppercase tracking-tighter">performed by</span>
                                 </div>
                                 <select 
                                   value={staffAssignments[service._id] || ""}
                                   onChange={(e) => setStaffAssignments({...staffAssignments, [service._id]: e.target.value})}
-                                  className="bg-slate-50 dark:bg-slate-900/50 px-3 py-2 rounded-xl text-[9px] font-black uppercase outline-none cursor-pointer text-slate-900 dark:text-white border-none focus:ring-0"
+                                  className="bg-secondary px-3 py-2 rounded-xl text-[9px] font-black uppercase outline-none cursor-pointer text-white border border-white/5 focus:ring-0"
                                 >
                                   <option value="">Any Master</option>
                                   {eligibleStaff.map(stf => (
@@ -469,11 +469,11 @@ export default function BookAppointment() {
                       </div>
 
                       <div className="space-y-3 md:col-span-2">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-3">Preferred Time Slot</label>
+                        <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Preferred Time Slot</label>
                         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 relative min-h-[100px]">
                           {slotsLoading && (
-                            <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/60 dark:bg-slate-900/60 backdrop-blur-[1px] rounded-3xl">
-                               <Loader2 className="animate-spin text-saloon-500" strokeWidth={3} />
+                            <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/60 backdrop-blur-[1px] rounded-3xl">
+                               <Loader2 className="animate-spin text-primary" strokeWidth={3} />
                             </div>
                           )}
                           
@@ -512,10 +512,10 @@ export default function BookAppointment() {
                                 onClick={() => formik.setFieldValue('time', time)}
                                 className={`py-4 rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all relative overflow-hidden ${
                                   isSelected 
-                                    ? 'bg-saloon-500 text-white shadow-xl scale-105 z-1' 
+                                    ? 'bg-primary text-secondary shadow-xl scale-105 z-1' 
                                     : isOccupied
-                                      ? 'bg-slate-100 dark:bg-slate-800/20 text-slate-300 dark:text-slate-700 cursor-not-allowed grayscale'
-                                      : 'bg-slate-50 dark:bg-slate-800/50 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 hover:shadow-md'
+                                      ? 'bg-white/5 text-muted/20 cursor-not-allowed grayscale'
+                                      : 'bg-background text-muted hover:bg-white/5 hover:text-white hover:shadow-md border border-white/5 shadow-inner'
                                 }`}
                               >
                                 {time}
@@ -532,10 +532,10 @@ export default function BookAppointment() {
                       </div>
                     </div>
 
-                    <div className="pt-8 border-t border-slate-100 dark:border-white/5 flex items-center justify-between">
+                    <div className="pt-8 border-t border-white/5 flex items-center justify-between">
                       <button 
                         onClick={prevStep}
-                        className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-saloon-500 transition-colors"
+                        className="flex items-center gap-2 text-[10px] font-black text-muted uppercase tracking-widest hover:text-primary transition-colors"
                       >
                         <ChevronLeft size={18} />
                         Back to Selection
@@ -543,7 +543,7 @@ export default function BookAppointment() {
                       <button 
                         onClick={nextStep}
                         disabled={!formik.isValid || !formik.values.clientName || !formik.values.time}
-                        className="px-10 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl disabled:opacity-50 hover:bg-saloon-600 dark:hover:bg-saloon-500 transition-all flex items-center gap-3"
+                        className="px-10 py-4 bg-primary text-secondary rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl disabled:opacity-50 hover:bg-primary/90 transition-all flex items-center gap-3"
                       >
                         Confirm Details
                         <ChevronRight size={18} />
@@ -560,19 +560,19 @@ export default function BookAppointment() {
                     exit={{ opacity: 0, x: -50 }}
                     className="space-y-10"
                   >
-                    <div className="bg-slate-950 rounded-[2.5rem] p-10 text-white shadow-2xl relative overflow-hidden">
-                       <div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none">
+                    <div className="bg-background rounded-[2.5rem] p-10 text-white shadow-2xl relative overflow-hidden border border-white/5">
+                       <div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none text-primary">
                           <CheckCircle2 size={150} strokeWidth={1} />
                        </div>
                        
                        <div className="relative z-10 space-y-10">
                           <div>
-                            <h3 className="text-2xl font-black uppercase tracking-tighter mb-8 italic">The Ritual Summary</h3>
+                            <h3 className="text-2xl font-black uppercase tracking-tighter mb-8 italic font-luxury">The Ritual Summary</h3>
                             <div className="space-y-4">
                               {selectedServices.map(s => (
                                 <div key={s._id} className="flex justify-between items-center py-3 border-b border-white/5">
-                                  <span className="text-[10px] font-black uppercase tracking-widest text-white/70">{s.name}</span>
-                                  <span className="text-sm font-black text-saloon-500">${s.price}</span>
+                                  <span className="text-[10px] font-black uppercase tracking-widest text-muted">{s.name}</span>
+                                  <span className="text-sm font-black text-primary font-luxury">${s.price}</span>
                                 </div>
                               ))}
                             </div>
@@ -592,7 +592,7 @@ export default function BookAppointment() {
                           <div className="pt-10 border-t border-white/10 flex items-center justify-between">
                              <div className="flex flex-col">
                                 <span className="text-[9px] font-black text-white/40 uppercase tracking-widest mb-1">Total Investment</span>
-                                <span className="text-4xl font-black text-saloon-500 tracking-tighter">${totalPrice}</span>
+                                <span className="text-4xl font-black text-primary tracking-tighter italic font-luxury">${totalPrice}</span>
                              </div>
                              <div className="flex items-center gap-3 text-white/60">
                                 <Clock size={16} />
@@ -605,7 +605,7 @@ export default function BookAppointment() {
                     <div className="pt-8 flex flex-col md:flex-row items-center gap-6">
                       <button 
                         onClick={prevStep}
-                        className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-saloon-500 transition-colors"
+                        className="flex items-center gap-2 text-[10px] font-black text-muted uppercase tracking-widest hover:text-primary transition-colors"
                       >
                         <ChevronLeft size={18} />
                         Adjust Rituals
@@ -613,7 +613,7 @@ export default function BookAppointment() {
                       <button 
                         onClick={formik.handleSubmit}
                         disabled={isSubmitting}
-                        className="w-full py-6 bg-gradient-to-r from-saloon-500 to-rosegold-500 text-white rounded-2xl font-black text-sm uppercase tracking-[0.3em] shadow-xl shadow-saloon-500/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-4"
+                        className="w-full py-6 bg-primary text-secondary rounded-2xl font-black text-sm uppercase tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-4"
                       >
                         {isSubmitting ? (
                           <Loader2 size={24} className="animate-spin" />
@@ -634,10 +634,10 @@ export default function BookAppointment() {
           {/* Sticky Selection Sidebar (Desktop) */}
           <div className="lg:col-span-4 hidden lg:block">
             <div className="sticky top-32 space-y-8">
-              <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 border border-slate-100 dark:border-white/5 shadow-xl">
-                 <div className="flex items-center gap-4 mb-10 pb-6 border-b border-slate-50 dark:border-white/5">
-                    <ShoppingBag className="text-saloon-500" />
-                    <h3 className="text-xl font-black uppercase tracking-tighter italic">Your Rituals</h3>
+              <div className="bg-secondary rounded-[2.5rem] p-10 border border-white/5 shadow-xl">
+                 <div className="flex items-center gap-4 mb-10 pb-6 border-b border-white/5">
+                    <ShoppingBag className="text-primary" />
+                    <h3 className="text-xl font-black uppercase tracking-tighter italic font-luxury text-white">Your Rituals</h3>
                  </div>
 
                  <AnimatePresence>
@@ -652,8 +652,8 @@ export default function BookAppointment() {
                             className="flex justify-between items-start group"
                           >
                             <div className="flex flex-col">
-                              <span className="text-[10px] font-black uppercase tracking-widest text-slate-800 dark:text-white truncate max-w-[150px]">{s.name}</span>
-                              <span className="text-[8px] font-bold text-slate-400 uppercase tracking-[0.2em]">{s.duration} Min</span>
+                              <span className="text-[10px] font-black uppercase tracking-widest text-white truncate max-w-[150px] font-luxury">{s.name}</span>
+                              <span className="text-[8px] font-bold text-muted uppercase tracking-[0.2em]">{s.duration} Min</span>
                             </div>
                             <button 
                               onClick={() => toggleService(s)}
@@ -666,30 +666,30 @@ export default function BookAppointment() {
                       </div>
                     ) : (
                       <div className="py-12 text-center">
-                         <Sparkles size={32} className="text-slate-100 dark:text-white/5 mx-auto mb-4" />
-                         <p className="text-[9px] font-black text-slate-300 uppercase tracking-widest">No rituals selected yet.</p>
+                         <Sparkles size={32} className="text-white/5 mx-auto mb-4" />
+                         <p className="text-[9px] font-black text-white/20 uppercase tracking-widest">No rituals selected yet.</p>
                       </div>
                     )}
                  </AnimatePresence>
 
-                 <div className="pt-10 border-t border-slate-100 dark:border-white/5 space-y-6">
-                    <div className="flex justify-between items-center text-slate-400">
+                  <div className="pt-10 border-t border-white/5 space-y-6">
+                    <div className="flex justify-between items-center text-muted">
                        <span className="text-[9px] font-black uppercase tracking-[0.3em]">Total Rituals</span>
                        <span className="text-sm font-bold">{selectedServices.length}</span>
                     </div>
                     <div className="flex justify-between items-center">
-                       <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em]">Total Investment</span>
-                       <span className="text-3xl font-black text-saloon-600 tracking-tighter">${totalPrice}</span>
+                       <span className="text-[9px] font-black text-muted uppercase tracking-[0.3em]">Total Investment</span>
+                       <span className="text-3xl font-black text-primary tracking-tighter italic font-luxury font-luxury">${totalPrice}</span>
                     </div>
                  </div>
               </div>
 
               {/* Trust Badge */}
-              <div className="bg-slate-900 rounded-[2rem] p-8 text-center">
+              <div className="bg-background rounded-[2.5rem] border border-white/5 p-8 text-center shadow-inner">
                  <div className="flex justify-center gap-1 mb-4">
-                    {[...Array(5)].map((_, i) => <Star key={i} size={12} className="text-saloon-500 fill-saloon-500" />)}
+                    {[...Array(5)].map((_, i) => <Star key={i} size={12} className="text-primary fill-primary" />)}
                  </div>
-                 <p className="text-[9px] font-black text-white/60 uppercase tracking-widest leading-relaxed">
+                 <p className="text-[9px] font-black text-white/60 uppercase tracking-widest leading-relaxed italic font-luxury">
                     Trusted by over 5,000 clients for <br/> premium luxury transformations.
                  </p>
               </div>

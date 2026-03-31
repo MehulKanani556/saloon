@@ -25,7 +25,7 @@ const Hero = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-slate-950">
+    <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-background">
       {/* Background Image with Dark Overlay */}
       <div className="absolute inset-0 z-0">
         <img
@@ -33,7 +33,7 @@ const Hero = () => {
           alt="Luxury Salon Background"
           className="w-full h-full object-cover opacity-30 scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
       </div>
 
       {/* Shimmer Effect */}
@@ -41,7 +41,7 @@ const Hero = () => {
         {[...Array(15)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-1 h-1 bg-saloon-500/30 rounded-full"
+            className="absolute w-1 h-1 bg-primary/30 rounded-full"
             initial={{
               x: Math.random() * 100 + "%",
               y: Math.random() * 100 + "%",
@@ -65,12 +65,12 @@ const Hero = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 mb-8"
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 backdrop-blur-xl border border-white/10 mb-8"
         >
           <motion.div
             animate={{ scale: [1, 1.2, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
-            className="w-2 h-2 rounded-full bg-saloon-500"
+            className="w-2 h-2 rounded-full bg-primary"
           />
           <span className="text-[9px] md:text-[10px] font-black text-white uppercase tracking-[0.2em]">
             500+ Happy Clients
@@ -98,7 +98,7 @@ const Hero = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1.2 }}
-          className="text-slate-300 text-xs md:text-base font-medium tracking-widest uppercase mb-12 max-w-2xl mx-auto italic"
+          className="text-muted text-xs md:text-base font-medium tracking-widest uppercase mb-12 max-w-2xl mx-auto italic"
         >
           Crafting Your Perfect Style Since Day One
         </motion.p>
@@ -119,7 +119,7 @@ const Hero = () => {
               else if (userInfo.role === 'Staff') navigate('/staff/dashboard');
               else navigate('/book');
             }}
-            className="premium-button-primary !px-8 !py-4 text-xs font-black uppercase tracking-[0.2em] shadow-2xl shadow-saloon-500/20"
+            className="premium-button-primary !px-8 !py-4 text-xs font-black uppercase tracking-[0.2em] shadow-2xl shadow-primary/20"
           >
             {userInfo ? 'Go to Dashboard' : 'Book Appointment'}
           </motion.button>
@@ -140,7 +140,7 @@ const Hero = () => {
       <motion.div
         animate={{ y: [0, 10, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 text-white/50"
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 text-muted"
       >
         <ChevronDown size={32} />
       </motion.div>
@@ -161,33 +161,33 @@ const ServicesPreview = () => {
   const previewServices = Array.isArray(services) ? services.slice(0, 8) : [];
 
   return (
-    <section id="services" className="py-24 bg-white dark:bg-slate-950">
+    <section id="services" className="py-24 bg-background">
       <div className="container mx-auto px-6">
         <div className="flex flex-col items-center mb-16">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white uppercase tracking-tighter text-center"
+            className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter text-center"
           >
-            Our Signature <span className="text-saloon-500">Services</span>
+            Our Signature <span className="text-primary font-luxury italic">Services</span>
           </motion.h2>
           <motion.div
             initial={{ width: 0 }}
             whileInView={{ width: 80 }}
             viewport={{ once: true }}
-            className="h-1 bg-saloon-500 mt-4 rounded-full"
+            className="h-1 bg-primary mt-4 rounded-full"
           />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {loading ? (
             [...Array(8)].map((_, i) => (
-              <div key={i} className="bg-slate-50 dark:bg-slate-900 rounded-3xl p-6 h-[400px] animate-pulse">
-                <div className="w-full h-48 bg-slate-200 dark:bg-slate-800 rounded-2xl mb-6" />
-                <div className="h-6 w-3/4 bg-slate-200 dark:bg-slate-800 rounded mb-4" />
-                <div className="h-4 w-1/2 bg-slate-200 dark:bg-slate-800 rounded mb-8" />
-                <div className="h-10 w-full bg-slate-200 dark:bg-slate-800 rounded" />
+              <div key={i} className="bg-secondary rounded-3xl p-6 h-[400px] animate-pulse">
+                <div className="w-full h-48 bg-background rounded-2xl mb-6" />
+                <div className="h-6 w-3/4 bg-background rounded mb-4" />
+                <div className="h-4 w-1/2 bg-background rounded mb-8" />
+                <div className="h-10 w-full bg-background rounded" />
               </div>
             ))
           ) : (
@@ -199,7 +199,7 @@ const ServicesPreview = () => {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
                 whileHover={{ y: -10 }}
-                className="group relative bg-white dark:bg-slate-900 rounded-[2rem] p-4 shadow-xl shadow-slate-200/40 dark:shadow-none border border-slate-100 dark:border-white/5"
+                className="group relative bg-secondary rounded-[2rem] p-4 border border-white/5"
               >
                 <div className="relative overflow-hidden rounded-[1.5rem] aspect-[4/3] mb-6 shadow-inner">
                   <img
@@ -210,27 +210,27 @@ const ServicesPreview = () => {
                       e.target.src = "https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1074&auto=format&fit=crop";
                     }}
                   />
-                  <div className="absolute top-4 right-4 px-3 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-full text-[9px] font-black text-saloon-600 uppercase tracking-widest shadow-lg">
+                  <div className="absolute top-4 right-4 px-3 py-1 bg-background/90 backdrop-blur-md rounded-full text-[9px] font-black text-primary uppercase tracking-widest shadow-lg">
                     {service.category?.name || "Ritual"}
                   </div>
                 </div>
                 <div className="px-2 pb-2">
                   <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight line-clamp-1">{service.name}</h3>
-                    <span className="text-xl font-black text-saloon-600">${service.price}</span>
+                    <h3 className="text-lg font-black text-white uppercase tracking-tight line-clamp-1">{service.name}</h3>
+                    <span className="text-xl font-black text-primary">${service.price}</span>
                   </div>
-                  <div className="flex items-center gap-3 text-slate-400 text-[9px] font-black uppercase tracking-widest mb-6">
+                  <div className="flex items-center gap-3 text-muted text-[9px] font-black uppercase tracking-widest mb-6">
                     <span className="flex items-center gap-1.5">
-                      <Clock size={12} className="text-saloon-500" /> {service.duration} Mins
+                      <Clock size={12} className="text-primary" /> {service.duration} Mins
                     </span>
-                    <span className="h-1 w-1 bg-slate-300 rounded-full" />
+                    <span className="h-1 w-1 bg-white/10 rounded-full" />
                     <span className="flex items-center gap-1.5">
-                      <Sparkles size={12} className="text-saloon-500" /> Professional Care
+                      <Sparkles size={12} className="text-primary" /> Professional Care
                     </span>
                   </div>
                   <button
                     onClick={() => navigate('/book')}
-                    className="w-full py-3.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-[10px] font-black uppercase tracking-[0.2em] text-slate-900 dark:text-white hover:bg-saloon-500 hover:text-white transition-all shadow-sm group-hover:shadow-saloon-200/50"
+                    className="w-full py-3.5 rounded-xl bg-background text-[10px] font-black uppercase tracking-[0.2em] text-white hover:bg-primary hover:text-secondary transition-all shadow-sm group-hover:shadow-primary/20"
                   >
                     Book Ritual Now
                   </button>
@@ -241,7 +241,7 @@ const ServicesPreview = () => {
         </div>
 
         <div className="mt-16 flex justify-center">
-          <Link to="/services" className="group flex items-center gap-4 px-8 py-4 rounded-xl border-2 border-slate-900 dark:border-white text-slate-900 dark:text-white text-xs font-black uppercase tracking-[0.2em] hover:bg-slate-900 hover:text-white dark:hover:bg-white dark:hover:text-slate-900 transition-all">
+          <Link to="/services" className="group flex items-center gap-4 px-8 py-4 rounded-xl border-2 border-white text-white text-xs font-black uppercase tracking-[0.2em] hover:bg-white hover:text-background transition-all">
             View All Services
             <ChevronRight size={16} className="group-hover:translate-x-2 transition-transform" />
           </Link>
@@ -280,11 +280,11 @@ const WhyChooseUs = () => {
   ];
 
   return (
-    <section id="about" className="py-32 bg-slate-950 relative overflow-hidden">
+    <section id="about" className="py-32 bg-background relative overflow-hidden">
       {/* Dynamic Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-20">
-        <div className="absolute top-[10%] left-[5%] w-[400px] h-[400px] bg-saloon-500/20 rounded-full blur-[120px]" />
-        <div className="absolute bottom-[10%] right-[5%] w-[500px] h-[500px] bg-rosegold-500/10 rounded-full blur-[150px]" />
+        <div className="absolute top-[10%] left-[5%] w-[400px] h-[400px] bg-primary/20 rounded-full blur-[120px]" />
+        <div className="absolute bottom-[10%] right-[5%] w-[500px] h-[500px] bg-accent/10 rounded-full blur-[150px]" />
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
@@ -299,14 +299,14 @@ const WhyChooseUs = () => {
               className="mb-12"
             >
               <div className="inline-flex items-center gap-3 px-4 py-1 rounded-full bg-white/5 border border-white/10 mb-6">
-                <div className="w-1.5 h-1.5 rounded-full bg-saloon-500 animate-pulse" />
+                <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
                 <span className="text-[10px] font-black text-white uppercase tracking-[0.4em]">The Glow Philosophy</span>
               </div>
               <h2 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8">
-                Where <span className="text-transparent bg-clip-text bg-gradient-to-r from-saloon-500 to-rosegold-500">Excellence</span> <br />
+                Where <span className="text-transparent bg-clip-text bg-luxury-gradient">Excellence</span> <br />
                 Becomes Habit
               </h2>
-              <p className="text-slate-400 text-sm md:text-base font-medium leading-relaxed tracking-wider max-w-lg mb-10">
+              <p className="text-muted text-sm md:text-base font-medium leading-relaxed tracking-wider max-w-lg mb-10">
                 We transcend the traditional salon experience. Every appointment is a meticulously choreographed ritual of transformation, precision, and luxury.
               </p>
 
@@ -318,17 +318,17 @@ const WhyChooseUs = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.1 }}
-                    className="group relative flex items-start gap-6 p-6 rounded-2xl bg-white/5 border border-white/5 hover:border-saloon-500/30 transition-all duration-500"
+                    className="group relative flex items-start gap-6 p-6 rounded-2xl bg-secondary border border-white/5 hover:border-primary/30 transition-all duration-500"
                   >
-                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-slate-900 flex items-center justify-center text-saloon-500 shadow-xl group-hover:scale-110 group-hover:bg-saloon-500 group-hover:text-white transition-all">
+                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-background flex items-center justify-center text-primary shadow-xl group-hover:scale-110 group-hover:bg-primary group-hover:text-secondary transition-all">
                       {f.icon}
                     </div>
                     <div>
                       <div className="flex items-center gap-3 mb-1">
-                        <span className="text-[10px] font-black text-saloon-500 tracking-widest">{f.prefix}</span>
+                        <span className="text-[10px] font-black text-primary tracking-widest">{f.prefix}</span>
                         <h4 className="text-sm font-black text-white uppercase tracking-widest">{f.title}</h4>
                       </div>
-                      <p className="text-[11px] text-slate-400 font-medium leading-relaxed uppercase tracking-wide">
+                      <p className="text-[11px] text-muted font-medium leading-relaxed uppercase tracking-wide">
                         {f.desc}
                       </p>
                     </div>
@@ -358,7 +358,7 @@ const WhyChooseUs = () => {
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-              className="absolute -top-12 -right-12 w-64 h-64 border-[1px] border-saloon-500/20 rounded-full pointer-events-none"
+              className="absolute -top-12 -right-12 w-64 h-64 border-[1px] border-primary/20 rounded-full pointer-events-none"
             />
 
             {/* Float Metric Card */}
@@ -366,23 +366,23 @@ const WhyChooseUs = () => {
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="absolute bottom-12 right-12 glass-card !bg-white/10 backdrop-blur-3xl border border-white/20 p-10 rounded-[2.5rem] shadow-3xl max-w-[280px]"
+              className="absolute bottom-12 right-12 bg-secondary/40 backdrop-blur-3xl border border-white/10 p-10 rounded-[2.5rem] shadow-3xl max-w-[280px]"
             >
               <div className="text-center">
-                <span className="text-7xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-saloon-500 tracking-tighter italic">12+</span>
+                <span className="text-7xl font-black text-transparent bg-clip-text bg-luxury-gradient tracking-tighter italic">12+</span>
                 <p className="text-[10px] font-black text-white uppercase tracking-[0.4em] mt-4 mb-2">Years of Mastery</p>
-                <div className="h-px w-12 bg-saloon-500 mx-auto" />
-                <p className="text-[8px] text-slate-400 font-bold uppercase tracking-widest mt-4">Pioneering the future of cinematic beauty since 2012.</p>
+                <div className="h-px w-12 bg-primary mx-auto" />
+                <p className="text-[8px] text-muted font-bold uppercase tracking-widest mt-4">Pioneering the future of cinematic beauty since 2012.</p>
               </div>
             </motion.div>
 
             {/* Experience Detail Tag */}
             <div className="absolute top-12 left-12 flex flex-col gap-4">
-              <div className="px-6 py-3 rounded-xl bg-slate-950/80 border border-white/10 backdrop-blur-xl">
+              <div className="px-6 py-3 rounded-xl bg-background/80 border border-white/10 backdrop-blur-xl">
                 <p className="text-[10px] font-black text-white uppercase tracking-widest">Ritual Protocol v3.0</p>
               </div>
-              <div className="px-6 py-3 rounded-xl bg-saloon-500 border border-saloon-400 shadow-xl shadow-saloon-500/20">
-                <p className="text-[10px] font-black text-white uppercase tracking-widest">Certified Excellence</p>
+              <div className="px-6 py-3 rounded-xl bg-primary border border-primary shadow-xl shadow-primary/20">
+                <p className="text-[10px] font-black text-secondary uppercase tracking-widest">Certified Excellence</p>
               </div>
             </div>
           </div>
@@ -402,13 +402,13 @@ const TeamPreview = () => {
   }, [dispatch]);
 
   return (
-    <section className="py-24 bg-slate-950 overflow-hidden">
+    <section className="py-24 bg-background overflow-hidden">
       <div className="container mx-auto px-6">
         <div className="flex flex-col items-center mb-16 text-center">
           <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            className="text-rosegold-500 font-black uppercase tracking-[0.3em] text-[10px] mb-4"
+            className="text-primary font-luxury font-black uppercase tracking-[0.3em] text-[10px] mb-4"
           >
             Maestros of Style
           </motion.p>
@@ -417,14 +417,14 @@ const TeamPreview = () => {
             whileInView={{ opacity: 1, y: 0 }}
             className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter"
           >
-            Meet Our <span className="text-saloon-500">Artists</span>
+            Meet Our <span className="text-primary italic">Artists</span>
           </motion.h2>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {loading ? (
             [...Array(4)].map((_, i) => (
-              <div key={i} className="h-80 bg-slate-900 rounded-[2rem] animate-pulse" />
+              <div key={i} className="h-80 bg-secondary rounded-[2rem] animate-pulse" />
             ))
           ) : (
             staff.map((artist, i) => (
@@ -435,19 +435,19 @@ const TeamPreview = () => {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
                 whileHover={{ y: -10 }}
-                className="group bg-slate-900 rounded-[2rem] p-8 border border-white/5 transition-all hover:bg-slate-800/80 hover:border-saloon-500/20"
+                className="group bg-secondary rounded-[2rem] p-8 border border-white/5 transition-all hover:border-primary/20"
               >
                 <div className="flex flex-col items-center">
-                  <div className="w-28 h-28 rounded-full p-1 bg-gradient-to-tr from-saloon-500 to-rosegold-500 mb-6 group-hover:scale-110 transition-transform duration-500 shadow-xl shadow-saloon-500/10">
+                  <div className="w-28 h-28 rounded-full p-1 bg-luxury-gradient mb-6 group-hover:scale-110 transition-transform duration-500 shadow-xl shadow-primary/10">
                     <img
                       src={artist.profileImage ? (artist.profileImage.startsWith('http') ? artist.profileImage : `${IMAGE_URL}${artist.profileImage}`) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${artist.name}`}
                       alt={artist.name}
-                      className="w-full h-full rounded-full object-cover bg-slate-800 border-2 border-slate-950"
+                      className="w-full h-full rounded-full object-cover bg-secondary border-2 border-background"
                     />
                   </div>
-                  <h4 className="text-lg font-black text-white uppercase tracking-tight mb-2 group-hover:text-saloon-500 transition-colors">{artist.name}</h4>
+                  <h4 className="text-lg font-black text-white uppercase tracking-tight mb-2 group-hover:text-primary transition-colors">{artist.name}</h4>
                   <div className="px-3 py-1 bg-white/5 rounded-full mb-4">
-                    <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">{artist.services?.[0]?.name || "Senior Stylist"}</span>
+                    <span className="text-[8px] font-black text-muted uppercase tracking-widest">{artist.services?.[0]?.name || "Senior Stylist"}</span>
                   </div>
 
                 </div>
@@ -479,15 +479,15 @@ const Testimonials = () => {
   }, [reviews.length]);
 
   return (
-    <section className="py-24 bg-white dark:bg-slate-950 relative overflow-hidden">
+    <section className="py-24 bg-background relative overflow-hidden">
       <div className="container mx-auto px-6 relative z-10 text-center">
         <div className="max-w-3xl mx-auto">
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
-            className="w-12 h-12 bg-saloon-50 rounded-xl flex items-center justify-center mx-auto mb-12 shadow-sm"
+            className="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center mx-auto mb-12 shadow-sm"
           >
-            <Sparkles size={24} className="text-saloon-500" />
+            <Sparkles size={24} className="text-primary" />
           </motion.div>
 
           <div className="min-h-[160px] md:min-h-[120px] mb-12 flex items-center justify-center">
@@ -500,12 +500,12 @@ const Testimonials = () => {
                 transition={{ duration: 0.6, ease: "easeOut" }}
                 className="flex flex-col items-center"
               >
-                <p className="text-lg md:text-2xl font-black text-slate-800 dark:text-white uppercase tracking-tight italic mb-8 leading-snug max-w-2xl">
+                <p className="text-lg md:text-2xl font-black text-white uppercase tracking-tight italic mb-8 leading-snug max-w-2xl font-luxury">
                   "{reviews[index].text}"
                 </p>
                 <div className="flex flex-col items-center">
-                  <h5 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-[0.2em]">{reviews[index].name}</h5>
-                  <p className="text-[9px] text-saloon-500 font-black uppercase tracking-[0.3em] mt-2">{reviews[index].role}</p>
+                  <h5 className="text-sm font-black text-white uppercase tracking-[0.2em]">{reviews[index].name}</h5>
+                  <p className="text-[9px] text-primary font-black uppercase tracking-[0.3em] mt-2">{reviews[index].role}</p>
                 </div>
               </motion.div>
             </AnimatePresence>
@@ -515,7 +515,7 @@ const Testimonials = () => {
             {reviews.map((_, i) => (
               <button
                 key={i}
-                className={`h-1 rounded-full transition-all duration-700 ${i === index ? 'w-8 bg-saloon-500' : 'w-2 bg-slate-200 dark:bg-slate-800'}`}
+                className={`h-1 rounded-full transition-all duration-700 ${i === index ? 'w-8 bg-primary' : 'w-2 bg-white/10'}`}
                 onClick={() => setIndex(i)}
               />
             ))}
@@ -546,20 +546,20 @@ const RitualMenu = () => {
   const filteredServices = services.filter(s => s.category?._id === activeCat);
 
   return (
-    <section className="py-24 bg-white relative">
+    <section className="py-24 bg-background relative">
       <div className="container mx-auto px-6">
-        
+
         {/* Elegant Header */}
         <div className="flex flex-col items-center mb-16 text-center">
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-saloon-500 font-extrabold uppercase tracking-[0.4em] text-[10px] mb-4"
+            className="text-primary font-extrabold uppercase tracking-[0.4em] text-[10px] mb-4"
           >
             The Ultimate Collection
           </motion.p>
-          <h2 className="text-4xl md:text-6xl font-black text-slate-900 uppercase tracking-tighter mb-12">
-            Ritual <span className="text-saloon-500">Menu</span>
+          <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mb-12">
+            Ritual <span className="text-primary font-luxury">Menu</span>
           </h2>
 
           {/* Clean Category Tabs */}
@@ -568,11 +568,10 @@ const RitualMenu = () => {
               <button
                 key={cat._id}
                 onClick={() => setActiveCat(cat._id)}
-                className={`px-7 py-3 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 border ${
-                  activeCat === cat._id
-                    ? "bg-slate-900 border-slate-900 text-white shadow-lg"
-                    : "bg-slate-50 border-transparent text-slate-400 hover:bg-slate-100 hover:text-slate-600"
-                }`}
+                className={`px-7 py-3 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 border ${activeCat === cat._id
+                    ? "bg-primary border-primary text-secondary shadow-lg"
+                    : "bg-secondary border-transparent text-muted hover:bg-white/10 hover:text-white"
+                  }`}
               >
                 {cat.name}
               </button>
@@ -581,7 +580,7 @@ const RitualMenu = () => {
         </div>
 
         {/* Spacious Service Grid */}
-        <div className="max-w-6xl mx-auto">
+        <div className="">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeCat}
@@ -597,18 +596,18 @@ const RitualMenu = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: i * 0.05 }}
-                  className="group flex items-center justify-between py-6 border-b border-slate-100 hover:border-saloon-200 transition-all duration-300"
+                  className="group flex items-center justify-between py-6 border-b border-white/5 hover:border-primary/20 transition-all duration-300"
                 >
                   <div className="flex-1 pr-6">
                     <div className="flex items-center justify-between mb-1">
-                      <h4 className="text-base font-black text-slate-800 uppercase tracking-tight group-hover:text-saloon-600">
+                      <h4 className="text-base font-black text-white uppercase tracking-tight group-hover:text-primary">
                         {service.name}
                       </h4>
-                      <span className="text-lg font-black text-slate-900 group-hover:text-saloon-500">
+                      <span className="text-lg font-black text-primary">
                         ${service.price}
                       </span>
                     </div>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">
+                    <p className="text-[10px] font-bold text-muted uppercase tracking-widest leading-relaxed">
                       {service.duration} Minutes of pure luxury
                     </p>
                   </div>
@@ -616,9 +615,9 @@ const RitualMenu = () => {
               ))}
             </motion.div>
           </AnimatePresence>
-          
+
           {filteredServices.length === 0 && (
-            <div className="py-20 text-center text-slate-300 italic uppercase text-[10px] tracking-widest">
+            <div className="py-24 text-center text-muted italic uppercase text-[11px] font-black tracking-[0.4em] bg-secondary/50 rounded-[3rem] border border-white/5 shadow-inner">
               Consulting the ritual archive...
             </div>
           )}
@@ -644,25 +643,25 @@ const FAQ = () => {
   ];
 
   return (
-    <section className="py-24 bg-saloon-50 dark:bg-slate-900/50">
+    <section className="py-24 bg-secondary">
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
           <div>
-            <p className="text-saloon-500 font-black uppercase tracking-[0.3em] text-[10px] mb-4">Curiosity Protocol</p>
-            <h2 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white uppercase tracking-tighter mb-8 leading-none">Frequently <br /> <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-saloon-500 to-rosegold-500">Asked Questions</span></h2>
-            <p className="text-slate-500 dark:text-slate-400 text-sm md:text-base max-w-md uppercase font-bold tracking-widest leading-relaxed">
+            <p className="text-primary font-black uppercase tracking-[0.3em] text-[10px] mb-4">Curiosity Protocol</p>
+            <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mb-8 leading-none">Frequently <br /> <span className="italic text-transparent bg-clip-text bg-luxury-gradient">Asked Questions</span></h2>
+            <p className="text-muted text-sm md:text-base max-w-md uppercase font-bold tracking-widest leading-relaxed">
               Informing your journey through the Glow Saloon ecosystem. Clear answers for a clear mind.
             </p>
           </div>
           <div className="space-y-4">
             {faqs.map((faq, i) => (
-              <div key={i} className="glass-card !bg-white dark:!bg-slate-900 border-white/60 shadow-xl overflow-hidden">
+              <div key={i} className="bg-background border border-white/5 rounded-2xl shadow-xl overflow-hidden">
                 <button
                   onClick={() => setOpen(open === i ? null : i)}
                   className="w-full px-8 py-6 flex items-center justify-between text-left"
                 >
-                  <span className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-widest italic">{faq.q}</span>
-                  {open === i ? <Minus size={16} className="text-saloon-500" /> : <Plus size={16} className="text-slate-400" />}
+                  <span className="text-[11px] font-black text-white uppercase tracking-widest italic">{faq.q}</span>
+                  {open === i ? <Minus size={16} className="text-primary" /> : <Plus size={16} className="text-muted" />}
                 </button>
                 <AnimatePresence>
                   {open === i && (
@@ -672,7 +671,7 @@ const FAQ = () => {
                       exit={{ height: 0, opacity: 0 }}
                       className="px-8 pb-8"
                     >
-                      <p className="text-[12px] text-slate-500 dark:text-slate-400 font-medium leading-relaxed tracking-wide uppercase">
+                      <p className="text-[12px] text-muted font-medium leading-relaxed tracking-wide uppercase">
                         {faq.a}
                       </p>
                     </motion.div>
@@ -698,7 +697,7 @@ const BookingCTA = () => {
           initial={{ opacity: 0, scale: 0.98 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          className="relative overflow-hidden bg-gradient-to-br from-saloon-500 to-rosegold-500 rounded-[2.5rem] py-16 px-8 text-center text-white shadow-2xl shadow-saloon-200/20"
+          className="relative overflow-hidden bg-luxury-gradient rounded-[2.5rem] py-16 px-8 text-center text-secondary shadow-2xl shadow-primary/20"
         >
           {/* Decorative Pattern */}
           <div className="absolute inset-0 opacity-5 pointer-events-none"
@@ -708,7 +707,7 @@ const BookingCTA = () => {
             <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter mb-6 leading-none whitespace-pre-line">
               READY FOR YOUR {"\n"} TRANSFORMATION?
             </h2>
-            <p className="text-white/90 text-sm md:text-base font-semibold uppercase tracking-widest mb-10 max-w-md mx-auto">
+            <p className="text-secondary/90 text-sm md:text-base font-black uppercase tracking-widest mb-10 max-w-md mx-auto">
               Book your appointment today and experience luxury like never before.
             </p>
             <motion.button
@@ -720,7 +719,7 @@ const BookingCTA = () => {
                 else if (userInfo.role === 'Staff') navigate('/staff/dashboard');
                 else navigate('/book');
               }}
-              className="bg-white text-saloon-600 px-10 py-4 rounded-xl text-xs font-black uppercase tracking-[0.2em] flex items-center gap-3 mx-auto group shadow-lg"
+              className="bg-secondary text-primary px-10 py-4 rounded-xl text-xs font-black uppercase tracking-[0.2em] flex items-center gap-3 mx-auto group shadow-lg"
             >
               {userInfo ? 'Go to Dashboard' : 'Book Now'}
               <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
@@ -736,7 +735,7 @@ const BookingCTA = () => {
 
 export default function Home() {
   return (
-    <div className="relative selection:bg-saloon-500 selection:text-white overflow-x-hidden bg-white dark:bg-slate-950 font-sans">
+    <div className="relative selection:bg-primary/30 selection:text-white overflow-x-hidden bg-background font-sans">
       <PublicNavbar />
 
       <main>

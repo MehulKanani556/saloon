@@ -17,7 +17,7 @@ const IMAGE_URL = 'http://localhost:5000';
 
 const Hero = () => {
   return (
-    <section className="relative min-h-[80vh] flex items-center bg-slate-950 overflow-hidden pt-20">
+    <section className="relative min-h-[80vh] flex items-center bg-background overflow-hidden pt-20">
       <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         <motion.div 
           initial={{ opacity: 0, x: -50 }}
@@ -29,35 +29,35 @@ const Hero = () => {
             <motion.div 
               initial={{ width: 0 }}
               animate={{ width: 50 }}
-              className="h-0.5 bg-saloon-500 rounded-full"
+              className="h-0.5 bg-primary rounded-full"
             />
-            <span className="text-saloon-500 font-bold uppercase tracking-[0.3em] text-[10px]">Est. 2014</span>
+            <span className="text-primary font-bold uppercase tracking-[0.3em] text-[10px]">Est. 2014</span>
           </div>
           
           <h1 className="text-5xl md:text-8xl font-black text-white uppercase tracking-tighter mb-8 leading-[0.85] md:leading-[0.85]">
             OUR <br /> 
-            <span className="relative inline-block mt-2">
+            <span className="relative inline-block mt-2 font-luxury italic">
               STORY
               <motion.div 
                 initial={{ width: 0 }}
                 animate={{ width: '100%' }}
                 transition={{ delay: 0.5, duration: 1 }}
-                className="absolute -bottom-2 left-0 h-2 bg-gradient-to-r from-saloon-500 to-transparent rounded-full"
+                className="absolute -bottom-2 left-0 h-2 bg-gradient-to-r from-primary to-transparent rounded-full"
               />
             </span>
           </h1>
           
-          <p className="text-slate-400 text-lg md:text-xl font-medium leading-relaxed max-w-xl mb-10 italic">
+          <p className="text-muted text-lg md:text-xl font-medium leading-relaxed max-w-xl mb-10 italic">
             Glow & Elegance was born from a singular passion: to redefine the boundary between beauty and artistry. For over a decade, we've curated an oasis of sophistication.
           </p>
           
-          <div className="flex flex-col gap-4 text-slate-500 text-sm font-semibold uppercase tracking-widest leading-loose">
+          <div className="flex flex-col gap-4 text-muted text-sm font-semibold uppercase tracking-widest leading-loose">
             <div className="flex items-center gap-4">
-              <Sparkles size={16} className="text-saloon-500" />
+              <Sparkles size={16} className="text-primary" />
               <span>Uncompromising Quality in every ritual</span>
             </div>
             <div className="flex items-center gap-4">
-              <Award size={16} className="text-saloon-500" />
+              <Award size={16} className="text-primary" />
               <span>International Training Standards</span>
             </div>
           </div>
@@ -69,19 +69,19 @@ const Hero = () => {
           transition={{ duration: 1 }}
           className="relative h-[500px] lg:h-[600px] group"
         >
-          <div className="absolute inset-0 bg-saloon-500/20 blur-[100px] rounded-full group-hover:bg-saloon-500/30 transition-all" />
+          <div className="absolute inset-0 bg-primary/10 blur-[100px] rounded-full group-hover:bg-primary/20 transition-all" />
           <div className="relative h-full w-full rounded-[3rem] overflow-hidden border border-white/10">
             <img 
               src="https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=1169&auto=format&fit=crop" 
               alt="Salon Interior" 
               className="h-full w-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000 group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
           </div>
           
           {/* Decorative Pattern Overlay */}
           <div className="absolute -top-10 -right-10 w-40 h-40 opacity-10 pointer-events-none" 
-               style={{ backgroundImage: 'radial-gradient(circle at 1.5px 1.5px, #f59e0b 1px, transparent 0)', backgroundSize: '16px 16px' }} />
+               style={{ backgroundImage: 'radial-gradient(circle at 1.5px 1.5px, #C9A227 1px, transparent 0)', backgroundSize: '16px 16px' }} />
         </motion.div>
       </div>
     </section>
@@ -91,27 +91,27 @@ const Hero = () => {
 const MissionValues = () => {
   const data = [
     { 
-      icon: <Target className="text-white" />, 
+      icon: <Target className="text-secondary" />, 
       title: "Our Mission", 
       desc: "To empower individuals through personalized beauty rituals that harmonize inner confidence with outer radiance.",
-      color: "from-saloon-500 to-saloon-600"
+      color: "from-primary to-primary"
     },
     { 
-      icon: <Eye className="text-white" />, 
+      icon: <Eye className="text-secondary" />, 
       title: "Our Vision", 
       desc: "To become the global benchmark for luxury grooming, where innovation meets the timeless traditions of elegance.",
-      color: "from-rosegold-500 to-rosegold-600"
+      color: "from-accent to-accent"
     },
     { 
       icon: <Heart className="text-white" />, 
       title: "Our Values", 
       desc: "Integrity, excellence, and inclusivity are the pillars of every masterpiece we create at Glow & Elegance.",
-      color: "from-slate-800 to-slate-900"
+      color: "from-secondary to-background"
     }
   ];
 
   return (
-    <section className="py-24 bg-white dark:bg-slate-950">
+    <section className="py-24 bg-background">
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {data.map((item, i) => (
@@ -121,13 +121,13 @@ const MissionValues = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.2 }}
-              className="group relative p-10 bg-slate-50 dark:bg-slate-900 rounded-[2.5rem] border border-slate-100 dark:border-white/5 hover:border-saloon-500/30 transition-all overflow-hidden"
+              className="group relative p-10 bg-secondary rounded-[2.5rem] border border-white/5 hover:border-primary/30 transition-all overflow-hidden"
             >
-              <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center mb-8 shadow-lg shadow-saloon-500/20 group-hover:scale-110 transition-transform`}>
+              <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform`}>
                 {item.icon}
               </div>
-              <h3 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter mb-4">{item.title}</h3>
-              <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed font-medium uppercase tracking-wide">
+              <h3 className="text-2xl font-black text-white uppercase tracking-tighter mb-4">{item.title}</h3>
+              <p className="text-muted text-sm leading-relaxed font-medium uppercase tracking-wide">
                 {item.desc}
               </p>
             </motion.div>
@@ -157,53 +157,53 @@ const TeamSection = () => {
   }, []);
 
   return (
-    <section className="py-24 bg-slate-50 dark:bg-slate-900/40">
+    <section className="py-24 bg-background">
       <div className="container mx-auto px-6">
         <div className="flex flex-col items-center mb-20 text-center">
           <motion.p 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            className="text-saloon-500 font-black uppercase tracking-[0.3em] text-[10px] mb-4"
+            className="text-primary font-black uppercase tracking-[0.3em] text-[10px] mb-4"
           >
             The Elite Collective
           </motion.p>
-          <h2 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white uppercase tracking-tighter">MEET THE <br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-saloon-500 to-rosegold-500 italic">ARTISTS</span></h2>
+          <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter">MEET THE <br/> <span className="text-transparent bg-clip-text bg-luxury-gradient italic">ARTISTS</span></h2>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {loading ? (
             [...Array(4)].map((_, i) => (
-              <div key={i} className="h-[450px] bg-white dark:bg-slate-900 rounded-[3rem] animate-pulse shadow-sm" />
+              <div key={i} className="h-[450px] bg-secondary rounded-[3rem] animate-pulse shadow-sm border border-white/5" />
             ))
           ) : staff.map((member, i) => (
-            <motion.div
+               <motion.div
               key={member._id}
               initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
               whileHover={{ y: -12 }}
-              className="group relative bg-white dark:bg-slate-900 rounded-[3rem] p-10 border border-slate-100 dark:border-white/5 transition-all text-center hover:shadow-3xl hover:shadow-saloon-500/10"
+              className="group relative bg-secondary rounded-[3rem] p-10 border border-white/5 transition-all text-center hover:shadow-3xl hover:shadow-primary/10"
             >
               {/* Profile Image & Ring */}
-              <div className="relative w-32 h-32 mx-auto mb-8 rounded-full p-1.5 bg-gradient-to-tr from-saloon-500 to-rosegold-500 shadow-xl overflow-hidden group-hover:scale-105 transition-transform duration-500">
+               <div className="relative w-32 h-32 mx-auto mb-8 rounded-full p-1.5 bg-luxury-gradient shadow-xl overflow-hidden group-hover:scale-105 transition-transform duration-500">
                 <img 
                   src={member.profileImage ? (member.profileImage.startsWith('http') ? member.profileImage : `${IMAGE_URL}${member.profileImage}`) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${member.name}`} 
                   alt={member.name}
-                  className="w-full h-full object-cover rounded-full border-2 border-white dark:border-slate-800"
+                  className="w-full h-full object-cover rounded-full border-2 border-secondary"
                 />
               </div>
               
               {/* Content Panel */}
               <div className="space-y-4">
-                <h4 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none group-hover:text-saloon-500 transition-colors">{member.name}</h4>
-                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest leading-none">{member.email.split('@')[0]}</p>
+                <h4 className="text-xl font-black text-white uppercase tracking-tight leading-none group-hover:text-primary transition-colors">{member.name}</h4>
+                <p className="text-[10px] text-muted font-bold uppercase tracking-widest leading-none">{member.email.split('@')[0]}</p>
                 
 
 
                 <div className="flex flex-wrap justify-center gap-2 pt-2">
                   {(member.services || []).slice(0, 3).map((s, si) => (
-                    <span key={si} className="px-3 py-1 bg-slate-50 dark:bg-white/5 rounded-full text-[8px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest border border-slate-100 dark:border-white/5">
+                    <span key={si} className="px-3 py-1 bg-background rounded-full text-[8px] font-black text-muted uppercase tracking-widest border border-white/5 shadow-inner">
                       {s.name || s}
                     </span>
                   ))}
@@ -211,8 +211,8 @@ const TeamSection = () => {
               </div>
 
               {/* Status Indicator */}
-              <div className="pt-8 mt-8 border-t border-slate-50 dark:border-white/5">
-                <span className="inline-flex items-center gap-2 text-[9px] font-black text-saloon-500 uppercase tracking-widest">
+                <div className="pt-8 mt-8 border-t border-white/5">
+                <span className="inline-flex items-center gap-2 text-[9px] font-black text-primary uppercase tracking-widest">
                   {member.email.split('@')[0]}
                 </span>
               </div>
@@ -253,20 +253,20 @@ const SalonInfo = () => {
   ];
 
   return (
-    <section className="py-24 bg-white dark:bg-slate-950">
+    <section className="py-24 bg-background">
       <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16">
         <div>
           <div className="flex items-center gap-4 mb-8">
-            <Clock className="text-saloon-500" />
-            <h3 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter">Operational Hours</h3>
+            <Clock className="text-primary" />
+            <h3 className="text-2xl font-black text-white uppercase tracking-tighter">Operational Hours</h3>
           </div>
           
-          <div className="bg-slate-50 dark:bg-slate-900 rounded-[2.5rem] p-10 border border-slate-100 dark:border-white/5 shadow-inner">
+          <div className="bg-secondary rounded-[2.5rem] p-10 border border-white/5 shadow-inner">
             <div className="space-y-6">
               {businessHours.map((h, i) => (
-                <div key={i} className="flex items-center justify-between py-1.5 group border-b border-slate-200/50 dark:border-white/5 last:border-none">
-                  <span className="text-[11px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest group-hover:text-saloon-500 transition-colors">{h.day}</span>
-                  <span className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-tight">{h.open} - {h.close}</span>
+                <div key={i} className="flex items-center justify-between py-1.5 group border-b border-white/5 last:border-none">
+                  <span className="text-[11px] font-black text-muted uppercase tracking-widest group-hover:text-primary transition-colors">{h.day}</span>
+                  <span className="text-xs font-black text-white uppercase tracking-tight">{h.open} - {h.close}</span>
                 </div>
               ))}
             </div>
@@ -275,40 +275,40 @@ const SalonInfo = () => {
 
         <div className="space-y-12">
           {/* Address Card */}
-          <div className="bg-gradient-to-br from-slate-900 to-slate-950 rounded-[2.5rem] p-12 text-white shadow-2xl relative overflow-hidden group">
+          <div className="bg-secondary rounded-[2.5rem] p-12 text-white shadow-2xl relative overflow-hidden group border border-white/5">
             <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none group-hover:rotate-12 transition-transform duration-700">
                <MapPin size={120} strokeWidth={1} />
             </div>
             <div className="relative z-10">
-              <div className="w-12 h-12 bg-saloon-500 rounded-2xl flex items-center justify-center mb-8">
+              <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center mb-8 text-secondary">
                 <MapPin size={24} />
               </div>
-              <h4 className="text-2xl font-black uppercase tracking-tighter mb-4 italic">Glow Headquarters</h4>
-              <p className="text-white/60 text-sm leading-relaxed uppercase tracking-widest mb-10 max-w-xs font-semibold">
+              <h4 className="text-2xl font-black uppercase tracking-tighter mb-4 italic font-luxury">Glow Headquarters</h4>
+              <p className="text-muted text-sm leading-relaxed uppercase tracking-widest mb-10 max-w-xs font-semibold">
                 123, LUXURY LANE, BANDRA WEST, <br/> MUMBAI, MAHARASHTRA 400050
               </p>
               <div className="flex flex-col gap-6">
                 <div className="flex items-center gap-4">
-                  <Phone size={16} className="text-saloon-500" />
-                  <span className="text-xs font-bold tracking-widest">+91 98765 43210</span>
+                  <Phone size={16} className="text-primary" />
+                  <span className="text-xs font-bold tracking-widest text-white"> +91 98765 43210</span>
                 </div>
                 <div className="flex items-center gap-4">
-                  <Mail size={16} className="text-saloon-500" />
-                  <span className="text-xs font-bold tracking-widest text-white/80">CONTACT@GLOWELEGANCE.COM</span>
+                  <Mail size={16} className="text-primary" />
+                  <span className="text-xs font-bold tracking-widest text-white/80 uppercase">CONTACT@GLOWELEGANCE.COM</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Payment Methods */}
-          <div className="p-10 bg-slate-50 dark:bg-slate-900 rounded-[2.5rem] border border-slate-100 dark:border-white/5">
+          <div className="p-10 bg-secondary rounded-[2.5rem] border border-white/5">
             <div className="flex items-center gap-4 mb-6">
-              <CreditCard className="text-saloon-500" size={18} />
-              <h5 className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-[0.2em]">Settlement Methods</h5>
+              <CreditCard className="text-primary" size={18} />
+              <h5 className="text-[10px] font-black text-white uppercase tracking-[0.2em]">Settlement Methods</h5>
             </div>
             <div className="flex flex-wrap gap-4">
               {['Cards', 'Apply Pay', 'UPI', 'Gift Vouchers', 'Net Banking'].map((m) => (
-                <span key={m} className="px-5 py-2 bg-white dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-xl text-[9px] font-black text-slate-400 uppercase tracking-widest shadow-sm">
+                <span key={m} className="px-5 py-2 bg-background border border-white/5 rounded-xl text-[9px] font-black text-muted uppercase tracking-widest shadow-sm">
                   {m}
                 </span>
               ))}
@@ -321,29 +321,29 @@ const SalonInfo = () => {
 };
 
 const Timeline = () => {
-  const milestones = [
-    { year: "2014", title: "Foundation Layed", desc: "Started as a boutique studio with 2 expert artists in Mumbai.", icon: <Award /> },
-    { year: "2016", title: "Luxury Expansion", desc: "Opened our flagship Bandra salon with cinematic interiors.", icon: <Star /> },
-    { year: "2019", title: "Global Recognition", desc: "Voted 'Most Innovative Salon' at Luxury Lifestyle Awards.", icon: <Sparkles /> },
-    { year: "2021", title: "Academy Launch", desc: "Established 'Glow Academy' to train the next generation of maestos.", icon: <Users /> },
-    { year: "2024", title: "Digital Transformation", desc: "Launched our full-suite booking and membership platform.", icon: <Calendar /> },
-  ];
-
-  return (
-    <section className="py-24 bg-slate-50 dark:bg-slate-950 overflow-hidden relative">
+    const milestones = [
+      { year: "2014", title: "Foundation Layed", desc: "Started as a boutique studio with 2 expert artists in Mumbai.", icon: <Award /> },
+      { year: "2016", title: "Luxury Expansion", desc: "Opened our flagship Bandra salon with cinematic interiors.", icon: <Star /> },
+      { year: "2019", title: "Global Recognition", desc: "Voted 'Most Innovative Salon' at Luxury Lifestyle Awards.", icon: <Sparkles /> },
+      { year: "2021", title: "Academy Launch", desc: "Established 'Glow Academy' to train the next generation of maestos.", icon: <Users /> },
+      { year: "2024", title: "Digital Transformation", desc: "Launched our full-suite booking and membership platform.", icon: <Calendar /> },
+    ];
+  
+    return (
+      <section className="py-24 bg-background overflow-hidden relative">
        {/* Background line */}
-       <div className="absolute left-1/2 top-0 bottom-0 w-px bg-slate-200 dark:bg-white/10 hidden lg:block" />
+       <div className="absolute left-1/2 top-0 bottom-0 w-px bg-white/5 hidden lg:block" />
 
        <div className="container mx-auto px-6 relative z-10">
           <div className="flex flex-col items-center mb-24 text-center">
             <motion.p 
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="text-saloon-500 font-black uppercase tracking-[0.3em] text-[10px] mb-4"
+              className="text-primary font-black uppercase tracking-[0.3em] text-[10px] mb-4"
             >
               The Legacy
             </motion.p>
-            <h2 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white uppercase tracking-tighter mb-4">OUR <span className="italic text-saloon-500">CHRONICLE</span></h2>
+            <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mb-4">OUR <span className="italic text-primary font-luxury">CHRONICLE</span></h2>
           </div>
 
           <div className="space-y-12 lg:space-y-0">
@@ -357,9 +357,9 @@ const Timeline = () => {
                   className="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left"
                 >
                   <div className={`flex flex-col lg:items-start ${i % 2 === 0 ? 'lg:items-end lg:text-right' : 'lg:items-start lg:text-left'} w-full`}>
-                    <span className="text-4xl md:text-6xl font-black text-saloon-500/20 italic mb-2">{m.year}</span>
-                    <h4 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter mb-4 group-hover:text-saloon-500 transition-colors">{m.title}</h4>
-                    <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed max-w-md font-medium uppercase tracking-wide">{m.desc}</p>
+                    <span className="text-4xl md:text-6xl font-black text-primary/10 italic mb-2">{m.year}</span>
+                    <h4 className="text-2xl font-black text-white uppercase tracking-tighter mb-4 group-hover:text-primary transition-colors">{m.title}</h4>
+                    <p className="text-muted text-sm leading-relaxed max-w-md font-medium uppercase tracking-wide">{m.desc}</p>
                   </div>
                 </motion.div>
 
@@ -368,7 +368,7 @@ const Timeline = () => {
                   initial={{ scale: 0 }}
                   whileInView={{ scale: 1 }}
                   viewport={{ once: true }}
-                  className="relative z-20 w-16 h-16 bg-white dark:bg-slate-900 border-4 border-saloon-500 flex items-center justify-center rounded-2xl shadow-xl text-saloon-500 shrink-0"
+                  className="relative z-20 w-16 h-16 bg-secondary border border-primary flex items-center justify-center rounded-2xl shadow-xl text-primary shrink-0"
                 >
                   {m.icon}
                 </motion.div>
@@ -384,7 +384,7 @@ const Timeline = () => {
 
 export default function About() {
   return (
-    <div className="relative selection:bg-saloon-500 selection:text-white bg-white dark:bg-slate-950 font-sans min-h-screen overflow-x-hidden">
+    <div className="relative selection:bg-primary/30 selection:text-white bg-background font-sans min-h-screen overflow-x-hidden">
       <PublicNavbar />
       
       <main>

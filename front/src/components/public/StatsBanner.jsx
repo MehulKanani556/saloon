@@ -37,17 +37,17 @@ const StatsCounter = ({ target, label, duration = 3000 }) => {
 
   return (
     <div ref={sectionRef} className="flex flex-col items-center">
-      <h3 className="text-3xl md:text-5xl font-black text-white italic tracking-tighter mb-2">
+      <h3 className="text-3xl md:text-5xl font-black text-primary italic tracking-tighter mb-2">
         {isVisible ? count : 0}{target.includes('+') ? '+' : target.includes('★') ? '★' : ''}
       </h3>
-      <p className="text-[9px] md:text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">{label}</p>
+      <p className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-[0.3em]">{label}</p>
     </div>
   );
 };
 
 const StatsBanner = () => {
   return (
-    <div className="bg-slate-950 py-16 border-y border-white/5">
+    <div className="bg-secondary py-16 border-y border-white/5">
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-2 md:grid-cols-3 gap-12 md:gap-4 divide-x divide-white/10">
           <StatsCounter target="500+" label="Happy Clients" />

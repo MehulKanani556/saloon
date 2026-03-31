@@ -134,201 +134,205 @@ export default function Appointments() {
     isSameDay(new Date(app.appointmentDate), selectedDate)
   );
 
+  const getStatusStyles = (status) => {
+    switch (status) {
+      case 'Completed': return 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20';
+      case 'Cancelled': return 'bg-rose-500/10 text-rose-500 border-rose-500/20';
+      case 'Confirmed': return 'bg-primary/10 text-primary border-primary/20';
+      default: return 'bg-white/5 text-muted border-white/10';
+    }
+  };
+
   if (appointmentsLoading) return (
     <div className="flex items-center justify-center h-[60vh]">
-      <div className="w-12 h-12 border-4 border-saloon-100 border-t-saloon-500 rounded-full animate-spin" />
+      <div className="w-12 h-12 border-4 border-white/5 border-t-primary rounded-full animate-spin" />
     </div>
   );
 
   return (
-    <div className="">
-      <div className="space-y-10">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
-          <div className="flex items-center gap-4 lg:gap-6 relative z-10 transition-all">
-            <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-white dark:bg-slate-900 border border-saloon-100 dark:border-white/10 flex items-center justify-center text-saloon-500 shadow-glass shrink-0 transition-transform hover:rotate-6">
-              <CalendarIcon size={24} md:size={32} strokeWidth={2.5} />
+    <div className="space-y-12">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+        <div className="flex items-center gap-6 group">
+          <div className="w-16 h-16 rounded-2xl bg-secondary border border-white/10 flex items-center justify-center text-primary shadow-premium shrink-0 transition-transform hover:rotate-6">
+            <CalendarIcon size={32} strokeWidth={2.5} />
+          </div>
+          <div className="min-w-0">
+            <h1 className="text-3xl lg:text-4xl font-black text-white tracking-tighter uppercase leading-none truncate md:whitespace-normal font-luxury italic">Appointment Bookings</h1>
+            <p className="text-[10px] font-black text-muted uppercase tracking-[0.3em] mt-3 opacity-60">Architectural Management of the Temporal Record</p>
+          </div>
+        </div>
+        <button
+          onClick={() => {
+            setSelectedAppointment(null);
+            setIsNewClient(false);
+            formik.resetForm();
+            setIsDrawerOpen(true);
+          }}
+          className="flex items-center gap-4 px-10 py-5 bg-primary text-secondary rounded-2xl font-black uppercase text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group"
+        >
+          <Plus size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
+          Secure Ritual Slot
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-12">
+        {/* Calendar Column */}
+        <div className="xl:col-span-8 space-y-8">
+          <div className="bg-secondary/40 backdrop-blur-xl p-8 rounded-[3rem] border border-white/5 shadow-3xl relative overflow-hidden">
+            <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/5 blur-[120px] rounded-full" />
+
+            <div className="flex flex-col sm:flex-row gap-6 sm:items-center justify-between mb-12 relative z-10">
+              <div className="flex flex-col">
+                <span className="text-[9px] font-black text-primary uppercase tracking-[0.5em] leading-none mb-3 italic">Temporal Matrix</span>
+                <h3 className="text-3xl font-black text-white uppercase tracking-tighter italic font-luxury">{format(currentDate, 'MMMM yyyy')}</h3>
+              </div>
+              <div className="flex gap-4">
+                <button
+                  onClick={() => setCurrentDate(subMonths(currentDate, 1))}
+                  className="w-14 h-14 flex items-center justify-center bg-background border border-white/5 rounded-2xl hover:bg-primary hover:text-secondary transition-all shadow-xl active:scale-95 group"
+                >
+                  <StepBack size={20} className="group-hover:-translate-x-0.5 transition-transform" />
+                </button>
+                <button
+                  onClick={() => setCurrentDate(addMonths(currentDate, 1))}
+                  className="w-14 h-14 flex items-center justify-center bg-background border border-white/5 rounded-2xl hover:bg-primary hover:text-secondary transition-all shadow-xl active:scale-95 group"
+                >
+                  <StepForward size={20} className="group-hover:translate-x-0.5 transition-transform" />
+                </button>
+              </div>
             </div>
-            <div className="min-w-0">
-              <h1 className="text-xl sm:text-3xl lg:text-4xl font-black text-slate-800 dark:text-white tracking-tighter uppercase leading-none truncate md:whitespace-normal">Appointment Bookings</h1>
-              <p className="text-slate-400 font-black text-[8px] sm:text-[9px] lg:text-[10px] uppercase tracking-[0.15em] lg:tracking-[0.25em] mt-2 lg:mt-4 opacity-70 group-hover:opacity-100 transition-opacity">Manage your saloon bookings here</p>
+
+            <div className="grid grid-cols-7 gap-3 relative z-10">
+              {['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map(day => (
+                <div key={day} className="text-center text-[9px] font-black text-muted/40 py-4 uppercase tracking-[0.4em] italic">{day}</div>
+              ))}
+              {days.map((day, i) => {
+                const isSelected = isSameDay(day, selectedDate);
+                const hasApps = appointments.some(a => isSameDay(new Date(a.appointmentDate), day));
+
+                return (
+                  <motion.div
+                    key={i}
+                    onClick={() => setSelectedDate(day)}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: i * 0.005 }}
+                    className={`
+                    aspect-square rounded-2xl flex flex-col items-center justify-center relative cursor-pointer group transition-all duration-500
+                    ${isSelected ? 'bg-primary text-secondary shadow-2xl scale-110 z-20' : 'bg-background/50 hover:bg-white/5 text-muted'}
+                    ${!isSameMonth(day, monthStart) ? 'opacity-10 hover:opacity-100' : ''}
+                    ${isToday(day) && !isSelected ? 'border-2 border-primary/20 shadow-inner shadow-primary/5' : 'border border-white/5'}
+                  `}
+                  >
+                    <span className={`text-lg font-black tracking-tighter ${isSelected ? 'text-secondary' : 'text-white'}`}>{format(day, 'd')}</span>
+                    {hasApps && (
+                      <div className={`w-1.5 h-1.5 rounded-full absolute bottom-3 ${isSelected ? 'bg-secondary' : 'bg-primary shadow-lg shadow-primary/40'}`} />
+                    )}
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
-          <button
-            onClick={() => {
-              setSelectedAppointment(null);
-              setIsNewClient(false);
-              formik.resetForm();
-              setIsDrawerOpen(true);
-            }}
-            className="flex items-center gap-2 px-6 py-3 lg:px-10 lg:py-5 bg-gradient-to-r from-saloon-500 via-saloon-600 to-rosegold-500 text-white lg:rounded-2xl rounded-xl font-black uppercase text-xs tracking-[0.2em] shadow-xl shadow-saloon-500/20 hover:scale-[1.05] transition-all group"
-          >
-            <Plus size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
-            Add New Booking
-          </button>
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
-          {/* Calendar Column */}
-          <div className="xl:col-span-8 space-y-8">
-            <div className="glass-card p-4 dark:bg-slate-900/40 border-white/60 shadow-2xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-saloon-500/5 blur-[80px] rounded-full" />
-
-              <div className="flex flex-col sm:flex-row gap-2 sm:gap-0 sm:items-center justify-between mb-4 sm:mb-10 mt-4 px-3 md:px-6 relative z-10">
-                <div className="flex flex-col">
-                  <span className="text-[9px] md:text-[10px] font-black text-saloon-500 uppercase tracking-widest leading-none mb-1 md:mb-2">Calendar View</span>
-                  <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-slate-800 dark:text-white uppercase tracking-tighter italic">{format(currentDate, 'MMMM yyyy')}</h3>
-                </div>
-                <div className="flex gap-2 md:gap-3">
-                  <button
-                    onClick={() => setCurrentDate(subMonths(currentDate, 1))}
-                    className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-xl md:rounded-2xl hover:bg-saloon-500 hover:text-white transition-all shadow-sm active:scale-95"
-                  >
-                    <StepBack size={18} md:size={20} />
-                  </button>
-                  <button
-                    onClick={() => setCurrentDate(addMonths(currentDate, 1))}
-                    className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-xl md:rounded-2xl hover:bg-saloon-500 hover:text-white transition-all shadow-sm active:scale-95"
-                  >
-                    <StepForward size={18} md:size={20} />
-                  </button>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-7 gap-2 relative z-10 p-4">
-                {['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map(day => (
-                  <div key={day} className="text-center text-[10px] font-black text-slate-400 py-4 uppercase tracking-[0.25em]">{day}</div>
-                ))}
-                {days.map((day, i) => {
-                  const isSelected = isSameDay(day, selectedDate);
-                  const hasApps = appointments.some(a => isSameDay(new Date(a.appointmentDate), day));
-
-                  return (
-                    <motion.div
-                      key={i}
-                      onClick={() => setSelectedDate(day)}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: i * 0.01 }}
-                      className={`
-                      aspect-square rounded-2xl flex flex-col items-center justify-center relative cursor-pointer group transition-all duration-300
-                      ${isSelected ? 'bg-saloon-500 text-white shadow-2xl scale-105 z-20' : 'hover:bg-slate-100 dark:hover:bg-slate-800 dark:text-slate-300'}
-                      ${!isSameMonth(day, monthStart) ? 'opacity-20 hover:opacity-100' : ''}
-                      ${isToday(day) && !isSelected ? 'border-2 border-saloon-200' : ''}
-                    `}
-                    >
-                      <span className={`text-base font-black ${isSelected ? 'text-white' : 'text-slate-800 dark:text-white'}`}>{format(day, 'd')}</span>
-                      {hasApps && (
-                        <div className={`w-1.5 h-1.5 rounded-full absolute bottom-4 ${isSelected ? 'bg-white' : 'bg-saloon-500 animate-pulse'}`} />
-                      )}
-                    </motion.div>
-                  );
-                })}
-              </div>
+        {/* Sidebar Column: Appointments Feed */}
+        <div className="xl:col-span-4 space-y-10 lg:mt-0">
+          <div className="flex items-center justify-between px-4">
+            <div className="space-y-2">
+              <h3 className="text-2xl font-black text-white tracking-tighter uppercase leading-none font-luxury italic">Selected Protocol</h3>
+              <p className="text-primary font-black text-[9px] uppercase tracking-[0.3em]">{format(selectedDate, 'MMMM do, yyyy')}</p>
+            </div>
+            <div className="w-12 h-12 rounded-2xl bg-secondary border border-white/5 flex items-center justify-center text-primary font-black text-lg shadow-inner">
+              {filteredAppointments.length}
             </div>
           </div>
 
-          {/* Sidebar Column: Appointments Feed */}
-          <div className="xl:col-span-4 space-y-6 lg:mt-0">
-            <div className="flex items-center justify-between px-2 mb-8">
-              <div>
-                <h3 className="text-2xl font-black text-slate-800 dark:text-white tracking-tighter uppercase leading-none">Today's Bookings</h3>
-                <p className="text-slate-400 font-black text-[9px] uppercase tracking-widest mt-3">Bookings for {format(selectedDate, 'MMM do')}</p>
-              </div>
-              <div className="w-10 h-10 rounded-2xl bg-saloon-500/10 flex items-center justify-center text-saloon-500 font-black text-sm border border-saloon-500/20">
-                {filteredAppointments.length}
-              </div>
-            </div>
+          <div className="space-y-6 max-h-[900px] overflow-y-auto pr-3 custom-scrollbar">
+            {filteredAppointments.length > 0 ? filteredAppointments.map((app, index) => (
+              <motion.div
+                key={app._id}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className="bg-secondary/40 backdrop-blur-md p-6 rounded-[2.5rem] border border-white/5 hover:border-primary/20 transition-all duration-500 group relative overflow-hidden"
+              >
+                <div className="absolute top-0 left-0 w-1.5 h-full bg-primary/20 group-hover:bg-primary transition-colors" />
 
-            <div className="space-y-5 max-h-[900px] overflow-y-auto pr-2 custom-scrollbar">
-              {filteredAppointments.length > 0 ? filteredAppointments.map((app, index) => (
-                <motion.div
-                  key={app._id}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="glass-card p-4 sm:p-5 border-white/60 dark:bg-slate-900/40 hover-lift shadow-xl group border-l-4 border-l-saloon-500 overflow-hidden"
-                >
-                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 sm:gap-0">
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-saloon-50 dark:bg-slate-800 overflow-hidden border border-white dark:border-white/5 p-0.5 shadow-sm shrink-0">
+                <div className="flex flex-col gap-6">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-center gap-5 min-w-0">
+                      <div className="w-16 h-16 rounded-[1.5rem] bg-background border border-white/10 p-1 group-hover:rotate-6 transition-transform shadow-2xl relative overflow-hidden">
                         <img
-                          src={app.client?.profileImage ? `${IMAGE_URL}${app.client.profileImage}` : `https://api.dicebear.com/9.x/adventurer/svg?seed=${app.client?.name}`}
+                          src={app.client?.profileImage ? (app.client.profileImage.startsWith('http') ? app.client.profileImage : `${IMAGE_URL}${app.client.profileImage}`) : `https://api.dicebear.com/9.x/adventurer/svg?seed=${app.client?.name}`}
                           alt={app.client?.name}
-                          className="w-full h-full rounded-[14px] object-cover"
+                          className="w-full h-full rounded-2xl object-cover grayscale transition-all duration-700 group-hover:grayscale-0"
                         />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <h4 className="font-black text-slate-800 dark:text-white tracking-tighter uppercase text-xs sm:text-sm truncate">{app.client?.name}</h4>
-                        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mt-2">
-                          <div className="flex items-center gap-1.5 sm:gap-2 text-[8px] sm:text-[10px] font-black text-saloon-500 uppercase tracking-widest bg-saloon-50 dark:bg-saloon-900/20 px-1.5 sm:px-2 py-1 rounded-lg w-fit shrink-0">
-                            <Clock size={10} sm:size={12} strokeWidth={3} />
-                            {format(new Date(app.appointmentDate), 'hh:mm a')}
+                        <h4 className="font-black text-white tracking-tighter uppercase text-base truncate font-luxury italic leading-none mb-4">{app.client?.name}</h4>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <div className="flex items-center gap-2 text-[8px] font-black text-primary uppercase tracking-[0.2em] bg-primary/10 px-2.5 py-1.5 rounded-lg border border-primary/20">
+                            <Clock size={12} strokeWidth={3} className="opacity-50" />
+                            {format(new Date(app.appointmentDate), "HH:mm 'PROTOCOL'")}
                           </div>
-                          <div className={`text-[8px] sm:text-[9px] font-black uppercase tracking-widest px-1.5 sm:px-2 py-1 rounded-lg border shrink-0 ${app.status === 'Completed' ? 'bg-green-500/10 text-green-500 border-green-500/20' :
-                            app.status === 'Cancelled' ? 'bg-red-500/10 text-red-500 border-red-500/20' :
-                              app.status === 'Confirmed' ? 'bg-blue-500/10 text-blue-500 border-blue-500/20' :
-                                'bg-amber-500/10 text-amber-500 border-amber-500/20'
-                            }`}>
+                          <div className={`text-[8px] font-black uppercase tracking-[0.2em] px-2.5 py-1.5 rounded-lg border ${getStatusStyles(app.status)}`}>
                             {app.status}
-                          </div>
-                          <div className={`text-[8px] sm:text-[9px] font-black uppercase tracking-widest px-1.5 sm:px-2 py-1 rounded-lg border shrink-0 ${app.paymentStatus === 'Paid' ? 'bg-green-500/10 text-green-500 border-green-500/20' :
-                            'bg-slate-500/10 text-slate-500 border-slate-500/20'
-                            }`}>
-                            {app.paymentStatus === 'Paid' ? 'Paid' : 'Unpaid'}
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div className="flex gap-2 self-start justify-end sm:justify-start">
-                      <button onClick={() => navigate(`/invoices?id=${app._id}`)} className="p-2 sm:p-2.5 bg-slate-50 dark:bg-slate-800 text-slate-400 hover:text-indigo-500 rounded-xl transition-all shadow-sm">
-                        <FileText size={14} />
-                      </button>
-                      <button onClick={() => handleEdit(app)} className="p-2 sm:p-2.5 bg-slate-50 dark:bg-slate-800 text-slate-400 hover:text-saloon-500 rounded-xl transition-all shadow-sm">
-                        <Edit3 size={14} />
-                      </button>
-                      <button onClick={() => openDeleteModal(app)} className="p-2 sm:p-2.5 bg-slate-50 dark:bg-slate-800 text-slate-400 hover:text-red-500 rounded-xl transition-all shadow-sm">
-                        <Trash2 size={14} />
-                      </button>
-                    </div>
                   </div>
-                  <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-100 dark:border-white/5 space-y-2 sm:space-y-3 group-hover:bg-slate-900 dark:group-hover:bg-saloon-500 transition-all duration-300">
+
+                  <div className="grid grid-cols-1 gap-2 pt-6 border-t border-white/5">
                     {app.assignments?.map((asm, idx) => {
                       const s = asm.service;
                       if (!s) return null;
                       return (
-                        <div key={s._id || idx} className="flex items-center justify-between group-hover:text-white gap-2">
-                          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-                            <div className="w-1.5 h-1.5 rounded-full bg-saloon-500 group-hover:bg-white shrink-0" />
-                            <span className="text-[10px] sm:text-[11px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest group-hover:text-white truncate">{s.name}</span>
+                        <div key={s._id || idx} className="flex items-center justify-between text-muted group-hover:text-white transition-colors">
+                          <div className="flex items-center gap-3">
+                            <div className="w-1.5 h-1.5 rounded-full bg-primary/20 group-hover:bg-primary transition-colors" />
+                            <span className="text-[10px] font-black uppercase tracking-widest">{s.name}</span>
                           </div>
-                          <span className="text-[9px] sm:text-[10px] font-black opacity-60 shrink-0">${s.price}</span>
+                          <span className="text-[9px] font-black italic opacity-40">${s.price}</span>
                         </div>
                       );
                     })}
-                    <div className="pt-2 border-t border-slate-200 dark:border-white/10 flex items-center justify-between group-hover:border-white/20">
-                      <span className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest group-hover:text-white/60">Final Total</span>
-                      <span className="text-xs sm:text-sm font-black text-saloon-500 group-hover:text-white">${app.totalPrice}</span>
+                    <div className="flex items-center justify-between pt-4 mt-2 border-t border-dashed border-white/10 group-hover:border-primary/20 transition-colors">
+                      <span className="text-[9px] font-black text-muted uppercase tracking-[0.3em] group-hover:text-white/60">Final Magnitude</span>
+                      <span className="text-xl font-black text-white group-hover:text-primary transition-all font-luxury italic">${app.totalPrice}</span>
                     </div>
                   </div>
-                </motion.div>
-              )) : (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="p-16 text-center glass-card border-dashed border-slate-200 dark:border-white/10"
+
+                  <div className="flex items-center justify-end gap-3 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+                    <button onClick={() => navigate(`/admin/invoices?id=${app._id}`)} className="p-3 bg-background border border-white/5 text-muted hover:text-white rounded-xl transition-all shadow-xl">
+                      <FileText size={16} />
+                    </button>
+                    <button onClick={() => handleEdit(app)} className="p-3 bg-background border border-white/5 text-muted hover:text-primary rounded-xl transition-all shadow-xl font-black">
+                      <Edit3 size={16} />
+                    </button>
+                    <button onClick={() => openDeleteModal(app)} className="p-3 bg-background border border-rose-500/10 text-muted hover:text-rose-500 rounded-xl transition-all shadow-xl">
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            )) : (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="py-32 text-center bg-secondary/20 rounded-[3rem] border border-dashed border-white/10"
+              >
+                <Clock className="mx-auto text-white/5 mb-6 rotate-12" size={64} strokeWidth={1} />
+                <p className="text-muted/40 font-black uppercase tracking-[0.4em] text-[10px] italic">No active protocols recorded</p>
+                <button
+                  onClick={() => setIsDrawerOpen(true)}
+                  className="mt-8 text-primary font-black text-[9px] uppercase tracking-[0.5em] flex items-center justify-center gap-3 mx-auto group hover:scale-105 transition-all"
                 >
-                  <Clock className="mx-auto text-slate-200 mb-4" size={48} />
-                  <p className="text-slate-400 font-black uppercase tracking-widest text-[10px]">No bookings for this date</p>
-                  <button
-                    onClick={() => setIsDrawerOpen(true)}
-                    className="mt-6 text-saloon-500 font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 mx-auto"
-                  >
-                    <Plus size={14} /> Add Booking
-                  </button>
-                </motion.div>
-              )}
-            </div>
+                  <Plus size={14} className="group-hover:rotate-90 transition-transform" /> Initialize Ritual
+                </button>
+              </motion.div>
+            )}
           </div>
         </div>
       </div>
@@ -341,13 +345,13 @@ export default function Appointments() {
           setIsNewClient(false);
           formik.resetForm();
         }}
-        title={selectedAppointment ? 'Edit Booking' : 'New Booking'}
-        subtitle="Operational Schedule"
+        title={selectedAppointment ? 'Refine Ritual' : 'Initialize Protocol'}
+        subtitle="Operational Schedule Management"
       >
-        <form onSubmit={formik.handleSubmit} className="space-y-6">
-          <div className="space-y-3.5">
+        <form onSubmit={formik.handleSubmit} className="space-y-10">
+          <div className="space-y-4">
             <CustomSelect
-              label="Select Client Profile"
+              label="Select Target Identity"
               name="clientId"
               value={formik.values.clientId}
               onChange={(e) => {
@@ -365,8 +369,8 @@ export default function Appointments() {
                 }
               }}
               options={[
-                { label: 'Choose Profile...', value: '' },
-                ...(!selectedAppointment ? [{ label: '+ Quick Create Customer', value: 'new' }] : []),
+                { label: 'Select Client Identity...', value: '' },
+                ...(!selectedAppointment ? [{ label: '+ Protocol New Client', value: 'new' }] : []),
                 ...clients.map(c => ({ label: `${c.name}`, value: c._id }))
               ]}
               icon={User}
@@ -377,39 +381,40 @@ export default function Appointments() {
             {isNewClient && (
               <motion.div
                 initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
-                className="space-y-5 overflow-hidden"
+                className="space-y-8 overflow-hidden bg-white/5 p-8 rounded-3xl border border-white/5"
               >
-                <div className="space-y-2">
-                  <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-2 italic">Customer Name</label>
+                <div className="space-y-3">
+                  <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-2 italic">Legal Identifer</label>
                   <input
                     name="clientName" onChange={formik.handleChange} value={formik.values.clientName}
-                    className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/30 rounded-xl px-5 py-4 text-xs font-bold outline-none transition-all dark:text-white"
+                    className="w-full bg-background border border-white/5 focus:border-primary/30 rounded-xl px-6 py-4 text-xs font-bold outline-none transition-all text-white shadow-inner placeholder:text-white/5"
+                    placeholder="Enter Full Name"
                   />
-                  {formik.errors.clientName && <p className="text-[8px] text-red-500 font-bold uppercase ml-4">{formik.errors.clientName}</p>}
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-2 italic">Contact Phone</label>
-                  <input
-                    name="clientPhone" onChange={formik.handleChange} value={formik.values.clientPhone}
-                    className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/30 rounded-xl px-5 py-4 text-xs font-bold outline-none transition-all dark:text-white"
-                  />
-                  {formik.errors.clientPhone && <p className="text-[8px] text-red-500 font-bold uppercase ml-4">{formik.errors.clientPhone}</p>}
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-2 italic">Digital Signature (Email)</label>
-                  <input
-                    name="clientEmail" onChange={formik.handleChange} value={formik.values.clientEmail}
-                    className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/30 rounded-xl px-5 py-4 text-xs font-bold outline-none transition-all dark:text-white"
-                  />
-                  {formik.errors.clientEmail && <p className="text-[8px] text-red-500 font-bold uppercase ml-4">{formik.errors.clientEmail}</p>}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-2 italic">Contact Tether</label>
+                    <input
+                      name="clientPhone" onChange={formik.handleChange} value={formik.values.clientPhone}
+                      className="w-full bg-background border border-white/5 focus:border-primary/30 rounded-xl px-6 py-4 text-xs font-bold outline-none transition-all text-white shadow-inner placeholder:text-white/5"
+                      placeholder="Phone Number"
+                    />
+                  </div>
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-2 italic">Digital Signature</label>
+                    <input
+                      name="clientEmail" onChange={formik.handleChange} value={formik.values.clientEmail}
+                      className="w-full bg-background border border-white/5 focus:border-primary/30 rounded-xl px-6 py-4 text-xs font-bold outline-none transition-all text-white shadow-inner placeholder:text-white/5"
+                      placeholder="Email Coordinate"
+                    />
+                  </div>
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
 
-          <div className="space-y-3.5">
+          <div className="space-y-4">
             <CustomSelect
               label="Ritual Selections"
               name="services"
@@ -419,20 +424,19 @@ export default function Appointments() {
               options={services.map(s => ({ label: `${s.name} - $${s.price}`, value: s._id }))}
               icon={Sparkles}
             />
-            {formik.errors.services && <p className="text-[8px] text-red-500 font-bold uppercase ml-4">{formik.errors.services}</p>}
           </div>
 
-          <div className="space-y-2">
-            <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-2 italic">Temporal Coordinates (Date & Time)</label>
+          <div className="space-y-4">
+            <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-2 italic underline decoration-primary/30 decoration-2 underline-offset-8">Temporal Coordinates</label>
             <input
               name="date" type="datetime-local" onChange={formik.handleChange} value={formik.values.date}
-              className="w-full bg-slate-50 dark:bg-slate-800/80 rounded-xl px-5 py-4 text-[10px] font-black uppercase tracking-widest outline-none dark:text-white border-none"
+              className="w-full bg-secondary border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.2em] outline-none text-white shadow-2xl transition-all"
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-6">
             <CustomSelect
-              label="Ritual Status" name="status" value={formik.values.status}
+              label="Operational Status" name="status" value={formik.values.status}
               onChange={formik.handleChange}
               options={['Pending', 'Confirmed', 'Completed', 'Cancelled'].map(s => ({ label: s, value: s }))}
             />
@@ -443,13 +447,13 @@ export default function Appointments() {
             />
           </div>
 
-          <div className="pt-4">
+          <div className="pt-8">
             <button
               type="submit" disabled={formik.isSubmitting}
-              className="w-full py-5 bg-slate-950 dark:hover:bg-saloon-600 dark:bg-white text-white dark:text-slate-900 rounded-xl font-black uppercase text-sm tracking-[0.3em] shadow-xl hover:bg-saloon-600 transition-all flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50"
+              className="w-full py-6 bg-primary text-secondary rounded-[2rem] font-black uppercase text-xs tracking-[0.4em] shadow-2xl shadow-primary/20 hover:scale-[1.02] transition-all flex items-center justify-center gap-4 active:scale-[0.98] disabled:opacity-50 group font-luxury italic"
             >
-              {formik.isSubmitting ? 'Syncing...' : selectedAppointment ? 'Update Appointment' : 'Create Appointment'}
-              <Sparkles size={16} />
+              {formik.isSubmitting ? 'Architecting Matrix...' : selectedAppointment ? 'COMMIT REFINEMENTS' : 'AUTHORIZE INITIATION'}
+              <Sparkles size={20} className="group-hover:rotate-12 transition-transform" />
             </button>
           </div>
         </form>
@@ -458,23 +462,23 @@ export default function Appointments() {
       <Modal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
-        title="Purge Booking?"
-        subtitle="Final Dissolution protocol"
+        title="DISSOLVE PROTOCOL?"
+        subtitle="Final Irreversible Liquidation"
         maxWidth="max-w-sm"
       >
-        <div className="text-center">
-          <div className="w-16 h-16 bg-red-50 dark:bg-red-500/10 rounded-2xl flex items-center justify-center mx-auto text-red-500 mb-6">
-            <AlertTriangle size={32} strokeWidth={2.5} />
+        <div className="text-center p-4">
+          <div className="w-24 h-24 bg-rose-500/10 border border-rose-500/20 rounded-[2.5rem] flex items-center justify-center mx-auto text-rose-500 mb-8 shadow-2xl shadow-rose-500/20">
+            <AlertTriangle size={48} strokeWidth={1.5} />
           </div>
-          <p className="text-slate-400 font-bold text-[10px] uppercase tracking-widest leading-relaxed mb-6 px-2">
-            Eliminating booking for <span className="text-red-500 font-black italic">{appointmentToDelete?.client?.name}</span> from the temporal record.
+          <p className="text-muted font-black text-[10px] uppercase tracking-[0.3em] leading-relaxed mb-10">
+            Eliminating ritual record for <br /><span className="text-rose-500 text-base font-luxury italic underline decoration-rose-500/30 decoration-2 underline-offset-4">{appointmentToDelete?.client?.name}</span> <br /> from active reality.
           </p>
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-4">
             <button
               onClick={handleDelete}
-              className="w-full py-4 bg-red-500 text-white rounded-xl font-black uppercase text-[10px] tracking-widest shadow-xl active:scale-95"
-            >Confirm Purge</button>
-            <button onClick={() => setIsDeleteModalOpen(false)} className="w-full py-4 bg-slate-100 dark:bg-slate-800 text-slate-400 rounded-xl font-black uppercase text-[10px] tracking-widest">Abort Protocol</button>
+              className="w-full py-5 bg-rose-500 text-white rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] shadow-xl shadow-rose-500/20 active:scale-95 hover:bg-rose-600 transition-all font-luxury italic"
+            >CONFIRM DISSOLUTION</button>
+            <button onClick={() => setIsDeleteModalOpen(false)} className="w-full py-5 bg-white/5 text-muted rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:text-white transition-all font-luxury italic">ABORT OPERATION</button>
           </div>
         </div>
       </Modal>

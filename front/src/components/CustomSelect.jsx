@@ -62,7 +62,7 @@ const CustomSelect = ({
   return (
     <div className={`relative ${className}`} ref={containerRef}>
       {label && (
-        <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] ml-2 mb-4 block italic">
+        <label className="text-[10px] font-black text-muted uppercase tracking-[0.2em] ml-2 mb-4 block">
           {label}
         </label>
       )}
@@ -72,25 +72,25 @@ const CustomSelect = ({
         onClick={() => setIsOpen(!isOpen)}
         className={`
           w-full flex items-center justify-between gap-4 px-8 py-4 
-          bg-white dark:bg-slate-800/80 border border-slate-100 dark:border-white/5 
+          bg-secondary border border-white/5 
           rounded-2xl text-[10px] font-black uppercase tracking-widest 
-          hover:border-saloon-500 shadow-sm transition-all group
-          ${isFilter ? 'min-w-[200px]' : ''}
+          hover:border-primary/30 shadow-premium transition-all group
+          ${isFilter ? 'min-w-[220px]' : ''}
         `}
       >
-        <span className="flex items-center gap-2 truncate text-slate-900 dark:text-white">
-          {Icon && <Icon size={14} className="text-saloon-600" />}
+        <span className="flex items-center gap-3 truncate text-white">
+          {Icon && <Icon size={14} className="text-primary opacity-60 group-hover:opacity-100 transition-opacity" />}
           {getLabel()}
         </span>
         <div className="flex items-center gap-3">
           {isMulti && Array.isArray(value) && value.length > 0 && (
-            <span className="px-2 py-0.5 bg-saloon-600 text-white text-[8px] rounded-md animate-pulse">
+            <span className="px-2 py-0.5 bg-primary text-secondary text-[8px] font-black rounded-md">
               {value.length}
             </span>
           )}
           <ChevronDown 
             size={14} 
-            className={`text-slate-400 group-hover:text-saloon-600 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} 
+            className={`text-muted group-hover:text-primary transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} 
           />
         </div>
       </button>
@@ -98,34 +98,38 @@ const CustomSelect = ({
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+            initial={{ opacity: 0, y: 10, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+            exit={{ opacity: 0, y: 10, scale: 0.98 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             className={`
               absolute z-[100] mt-3 w-full left-0
-              bg-white dark:bg-slate-900 rounded-2xl shadow-2xl 
-              border border-slate-100 dark:border-white/5 overflow-hidden
+              bg-secondary rounded-2xl shadow-3xl 
+              border border-white/10 overflow-hidden
             `}
           >
-            <div className="max-h-60 overflow-auto py-2 custom-scrollbar">
+            <div className="max-h-64 overflow-auto py-3 custom-scrollbar">
               {options.map((option) => (
                 <button
                   key={option.value}
                   type="button"
                   onClick={() => handleToggle(option.value)}
                   className={`
-                    w-full flex items-center justify-between px-6 py-4 
+                    w-full flex items-center justify-between px-8 py-4 
                     text-[10px] font-black uppercase tracking-widest whitespace-nowrap
-                    hover:bg-slate-50 dark:hover:bg-slate-800 transition-all text-left
-                    ${isSelected(option.value) ? 'text-saloon-600' : 'text-slate-400'}
+                    hover:bg-white/5 transition-all text-left
+                    ${isSelected(option.value) ? 'text-primary' : 'text-muted'}
                   `}
                 >
                   <span>{option.label}</span>
                   {isSelected(option.value) && (
-                    <div className="box-content p-1 bg-saloon-600/10 rounded-lg">
-                      <Check size={14} className="text-saloon-600" />
-                    </div>
+                    <motion.div 
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="p-1 bg-primary/10 rounded-lg"
+                    >
+                      <Check size={14} className="text-primary" />
+                    </motion.div>
                   )}
                 </button>
               ))}

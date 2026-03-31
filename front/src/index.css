@@ -5,40 +5,35 @@
 @tailwind utilities;
 
 :root {
-  --brand-pink: #f59e0b;
-  --brand-rosegold: #b57e65;
-  --brand-pastel: #fffbeb;
+  --primary: #C9A227;     /* Gold */
+  --secondary: #1A1A1A;   /* Black */
+  --accent: #F5E6C8;      /* Light Gold */
+  --background: #0F0F0F;  /* Dark */
+  --text: #FFFFFF;
+  --muted: #A0A0A0;
 }
 
 @layer base {
   body {
-    @apply bg-[#FAF8F6] text-slate-800 font-sans transition-colors duration-500;
+    @apply bg-[#0F0F0F] text-white font-sans transition-colors duration-500 selection:bg-[#C9A227]/30;
   }
   
   .dark body {
-    @apply bg-slate-950 text-slate-50;
+    @apply bg-[#0F0F0F] text-white;
   }
 }
 
 @layer components {
   .glass-card {
-    @apply bg-white/70 backdrop-blur-md border border-white/40 shadow-glass rounded-2xl transition-all;
-  }
-  
-  .dark .glass-card {
-    @apply bg-slate-900/40 border-white/10 shadow-none;
+    @apply bg-secondary/40 backdrop-blur-md border border-white/10 shadow-glass rounded-2xl transition-all;
   }
   
   .glass-sidebar {
-    @apply bg-white/40 backdrop-blur-lg border-r border-white/30 transition-all;
-  }
-  
-  .dark .glass-sidebar {
-    @apply bg-slate-900/40 border-r-white/5;
+    @apply bg-secondary/60 backdrop-blur-lg border-r border-white/5 transition-all;
   }
   
   .premium-gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-saloon-500 to-rosegold-500;
+    @apply bg-clip-text text-transparent bg-luxury-gradient;
   }
 
   .premium-button {
@@ -46,7 +41,7 @@
   }
   
   .premium-button-primary {
-    @apply premium-button bg-gradient-to-r from-saloon-500 to-rosegold-400 text-white;
+    @apply premium-button bg-primary text-secondary hover:shadow-premium;
   }
 }
 
@@ -56,23 +51,16 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+  @apply bg-secondary;
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-rosegold-200 rounded-full;
-}
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-rosegold-300;
+  @apply bg-primary/30 rounded-full hover:bg-primary/50 transition-colors;
 }
 
-/* Dark Mode Overrides */
-/* Dark Mode Surface Overrides */
-.dark .bg-white { @apply bg-slate-900 border-white/10; }
-.dark .bg-saloon-50 { @apply bg-slate-800; }
-.dark .border-saloon-100 { @apply border-white/5; }
-.dark .shadow-glass { @apply shadow-none; }
-.dark .shadow-premium { @apply shadow-none; }
+/* Dark Mode Surface Overrides - Since it's already dark, we ensure readability */
+.dark .bg-white { @apply bg-secondary border-white/10; }
+.dark .bg-saloon-50 { @apply bg-[#1A1A1A]; }
+.dark .text-slate-800, .dark .text-slate-700 { color: #FFFFFF; }
+.dark .text-slate-600, .dark .text-slate-500 { color: #A0A0A0; }
+.dark .text-slate-400 { color: #808080; }
 
-.dark .text-slate-800, .dark .text-slate-700 { color: #f1f5f9; }
-.dark .text-slate-600, .dark .text-slate-500 { color: #cbd5e1; }
-.dark .text-slate-400 { color: #94a3b8; }
