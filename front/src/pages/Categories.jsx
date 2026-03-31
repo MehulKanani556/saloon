@@ -211,7 +211,7 @@ export default function Categories() {
                 transition={{ delay: index * 0.03 }}
                 className="group relative bg-secondary/30 backdrop-blur-sm rounded-2xl border border-white/5 shadow-3xl hover:border-primary/40 transition-all duration-700"
               >
-                <div className="relative z-10 p-6 lg:px-12 lg:py-8 grid grid-cols-1 lg:grid-cols-[1.5fr_2fr_1.5fr_150px] gap-6 lg:gap-8 items-center">
+                <div className="relative z-10 px-5 py-5 grid grid-cols-1 lg:grid-cols-[1.5fr_2fr_1.5fr_150px] gap-6 lg:gap-8 items-center">
                   {/* Protocol Name */}
                   <div className="flex items-center gap-6">
                     <div className="w-14 h-14 rounded-2xl bg-background flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-secondary transition-all duration-700 shadow-inner">
@@ -233,7 +233,7 @@ export default function Categories() {
                   {/* Status Toggle */}
                   <div className="flex items-center gap-5">
                     <div className={`w-2.5 h-2.5 rounded-full ${cat.isActive ? 'bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.8)]' : 'bg-white/10'}`} />
-                    <span className="text-[10px] font-black text-white uppercase tracking-[0.3em] font-luxury ">{cat.isActive ? 'OPERATIONAL' : 'HALTED'}</span>
+                    <span className="text-[10px] font-black text-white uppercase tracking-[0.3em] font-luxury">{cat.isActive ? 'ACTIVE' : 'INACTIVE'}</span>
                     <button
                       onClick={() => dispatch(updateCategory({ id: cat._id, categoryData: { isActive: !cat.isActive } }))}
                       className={`ml-auto lg:ml-6 w-12 h-6 rounded-full relative transition-all duration-700 p-1 ${cat.isActive ? 'bg-emerald-500' : 'bg-background'}`}

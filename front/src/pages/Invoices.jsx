@@ -235,13 +235,13 @@ export default function Invoices() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-background/80">
-                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap">Ritual Ref</th>
-                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap">Client Identity</th>
-                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap">Masterpiece</th>
-                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap">Execution</th>
-                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap">Value</th>
-                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap">Settlement</th>
-                <th className="px-10 py-10 text-center text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap">Actions</th>
+                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary italic whitespace-nowrap">Ritual Ref</th>
+                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary italic whitespace-nowrap">Client Identity</th>
+                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary italic whitespace-nowrap">Masterpiece</th>
+                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary italic whitespace-nowrap">Execution</th>
+                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary italic whitespace-nowrap">Value</th>
+                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary italic whitespace-nowrap">Settlement</th>
+                <th className="px-5 py-5 text-center text-[10px] font-black uppercase tracking-[0.4em] text-primary italic whitespace-nowrap">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
@@ -255,29 +255,29 @@ export default function Invoices() {
                     className="group border-b border-white/5 hover:bg-white/5 transition-all"
                   >
                     <td className="px-10 py-8">
-                      <span className="text-[10px] font-black text-muted tracking-widest uppercase  bg-background/50 px-3 py-1.5 rounded-2xl border border-white/5 shadow-inner">
+                      <span className="text-[10px] font-black text-muted tracking-widest uppercase  bg-background/50 px-3 py-1.5 rounded-2xl border border-white/5 shadow-inner whitespace-nowrap">
                         #{invoice.appointmentId || invoice._id.substring(18).toUpperCase()}
                       </span>
                     </td>
-                    <td className="px-10 py-8">
+                    <td className="px-5 py-5">
                       <div className="flex items-center gap-5">
                         <div className="w-14 h-14 rounded-2xl bg-background p-1 border border-white/10 group-hover:rotate-6 transition-all duration-500 shadow-2xl">
                           <img
-                            src={invoice.client?.profileImage ? `${IMAGE_URL}${invoice.client.profileImage}` : `https://api.dicebear.com/9.x/adventurer/svg?seed=${invoice.client?.name || 'Client'}`}
+                            src={invoice.client?.profileImage ? `${invoice.client.profileImage}` : `https://api.dicebear.com/9.x/adventurer/svg?seed=${invoice.client?.name || 'Client'}`}
                             alt={invoice.client?.name || 'Client'}
                             className="w-full h-full rounded-2xl object-cover grayscale transition-all duration-700 group-hover:grayscale-0"
                           />
                         </div>
                         <div>
                           <p className="text-sm font-black text-white uppercase tracking-tighter font-luxury  leading-none mb-2 group-hover:text-primary transition-colors">{invoice.client?.name}</p>
-                          <p className="text-[9px] font-black text-muted uppercase tracking-[0.2em] ">{invoice.client?.phone}</p>
-                        </div>
-                      </div>
-                    </td>
+                          <p className="text-[9px] font-black text-muted uppercase tracking-[0.2em] whitespace-nowrap">{invoice.client?.phone}</p>
+                        </div >
+                      </div >
+                    </td >
                     <td className="px-10 py-8">
                       <p className="text-[11px] font-black text-muted uppercase tracking-[0.1em]  whitespace-nowrap group-hover:text-white transition-colors">{invoice.assignments?.map(a => a.service?.name).join(', ')}</p>
                     </td>
-                    <td className="px-10 py-8">
+                    <td className="px-5 py-5">
                       <div className="flex flex-col gap-1.5">
                         <span className="text-xs font-black text-white  tracking-widest leading-none">{format(new Date(invoice.appointmentDate), 'MMM dd, yyyy')}</span>
                         <span className="text-[9px] font-black text-muted uppercase tracking-[0.3em] opacity-0 group-hover:opacity-100 transition-all  leading-none">
@@ -310,7 +310,7 @@ export default function Invoices() {
                         )}
                       </div>
                     </td>
-                    <td className="px-10 py-8">
+                    <td className="px-5 py-5">
                       <div className="flex items-center justify-center gap-4 transition-all translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100">
                         {invoice.status !== 'Cancelled' && (
                           <>
@@ -333,9 +333,9 @@ export default function Invoices() {
                   </motion.tr>
                 ))}
               </AnimatePresence>
-            </tbody>
-          </table>
-        </div>
+            </tbody >
+          </table >
+        </div >
 
         {!filteredInvoices.length && (
           <div className="p-32 text-center space-y-8">
@@ -344,8 +344,9 @@ export default function Invoices() {
             </div>
             <p className="text-muted/40 font-black uppercase tracking-[0.5em] text-[10px] ">No Masterpiece Records Detected in Matrix</p>
           </div>
-        )}
-      </div>
+        )
+        }
+      </div >
 
       {selectedInvoice && (
         <InvoiceDetailModal
@@ -353,7 +354,7 @@ export default function Invoices() {
           onClose={() => setSelectedInvoice(null)}
         />
       )}
-    </div>
+    </div >
   );
 }
 

@@ -144,101 +144,101 @@ export default function Clients() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-background/80">
-                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap">Identity</th>
-                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap">Tethers & Signals</th>
-                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap text-center">Frequency</th>
-                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/5">
-              <AnimatePresence mode="popLayout">
-                {filteredClients.map((client, index) => (
-                  <motion.tr
-                    key={client._id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 20 }}
-                    transition={{ delay: index * 0.02, ease: "easeOut" }}
-                    className="hover:bg-white/5 transition-all group"
-                  >
-                    <td className="px-10 py-8">
-                      <div className="flex items-center gap-6">
-                        <div className="w-16 h-16 rounded-2xl bg-background p-1 border border-white/10 group-hover:rotate-6 transition-all duration-500 shadow-2xl relative overflow-hidden">
-                          <img
-                            src={client.profileImage ? (client.profileImage.startsWith('/uploads') ? `${IMAGE_URL}${client.profileImage}` : client.profileImage) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${client.name}`}
-                            alt={client.name}
-                            className="w-full h-full rounded-2xl object-cover grayscale transition-all duration-700 group-hover:grayscale-0"
-                          />
-                        </div>
-                        <div>
-                          <p className="font-black text-white text-base tracking-tighter uppercase  whitespace-nowrap font-luxury group-hover:text-primary transition-colors leading-none mb-3">{client.name}</p>
-                          <div className="flex items-center gap-2">
-                            <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-                            <p className="text-[9px] font-black text-muted uppercase tracking-[0.2em] whitespace-nowrap">Protocol Est. {new Date(client.createdAt).getFullYear()}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-10 py-8">
-                      <div className="space-y-3">
-                        <p className="text-[10px] font-black text-muted group-hover:text-white transition-colors flex items-center gap-4 whitespace-nowrap tracking-widest uppercase">
-                          <Mail size={14} className="text-primary/40 group-hover:text-primary" />
-                          {client.email}
-                        </p>
-                        <p className="text-[10px] font-black text-muted group-hover:text-white transition-colors flex items-center gap-4 whitespace-nowrap tracking-widest uppercase">
-                          <Phone size={14} className="text-primary/40 group-hover:text-primary" />
-                          {client.phone}
-                        </p>
-                      </div>
-                    </td>
+                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap">Identity</th>
+                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap">Tethers & Signals</th>
+                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap text-center">Frequency</th>
+                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap text-right">Actions</th>
+              </tr >
+            </thead >
+    <tbody className="divide-y divide-white/5">
+      <AnimatePresence mode="popLayout">
+        {filteredClients.map((client, index) => (
+          <motion.tr
+            key={client._id}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 20 }}
+            transition={{ delay: index * 0.02, ease: "easeOut" }}
+            className="hover:bg-white/5 transition-all group"
+          >
+            <td className="px-5 py-5">
+              <div className="flex items-center gap-6">
+                <div className="w-16 h-16 rounded-2xl bg-background p-1 border border-white/10 group-hover:rotate-6 transition-all duration-500 shadow-2xl relative overflow-hidden">
+                  <img
+                    src={client.profileImage ? (client.profileImage.startsWith('/uploads') ? `${IMAGE_URL}${client.profileImage}` : client.profileImage) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${client.name}`}
+                    alt={client.name}
+                    className="w-full h-full rounded-2xl object-cover grayscale transition-all duration-700 group-hover:grayscale-0"
+                  />
+                </div>
+                <div>
+                  <p className="font-black text-white text-base tracking-tighter uppercase  whitespace-nowrap font-luxury group-hover:text-primary transition-colors leading-none mb-3">{client.name}</p>
+                  <div className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                    <p className="text-[9px] font-black text-muted uppercase tracking-[0.2em] whitespace-nowrap">Protocol Est. {new Date(client.createdAt).getFullYear()}</p>
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td className="px-5 py-5">
+              <div className="space-y-3">
+                <p className="text-[10px] font-black text-muted group-hover:text-white transition-colors flex items-center gap-4 whitespace-nowrap tracking-widest uppercase">
+                  <Mail size={14} className="text-primary/40 group-hover:text-primary" />
+                  {client.email}
+                </p>
+                <p className="text-[10px] font-black text-muted group-hover:text-white transition-colors flex items-center gap-4 whitespace-nowrap tracking-widest uppercase">
+                  <Phone size={14} className="text-primary/40 group-hover:text-primary" />
+                  {client.phone}
+                </p>
+              </div>
+            </td>
 
-                    <td className="px-10 py-8 text-center">
-                      <div className="inline-flex flex-col items-center bg-background/50 px-6 py-4 rounded-2xl border border-white/5 group-hover:bg-primary transition-all duration-500">
-                        <span className="text-xl font-black text-white tracking-tighter whitespace-nowrap group-hover:text-secondary">{(client.bookingHistory?.length || 0).toString().padStart(2, '0')}</span>
-                        <span className="text-[8px] font-black text-primary uppercase tracking-[0.3em] mt-1 whitespace-nowrap group-hover:text-secondary group-hover:opacity-40 ">Rituals</span>
-                      </div>
-                    </td>
-                    <td className="px-10 py-8 text-right">
-                      <div className="flex items-center justify-end gap-3 translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-500">
-                        <button
-                          onClick={() => navigate(`/admin/invoices?id=${client.name}`)}
-                          className="p-4 bg-background border border-white/5 rounded-2xl text-muted hover:text-white transition-all shadow-xl"
-                        >
-                          <FileText size={18} />
-                        </button>
-                        <button
-                          onClick={() => {
-                            setProfileClient(client);
-                            setIsProfileOpen(true);
-                          }}
-                          className="p-4 bg-background border border-white/5 rounded-2xl text-muted hover:text-primary transition-all shadow-xl"
-                        >
-                          <Eye size={18} />
-                        </button>
-                        <button
-                          onClick={() => handleEdit(client)}
-                          className="p-4 bg-background border border-white/5 rounded-2xl text-muted hover:text-primary transition-all shadow-xl"
-                        >
-                          <Edit3 size={18} />
-                        </button>
-                        <button
-                          onClick={() => {
-                            setClientToDelete(client);
-                            setIsDeleteModalOpen(true);
-                          }}
-                          className="p-4 bg-background border border-rose-500/10 rounded-2xl text-muted hover:text-rose-500 transition-all shadow-xl"
-                        >
-                          <Trash2 size={18} />
-                        </button>
-                      </div>
-                    </td>
-                  </motion.tr>
-                ))}
-              </AnimatePresence>
-            </tbody>
-          </table>
-        </div>
-      </div>
+            <td className="px-5 py-5 text-center">
+              <div className="inline-flex flex-col items-center bg-background/50 px-6 py-4 rounded-2xl border border-white/5 group-hover:bg-primary transition-all duration-500">
+                <span className="text-xl font-black text-white tracking-tighter whitespace-nowrap group-hover:text-secondary">{(client.bookingHistory?.length || 0).toString().padStart(2, '0')}</span>
+                <span className="text-[8px] font-black text-primary uppercase tracking-[0.3em] mt-1 whitespace-nowrap group-hover:text-secondary group-hover:opacity-40 ">Rituals</span>
+              </div>
+            </td>
+            <td className="px-5 py-5 text-right">
+              <div className="flex items-center justify-end gap-3 translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-500">
+                <button
+                  onClick={() => navigate(`/admin/invoices?id=${client.name}`)}
+                  className="p-4 bg-background border border-white/5 rounded-2xl text-muted hover:text-white transition-all shadow-xl"
+                >
+                  <FileText size={18} />
+                </button>
+                <button
+                  onClick={() => {
+                    setProfileClient(client);
+                    setIsProfileOpen(true);
+                  }}
+                  className="p-4 bg-background border border-white/5 rounded-2xl text-muted hover:text-primary transition-all shadow-xl"
+                >
+                  <Eye size={18} />
+                </button>
+                <button
+                  onClick={() => handleEdit(client)}
+                  className="p-4 bg-background border border-white/5 rounded-2xl text-muted hover:text-primary transition-all shadow-xl"
+                >
+                  <Edit3 size={18} />
+                </button>
+                <button
+                  onClick={() => {
+                    setClientToDelete(client);
+                    setIsDeleteModalOpen(true);
+                  }}
+                  className="p-4 bg-background border border-rose-500/10 rounded-2xl text-muted hover:text-rose-500 transition-all shadow-xl"
+                >
+                  <Trash2 size={18} />
+                </button>
+              </div>
+            </td>
+          </motion.tr>
+        ))}
+      </AnimatePresence>
+    </tbody>
+          </table >
+        </div >
+      </div >
 
       <Modal
         isOpen={isDrawerOpen}
@@ -454,7 +454,7 @@ export default function Clients() {
           </div>
         )}
       </Modal>
-    </div>
+    </div >
   );
 }
 

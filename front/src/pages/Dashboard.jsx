@@ -32,10 +32,12 @@ import { fetchDashboardInsights } from '../redux/slices/dashboardSlice';
 import toast from 'react-hot-toast';
 import { IMAGE_URL } from '../utils/BASE_URL';
 import { format, formatDistanceToNow, isToday } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
   const dispatch = useDispatch();
   const { data, loading, error } = useSelector((state) => state.dashboard);
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchDashboardInsights());
@@ -171,9 +173,9 @@ export default function Dashboard() {
             <Star className="text-primary" size={24} />
             Ritual Hierarchy
           </h3>
-          <div className="space-y-10 flex-1 overflow-y-auto custom-scrollbar pr-2">
+          <div className="space-y-6 flex-1 max-h-[300px] overflow-y-auto custom-scrollbar pr-2">
             {data.serviceHierarchy.map((service, i) => (
-              <div key={i} className="space-y-4 group">
+              <div key={i} className="space-y-2 group">
                 <div className="flex justify-between items-end text-[10px] font-black uppercase tracking-[0.4em] text-muted ">
                   <span className="text-white truncate max-w-[160px] group-hover:text-primary transition-colors">{service.name}</span>
                   <span className="text-primary opacity-60 group-hover:opacity-100">{service.value}% Intensity</span>
@@ -192,7 +194,7 @@ export default function Dashboard() {
               </div>
             ))}
           </div>
-          <div className="mt-10 pt-10 border-t border-white/5">
+          <div onClick={() => navigate('/admin/categories')} className="mt-10 pt-10 border-t border-white/5">
             <button className="w-full py-5 bg-background border border-white/5 rounded-2xl text-[10px] font-black uppercase tracking-[0.4em] text-muted hover:text-white transition-all  font-luxury">
               VIEW ALL ANALYTICS
             </button>

@@ -241,7 +241,7 @@ const ServicesPreview = () => {
         </div>
 
         <div className="mt-16 flex justify-center">
-          <Link to="/services" className="group flex items-center gap-4 px-8 py-4 rounded-xl border-2 border-white text-white text-xs font-black uppercase tracking-[0.2em] hover:bg-white hover:text-background transition-all">
+          <Link to="/services" className="group flex items-center gap-4 px-8 py-4 rounded-xl border-2 border-primary text-primary text-xs font-black uppercase tracking-[0.2em] hover:bg-primary hover:text-secondary transition-all">
             View All Services
             <ChevronRight size={16} className="group-hover:translate-x-2 transition-transform" />
           </Link>
