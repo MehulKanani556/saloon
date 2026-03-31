@@ -71,7 +71,7 @@ const AppContent = () => {
         <Route path="/admin/settings" element={<PrivateRoute roles={['Admin']}><Settings /></PrivateRoute>} />
 
         {/* Staff Routes */}
-        <Route path="/staff/dashboard" element={<PrivateRoute roles={['Staff']}><div className="p-10"><h1 className="text-3xl font-black text-slate-800">STAFF DASHBOARD</h1><p className="text-slate-400 mt-4">Welcome back to your workspace.</p></div></PrivateRoute>} />
+        <Route path="/staff/dashboard" element={<PrivateRoute roles={['Staff']}><div className="p-10"><h1 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">STAFF DASHBOARD</h1><p className="text-muted/60 text-[10px] font-black uppercase tracking-[0.4em]">Welcome back to your workspace.</p></div></PrivateRoute>} />
         <Route path="/staff/appointments" element={<PrivateRoute roles={['Staff']}><Appointments /></PrivateRoute>} />
         
         {/* Client/General Auth Routes */}

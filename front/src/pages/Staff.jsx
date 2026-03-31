@@ -135,8 +135,8 @@ export default function Staff() {
             <LayoutGrid size={32} strokeWidth={2.5} />
           </div>
           <div className="min-w-0">
-            <h1 className="text-3xl lg:text-4xl font-black text-white tracking-tighter uppercase leading-none truncate md:whitespace-normal font-luxury ">Artisan Collective</h1>
-            <p className="text-[10px] font-black text-muted uppercase tracking-[0.3em] mt-3 opacity-60 ">Cataloging Master Grooming Specialists</p>
+            <h1 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">Artisan Collective</h1>
+            <p className="text-[10px] font-black text-muted uppercase tracking-[0.3em] opacity-60">Cataloging Master Grooming Specialists</p>
           </div>
         </div>
         <button

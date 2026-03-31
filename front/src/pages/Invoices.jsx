@@ -210,8 +210,8 @@ export default function Invoices() {
             <FileText size={32} strokeWidth={2.5} />
           </div>
           <div className="min-w-0">
-            <h1 className="text-3xl lg:text-4xl font-black text-white tracking-tighter uppercase leading-none truncate md:whitespace-normal font-luxury ">Financial Archive</h1>
-            <p className="text-[10px] font-black text-muted uppercase tracking-[0.3em] mt-3 opacity-60 ">Audit trail of all financial ritual settlements</p>
+            <h1 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">Financial Archive</h1>
+            <p className="text-[10px] font-black text-muted uppercase tracking-[0.3em] opacity-60">Audit trail of all financial ritual settlements</p>
           </div>
         </div>
 
@@ -235,13 +235,13 @@ export default function Invoices() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-background/80">
-                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary italic whitespace-nowrap">Ritual Ref</th>
-                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary italic whitespace-nowrap">Client Identity</th>
-                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary italic whitespace-nowrap">Masterpiece</th>
-                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary italic whitespace-nowrap">Execution</th>
-                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary italic whitespace-nowrap">Value</th>
-                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary italic whitespace-nowrap">Settlement</th>
-                <th className="px-5 py-5 text-center text-[10px] font-black uppercase tracking-[0.4em] text-primary italic whitespace-nowrap">Actions</th>
+                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Ritual Ref</th>
+                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Client Identity</th>
+                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Masterpiece</th>
+                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Execution</th>
+                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Value</th>
+                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Settlement</th>
+                <th className="px-5 py-5 text-center text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">

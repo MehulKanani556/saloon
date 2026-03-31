@@ -81,8 +81,8 @@ export default function ChangePassword() {
               <KeyRound size={32} strokeWidth={2.5} />
             </div>
             <div>
-              <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-[-0.05em]  leading-none mb-3 font-luxury">Security <span className="text-primary/50">Matrix</span></h2>
-              <p className="text-muted/60 text-[10px] font-black uppercase tracking-[0.5em] ">Synchronize Access Credentials</p>
+              <h2 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">Security <span className="text-primary/50">Matrix</span></h2>
+              <p className="text-muted/60 text-[10px] font-black uppercase tracking-[0.5em]">Synchronize Access Credentials</p>
             </div>
           </div>
 

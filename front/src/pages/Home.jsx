@@ -168,9 +168,9 @@ const ServicesPreview = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter text-center"
+            className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 text-center"
           >
-            Our Signature <span className="text-primary font-luxury ">Services</span>
+            Our Signature <span className="text-primary font-luxury">Services</span>
           </motion.h2>
           <motion.div
             initial={{ width: 0 }}
@@ -415,9 +415,9 @@ const TeamPreview = () => {
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter"
+            className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8"
           >
-            Meet Our <span className="text-primary ">Artists</span>
+            Meet Our <span className="text-primary">Artists</span>
           </motion.h2>
         </div>
 
@@ -578,7 +578,7 @@ const RitualMenu = () => {
           >
             The Ultimate Collection
           </motion.p>
-          <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mb-12">
+          <h2 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8">
             Ritual <span className="text-primary font-luxury">Menu</span>
           </h2>
 

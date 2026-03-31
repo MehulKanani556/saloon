@@ -63,10 +63,10 @@ export default function Settings() {
             <Building2 size={24} md:size={32} strokeWidth={2.5} />
           </div>
           <div className="min-w-0">
-            <h1 className="text-xl sm:text-3xl lg:text-4xl font-black text-white tracking-tighter uppercase leading-none  truncate md:whitespace-normal font-luxury">
+            <h1 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">
               Saloon Manifesto
             </h1>
-            <p className="text-muted font-black text-[8px] sm:text-[9px] lg:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.25em] mt-2 lg:mt-4 opacity-70">
+            <p className="text-muted font-black text-[8px] sm:text-[9px] lg:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.25em] opacity-70">
               Configure global business identity and operational protocols
             </p>
           </div>

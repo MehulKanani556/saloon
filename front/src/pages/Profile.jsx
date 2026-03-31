@@ -114,7 +114,7 @@ export default function Profile() {
 
               <div className="space-y-4 max-w-lg">
                 <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
-                  <h2 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter  font-luxury leading-none">Identity <span className="text-primary/50">Core</span></h2>
+                  <h2 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">Identity <span className="text-primary/50">Core</span></h2>
                   <div className="px-4 py-1.5 bg-primary/10 text-primary border border-primary/20 rounded-full text-[9px] font-black uppercase tracking-[0.3em] shadow-inner backdrop-blur-md">
                     {user?.role || 'CLIENT'}
                   </div>

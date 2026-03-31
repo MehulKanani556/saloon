@@ -220,8 +220,8 @@ export default function BookAppointment() {
               <Scissors size={28} />
             </div>
           </div>
-          <h1 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter  font-luxury">Book Your Ritual</h1>
-          <p className="text-muted font-black text-[10px] uppercase tracking-[0.3em] mt-4">Secure your spot in our sanctuary of elegance.</p>
+          <h1 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">Book Your Ritual</h1>
+          <p className="text-muted font-black text-[10px] uppercase tracking-[0.3em]">Secure your spot in our sanctuary of elegance.</p>
         </div>
 
         <div className="container px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 max-w-7xl mx-auto">

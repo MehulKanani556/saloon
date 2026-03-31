@@ -48,8 +48,8 @@ export default function Contact() {
                 <MessageSquare className="text-secondary" size={32} />
               </div>
             </motion.div>
-            <h1 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter  font-luxury">Get In <span className="text-primary ">Touch</span></h1>
-            <p className="text-muted font-black text-[10px] uppercase tracking-[0.4em] mt-6">Contact the artisans of beauty.</p>
+            <h1 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">Get In <span className="text-primary ">Touch</span></h1>
+            <p className="text-muted font-black text-[10px] uppercase tracking-[0.4em]">Contact the artisans of beauty.</p>
           </div>
         </section>
 

@@ -35,7 +35,7 @@ export default function MyAppointments() {
               <div className="w-16 h-[2px] bg-luxury-gradient" />
               <p className="text-[10px] font-black text-primary uppercase tracking-[0.6em] animate-pulse">Temporal Logistics</p>
             </div>
-            <h1 className="text-5xl md:text-7xl font-black text-white uppercase tracking-[-0.05em]  font-luxury leading-none">The Ritual <span className="text-primary/50">Archive</span></h1>
+            <h1 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">The Ritual <span className="text-primary/50">Archive</span></h1>
             <p className="text-muted/40 text-[11px] uppercase font-black tracking-[0.5em] flex items-center gap-4 ">
               Chronological ledger of your aesthetic evolution within the matrix
             </p>

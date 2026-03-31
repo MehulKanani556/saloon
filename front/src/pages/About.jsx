@@ -33,7 +33,7 @@ const Hero = () => {
             <span className="text-primary font-bold uppercase tracking-[0.3em] text-[10px]">Est. 2014</span>
           </div>
 
-          <h1 className="text-5xl md:text-8xl font-black text-white uppercase tracking-tighter mb-8 leading-[0.85] md:leading-[0.85]">
+          <h1 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">
             OUR <br />
             <span className="relative inline-block mt-2 font-luxury ">
               STORY

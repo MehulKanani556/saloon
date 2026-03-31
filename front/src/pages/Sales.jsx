@@ -60,8 +60,8 @@ export default function Sales() {
             <Wallet size={24} md:size={32} strokeWidth={2.5} />
           </div>
           <div className="space-y-1">
-            <h1 className="text-2xl md:text-4xl font-black text-white tracking-tighter uppercase leading-tight  font-luxury">Financial Matrix</h1>
-            <p className="text-muted font-bold text-[8px] md:text-[10px] uppercase tracking-[0.15em] md:tracking-[0.25em] mt-2 opacity-70 group-hover:opacity-100 transition-opacity whitespace-normal">Real-time audit of saloon revenue ecosystems</p>
+            <h1 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">Financial Matrix</h1>
+            <p className="text-muted font-bold text-[8px] md:text-[10px] uppercase tracking-[0.15em] md:tracking-[0.25em] opacity-70 group-hover:opacity-100 transition-opacity whitespace-normal">Real-time audit of saloon revenue ecosystems</p>
           </div>
         </div>
         <div className="flex flex-col md:flex-row gap-4">

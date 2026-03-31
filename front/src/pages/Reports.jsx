@@ -37,7 +37,7 @@ export default function Reports() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-1">
-          <h1 className="text-4xl font-black text-white tracking-tighter uppercase leading-tight  font-luxury">Business Intelligence</h1>
+          <h1 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">Business Intelligence</h1>
           <p className="text-muted font-bold text-xs uppercase tracking-[0.2em]">Operational audit and growth analytics vault</p>
         </div>
       </div>

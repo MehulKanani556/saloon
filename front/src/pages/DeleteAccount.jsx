@@ -40,8 +40,8 @@ export default function DeleteAccount() {
               <Trash2 size={40} strokeWidth={2.5} />
             </div>
             <div>
-              <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-[-0.05em]  font-luxury leading-none mb-3">Identity <span className="text-red-500/50">Dissolution</span></h2>
-              <p className="text-muted/40 text-[10px] font-black uppercase tracking-[0.5em]  flex items-center gap-3">
+              <h2 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">Identity <span className="text-red-500/50">Dissolution</span></h2>
+              <p className="text-muted/40 text-[10px] font-black uppercase tracking-[0.5em] flex items-center gap-3">
                 <AlertCircle size={14} className="text-red-500/40" /> Irreversible Digital Detachment
               </p>
             </div>

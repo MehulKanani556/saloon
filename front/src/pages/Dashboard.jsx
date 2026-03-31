@@ -62,8 +62,8 @@ export default function Dashboard() {
             <Activity size={32} strokeWidth={2.5} />
           </div>
           <div className="min-w-0">
-            <h1 className="text-3xl lg:text-4xl font-black text-white tracking-tighter uppercase leading-none truncate md:whitespace-normal font-luxury ">Executive Summary</h1>
-            <div className="flex items-center gap-4 mt-3">
+            <h1 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">Executive Summary</h1>
+            <div className="flex items-center gap-4">
               <div className="flex gap-1.5">
                 {[1, 2, 3].map(i => (
                   <motion.span
