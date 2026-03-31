@@ -1,15 +1,15 @@
-const Client = require('../models/Client');
+const User = require('../models/User');
 const { deleteFromS3 } = require('../utils/s3Utils');
 
 // @desc Get all clients
 const getClients = async (req, res) => {
-    const clients = await Client.find({}).sort({ createdAt: -1 }).populate('bookingHistory');
+    const clients = await User.find({ role: 'User' }).sort({ createdAt: -1 }).populate('bookingHistory');
     res.json(clients);
 };
 
 // @desc Get client by ID
 const getClientById = async (req, res) => {
-    const client = await Client.findById(req.params.id);
+    const client = await User.findOne({ _id: req.params.id, role: 'User' });
     if (client) {
         res.json(client);
     } else {
@@ -22,7 +22,8 @@ const createClient = async (req, res) => {
     const { name, email, phone } = req.body;
     let profileImage = req.body.profileImage || ''; // Populated by uploadMiddleware if image uploaded
 
-    const clientExists = await Client.findOne({ 
+    const clientExists = await User.findOne({ 
+        role: 'User',
         $or: [{ email }, { phone }] 
     });
 
@@ -32,7 +33,7 @@ const createClient = async (req, res) => {
         });
     }
 
-    const client = new Client({ name, email, phone, profileImage });
+    const client = new User({ name, email, phone, profileImage, role: 'User' });
     const createdClient = await client.save();
     res.status(201).json(createdClient);
 };
@@ -42,10 +43,11 @@ const updateClient = async (req, res) => {
     const { name, email, phone } = req.body;
     let profileImage = req.body.profileImage; // From uploadMiddleware if new, else from body
     
-    const targetClient = await Client.findById(req.params.id);
+    const targetClient = await User.findOne({ _id: req.params.id, role: 'User' });
     if (targetClient) {
         // Validation check for collisions with other clients
-        const collisionCheck = await Client.findOne({
+        const collisionCheck = await User.findOne({
+            role: 'User',
             _id: { $ne: req.params.id },
             $or: [{ email }, { phone }]
         });
@@ -75,7 +77,7 @@ const updateClient = async (req, res) => {
 
 // @desc Delete client
 const deleteClient = async (req, res) => {
-    const client = await Client.findById(req.params.id);
+    const client = await User.findOne({ _id: req.params.id, role: 'User' });
     if (client) {
         // Delete image from S3 before removing record
         if (client.profileImage) {

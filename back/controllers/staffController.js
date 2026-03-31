@@ -1,8 +1,8 @@
-const Staff = require('../models/Staff');
+const User = require('../models/User');
 const { deleteFromS3 } = require('../utils/s3Utils');
 
 const getStaff = async (req, res) => {
-    const staff = await Staff.find({}).populate('services');
+    const staff = await User.find({ role: 'Staff' }).populate('services');
     res.json(staff);
 };
 
@@ -11,14 +11,14 @@ const createStaff = async (req, res) => {
     if (services) {
         services = Array.isArray(services) ? services : [services];
     }
-    const staff = new Staff({ name, email, services, profileImage, availability, ratings });
+    const staff = new User({ name, email, services, profileImage, availability, ratings, role: 'Staff' });
     let createdStaff = await staff.save();
     createdStaff = await createdStaff.populate('services');
     res.status(201).json(createdStaff);
 };
 
 const updateStaff = async (req, res) => {
-    const staff = await Staff.findById(req.params.id);
+    const staff = await User.findOne({ _id: req.params.id, role: 'Staff' });
     if (staff) {
         // If image changed, delete old one from S3
         if (req.body.profileImage && staff.profileImage && req.body.profileImage !== staff.profileImage) {
@@ -44,7 +44,7 @@ const updateStaff = async (req, res) => {
 };
 
 const deleteStaff = async (req, res) => {
-    const staff = await Staff.findById(req.params.id);
+    const staff = await User.findOne({ _id: req.params.id, role: 'Staff' });
     if (staff) {
         // Delete image from S3 before removing record
         if (staff.profileImage) {

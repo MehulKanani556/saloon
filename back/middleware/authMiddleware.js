@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const Admin = require('../models/Admin');
+const User = require('../models/User');
 
 const protect = async (req, res, next) => {
     let token;
@@ -9,9 +9,9 @@ const protect = async (req, res, next) => {
             token = req.headers.authorization.split(' ')[1];
             const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET || 'access_secret');
             
-            req.admin = await Admin.findById(decoded.id).select('-password');
+            req.user = await User.findById(decoded.id).select('-password');
             
-            if (!req.admin) {
+            if (!req.user) {
                 return res.status(401).json({ message: 'Not authorized, user not found' });
             }
 
@@ -29,9 +29,9 @@ const protect = async (req, res, next) => {
 
 const authorize = (...roles) => {
     return (req, res, next) => {
-        if (!req.admin || !roles.includes(req.admin.role)) {
+        if (!req.user || !roles.includes(req.user.role)) {
             return res.status(403).json({ 
-                message: `Role ${req.admin ? req.admin.role : 'None'} is not authorized to access this route` 
+                message: `Role ${req.user ? req.user.role : 'None'} is not authorized to access this route` 
             });
         }
         next();

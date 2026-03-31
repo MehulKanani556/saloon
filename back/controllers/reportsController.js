@@ -1,7 +1,5 @@
 const Appointment = require('../models/Appointment');
-const Client = require('../models/Client');
-const Service = require('../models/Service');
-const Staff = require('../models/Staff');
+const User = require('../models/User');
 const moment = require('moment');
 
 // @desc Get Business Intelligence / Reports Data
@@ -11,9 +9,9 @@ const getReportIntel = async (req, res) => {
     try {
         const [appointments, clients, services, staff] = await Promise.all([
             Appointment.find().populate('client services'),
-            Client.countDocuments(),
+            User.countDocuments({ role: 'User' }),
             Service.countDocuments({ isActive: true }),
-            Staff.countDocuments()
+            User.countDocuments({ role: 'Staff' })
         ]);
 
         const completedPaid = appointments.filter(a => a.status === 'Completed' && a.paymentStatus === 'Paid');

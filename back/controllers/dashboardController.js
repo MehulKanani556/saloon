@@ -1,7 +1,5 @@
 const Appointment = require('../models/Appointment');
-const Client = require('../models/Client');
-const Service = require('../models/Service');
-const Staff = require('../models/Staff');
+const User = require('../models/User');
 const moment = require('moment');
 
 // @desc Get Dashboard Collective Intelligence
@@ -9,9 +7,9 @@ const getDashboardInsights = async (req, res) => {
     try {
         const [appointments, clients, services, staff] = await Promise.all([
             Appointment.find().populate('client services'),
-            Client.countDocuments(),
+            User.countDocuments({ role: 'User' }),
             Service.find().populate('category'),
-            Staff.find().limit(2)
+            User.find({ role: 'Staff' }).limit(2)
         ]);
 
         // 1. Core Matrix Stats

@@ -1,5 +1,5 @@
 const Appointment = require('../models/Appointment');
-const Client = require('../models/Client');
+const User = require('../models/User');
 const Service = require('../models/Service');
 
 const createAppointment = async (req, res) => {
@@ -13,9 +13,9 @@ const createAppointment = async (req, res) => {
 
     const totalPrice = servicesFound.reduce((acc, curr) => acc + curr.price, 0);
 
-    let client = await Client.findOne({ email: clientEmail });
+    let client = await User.findOne({ email: clientEmail, role: 'User' });
     if (!client) {
-        client = await Client.create({ name: clientName, email: clientEmail, phone: clientPhone });
+        client = await User.create({ name: clientName, email: clientEmail, phone: clientPhone, role: 'User' });
     } else if (clientPhone) {
         client.phone = clientPhone;
         await client.save();
@@ -43,7 +43,7 @@ const deleteAppointment = async (req, res) => {
     const appointment = await Appointment.findById(req.params.id);
     if (appointment) {
         if (appointment.client) {
-            await Client.findByIdAndUpdate(appointment.client, {
+            await User.findByIdAndUpdate(appointment.client, {
                 $pull: { bookingHistory: appointment._id }
             });
         }
@@ -68,9 +68,9 @@ const updateAppointment = async (req, res) => {
         }
 
         if (clientEmail && clientName) {
-            let client = await Client.findOne({ email: clientEmail });
+            let client = await User.findOne({ email: clientEmail, role: 'User' });
             if (!client) {
-                client = await Client.create({ name: clientName, email: clientEmail, phone: clientPhone });
+                client = await User.create({ name: clientName, email: clientEmail, phone: clientPhone, role: 'User' });
             } else if (clientPhone) {
                 client.phone = clientPhone;
                 await client.save();

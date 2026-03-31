@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const Admin = require('../models/Admin');
+const User = require('../models/User');
 
 const generateAccessToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_ACCESS_SECRET || 'access_secret', { expiresIn: '1m' });
@@ -16,13 +16,13 @@ const registerAdmin = async (req, res) => {
     const { name, email, password } = req.body;
 
     try {
-        const adminExists = await Admin.findOne({ email });
+        const adminExists = await User.findOne({ email });
 
         if (adminExists) {
             return res.status(400).json({ message: 'Admin already exists' });
         }
 
-        const admin = await Admin.create({ name, email, password });
+        const admin = await User.create({ name, email, password, role: 'Admin' });
 
         if (admin) {
             const accessToken = generateAccessToken(admin._id);
@@ -58,7 +58,7 @@ const loginAdmin = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        const admin = await Admin.findOne({ email });
+        const admin = await User.findOne({ email, role: 'Admin' });
 
         if (admin && (await admin.matchPassword(password))) {
             const accessToken = generateAccessToken(admin._id);
@@ -103,7 +103,7 @@ const refresh = async (req, res) => {
         async (err, decoded) => {
             if (err) return res.status(403).json({ message: 'Forbidden' });
 
-            const admin = await Admin.findById(decoded.id);
+            const admin = await User.findById(decoded.id);
             if (!admin) return res.status(401).json({ message: 'Unauthorized' });
 
             const accessToken = generateAccessToken(admin._id);
