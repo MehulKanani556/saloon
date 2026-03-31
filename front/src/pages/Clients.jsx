@@ -196,7 +196,7 @@ export default function Clients() {
                     <td className="px-4 md:px-8 md:py-8 py-4 text-right">
                       <div className="flex items-center justify-start gap-2 transition-opacity">
                         <button
-                          onClick={() => navigate(`/invoices?id=${client.name}`)}
+                          onClick={() => navigate(`/admin/invoices?id=${client.name}`)}
                           className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl text-slate-400 hover:text-indigo-500 transition-all border border-transparent hover:border-indigo-500/20"
                         >
                           <FileText size={18} />

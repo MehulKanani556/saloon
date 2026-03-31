@@ -225,10 +225,10 @@ export default function AdminServices() {
           <button
             type="submit"
             disabled={formik.isSubmitting}
-            className="w-full py-5 bg-slate-950 dark:bg-white text-white dark:text-slate-900 rounded-xl font-black text-[10px] uppercase tracking-[0.3em] shadow-xl hover:bg-saloon-600 transition-all flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50"
+            className="w-full py-5 bg-slate-950 dark:hover:bg-saloon-600 dark:bg-white text-white dark:text-slate-900 rounded-xl font-black text-sm uppercase tracking-[0.3em] shadow-xl hover:bg-saloon-600 transition-all flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50"
           >
-            <Sparkles size={16} />
-            {formik.isSubmitting ? 'Syncing...' : (editingService ? 'Refine Protocol' : 'Deploy Service')}
+            {/* <Sparkles size={16} /> */}
+            {formik.isSubmitting ? 'Syncing...' : (editingService ? 'Update Service' : 'Create Service')}
           </button>
         </form>
       </Modal>

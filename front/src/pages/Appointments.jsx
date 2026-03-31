@@ -442,9 +442,9 @@ export default function Appointments() {
           <div className="pt-4">
             <button
               type="submit" disabled={formik.isSubmitting}
-              className="w-full py-5 bg-slate-950 dark:bg-white text-white dark:text-slate-900 rounded-xl font-black uppercase text-[10px] tracking-[0.3em] shadow-xl hover:bg-saloon-600 transition-all flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50"
+              className="w-full py-5 bg-slate-950 dark:hover:bg-saloon-600 dark:bg-white text-white dark:text-slate-900 rounded-xl font-black uppercase text-sm tracking-[0.3em] shadow-xl hover:bg-saloon-600 transition-all flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50"
             >
-              {formik.isSubmitting ? 'Syncing...' : selectedAppointment ? 'Update Ritual' : 'Commit Booking'}
+              {formik.isSubmitting ? 'Syncing...' : selectedAppointment ? 'Update Appointment' : 'Create Appointment'}
               <Sparkles size={16} />
             </button>
           </div>

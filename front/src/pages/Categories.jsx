@@ -188,10 +188,10 @@ export default function Categories() {
           <button
             type="submit"
             disabled={formik.isSubmitting}
-            className="w-full py-5 bg-slate-950 dark:bg-white text-white dark:text-slate-900 rounded-xl font-black text-[10px] uppercase tracking-[0.3em] shadow-2xl hover:bg-saloon-600 dark:hover:bg-saloon-50 transition-all flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50"
+            className="w-full py-5 bg-slate-950 dark:hover:bg-saloon-600 dark:bg-white text-white dark:text-slate-900 rounded-xl font-black text-sm uppercase tracking-[0.3em] shadow-2xl hover:bg-saloon-600 transition-all flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50"
           >
-            <Sparkles size={16} />
-            {formik.isSubmitting ? 'Syncing...' : (editingCategory ? 'Refine Protocol' : 'Publish Category')}
+            {/* <Sparkles size={16} /> */}
+            {formik.isSubmitting ? 'Syncing...' : (editingCategory ? 'Update Category' : 'Create Category')}
           </button>
         </form>
       </Modal>
