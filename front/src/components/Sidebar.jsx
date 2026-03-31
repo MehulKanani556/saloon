@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector } from 'react-redux';
+import Logo from '../assets/logo.png';
 
 const sidebarItems = [
   { icon: LayoutDashboard, label: 'Dashboard', path: '/admin/dashboard' },
@@ -66,13 +67,13 @@ export default function Sidebar({ isOpen, setIsOpen }) {
             {(!isCollapsed || isDrawerMode) && (
               <motion.div
                 key="logo"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.2 }}
-                className="text-2xl font-black tracking-tighter bg-gradient-to-r from-saloon-600 to-rosegold-500 bg-clip-text text-transparent leading-none uppercase"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.3 }}
+                className="flex items-center gap-2"
               >
-                GLOW & ELEGANCE
+                <img src={Logo} alt="Logo" className="h-10 w-auto object-contain" />
               </motion.div>
             )}
           </AnimatePresence>

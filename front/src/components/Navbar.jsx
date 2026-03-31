@@ -3,6 +3,7 @@ import { Search, Moon, Sun, LogOut, Menu, ChevronDown, User, ShieldCheck } from 
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../redux/slices/authSlice';
 import { motion, AnimatePresence } from 'framer-motion';
+import Logo from '../assets/logo.png';
 
 export default function Navbar({ darkMode, setDarkMode, onMenuClick }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -38,11 +39,14 @@ export default function Navbar({ darkMode, setDarkMode, onMenuClick }) {
         </button>
 
         <div className="hidden lg:flex items-center gap-6 px-1 py-1">
-          <div className="flex flex-col">
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] leading-none mb-1">Glow & Elegance Status</p>
-            <div className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-pulse" />
-              <p className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest italic">System: Online</p>
+          <div className="flex items-center gap-4">
+            <img src={Logo} alt="Logo" className="h-8 w-auto object-contain" />
+            <div className="flex flex-col">
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] leading-none mb-1">Status</p>
+              <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-pulse" />
+                <p className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest italic">Online</p>
+              </div>
             </div>
           </div>
           <div className="h-8 w-[1px] bg-slate-200 dark:bg-white/10" />

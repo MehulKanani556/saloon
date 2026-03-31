@@ -4,6 +4,7 @@ import { Mail, Lock, Sparkles, ArrowRight, AlertCircle } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginAdmin } from '../redux/slices/authSlice';
 import { useNavigate, Link } from 'react-router-dom';
+import Logo from '../assets/logo.png';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
@@ -48,12 +49,10 @@ export default function Login() {
         className="glass-card w-full max-w-md p-10 border-white/60 shadow-premium relative z-10"
       >
         <div className="flex flex-col items-center text-center mb-10">
-          <div className="w-20 h-20 rounded-3xl bg-gradient-to-tr from-saloon-500 to-rosegold-400 p-0.5 shadow-md mb-6">
-            <div className="w-full h-full rounded-[22px] bg-white flex items-center justify-center">
-              <Sparkles size={32} className="text-saloon-500" />
-            </div>
+          <div className="mb-6">
+            <img src={Logo} alt="Glow & Elegance" className="h-16 w-auto object-contain" />
           </div>
-          <h1 className="text-3xl font-black text-slate-800 tracking-tight leading-none">GLOW SALOON</h1>
+          <h1 className="text-3xl font-black text-slate-800 tracking-tight leading-none">GLOW & ELEGANCE</h1>
           <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.2em] mt-3 underline decoration-saloon-100 underline-offset-4 decoration-2">Admin Portal</p>
         </div>
 
@@ -114,13 +113,13 @@ export default function Login() {
 
         <div className="mt-8 text-center">
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-            New to Glow Saloon? 
+            New to Glow & Elegance? 
             <Link to="/signup" className="text-saloon-500 ml-2 hover:underline">Establish Identity</Link>
           </p>
         </div>
 
         <p className="mt-10 text-center text-[9px] font-black text-slate-300 uppercase tracking-[0.3em] leading-relaxed">
-          Proprietary Intelligence Suite <br/> Sia Elegance Collective
+          Proprietary Intelligence Suite <br/> Glow & Elegance Collective
         </p>
       </motion.div>
     </div>

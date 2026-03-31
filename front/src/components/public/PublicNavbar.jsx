@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Menu, X, LogIn } from 'lucide-react';
+import Logo from '../../assets/logo.png';
 
 const PublicNavbar = () => {
   const { adminInfo } = useSelector((state) => state.auth);
@@ -29,13 +30,22 @@ const PublicNavbar = () => {
         : 'bg-transparent py-3 md:py-5'
     }`}>
       <div className="container mx-auto px-6 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 group">
+         {/* <Link to="/" className="flex items-center gap-2 group">
           <span className="text-xl md:text-2xl transition-transform group-hover:rotate-12">✂</span>
           <h1 className={`text-sm md:text-xl font-black uppercase tracking-[0.2em] transition-colors ${
             showSolid ? 'text-slate-900 dark:text-white' : 'text-white font-bold drop-shadow-md'
           }`}>
             Glow <span className="text-saloon-500">&</span> Elegance
           </h1>
+        </Link> */}
+        <Link to="/" className="flex items-center gap-2 group">
+          <img 
+            src={Logo} 
+            alt="Glow & Elegance" 
+            className={`h-8 md:h-12 w-auto object-contain transition-all duration-500 ${
+              showSolid ? '' : 'brightness-0 invert drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]'
+            }`} 
+          />
         </Link>
 
         {/* Desktop Links */}
@@ -97,7 +107,7 @@ const PublicNavbar = () => {
               <button 
                 onClick={() => {
                   setIsMobileMenuOpen(false);
-                  navigate(adminInfo ? '/dashboard' : '/login');
+                  navigate(adminInfo ? '/admin/dashboard' : '/login');
                 }}
                 className="w-full py-4 text-[10px] font-black uppercase tracking-widest text-slate-400 text-left flex items-center gap-2"
               >

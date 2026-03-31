@@ -4,6 +4,7 @@ import { Mail, Lock, User, Sparkles, ArrowRight, AlertCircle } from 'lucide-reac
 import { useDispatch, useSelector } from 'react-redux';
 import { signupAdmin } from '../redux/slices/authSlice';
 import { useNavigate, Link } from 'react-router-dom';
+import Logo from '../assets/logo.png';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
@@ -49,10 +50,8 @@ export default function Signup() {
                 className="glass-card w-full max-w-lg p-10 border-white/60 shadow-premium relative z-10"
             >
                 <div className="flex flex-col items-center text-center mb-8">
-                    <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-saloon-500 to-rosegold-400 p-0.5 shadow-md mb-4">
-                        <div className="w-full h-full rounded-[22px] bg-white flex items-center justify-center">
-                            <Sparkles size={28} className="text-saloon-500" />
-                        </div>
+                    <div className="mb-6">
+                        <img src={Logo} alt="Glow & Elegance" className="h-16 w-auto object-contain" />
                     </div>
                     <h1 className="text-2xl font-black text-slate-800 tracking-tight leading-none">JOIN THE ELITE</h1>
                     <p className="text-slate-400 text-[9px] font-bold uppercase tracking-[0.2em] mt-3 underline decoration-saloon-100 underline-offset-4 decoration-2">Create Admin Profile</p>
@@ -141,7 +140,7 @@ export default function Signup() {
                 </div>
 
                 <p className="mt-10 text-center text-[8px] font-black text-slate-300 uppercase tracking-[0.3em] leading-relaxed">
-                    Glow Saloon Collective <br/> Global Administrative Core
+                    Glow & Elegance Collective <br/> Global Administrative Core
                 </p>
             </motion.div>
         </div>

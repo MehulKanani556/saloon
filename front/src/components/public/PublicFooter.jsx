@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Instagram, Facebook, Twitter, Mail, Phone, MapPin } from 'lucide-react';
+import Logo from '../../assets/logo.png';
 
 const PublicFooter = () => {
   return (
@@ -9,11 +10,17 @@ const PublicFooter = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16 text-center md:text-left">
           {/* Brand */}
           <div className="flex flex-col items-center md:items-start">
-            <Link to="/" className="flex items-center gap-2 mb-6 group">
-              <span className="text-2xl transition-transform group-hover:rotate-12">✂</span>
-              <h1 className="text-lg font-black text-white uppercase tracking-[0.2em]">
-                Glow <span className="text-saloon-500">&</span> Elegance
-              </h1>
+            <Link to="/" className="flex flex-col items-center gap-2 mb-6 group">
+              <img
+                src={Logo}
+                alt="Logo"
+                className="h-12 w-auto brightness-0 invert drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]"
+              />
+              <div className="flex items-center gap-2">
+                <h1 className="text-lg font-black text-white uppercase tracking-[0.2em]">
+                  Glow <span className="text-saloon-500">&</span> Elegance
+                </h1>
+              </div>
             </Link>
             <p className="text-slate-500 text-[10px] font-bold leading-relaxed uppercase tracking-[0.15em] mb-8 max-w-[240px]">
               The ultimate destination for luxury beauty and lifestyle. Crafting Your Perfect Style Since Day One.
