@@ -1,15 +1,36 @@
 const Appointment = require('../models/Appointment');
 const User = require('../models/User');
 const Service = require('../models/Service');
+const moment = require('moment');
 
 const createAppointment = async (req, res) => {
     const { clientEmail, clientName, clientPhone, services, assignments, date, status, paymentStatus } = req.body;
 
     // 1. Resolve Services and Assignments
-    // If assignments provided: [{ service: 'id', staff: 'id' }]
-    // If only services provided: [{ service: 'id' }] -> need to auto-assign staff
     let finalAssignments = assignments || [];
-    const serviceIds = services || finalAssignments.map(a => a.service);
+    let serviceIds = services || finalAssignments.map(a => a.service);
+
+    // Robust parsing for serviceIds from form-data or mixed inputs
+    if (serviceIds && typeof serviceIds === 'string') {
+        if (serviceIds.includes(',')) {
+            serviceIds = serviceIds.split(',').map(s => s.replace(/[\[\]'"]/g, '').trim());
+        } else {
+            serviceIds = [serviceIds.replace(/[\[\]'"]/g, '').trim()];
+        }
+    }
+
+    // Ensure it's an array and filter valid 24-char IDs
+    serviceIds = Array.isArray(serviceIds) ? serviceIds.filter(s => s && s.length === 24) : [];
+
+    // 2. Validate Temple Coordinates (Date)
+    const normalizedDate = moment(date, ["DD/MM/YYYY", "YYYY-MM-DD", "MM/DD/YYYY"], true);
+    if (!date || !normalizedDate.isValid()) {
+        return res.status(400).json({ message: 'Temporal coordinates are invalid or missing. Ensure format is DD/MM/YYYY or YYYY-MM-DD.' });
+    }
+
+    if (serviceIds.length === 0) {
+        return res.status(400).json({ message: 'At least one ritual component (service) is required' });
+    }
 
     const servicesFound = await Service.find({ _id: { $in: serviceIds } });
     if (!servicesFound.length) {
@@ -17,9 +38,9 @@ const createAppointment = async (req, res) => {
     }
 
     const totalPrice = servicesFound.reduce((acc, curr) => acc + curr.price, 0);
-    const requestedTime = new Date(date);
+    const requestedTime = normalizedDate.toDate();
 
-    // 2. Handle Auto-Assignment if needed
+    // 3. Handle Auto-Assignment if needed
     if (finalAssignments.length === 0 || !finalAssignments[0].staff) {
         // Find qualified staff who can do ALL rituals
         const eligibleStaff = await User.find({
@@ -44,7 +65,7 @@ const createAppointment = async (req, res) => {
         if (!assignedStaffId) {
             return res.status(400).json({ message: 'All qualified masters are occupied during this temporal slot' });
         }
-        
+
         finalAssignments = serviceIds.map(sid => ({ service: sid, staff: assignedStaffId }));
     } else {
         // Verify user-selected staff availability
@@ -72,7 +93,7 @@ const createAppointment = async (req, res) => {
     const appointment = new Appointment({
         client: client._id,
         assignments: finalAssignments,
-        appointmentDate: date,
+        appointmentDate: requestedTime,
         status: status || 'Pending',
         paymentStatus: paymentStatus || 'Pending',
         totalPrice
@@ -85,7 +106,7 @@ const createAppointment = async (req, res) => {
 };
 
 const getAppointments = async (req, res) => {
-    const appointments = await Appointment.find({}).populate('client').populate('services');
+    const appointments = await Appointment.find({}).populate(['client', 'assignments.service', 'assignments.staff']);
     res.json(appointments);
 };
 
@@ -109,11 +130,24 @@ const updateAppointment = async (req, res) => {
     const appointment = await Appointment.findById(req.params.id);
 
     if (appointment) {
-        if (services && Array.isArray(services) && services.length > 0) {
-            const servicesFound = await Service.find({ _id: { $in: services } });
-            if (servicesFound.length) {
-                appointment.totalPrice = servicesFound.reduce((acc, curr) => acc + curr.price, 0);
-                appointment.services = services;
+        let sInput = services;
+        if (sInput) {
+            if (typeof sInput === 'string') {
+                if (sInput.includes(',')) {
+                    sInput = sInput.split(',').map(s => s.replace(/[\[\]'"]/g, '').trim());
+                } else {
+                    sInput = [sInput.replace(/[\[\]'"]/g, '').trim()];
+                }
+            }
+            // Filter valid 24-char IDs
+            const cleanedServicesIds = Array.isArray(sInput) ? sInput.filter(s => s && s.length === 24) : [];
+
+            if (cleanedServicesIds.length > 0) {
+                const servicesFound = await Service.find({ _id: { $in: cleanedServicesIds } });
+                if (servicesFound.length) {
+                    appointment.totalPrice = servicesFound.reduce((acc, curr) => acc + curr.price, 0);
+                    // Assignments would normally be updated here as well
+                }
             }
         }
 
@@ -128,11 +162,18 @@ const updateAppointment = async (req, res) => {
             appointment.client = client._id;
         }
 
-        appointment.appointmentDate = date || appointment.appointmentDate;
+        if (date) {
+            const normalizedDate = moment(date, ["DD/MM/YYYY", "YYYY-MM-DD", "MM/DD/YYYY"], true);
+            if (!normalizedDate.isValid()) {
+                return res.status(400).json({ message: 'Updated temporal coordinates are invalid. Ensure DD/MM/YYYY or YYYY-MM-DD.' });
+            }
+            appointment.appointmentDate = normalizedDate.toDate();
+        }
+
         appointment.status = status || appointment.status;
         appointment.paymentStatus = paymentStatus || appointment.paymentStatus;
 
-        const updatedApp = await (await appointment.save()).populate(['client', 'services']);
+        const updatedApp = await (await appointment.save()).populate(['client', 'assignments.service', 'assignments.staff']);
         res.json(updatedApp);
     } else {
         res.status(404).json({ message: 'Appointment not found' });
@@ -144,7 +185,7 @@ const updateAppointmentStatus = async (req, res) => {
     if (appointment) {
         appointment.status = req.body.status || appointment.status;
         appointment.paymentStatus = req.body.paymentStatus || appointment.paymentStatus;
-        const updatedApp = await (await appointment.save()).populate(['client', 'services']);
+        const updatedApp = await (await appointment.save()).populate(['client', 'assignments.service', 'assignments.staff']);
         res.json(updatedApp);
     } else {
         res.status(404).json({ message: 'Appointment not found' });
@@ -161,9 +202,13 @@ const getOccupiedSlots = async (req, res) => {
         const requestedServices = serviceIds.split(',');
         const requestedStaffIds = staffIds ? staffIds.split(',') : null;
 
-        const [year, month, day] = date.split('-').map(Number);
-        const targetDate = new Date(Date.UTC(year, month - 1, day));
-        const nextDate = new Date(Date.UTC(year, month - 1, day + 1));
+        const normalizedDate = moment(date, ["DD/MM/YYYY", "YYYY-MM-DD", "MM/DD/YYYY"], true);
+        if (!normalizedDate.isValid()) {
+            return res.status(400).json({ message: 'Target temporal window is invalid. Ensure DD/MM/YYYY or YYYY-MM-DD.' });
+        }
+
+        const targetDate = normalizedDate.clone().startOf('day').toDate();
+        const nextDate = normalizedDate.clone().add(1, 'days').startOf('day').toDate();
 
         const rituals = await Service.find({ _id: { $in: requestedServices } });
         const totalDuration = rituals.reduce((acc, curr) => acc + curr.duration, 0);
@@ -198,7 +243,7 @@ const getOccupiedSlots = async (req, res) => {
 
         const staffBusyBlocks = {};
         qualifiedStaff.forEach(s => staffBusyBlocks[s._id] = []);
-        
+
         appointments.forEach(app => {
             const start = new Date(app.appointmentDate).getTime();
             const durationMs = app.assignments.reduce((acc, a) => acc + (a.service?.duration || 30), 0) * 60 * 1000;

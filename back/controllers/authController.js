@@ -2,11 +2,11 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 const generateAccessToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_ACCESS_SECRET || 'access_secret', { expiresIn: '1m' });
+    return jwt.sign({ id }, process.env.JWT_ACCESS_SECRET, { expiresIn: '1d' });
 };
 
 const generateRefreshToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_REFRESH_SECRET || 'refresh_secret', { expiresIn: '7d' });
+    return jwt.sign({ id }, process.env.JWT_REFRESH_SECRET, { expiresIn: '30d' });
 };
 
 // @desc Register Admin
@@ -32,7 +32,7 @@ const registerAdmin = async (req, res) => {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'strict',
-                maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+                maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
             });
 
             res.status(201).json({
@@ -68,7 +68,7 @@ const loginAdmin = async (req, res) => {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'strict',
-                maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+                maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
             });
 
             res.json({

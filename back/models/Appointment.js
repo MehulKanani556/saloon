@@ -27,3 +27,4 @@ appointmentSchema.pre('save', async function (next) {
 });
 
 module.exports = mongoose.model('Appointment', appointmentSchema);
+    

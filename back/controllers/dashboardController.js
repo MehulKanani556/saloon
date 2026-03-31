@@ -1,4 +1,5 @@
 const Appointment = require('../models/Appointment');
+const Service = require('../models/Service');
 const User = require('../models/User');
 const moment = require('moment');
 
@@ -6,7 +7,7 @@ const moment = require('moment');
 const getDashboardInsights = async (req, res) => {
     try {
         const [appointments, clients, services, staff] = await Promise.all([
-            Appointment.find().populate('client services'),
+            Appointment.find().populate('client assignments.service assignments.staff'),
             User.countDocuments({ role: 'User' }),
             Service.find().populate('category'),
             User.find({ role: 'Staff' }).limit(2)
@@ -14,10 +15,10 @@ const getDashboardInsights = async (req, res) => {
 
         // 1. Core Matrix Stats
         const totalRevenue = appointments
-            .filter(app => app.paymentStatus === 'Paid' && app.status !== 'Cancelled')
+            .filter(app => (app.paymentStatus === 'Paid' || app.paymentStatus === 'UPI') && app.status !== 'Cancelled')
             .reduce((sum, app) => sum + (app.totalPrice || 0), 0);
         const todayRevenue = appointments
-            .filter(app => moment(app.date || app.appointmentDate).isSame(moment(), 'day') && app.paymentStatus === 'Paid' && app.status !== 'Cancelled')
+            .filter(app => moment(app.appointmentDate).isSame(moment(), 'day') && (app.paymentStatus === 'Paid' || app.paymentStatus === 'UPI') && app.status !== 'Cancelled')
             .reduce((sum, app) => sum + (app.totalPrice || 0), 0);
         const activeServices = services.filter(s => s.isActive).length;
 
@@ -26,7 +27,7 @@ const getDashboardInsights = async (req, res) => {
         for (let i = 6; i >= 0; i--) {
             const date = moment().subtract(i, 'days');
             const dayRevenue = appointments
-                .filter(app => moment(app.date || app.appointmentDate).isSame(date, 'day') && app.paymentStatus === 'Paid' && app.status !== 'Cancelled')
+                .filter(app => moment(app.appointmentDate).isSame(date, 'day') && (app.paymentStatus === 'Paid' || app.paymentStatus === 'UPI') && app.status !== 'Cancelled')
                 .reduce((sum, app) => sum + (app.totalPrice || 0), 0);
 
             last7Days.push({
@@ -45,16 +46,16 @@ const getDashboardInsights = async (req, res) => {
         const totalCategoriesCount = services.length;
         const serviceData = Object.keys(categories).map((cat, i) => ({
             name: cat,
-            value: Math.round((categories[cat] / totalCategoriesCount) * 100),
+            value: totalCategoriesCount > 0 ? Math.round((categories[cat] / totalCategoriesCount) * 100) : 0,
             color: ['#ff3d9f', '#b57e65', '#6366f1', '#10b981', '#f59e0b'][i % 5]
         }));
 
-        const totalConfirmedAppointments = appointments.filter(app => ['Confirmed', 'Completed'].includes(app.status)).length;
+        const totalValidAppointments = appointments.filter(app => ['Pending', 'Confirmed', 'Completed'].includes(app.status)).length;
 
         // 4. Temporal Occupancy (Peak Hours)
         const hourCounts = new Array(24).fill(0);
         appointments.forEach(app => {
-            const hour = moment(app.date || app.appointmentDate).hour();
+            const hour = moment(app.appointmentDate).hour();
             hourCounts[hour]++;
         });
 
@@ -67,23 +68,23 @@ const getDashboardInsights = async (req, res) => {
         const today = moment().startOf('day');
         const upcomingRituals = appointments
             .filter(app => 
-                moment(app.date || app.appointmentDate).isSame(today, 'day') && 
+                moment(app.appointmentDate).isSame(today, 'day') && 
                 ['Pending', 'Confirmed'].includes(app.status)
             )
-            .sort((a, b) => new Date(a.date || a.appointmentDate) - new Date(b.date || b.appointmentDate))
+            .sort((a, b) => new Date(a.appointmentDate) - new Date(b.appointmentDate))
             .slice(0, 5);
 
         res.json({
             stats: {
                 totalClients: clients,
-                totalAppointments: totalConfirmedAppointments,
+                totalAppointments: totalValidAppointments,
                 totalRevenue,
                 todayRevenue,
                 activeServices
             },
             financialVelocity: last7Days,
             serviceHierarchy: serviceData,
-            recentBookings: appointments.sort((a, b) => new Date(b.date || b.appointmentDate) - new Date(a.date || a.appointmentDate)).slice(0, 5),
+            recentBookings: appointments.sort((a, b) => new Date(b.appointmentDate) - new Date(a.appointmentDate)).slice(0, 5),
             occupancyTrends,
             upcomingRituals,
             eliteTalent: staff,
