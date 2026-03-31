@@ -8,7 +8,7 @@ const moment = require('moment');
 const getReportIntel = async (req, res) => {
     try {
         const [appointments, clients, services, staff] = await Promise.all([
-            Appointment.find().populate('client services'),
+            Appointment.find().populate('client assignments.service'),
             User.countDocuments({ role: 'User' }),
             Service.countDocuments({ isActive: true }),
             User.countDocuments({ role: 'Staff' })
@@ -25,7 +25,7 @@ const getReportIntel = async (req, res) => {
                 id: app._id,
                 type: app.status === 'Completed' ? 'completed' : app.status === 'Cancelled' ? 'cancelled' : 'scheduled',
                 title: `Appointment — ${app.client?.name || 'Unknown Client'}`,
-                description: app.services?.map(s => s.name).join(', ') || 'No services',
+                description: app.assignments?.map(a => a.service?.name).join(', ') || 'No services',
                 amount: app.totalPrice || 0,
                 status: app.status,
                 paymentStatus: app.paymentStatus,

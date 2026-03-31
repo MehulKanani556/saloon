@@ -85,7 +85,7 @@ const createAppointment = async (req, res) => {
 };
 
 const getAppointments = async (req, res) => {
-    const appointments = await Appointment.find({}).populate('client').populate('services');
+    const appointments = await Appointment.find({}).populate('client').populate('assignments.service').populate('assignments.staff');
     res.json(appointments);
 };
 
@@ -132,7 +132,7 @@ const updateAppointment = async (req, res) => {
         appointment.status = status || appointment.status;
         appointment.paymentStatus = paymentStatus || appointment.paymentStatus;
 
-        const updatedApp = await (await appointment.save()).populate(['client', 'services']);
+        const updatedApp = await (await appointment.save()).populate(['client', 'assignments.service', 'assignments.staff']);
         res.json(updatedApp);
     } else {
         res.status(404).json({ message: 'Appointment not found' });
@@ -144,7 +144,7 @@ const updateAppointmentStatus = async (req, res) => {
     if (appointment) {
         appointment.status = req.body.status || appointment.status;
         appointment.paymentStatus = req.body.paymentStatus || appointment.paymentStatus;
-        const updatedApp = await (await appointment.save()).populate(['client', 'services']);
+        const updatedApp = await (await appointment.save()).populate(['client', 'assignments.service', 'assignments.staff']);
         res.json(updatedApp);
     } else {
         res.status(404).json({ message: 'Appointment not found' });

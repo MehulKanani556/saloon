@@ -6,7 +6,7 @@ const moment = require('moment');
 const getDashboardInsights = async (req, res) => {
     try {
         const [appointments, clients, services, staff] = await Promise.all([
-            Appointment.find().populate('client services'),
+            Appointment.find().populate('client assignments.service'),
             User.countDocuments({ role: 'User' }),
             Service.find().populate('category'),
             User.find({ role: 'Staff' }).limit(2)

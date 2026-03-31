@@ -6,7 +6,7 @@ const moment = require('moment');
 const generateInvoicePDF = async (req, res) => {
    try {
       const appointment = await Appointment.findById(req.params.id)
-         .populate(['client', 'services']);
+         .populate(['client', 'assignments.service']);
 
       if (!appointment) {
          return res.status(404).json({ message: 'Ritual session not found for invoice' });
@@ -110,7 +110,8 @@ const generateInvoicePDF = async (req, res) => {
 
         // Ritual Entries
         let currentY = tableY + 40;
-        appointment.services.forEach((service, idx) => {
+        appointment.assignments.forEach((asm, idx) => {
+            const service = asm.service;
             doc.fillColor(colors.void).fontSize(14).font('Helvetica-BoldOblique')
                .text(service.name.toUpperCase(), 50, currentY);
             
@@ -122,7 +123,7 @@ const generateInvoicePDF = async (req, res) => {
 
             currentY += 60;
             
-            if (idx < appointment.services.length - 1) {
+            if (idx < appointment.assignments.length - 1) {
                 doc.strokeColor(colors.stroke).dash(2, { space: 2 }).moveTo(50, currentY - 20).lineTo(550, currentY - 20).stroke().undash();
             }
         });

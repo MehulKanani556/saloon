@@ -2,7 +2,7 @@ const Service = require('../models/Service');
 const { deleteFromS3 } = require('../utils/s3Utils');
 
 const getServices = async (req, res) => {
-    const services = await Service.find({}).populate('category');
+    const services = await Service.find({}).populate('category').sort({ createdAt: -1 });
     res.json(services);
 };
 

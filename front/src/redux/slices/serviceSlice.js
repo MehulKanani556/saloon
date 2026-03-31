@@ -60,7 +60,7 @@ const serviceSlice = createSlice({
                 state.error = action.error.message;
             })
             .addCase(addService.fulfilled, (state, action) => {
-                state.services.push(action.payload);
+                state.services.unshift(action.payload);
             })
             .addCase(updateService.fulfilled, (state, action) => {
                 const index = state.services.findIndex(s => s._id === action.payload._id);

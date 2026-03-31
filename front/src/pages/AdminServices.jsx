@@ -70,6 +70,7 @@ export default function AdminServices() {
         setEditingService(null);
         setImageFile(null);
         setPreview('');
+        formik.resetForm();
       } catch (err) {
         toast.error('Operation failed');
       }
@@ -284,6 +285,9 @@ export default function AdminServices() {
           <button
             onClick={() => {
               setEditingService(null);
+              formik.resetForm();
+              setPreview('');
+              setImageFile(null);
               setShowForm(true);
             }}
             className="flex items-center justify-center gap-3 px-6 md:px-8 py-3 md:py-4 bg-gradient-to-r from-slate-900 to-slate-800 dark:from-white dark:to-slate-100 dark:text-slate-900 text-white rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-widest shadow-2xl hover:scale-[1.05] transition-all group"
