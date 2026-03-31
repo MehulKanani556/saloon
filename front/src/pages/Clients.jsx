@@ -112,8 +112,8 @@ export default function Clients() {
             <User2 size={32} strokeWidth={2.5} />
           </div>
           <div className="min-w-0">
-            <h1 className="text-3xl lg:text-4xl font-black text-white tracking-tighter uppercase leading-none truncate md:whitespace-normal font-luxury italic">Customer Archives</h1>
-            <p className="text-[10px] font-black text-muted uppercase tracking-[0.3em] mt-3 opacity-60 italic">Cataloging Eternal Beauty Profiles</p>
+            <h1 className="text-3xl lg:text-4xl font-black text-white tracking-tighter uppercase leading-none truncate md:whitespace-normal font-luxury ">Customer Archives</h1>
+            <p className="text-[10px] font-black text-muted uppercase tracking-[0.3em] mt-3 opacity-60 ">Cataloging Eternal Beauty Profiles</p>
           </div>
         </div>
 
@@ -144,10 +144,10 @@ export default function Clients() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-background/80">
-                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary italic whitespace-nowrap">Identity</th>
-                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary italic whitespace-nowrap">Tethers & Signals</th>
-                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary italic whitespace-nowrap text-center">Frequency</th>
-                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary italic whitespace-nowrap text-right">Actions</th>
+                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap">Identity</th>
+                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap">Tethers & Signals</th>
+                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap text-center">Frequency</th>
+                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
@@ -171,7 +171,7 @@ export default function Clients() {
                           />
                         </div>
                         <div>
-                          <p className="font-black text-white text-base tracking-tighter uppercase italic whitespace-nowrap font-luxury group-hover:text-primary transition-colors leading-none mb-3">{client.name}</p>
+                          <p className="font-black text-white text-base tracking-tighter uppercase  whitespace-nowrap font-luxury group-hover:text-primary transition-colors leading-none mb-3">{client.name}</p>
                           <div className="flex items-center gap-2">
                             <div className="w-1.5 h-1.5 rounded-full bg-primary" />
                             <p className="text-[9px] font-black text-muted uppercase tracking-[0.2em] whitespace-nowrap">Protocol Est. {new Date(client.createdAt).getFullYear()}</p>
@@ -195,7 +195,7 @@ export default function Clients() {
                     <td className="px-10 py-8 text-center">
                       <div className="inline-flex flex-col items-center bg-background/50 px-6 py-4 rounded-2xl border border-white/5 group-hover:bg-primary transition-all duration-500">
                         <span className="text-xl font-black text-white tracking-tighter whitespace-nowrap group-hover:text-secondary">{(client.bookingHistory?.length || 0).toString().padStart(2, '0')}</span>
-                        <span className="text-[8px] font-black text-primary uppercase tracking-[0.3em] mt-1 whitespace-nowrap group-hover:text-secondary group-hover:opacity-40 italic">Rituals</span>
+                        <span className="text-[8px] font-black text-primary uppercase tracking-[0.3em] mt-1 whitespace-nowrap group-hover:text-secondary group-hover:opacity-40 ">Rituals</span>
                       </div>
                     </td>
                     <td className="px-10 py-8 text-right">
@@ -274,25 +274,25 @@ export default function Clients() {
               <Plus size={24} strokeWidth={3} />
             </div>
           </div>
-          <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em] mt-8 italic">Geometric Identity Signature</p>
+          <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em] mt-8 ">Geometric Identity Signature</p>
         </div>
 
         <form onSubmit={formik.handleSubmit} className="space-y-10">
           <div className="space-y-4">
-            <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 italic underline decoration-primary/30 decoration-2 underline-offset-8">Legal Identity</label>
+            <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2  underline decoration-primary/30 decoration-2 underline-offset-8">Legal Identity</label>
             <input
               name="name"
               onChange={formik.handleChange}
               value={formik.values.name}
-              className="w-full bg-secondary border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.2em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5 italic"
+              className="w-full bg-secondary border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.2em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5 "
               placeholder="ENTER NOMENCLATURE"
             />
-            {formik.touched.name && formik.errors.name && <p className="text-rose-500 text-[9px] font-black ml-4 uppercase italic tracking-widest">{formik.errors.name}</p>}
+            {formik.touched.name && formik.errors.name && <p className="text-rose-500 text-[9px] font-black ml-4 uppercase  tracking-widest">{formik.errors.name}</p>}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-4">
-              <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 italic">Digital Beacon (Email)</label>
+              <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 ">Digital Beacon (Email)</label>
               <input
                 name="email"
                 onChange={formik.handleChange}
@@ -300,11 +300,11 @@ export default function Clients() {
                 className="w-full bg-secondary border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.2em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5"
                 placeholder="EMAIL@MATRIX.COM"
               />
-              {formik.touched.email && formik.errors.email && <p className="text-rose-500 text-[9px] font-black ml-4 uppercase italic tracking-widest">{formik.errors.email}</p>}
+              {formik.touched.email && formik.errors.email && <p className="text-rose-500 text-[9px] font-black ml-4 uppercase  tracking-widest">{formik.errors.email}</p>}
             </div>
 
             <div className="space-y-4">
-              <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 italic">Tether Signal (Phone)</label>
+              <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 ">Tether Signal (Phone)</label>
               <input
                 name="phone"
                 onChange={formik.handleChange}
@@ -312,7 +312,7 @@ export default function Clients() {
                 className="w-full bg-secondary border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.2em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5"
                 placeholder="+XX XXXXX XXXXX"
               />
-              {formik.touched.phone && formik.errors.phone && <p className="text-rose-500 text-[9px] font-black ml-4 uppercase italic tracking-widest">{formik.errors.phone}</p>}
+              {formik.touched.phone && formik.errors.phone && <p className="text-rose-500 text-[9px] font-black ml-4 uppercase  tracking-widest">{formik.errors.phone}</p>}
             </div>
           </div>
 
@@ -320,7 +320,7 @@ export default function Clients() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-6 bg-primary text-secondary rounded-2xl text-[10px] font-black uppercase tracking-[0.5em] hover:bg-primary/90 transition-all shadow-2xl shadow-primary/20 active:scale-[0.98] disabled:opacity-50 font-luxury italic"
+              className="w-full py-6 bg-primary text-secondary rounded-2xl text-[10px] font-black uppercase tracking-[0.5em] hover:bg-primary/90 transition-all shadow-2xl shadow-primary/20 active:scale-[0.98] disabled:opacity-50 font-luxury "
             >
               {selectedClient ? 'COMMIT IDENTITY UPDATE' : 'AUTHORIZE PROTOCOL ENTRY'}
             </button>
@@ -339,8 +339,8 @@ export default function Clients() {
           <div className="w-24 h-24 bg-rose-500/10 border border-rose-500/20 rounded-2xl flex items-center justify-center mx-auto text-rose-500 mb-10 shadow-2xl shadow-rose-500/20">
             <Trash2 size={48} strokeWidth={1} />
           </div>
-          <p className="text-muted font-black text-[10px] uppercase tracking-[0.3em] leading-relaxed mb-10 italic">
-            Eliminating digital signature of <br /><span className="text-rose-500 text-base font-luxury italic underline decoration-rose-500/30 decoration-2 underline-offset-4">{clientToDelete?.name}</span> <br /> from active records.
+          <p className="text-muted font-black text-[10px] uppercase tracking-[0.3em] leading-relaxed mb-10 ">
+            Eliminating digital signature of <br /><span className="text-rose-500 text-base font-luxury  underline decoration-rose-500/30 decoration-2 underline-offset-4">{clientToDelete?.name}</span> <br /> from active records.
           </p>
           <div className="flex flex-col gap-4">
             <button
@@ -348,13 +348,13 @@ export default function Clients() {
                 dispatch(deleteClient(clientToDelete._id));
                 setIsDeleteModalOpen(false);
               }}
-              className="w-full py-5 bg-rose-500 text-white rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:bg-rose-600 transition-all shadow-xl active:scale-95 font-luxury italic"
+              className="w-full py-5 bg-rose-500 text-white rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:bg-rose-600 transition-all shadow-xl active:scale-95 font-luxury "
             >
               CONFIRM DISSOLUTION
             </button>
             <button
               onClick={() => setIsDeleteModalOpen(false)}
-              className="w-full py-5 bg-white/5 text-muted rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:text-white transition-all font-luxury italic"
+              className="w-full py-5 bg-white/5 text-muted rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:text-white transition-all font-luxury "
             >
               ABORT OPERATION
             </button>
@@ -372,7 +372,7 @@ export default function Clients() {
           <>
             <button
               onClick={() => { setIsProfileOpen(false); handleEdit(profileClient); }}
-              className="flex-1 py-5 bg-primary text-secondary rounded-2xl text-[10px] font-black uppercase tracking-[0.4em] hover:bg-primary/90 transition-all shadow-xl active:scale-95 font-luxury italic"
+              className="flex-1 py-5 bg-primary text-secondary rounded-2xl text-[10px] font-black uppercase tracking-[0.4em] hover:bg-primary/90 transition-all shadow-xl active:scale-95 font-luxury "
             >
               REDEFINE PROTOCOL
             </button>
@@ -389,25 +389,25 @@ export default function Clients() {
           <div className="space-y-12 p-2">
             <div className="grid grid-cols-2 gap-6">
               <div className="p-6 bg-secondary/50 rounded-2xl border border-white/5 shadow-inner">
-                <div className="flex items-center gap-3 text-primary mb-4 italic">
+                <div className="flex items-center gap-3 text-primary mb-4 ">
                   <ShoppingBag size={14} strokeWidth={2.5} />
                   <span className="text-[9px] font-black uppercase tracking-[0.3em]">Rituals</span>
                 </div>
-                <div className="text-3xl font-black text-white italic font-luxury leading-none">{(profileClient.bookingHistory?.length || 0).toString().padStart(2, '0')}</div>
+                <div className="text-3xl font-black text-white  font-luxury leading-none">{(profileClient.bookingHistory?.length || 0).toString().padStart(2, '0')}</div>
               </div>
               <div className="p-6 bg-secondary/50 rounded-2xl border border-white/5 shadow-inner">
-                <div className="flex items-center gap-3 text-primary mb-4 italic">
+                <div className="flex items-center gap-3 text-primary mb-4 ">
                   <Award size={14} strokeWidth={2.5} />
                   <span className="text-[9px] font-black uppercase tracking-[0.3em]">Status</span>
                 </div>
-                <div className="text-sm font-black text-white italic font-luxury leading-none uppercase tracking-tighter">PREMIUM</div>
+                <div className="text-sm font-black text-white  font-luxury leading-none uppercase tracking-tighter">PREMIUM</div>
               </div>
             </div>
 
             <div className="p-8 bg-background/50 rounded-2xl border border-white/5 flex items-center justify-between group shadow-3xl hover:border-primary/20 transition-all duration-500">
               <div className="space-y-4">
-                <p className="text-[9px] font-black text-muted uppercase tracking-[0.5em] italic">Active Tether</p>
-                <p className="text-2xl font-black text-white tracking-tighter italic font-luxury group-hover:text-primary transition-all">{profileClient.phone}</p>
+                <p className="text-[9px] font-black text-muted uppercase tracking-[0.5em] ">Active Tether</p>
+                <p className="text-2xl font-black text-white tracking-tighter  font-luxury group-hover:text-primary transition-all">{profileClient.phone}</p>
               </div>
               <div className="w-16 h-16 bg-secondary rounded-2xl flex items-center justify-center text-muted group-hover:bg-primary group-hover:text-secondary transition-all duration-500 shadow-xl border border-white/5">
                 <Phone size={24} strokeWidth={2.5} />
@@ -418,7 +418,7 @@ export default function Clients() {
               <div className="flex items-center justify-between px-2">
                 <div className="flex items-center gap-4">
                   <Calendar size={16} className="text-primary" />
-                  <span className="text-[10px] font-black text-white uppercase tracking-[0.4em] italic leading-none">Ritual Archive</span>
+                  <span className="text-[10px] font-black text-white uppercase tracking-[0.4em]  leading-none">Ritual Archive</span>
                 </div>
                 <span className="h-[1px] flex-1 bg-white/5 mx-6" />
               </div>
@@ -429,24 +429,24 @@ export default function Clients() {
                     <div className="flex items-center justify-between mb-6">
                       <div className="flex items-center gap-3">
                         <div className="w-2 h-2 rounded-full bg-primary" />
-                        <p className="text-[11px] font-black text-white uppercase tracking-tighter italic font-luxury leading-none">
+                        <p className="text-[11px] font-black text-white uppercase tracking-tighter  font-luxury leading-none">
                           {format(new Date(app.appointmentDate), 'MMM dd, yyyy')}
                         </p>
                       </div>
-                      <div className={`px-4 py-2 rounded-xl text-[8px] font-black uppercase tracking-[0.2em] italic border ${app.status === 'Completed' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : 'bg-primary/10 text-primary border-primary/20'}`}>
+                      <div className={`px-4 py-2 rounded-xl text-[8px] font-black uppercase tracking-[0.2em]  border ${app.status === 'Completed' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : 'bg-primary/10 text-primary border-primary/20'}`}>
                         {app.status}
                       </div>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-black text-muted uppercase tracking-widest truncate max-w-[180px] italic">{app.services?.map(s => s.name).join(', ')}</span>
-                      <span className="text-lg font-black text-primary font-luxury italic leading-none">${app.totalPrice}</span>
+                      <span className="text-[10px] font-black text-muted uppercase tracking-widest truncate max-w-[180px] ">{app.services?.map(s => s.name).join(', ')}</span>
+                      <span className="text-lg font-black text-primary font-luxury  leading-none">${app.totalPrice}</span>
                     </div>
                   </div>
                 ))}
                 {appointments.filter(app => app.client?._id === profileClient._id).length === 0 && (
                   <div className="py-20 text-center bg-white/5 rounded-2xl border border-dashed border-white/10">
                     <Clock className="mx-auto text-white/5 mb-6" size={48} strokeWidth={1} />
-                    <p className="text-muted/40 italic text-[10px] uppercase font-black tracking-[0.4em]">No archives found in matrix</p>
+                    <p className="text-muted/40  text-[10px] uppercase font-black tracking-[0.4em]">No archives found in matrix</p>
                   </div>
                 )}
               </div>

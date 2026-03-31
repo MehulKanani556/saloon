@@ -34,14 +34,14 @@ export default function DeleteAccount() {
         >
           {/* Accent Glow */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/10 rounded-full blur-[100px] pointer-events-none animate-pulse" />
-          
+
           <div className="flex items-center gap-8 mb-16 pb-12 border-b border-white/5 relative z-10">
             <div className="w-24 h-24 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-500 border border-red-500/20 shadow-[0_15px_40px_rgba(239,68,68,0.2)]">
               <Trash2 size={40} strokeWidth={2.5} />
             </div>
             <div>
-              <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-[-0.05em] italic font-luxury leading-none mb-3">Identity <span className="text-red-500/50">Dissolution</span></h2>
-              <p className="text-muted/40 text-[10px] font-black uppercase tracking-[0.5em] italic flex items-center gap-3">
+              <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-[-0.05em]  font-luxury leading-none mb-3">Identity <span className="text-red-500/50">Dissolution</span></h2>
+              <p className="text-muted/40 text-[10px] font-black uppercase tracking-[0.5em]  flex items-center gap-3">
                 <AlertCircle size={14} className="text-red-500/40" /> Irreversible Digital Detachment
               </p>
             </div>
@@ -53,18 +53,18 @@ export default function DeleteAccount() {
                 <ShieldAlert className="text-red-500" size={36} />
               </div>
               <div className="text-center md:text-left space-y-8">
-                <p className="text-[16px] font-black text-red-500 uppercase tracking-[0.4em] italic mb-6 font-luxury leading-none shadow-sm">Critical Protocol Warning</p>
-                <div className="space-y-6 text-[12px] text-muted/60 font-black uppercase leading-relaxed tracking-[0.3em] italic">
+                <p className="text-[16px] font-black text-red-500 uppercase tracking-[0.4em]  mb-6 font-luxury leading-none shadow-sm">Critical Protocol Warning</p>
+                <div className="space-y-6 text-[12px] text-muted/60 font-black uppercase leading-relaxed tracking-[0.3em] ">
                   <p className="flex items-center gap-5 justify-center md:justify-start group cursor-default hover:text-white transition-colors duration-500">
-                    <span className="w-2 h-2 rounded-full bg-red-500/50 group-hover:scale-150 transition-transform" /> 
+                    <span className="w-2 h-2 rounded-full bg-red-500/50 group-hover:scale-150 transition-transform" />
                     Immediate detachment from the public matrix.
                   </p>
                   <p className="flex items-center gap-5 justify-center md:justify-start group cursor-default hover:text-white transition-colors duration-500">
-                    <span className="w-2 h-2 rounded-full bg-red-500/50 group-hover:scale-150 transition-transform" /> 
+                    <span className="w-2 h-2 rounded-full bg-red-500/50 group-hover:scale-150 transition-transform" />
                     Archival of all ritual history and aesthetic metadata.
                   </p>
                   <p className="flex items-center gap-5 justify-center md:justify-start group cursor-default hover:text-white transition-colors duration-500">
-                    <span className="w-2 h-2 rounded-full bg-red-500/50 group-hover:scale-150 transition-transform" /> 
+                    <span className="w-2 h-2 rounded-full bg-red-500/50 group-hover:scale-150 transition-transform" />
                     Permanent revocation of all synchronization access.
                   </p>
                 </div>
@@ -72,11 +72,11 @@ export default function DeleteAccount() {
             </div>
 
             <div className="pt-8 text-center space-y-12">
-              <p className="text-muted/30 text-[11px] font-black uppercase tracking-[0.6em] italic animate-pulse">Confirm final authorization sequence?</p>
-              
-              <button 
+              <p className="text-muted/30 text-[11px] font-black uppercase tracking-[0.6em]  animate-pulse">Confirm final authorization sequence?</p>
+
+              <button
                 onClick={() => setShowConfirm(true)}
-                className="w-full bg-red-500/10 hover:bg-red-500 border border-red-500/20 hover:border-transparent py-8 rounded-2xl text-[12px] font-black uppercase tracking-[0.5em] text-red-500 hover:text-white transition-all duration-700 shadow-2xl hover:shadow-[0_25px_60px_rgba(239,68,68,0.3)] group flex items-center justify-center gap-8 active:scale-[0.98] font-luxury italic"
+                className="w-full bg-red-500/10 hover:bg-red-500 border border-red-500/20 hover:border-transparent py-8 rounded-2xl text-[12px] font-black uppercase tracking-[0.5em] text-red-500 hover:text-white transition-all duration-700 shadow-2xl hover:shadow-[0_25px_60px_rgba(239,68,68,0.3)] group flex items-center justify-center gap-8 active:scale-[0.98] font-luxury "
               >
                 Initalize Final Dissolution Protocol
                 <ChevronRight size={24} className="group-hover:translate-x-4 transition-transform duration-700" />
@@ -89,7 +89,7 @@ export default function DeleteAccount() {
         <AnimatePresence>
           {showConfirm && (
             <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-background/95 backdrop-blur-2xl">
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, scale: 0.9, y: 40 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 40 }}
@@ -98,8 +98,8 @@ export default function DeleteAccount() {
                 {/* Decorative Elements */}
                 <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/20 rounded-full blur-[100px] pointer-events-none animate-pulse" />
                 <div className="absolute bottom-0 left-0 w-48 h-48 bg-red-500/10 rounded-full blur-[80px] pointer-events-none" />
-                
-                <button 
+
+                <button
                   onClick={() => setShowConfirm(false)}
                   className="absolute right-12 top-12 text-muted/30 hover:text-white transition-all duration-500 hover:rotate-90 scale-125"
                 >
@@ -110,13 +110,13 @@ export default function DeleteAccount() {
                   <div className="w-28 h-28 bg-red-500/10 rounded-2xl flex items-center justify-center mx-auto mb-12 animate-bounce shadow-[0_20px_50px_rgba(239,68,68,0.2)] border border-red-500/30 text-red-500">
                     <ShieldAlert size={56} strokeWidth={1.5} />
                   </div>
-                  
-                  <h3 className="text-4xl md:text-5xl font-black text-white uppercase tracking-[-0.05em] italic mb-6 font-luxury leading-none">Authorization <span className="text-red-500/50">Core</span></h3>
-                  <p className="text-muted/40 text-[11px] font-black uppercase tracking-[0.4em] mb-16 max-w-sm mx-auto italic leading-relaxed">Provide synchronization key to finalize matrix removal.</p>
+
+                  <h3 className="text-4xl md:text-5xl font-black text-white uppercase tracking-[-0.05em]  mb-6 font-luxury leading-none">Authorization <span className="text-red-500/50">Core</span></h3>
+                  <p className="text-muted/40 text-[11px] font-black uppercase tracking-[0.4em] mb-16 max-w-sm mx-auto  leading-relaxed">Provide synchronization key to finalize matrix removal.</p>
 
                   <div className="space-y-12 text-left">
                     <div className="space-y-6">
-                      <label className="text-[11px] font-black text-muted/30 uppercase tracking-[0.6em] pl-4 italic">Security Key (Password)</label>
+                      <label className="text-[11px] font-black text-muted/30 uppercase tracking-[0.6em] pl-4 ">Security Key (Password)</label>
                       <input
                         type="password"
                         value={password}
@@ -127,16 +127,16 @@ export default function DeleteAccount() {
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-6 pt-10">
-                      <button 
+                      <button
                         onClick={() => setShowConfirm(false)}
-                        className="flex-1 px-12 py-7 border border-white/5 rounded-2xl text-[11px] font-black uppercase tracking-[0.5em] hover:bg-white/5 text-muted/40 hover:text-white transition-all duration-700 italic font-luxury"
+                        className="flex-1 px-12 py-7 border border-white/5 rounded-2xl text-[11px] font-black uppercase tracking-[0.5em] hover:bg-white/5 text-muted/40 hover:text-white transition-all duration-700  font-luxury"
                       >
                         Abort Sequence
                       </button>
-                      <button 
+                      <button
                         onClick={handleDissolve}
                         disabled={loading || !password}
-                        className="flex-1 px-12 py-7 bg-red-600 text-white rounded-2xl text-[11px] font-black uppercase tracking-[0.5em] shadow-[0_25px_60px_rgba(220,38,38,0.4)] disabled:opacity-10 flex items-center justify-center gap-5 transition-all duration-700 hover:scale-[1.05] active:translate-y-1 italic font-luxury"
+                        className="flex-1 px-12 py-7 bg-red-600 text-white rounded-2xl text-[11px] font-black uppercase tracking-[0.5em] shadow-[0_25px_60px_rgba(220,38,38,0.4)] disabled:opacity-10 flex items-center justify-center gap-5 transition-all duration-700 hover:scale-[1.05] active:translate-y-1  font-luxury"
                       >
                         {loading ? <Loader2 className="animate-spin" size={24} /> : <Trash2 size={24} />}
                         Final Dissolve

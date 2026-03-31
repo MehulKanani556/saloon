@@ -35,9 +35,9 @@ export default function MyAppointments() {
               <div className="w-16 h-[2px] bg-luxury-gradient" />
               <p className="text-[10px] font-black text-primary uppercase tracking-[0.6em] animate-pulse">Temporal Logistics</p>
             </div>
-            <h1 className="text-5xl md:text-7xl font-black text-white uppercase tracking-[-0.05em] italic font-luxury leading-none">The Ritual <span className="text-primary/50">Archive</span></h1>
-            <p className="text-muted/40 text-[11px] uppercase font-black tracking-[0.5em] flex items-center gap-4 italic">
-               Chronological ledger of your aesthetic evolution within the matrix
+            <h1 className="text-5xl md:text-7xl font-black text-white uppercase tracking-[-0.05em]  font-luxury leading-none">The Ritual <span className="text-primary/50">Archive</span></h1>
+            <p className="text-muted/40 text-[11px] uppercase font-black tracking-[0.5em] flex items-center gap-4 ">
+              Chronological ledger of your aesthetic evolution within the matrix
             </p>
           </div>
           <motion.button
@@ -60,7 +60,7 @@ export default function MyAppointments() {
                 <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
               </div>
             </div>
-            <p className="text-[11px] font-black uppercase tracking-[0.6em] text-muted animate-pulse italic">Consulting the Matrix Oracle...</p>
+            <p className="text-[11px] font-black uppercase tracking-[0.6em] text-muted animate-pulse ">Consulting the Matrix Oracle...</p>
           </div>
         ) : appointments.length === 0 ? (
           <motion.div
@@ -72,9 +72,9 @@ export default function MyAppointments() {
             <div className="w-28 h-28 bg-background/50 rounded-2xl flex items-center justify-center mx-auto mb-12 shadow-inner border border-white/5 text-primary/20">
               <AlertTriangle size={56} strokeWidth={1} />
             </div>
-            <h3 className="text-4xl font-black text-white uppercase tracking-[-0.05em] mb-6 font-luxury italic leading-none">Archive <span className="text-muted/20">Null</span></h3>
-            <p className="text-muted/40 text-[12px] font-black uppercase tracking-[0.4em] max-w-sm mx-auto mb-16 leading-relaxed italic">Your chronological records contain zero active ritual coordinates in the current branch.</p>
-            <button className="px-16 py-7 bg-luxury-gradient text-secondary rounded-2xl flex items-center gap-5 mx-auto font-black text-[11px] uppercase tracking-[0.5em] shadow-3xl hover:scale-105 active:scale-95 transition-all font-luxury italic">
+            <h3 className="text-4xl font-black text-white uppercase tracking-[-0.05em] mb-6 font-luxury  leading-none">Archive <span className="text-muted/20">Null</span></h3>
+            <p className="text-muted/40 text-[12px] font-black uppercase tracking-[0.4em] max-w-sm mx-auto mb-16 leading-relaxed ">Your chronological records contain zero active ritual coordinates in the current branch.</p>
+            <button className="px-16 py-7 bg-luxury-gradient text-secondary rounded-2xl flex items-center gap-5 mx-auto font-black text-[11px] uppercase tracking-[0.5em] shadow-3xl hover:scale-105 active:scale-95 transition-all font-luxury ">
               <Sparkles size={20} /> Register New Ritual
             </button>
           </motion.div>
@@ -94,8 +94,8 @@ export default function MyAppointments() {
 
                   {/* Enhanced Temporal Identifier */}
                   <div className="flex flex-col items-center justify-center min-w-[160px] py-12 bg-background/40 rounded-2xl border border-white/5 group-hover:border-primary/20 transition-all duration-1000 shadow-inner relative z-10">
-                    <span className="text-[12px] font-black text-muted/40 uppercase tracking-[0.6em] mb-4 italic">{format(new Date(app.appointmentDate), 'MMM')}</span>
-                    <span className="text-7xl font-black text-white leading-none font-luxury tracking-tighter italic group-hover:text-primary transition-colors duration-1000">{format(new Date(app.appointmentDate), 'dd')}</span>
+                    <span className="text-[12px] font-black text-muted/40 uppercase tracking-[0.6em] mb-4 ">{format(new Date(app.appointmentDate), 'MMM')}</span>
+                    <span className="text-7xl font-black text-white leading-none font-luxury tracking-tighter  group-hover:text-primary transition-colors duration-1000">{format(new Date(app.appointmentDate), 'dd')}</span>
                     <span className="text-[12px] font-black text-primary mt-6 uppercase tracking-[0.4em] bg-primary/5 px-6 py-2 rounded-full border border-primary/20 shadow-inner font-luxury">{format(new Date(app.appointmentDate), 'HH:mm')}</span>
                   </div>
 
@@ -103,13 +103,13 @@ export default function MyAppointments() {
                     <div className="flex flex-wrap items-center gap-6 justify-between border-b border-white/5 pb-10">
                       <div className="flex flex-wrap gap-4">
                         {app.assignments.map((asm, i) => (
-                          <div key={i} className="px-8 py-3.5 bg-background/50 border border-white/5 text-primary text-[11px] font-black uppercase tracking-[0.5em] rounded-2xl shadow-inner flex items-center gap-4 group-hover:border-primary/20 transition-all duration-700 font-luxury italic">
+                          <div key={i} className="px-8 py-3.5 bg-background/50 border border-white/5 text-primary text-[11px] font-black uppercase tracking-[0.5em] rounded-2xl shadow-inner flex items-center gap-4 group-hover:border-primary/20 transition-all duration-700 font-luxury ">
                             <div className="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_15px_rgba(201,162,39,0.8)]" />
                             {asm.service?.name}
                           </div>
                         ))}
                       </div>
-                      <div className={`px-10 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-[0.5em] border shadow-[0_20px_40px_rgba(0,0,0,0.5)] backdrop-blur-xl font-luxury italic ring-1 ring-white/5 ${statusColors[app.status]}`}>
+                      <div className={`px-10 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-[0.5em] border shadow-[0_20px_40px_rgba(0,0,0,0.5)] backdrop-blur-xl font-luxury  ring-1 ring-white/5 ${statusColors[app.status]}`}>
                         {app.status}
                       </div>
                     </div>
@@ -120,8 +120,8 @@ export default function MyAppointments() {
                           <User size={28} strokeWidth={1} />
                         </div>
                         <div>
-                          <p className="text-[10px] font-black text-muted/20 uppercase tracking-[0.5em] mb-2 italic">Technician</p>
-                          <p className="text-[13px] font-black text-white uppercase tracking-[-0.02em] font-luxury italic group-hover/sub:text-primary transition-colors duration-700">{app.assignments[0]?.staff?.name || 'Assigned Master'}</p>
+                          <p className="text-[10px] font-black text-muted/20 uppercase tracking-[0.5em] mb-2 ">Technician</p>
+                          <p className="text-[13px] font-black text-white uppercase tracking-[-0.02em] font-luxury  group-hover/sub:text-primary transition-colors duration-700">{app.assignments[0]?.staff?.name || 'Assigned Master'}</p>
                         </div>
                       </div>
 
@@ -130,7 +130,7 @@ export default function MyAppointments() {
                           <Hash size={28} strokeWidth={1} />
                         </div>
                         <div>
-                          <p className="text-[10px] font-black text-muted/20 uppercase tracking-[0.5em] mb-2 italic">Matrix Ref</p>
+                          <p className="text-[10px] font-black text-muted/20 uppercase tracking-[0.5em] mb-2 ">Matrix Ref</p>
                           <p className="text-[12px] font-black text-muted/40 uppercase tracking-[0.4em] font-luxury">0x{app._id.slice(-8).toUpperCase()}</p>
                         </div>
                       </div>
@@ -140,15 +140,15 @@ export default function MyAppointments() {
                           <div className={`w-4 h-4 rounded-full ${app.paymentStatus === 'Paid' ? 'bg-emerald-500 shadow-[0_0_30px_rgba(16,185,129,0.8)] animate-pulse' : 'bg-primary shadow-[0_0_30px_rgba(201,162,39,0.8)] animate-pulse'}`} />
                         </div>
                         <div>
-                          <p className="text-[10px] font-black text-muted/20 uppercase tracking-[0.5em] mb-2 italic">Ledger State</p>
-                          <p className={`text-[13px] font-black uppercase tracking-[0.2em] italic font-luxury ${app.paymentStatus === 'Paid' ? 'text-emerald-400' : 'text-primary'}`}>{app.paymentStatus}</p>
+                          <p className="text-[10px] font-black text-muted/20 uppercase tracking-[0.5em] mb-2 ">Ledger State</p>
+                          <p className={`text-[13px] font-black uppercase tracking-[0.2em]  font-luxury ${app.paymentStatus === 'Paid' ? 'text-emerald-400' : 'text-primary'}`}>{app.paymentStatus}</p>
                         </div>
                       </div>
                     </div>
                   </div>
 
                   <div className="flex shrink-0">
-                    <motion.button 
+                    <motion.button
                       whileHover={{ scale: 1.1, x: 10 }}
                       whileTap={{ scale: 0.9 }}
                       className="w-full lg:w-24 lg:h-56 bg-background/60 border border-white/10 rounded-2xl flex items-center justify-center text-muted/20 hover:text-secondary hover:bg-luxury-gradient hover:border-transparent transition-all duration-1000 group/btn shadow-inner"

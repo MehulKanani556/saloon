@@ -40,48 +40,48 @@ const InvoiceDetailModal = ({ appointment, onClose }) => {
       <div className="flex flex-col max-h-[70vh] -my-10">
         <div className="p-8 md:p-12 bg-secondary/80 backdrop-blur-xl rounded-2xl border border-white/5 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-[1px] bg-luxury-gradient opacity-10" />
-          
+
           <div className="flex flex-col md:flex-row justify-between gap-10 mb-16">
             <div className="space-y-6">
               <div>
-                <h1 className="text-3xl font-black tracking-tighter italic uppercase text-primary mb-1 font-luxury leading-none">Glow Saloon</h1>
-                <p className="text-[9px] font-black uppercase tracking-[0.4em] text-muted italic opacity-60">Elite Aesthetics & Grooming</p>
+                <h1 className="text-3xl font-black tracking-tighter  uppercase text-primary mb-1 font-luxury leading-none">Glow Saloon</h1>
+                <p className="text-[9px] font-black uppercase tracking-[0.4em] text-muted  opacity-60">Elite Aesthetics & Grooming</p>
               </div>
-              <div className="space-y-2 text-[10px] font-black text-muted uppercase tracking-widest italic opacity-80 leading-relaxed">
+              <div className="space-y-2 text-[10px] font-black text-muted uppercase tracking-widest  opacity-80 leading-relaxed">
                 <p>123 Luxury Lane, Diamond District</p>
                 <p>Mumbai, Maharashtra - 400001</p>
                 <p>contact@glowsaloon.com</p>
               </div>
             </div>
             <div className="text-left md:text-right space-y-6">
-              <h2 className="text-5xl font-black tracking-tighter italic text-white/5 uppercase select-none leading-none -mb-8">Fiscal Record</h2>
+              <h2 className="text-5xl font-black tracking-tighter  text-white/5 uppercase select-none leading-none -mb-8">Fiscal Record</h2>
               <div className="space-y-2">
-                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-primary italic">Recipient Protocol</p>
-                <p className="text-2xl font-black tracking-tight uppercase italic text-white font-luxury">{appointment.client?.name}</p>
-                <p className="text-[10px] font-black text-muted uppercase tracking-widest italic">{appointment.client?.email}</p>
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-primary ">Recipient Protocol</p>
+                <p className="text-2xl font-black tracking-tight uppercase  text-white font-luxury">{appointment.client?.name}</p>
+                <p className="text-[10px] font-black text-muted uppercase tracking-widest ">{appointment.client?.email}</p>
               </div>
             </div>
           </div>
 
           <div className="mb-12 grid grid-cols-1 sm:grid-cols-3 gap-8">
             <div className="p-8 rounded-2xl bg-background/50 border border-white/5 shadow-inner group">
-              <p className="text-[9px] font-black uppercase tracking-[0.4em] text-primary mb-3 italic">Creation Archive</p>
-              <p className="font-black italic text-sm text-white tracking-widest">{format(new Date(appointment.createdAt), 'MMMM dd, yyyy')}</p>
+              <p className="text-[9px] font-black uppercase tracking-[0.4em] text-primary mb-3 ">Creation Archive</p>
+              <p className="font-black  text-sm text-white tracking-widest">{format(new Date(appointment.createdAt), 'MMMM dd, yyyy')}</p>
             </div>
             <div className="p-8 rounded-2xl bg-background/50 border border-white/5 shadow-inner group">
-              <p className="text-[9px] font-black uppercase tracking-[0.4em] text-primary mb-3 italic">Ritual Identity</p>
-              <p className="font-black italic text-sm text-white tracking-widest">#{appointment.appointmentId || appointment._id.substring(18).toUpperCase()}</p>
+              <p className="text-[9px] font-black uppercase tracking-[0.4em] text-primary mb-3 ">Ritual Identity</p>
+              <p className="font-black  text-sm text-white tracking-widest">#{appointment.appointmentId || appointment._id.substring(18).toUpperCase()}</p>
             </div>
             <div className="p-8 rounded-2xl bg-background/50 border border-white/5 shadow-inner flex justify-between items-center sm:block sm:space-y-4">
               <div>
-                <p className="text-[9px] font-black uppercase tracking-[0.4em] text-primary mb-3 italic">Ritual State</p>
-                <p className={`font-black italic text-[11px] uppercase tracking-[0.3em] ${appointment.status === 'Cancelled' ? 'text-rose-500' : appointment.status === 'Completed' ? 'text-emerald-500' : 'text-primary'}`}>
+                <p className="text-[9px] font-black uppercase tracking-[0.4em] text-primary mb-3 ">Ritual State</p>
+                <p className={`font-black  text-[11px] uppercase tracking-[0.3em] ${appointment.status === 'Cancelled' ? 'text-rose-500' : appointment.status === 'Completed' ? 'text-emerald-500' : 'text-primary'}`}>
                   {appointment.status || 'Pending'}
                 </p>
               </div>
               <div className="border-l border-white/10 pl-6 sm:border-l-0 sm:pl-0">
-                <p className="text-[9px] font-black uppercase tracking-[0.4em] text-primary mb-3 italic">Settlement</p>
-                <p className={`font-black italic text-[11px] uppercase tracking-[0.3em] ${appointment.paymentStatus === 'Paid' ? 'text-emerald-500' : 'text-amber-500'}`}>
+                <p className="text-[9px] font-black uppercase tracking-[0.4em] text-primary mb-3 ">Settlement</p>
+                <p className={`font-black  text-[11px] uppercase tracking-[0.3em] ${appointment.paymentStatus === 'Paid' ? 'text-emerald-500' : 'text-amber-500'}`}>
                   {appointment.paymentStatus || 'Pending'}
                 </p>
               </div>
@@ -92,9 +92,9 @@ const InvoiceDetailModal = ({ appointment, onClose }) => {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-white/5 text-left">
-                  <th className="pb-6 text-[10px] font-black uppercase tracking-[0.4em] text-primary italic px-2">Masterpiece Ritual</th>
-                  <th className="pb-6 text-right text-[10px] font-black uppercase tracking-[0.4em] text-primary italic px-2">Timeline</th>
-                  <th className="pb-6 text-right text-[10px] font-black uppercase tracking-[0.4em] text-primary italic px-2">Value</th>
+                  <th className="pb-6 text-[10px] font-black uppercase tracking-[0.4em] text-primary  px-2">Masterpiece Ritual</th>
+                  <th className="pb-6 text-right text-[10px] font-black uppercase tracking-[0.4em] text-primary  px-2">Timeline</th>
+                  <th className="pb-6 text-right text-[10px] font-black uppercase tracking-[0.4em] text-primary  px-2">Value</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">
@@ -104,14 +104,14 @@ const InvoiceDetailModal = ({ appointment, onClose }) => {
                   return (
                     <tr key={service._id || idx} className="group transition-all hover:bg-white/5">
                       <td className="py-8 px-2">
-                        <p className="font-black text-base tracking-tighter uppercase italic text-white font-luxury">{service.name}</p>
-                        <p className="text-[10px] font-black text-muted uppercase mt-2 tracking-[0.2em] italic">{service.category?.name || 'General Ritual'}</p>
+                        <p className="font-black text-base tracking-tighter uppercase  text-white font-luxury">{service.name}</p>
+                        <p className="text-[10px] font-black text-muted uppercase mt-2 tracking-[0.2em] ">{service.category?.name || 'General Ritual'}</p>
                       </td>
                       <td className="py-8 px-2 text-right">
-                        <p className="font-black text-xs italic text-white tracking-widest">{format(new Date(appointment.appointmentDate), 'MMM dd, HH:mm')}</p>
+                        <p className="font-black text-xs  text-white tracking-widest">{format(new Date(appointment.appointmentDate), 'MMM dd, HH:mm')}</p>
                       </td>
                       <td className="py-8 px-2 text-right">
-                        <p className="font-black text-lg italic text-primary tracking-tighter font-luxury leading-none">${service.price?.toLocaleString()}</p>
+                        <p className="font-black text-lg  text-primary tracking-tighter font-luxury leading-none">${service.price?.toLocaleString()}</p>
                       </td>
                     </tr>
                   );
@@ -123,23 +123,23 @@ const InvoiceDetailModal = ({ appointment, onClose }) => {
           <div className="flex justify-end pt-12 border-t border-white/10">
             <div className="w-full sm:w-1/2 space-y-6">
               <div className="flex justify-between items-center px-4">
-                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-muted italic">Ritual Summation</span>
-                <span className="font-black italic text-sm text-white tracking-widest">${appointment.totalPrice.toLocaleString()}</span>
+                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-muted ">Ritual Summation</span>
+                <span className="font-black  text-sm text-white tracking-widest">${appointment.totalPrice.toLocaleString()}</span>
               </div>
               <div className="flex justify-between items-center p-8 bg-primary rounded-2xl text-secondary shadow-2xl shadow-primary/20 relative overflow-hidden group">
                 <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
-                <span className="text-[11px] font-black uppercase tracking-[0.5em] italic relative z-10">Eternal Value</span>
-                <span className="text-3xl font-black italic tracking-tighter font-luxury relative z-10 leading-none">${appointment.totalPrice.toLocaleString()}</span>
+                <span className="text-[11px] font-black uppercase tracking-[0.5em]  relative z-10">Eternal Value</span>
+                <span className="text-3xl font-black  tracking-tighter font-luxury relative z-10 leading-none">${appointment.totalPrice.toLocaleString()}</span>
               </div>
             </div>
           </div>
 
           <div className="mt-20 pt-12 border-t border-white/5 text-center space-y-6">
-            <p className="text-[9px] font-black uppercase tracking-[0.6em] text-white/10 italic">Certified Financial Asset Authentication</p>
+            <p className="text-[9px] font-black uppercase tracking-[0.6em] text-white/10 ">Certified Financial Asset Authentication</p>
             <div className="flex items-center justify-center gap-6">
               <button
                 onClick={handleExportPDF}
-                className="flex items-center gap-4 px-10 py-5 bg-secondary text-primary rounded-2xl font-black text-[10px] uppercase tracking-[0.4em] hover:bg-primary hover:text-secondary transition-all active:scale-95 shadow-2xl border border-primary/20 font-luxury italic"
+                className="flex items-center gap-4 px-10 py-5 bg-secondary text-primary rounded-2xl font-black text-[10px] uppercase tracking-[0.4em] hover:bg-primary hover:text-secondary transition-all active:scale-95 shadow-2xl border border-primary/20 font-luxury "
               >
                 <Download size={16} />
                 AUTHORIZE PDF EXPORT
@@ -210,8 +210,8 @@ export default function Invoices() {
             <FileText size={32} strokeWidth={2.5} />
           </div>
           <div className="min-w-0">
-            <h1 className="text-3xl lg:text-4xl font-black text-white tracking-tighter uppercase leading-none truncate md:whitespace-normal font-luxury italic">Financial Archive</h1>
-            <p className="text-[10px] font-black text-muted uppercase tracking-[0.3em] mt-3 opacity-60 italic">Audit trail of all financial ritual settlements</p>
+            <h1 className="text-3xl lg:text-4xl font-black text-white tracking-tighter uppercase leading-none truncate md:whitespace-normal font-luxury ">Financial Archive</h1>
+            <p className="text-[10px] font-black text-muted uppercase tracking-[0.3em] mt-3 opacity-60 ">Audit trail of all financial ritual settlements</p>
           </div>
         </div>
 
@@ -235,13 +235,13 @@ export default function Invoices() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-background/80">
-                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary italic whitespace-nowrap">Ritual Ref</th>
-                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary italic whitespace-nowrap">Client Identity</th>
-                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary italic whitespace-nowrap">Masterpiece</th>
-                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary italic whitespace-nowrap">Execution</th>
-                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary italic whitespace-nowrap">Value</th>
-                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary italic whitespace-nowrap">Settlement</th>
-                <th className="px-10 py-10 text-center text-[10px] font-black uppercase tracking-[0.4em] text-primary italic whitespace-nowrap">Actions</th>
+                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap">Ritual Ref</th>
+                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap">Client Identity</th>
+                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap">Masterpiece</th>
+                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap">Execution</th>
+                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap">Value</th>
+                <th className="px-10 py-10 text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap">Settlement</th>
+                <th className="px-10 py-10 text-center text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
@@ -255,7 +255,7 @@ export default function Invoices() {
                     className="group border-b border-white/5 hover:bg-white/5 transition-all"
                   >
                     <td className="px-10 py-8">
-                      <span className="text-[10px] font-black text-muted tracking-widest uppercase italic bg-background/50 px-3 py-1.5 rounded-2xl border border-white/5 shadow-inner">
+                      <span className="text-[10px] font-black text-muted tracking-widest uppercase  bg-background/50 px-3 py-1.5 rounded-2xl border border-white/5 shadow-inner">
                         #{invoice.appointmentId || invoice._id.substring(18).toUpperCase()}
                       </span>
                     </td>
@@ -269,27 +269,27 @@ export default function Invoices() {
                           />
                         </div>
                         <div>
-                          <p className="text-sm font-black text-white uppercase tracking-tighter font-luxury italic leading-none mb-2 group-hover:text-primary transition-colors">{invoice.client?.name}</p>
-                          <p className="text-[9px] font-black text-muted uppercase tracking-[0.2em] italic">{invoice.client?.phone}</p>
+                          <p className="text-sm font-black text-white uppercase tracking-tighter font-luxury  leading-none mb-2 group-hover:text-primary transition-colors">{invoice.client?.name}</p>
+                          <p className="text-[9px] font-black text-muted uppercase tracking-[0.2em] ">{invoice.client?.phone}</p>
                         </div>
                       </div>
                     </td>
                     <td className="px-10 py-8">
-                      <p className="text-[11px] font-black text-muted uppercase tracking-[0.1em] italic whitespace-nowrap group-hover:text-white transition-colors">{invoice.assignments?.map(a => a.service?.name).join(', ')}</p>
+                      <p className="text-[11px] font-black text-muted uppercase tracking-[0.1em]  whitespace-nowrap group-hover:text-white transition-colors">{invoice.assignments?.map(a => a.service?.name).join(', ')}</p>
                     </td>
                     <td className="px-10 py-8">
                       <div className="flex flex-col gap-1.5">
-                        <span className="text-xs font-black text-white italic tracking-widest leading-none">{format(new Date(invoice.appointmentDate), 'MMM dd, yyyy')}</span>
-                        <span className="text-[9px] font-black text-muted uppercase tracking-[0.3em] opacity-0 group-hover:opacity-100 transition-all italic leading-none">
+                        <span className="text-xs font-black text-white  tracking-widest leading-none">{format(new Date(invoice.appointmentDate), 'MMM dd, yyyy')}</span>
+                        <span className="text-[9px] font-black text-muted uppercase tracking-[0.3em] opacity-0 group-hover:opacity-100 transition-all  leading-none">
                           {format(new Date(invoice.appointmentDate), 'hh:mm a')}
                         </span>
                       </div>
                     </td>
                     <td className="px-10 py-8">
-                      <p className="text-xl font-black text-white tracking-tighter italic font-luxury leading-none">${invoice.totalPrice.toLocaleString()}</p>
+                      <p className="text-xl font-black text-white tracking-tighter  font-luxury leading-none">${invoice.totalPrice.toLocaleString()}</p>
                     </td>
                     <td className="px-10 py-8">
-                      <div className="flex flex-col gap-3 italic">
+                      <div className="flex flex-col gap-3 ">
                         <div className={`
                           inline-flex items-center gap-2 px-4 py-2 rounded-xl border text-[9px] font-black uppercase tracking-[0.3em] w-fit shadow-xl
                           ${invoice.status === 'Completed' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500' :
@@ -340,9 +340,9 @@ export default function Invoices() {
         {!filteredInvoices.length && (
           <div className="p-32 text-center space-y-8">
             <div className="w-24 h-24 bg-white/5 rounded-2xl flex items-center justify-center mx-auto border border-dashed border-white/10 animate-pulse">
-               <AlertCircle className="text-white/10" size={48} strokeWidth={1} />
+              <AlertCircle className="text-white/10" size={48} strokeWidth={1} />
             </div>
-            <p className="text-muted/40 font-black uppercase tracking-[0.5em] text-[10px] italic">No Masterpiece Records Detected in Matrix</p>
+            <p className="text-muted/40 font-black uppercase tracking-[0.5em] text-[10px] ">No Masterpiece Records Detected in Matrix</p>
           </div>
         )}
       </div>

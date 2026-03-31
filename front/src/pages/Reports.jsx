@@ -37,7 +37,7 @@ export default function Reports() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-1">
-          <h1 className="text-4xl font-black text-white tracking-tighter uppercase leading-tight italic font-luxury">Business Intelligence</h1>
+          <h1 className="text-4xl font-black text-white tracking-tighter uppercase leading-tight  font-luxury">Business Intelligence</h1>
           <p className="text-muted font-bold text-xs uppercase tracking-[0.2em]">Operational audit and growth analytics vault</p>
         </div>
       </div>
@@ -60,8 +60,8 @@ export default function Reports() {
             <div className="w-12 h-12 rounded-xl bg-background border border-white/5 flex items-center justify-center mb-6 text-muted group-hover:bg-primary group-hover:text-secondary transition-all duration-500 shadow-inner">
               <stat.icon size={22} />
             </div>
-            <h3 className="text-muted text-[9px] font-black uppercase tracking-[0.2em] leading-none mb-3 italic opacity-60 group-hover:opacity-100 transition-opacity">{stat.label}</h3>
-            <p className="text-3xl font-black text-white tracking-tighter italic font-luxury">{stat.value}</p>
+            <h3 className="text-muted text-[9px] font-black uppercase tracking-[0.2em] leading-none mb-3  opacity-60 group-hover:opacity-100 transition-opacity">{stat.label}</h3>
+            <p className="text-3xl font-black text-white tracking-tighter  font-luxury">{stat.value}</p>
             <div className="absolute bottom-0 left-0 w-full h-[1px] bg-luxury-gradient opacity-0 group-hover:opacity-100 transition-opacity" />
           </motion.div>
         ))}
@@ -78,8 +78,8 @@ export default function Reports() {
         ].map((item, i) => (
           <div key={i} className="bg-secondary p-6 rounded-2xl border border-white/5 shadow-xl text-center">
             <item.icon size={18} className="mx-auto text-primary mb-3" />
-            <p className="text-2xl font-black text-white tracking-tighter italic font-luxury">{item.value}</p>
-            <p className="text-[9px] font-black text-muted uppercase tracking-widest mt-1 italic">{item.label}</p>
+            <p className="text-2xl font-black text-white tracking-tighter  font-luxury">{item.value}</p>
+            <p className="text-[9px] font-black text-muted uppercase tracking-widest mt-1 ">{item.label}</p>
           </div>
         ))}
       </div>
@@ -87,7 +87,7 @@ export default function Reports() {
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
         <div className="bg-secondary p-10 rounded-2xl shadow-2xl border border-white/5">
-          <h3 className="text-xl font-black text-white tracking-tighter uppercase italic mb-10 font-luxury">Monthly Revenue</h3>
+          <h3 className="text-xl font-black text-white tracking-tighter uppercase  mb-10 font-luxury">Monthly Revenue</h3>
           <div className="h-[280px]">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={intel.monthlyData}>
@@ -112,7 +112,7 @@ export default function Reports() {
         </div>
 
         <div className="bg-secondary p-10 rounded-2xl shadow-2xl border border-white/5">
-          <h3 className="text-xl font-black text-white tracking-tighter uppercase italic mb-10 font-luxury">Monthly Appointments</h3>
+          <h3 className="text-xl font-black text-white tracking-tighter uppercase  mb-10 font-luxury">Monthly Appointments</h3>
           <div className="h-[280px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={intel.monthlyData}>
@@ -134,11 +134,11 @@ export default function Reports() {
       {/* Recent Activity Log */}
       <div className="bg-secondary rounded-2xl shadow-2xl border border-white/5 overflow-hidden">
         <div className="p-8 border-b border-white/5">
-          <h3 className="text-xl font-black text-white tracking-tighter uppercase italic font-luxury">Recent Activity Log</h3>
+          <h3 className="text-xl font-black text-white tracking-tighter uppercase  font-luxury">Recent Activity Log</h3>
         </div>
         <div className="divide-y divide-white/5">
           {intel.recentLogs.length === 0 && (
-            <div className="p-16 text-center text-muted font-black uppercase tracking-widest text-[10px] italic">No activity records found</div>
+            <div className="p-16 text-center text-muted font-black uppercase tracking-widest text-[10px] ">No activity records found</div>
           )}
           {intel.recentLogs.map((log, i) => (
             <motion.div
@@ -153,12 +153,12 @@ export default function Reports() {
                   {statusIcon(log.type)}
                 </div>
                 <div>
-                  <p className="text-sm font-black text-white uppercase tracking-tight italic font-luxury">{log.title}</p>
+                  <p className="text-sm font-black text-white uppercase tracking-tight  font-luxury">{log.title}</p>
                   <p className="text-[10px] font-bold text-muted uppercase tracking-widest mt-1">{log.description}</p>
                 </div>
               </div>
               <div className="text-right">
-                <p className="text-sm font-black text-white italic font-luxury">${log.amount.toLocaleString()}</p>
+                <p className="text-sm font-black text-white  font-luxury">${log.amount.toLocaleString()}</p>
                 <p className="text-[9px] font-bold text-muted uppercase tracking-widest mt-1">
                   {log.date ? format(new Date(log.date), 'MMM dd, yyyy') : '—'}
                 </p>

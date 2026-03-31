@@ -39,7 +39,7 @@ const PageHero = () => {
           <span className="text-[9px] font-black text-primary uppercase tracking-[0.3em]">Pure Elegance</span>
         </motion.div>
 
-        <h1 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter flex justify-center gap-[2px] font-luxury italic">
+        <h1 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter flex justify-center gap-[2px] font-luxury ">
           {title.map((char, i) => (
             <motion.span
               key={i}
@@ -60,7 +60,7 @@ const PageHero = () => {
         >
           <Link to="/" className="hover:text-primary transition-colors">Home Base</Link>
           <span className="w-1.5 h-px bg-white/20" />
-          <span className="text-primary italic">The Menu</span>
+          <span className="text-primary ">The Menu</span>
         </motion.div>
       </div>
     </section>
@@ -88,7 +88,7 @@ const BookingCTA = () => {
 
           <div className="relative z-10 max-w-2xl mx-auto">
             <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter mb-8 leading-none whitespace-pre-line font-luxury">
-              READY FOR YOUR {"\n"} <span className="text-primary italic font-luxury">TRANSFORMATION?</span>
+              READY FOR YOUR {"\n"} <span className="text-primary  font-luxury">TRANSFORMATION?</span>
             </h2>
             <p className="text-muted text-[11px] md:text-xs font-black uppercase tracking-[0.3em] mb-12 max-w-sm mx-auto leading-relaxed">
               Ascend to a new standard of personal care. Secure your ritual coordinates today.
@@ -250,7 +250,7 @@ export default function PublicServices() {
 
                       <div className="px-2 pb-2">
                         <div className="flex justify-between items-start mb-2">
-                          <h3 className="text-lg font-black text-white uppercase tracking-tight line-clamp-1 font-luxury italic leading-none">{service.name}</h3>
+                          <h3 className="text-lg font-black text-white uppercase tracking-tight line-clamp-1 font-luxury  leading-none">{service.name}</h3>
                           <span className="text-xl font-black text-primary">${service.price}</span>
                         </div>
                         <div className="flex items-center gap-3 text-muted text-[9px] font-black uppercase tracking-widest mb-6">
@@ -327,7 +327,7 @@ export default function PublicServices() {
                   </button>
                 </div>
 
-                <p className="text-[9px] font-black text-muted/40 uppercase tracking-[0.5em] italic">
+                <p className="text-[9px] font-black text-muted/40 uppercase tracking-[0.5em] ">
                   Chronicle Page {currentPage} of {totalPages}
                 </p>
               </div>

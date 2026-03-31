@@ -98,7 +98,7 @@ const Hero = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1.2 }}
-          className="text-muted text-xs md:text-base font-medium tracking-widest uppercase mb-12 max-w-2xl mx-auto italic"
+          className="text-muted text-xs md:text-base font-medium tracking-widest uppercase mb-12 max-w-2xl mx-auto "
         >
           Crafting Your Perfect Style Since Day One
         </motion.p>
@@ -170,7 +170,7 @@ const ServicesPreview = () => {
             viewport={{ once: true }}
             className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter text-center"
           >
-            Our Signature <span className="text-primary font-luxury italic">Services</span>
+            Our Signature <span className="text-primary font-luxury ">Services</span>
           </motion.h2>
           <motion.div
             initial={{ width: 0 }}
@@ -369,7 +369,7 @@ const WhyChooseUs = () => {
               className="absolute bottom-12 right-12 bg-secondary/40 backdrop-blur-3xl border border-white/10 p-10 rounded-2xl shadow-3xl max-w-[280px]"
             >
               <div className="text-center">
-                <span className="text-7xl font-black text-transparent bg-clip-text bg-luxury-gradient tracking-tighter italic">12+</span>
+                <span className="text-7xl font-black text-transparent bg-clip-text bg-luxury-gradient tracking-tighter ">12+</span>
                 <p className="text-[10px] font-black text-white uppercase tracking-[0.4em] mt-4 mb-2">Years of Mastery</p>
                 <div className="h-px w-12 bg-primary mx-auto" />
                 <p className="text-[8px] text-muted font-bold uppercase tracking-widest mt-4">Pioneering the future of cinematic beauty since 2012.</p>
@@ -417,7 +417,7 @@ const TeamPreview = () => {
             whileInView={{ opacity: 1, y: 0 }}
             className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter"
           >
-            Meet Our <span className="text-primary italic">Artists</span>
+            Meet Our <span className="text-primary ">Artists</span>
           </motion.h2>
         </div>
 
@@ -450,17 +450,17 @@ const TeamPreview = () => {
 
                 <div className="px-2 pb-2">
                   <div className="mb-4">
-                    <h4 className="text-lg font-black text-white uppercase tracking-tight line-clamp-1 font-luxury italic leading-none">{artist.name}</h4>
-                    <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mt-2 mb-1 opacity-80 italic">Senior Artisan</p>
+                    <h4 className="text-lg font-black text-white uppercase tracking-tight line-clamp-1 font-luxury  leading-none">{artist.name}</h4>
+                    <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mt-2 mb-1 opacity-80 ">Senior Artisan</p>
                   </div>
-                  
+
                   <div className="flex items-center gap-3 text-muted text-[9px] font-black uppercase tracking-widest mb-6">
                     <span className="flex items-center gap-1.5">
                       <Sparkles size={12} className="text-primary" /> Specialist
                     </span>
                     <span className="h-1 w-1 bg-white/10 rounded-full" />
                     <span className="flex items-center gap-1.5">
-                       Mastery v3.0
+                      Mastery v3.0
                     </span>
                   </div>
 
@@ -520,7 +520,7 @@ const Testimonials = () => {
                 transition={{ duration: 0.6, ease: "easeOut" }}
                 className="flex flex-col items-center"
               >
-                <p className="text-lg md:text-2xl font-black text-white uppercase tracking-tight italic mb-8 leading-snug max-w-2xl font-luxury">
+                <p className="text-lg md:text-2xl font-black text-white uppercase tracking-tight  mb-8 leading-snug max-w-2xl font-luxury">
                   "{reviews[index].text}"
                 </p>
                 <div className="flex flex-col items-center">
@@ -637,7 +637,7 @@ const RitualMenu = () => {
           </AnimatePresence>
 
           {filteredServices.length === 0 && (
-            <div className="py-24 text-center text-muted italic uppercase text-[11px] font-black tracking-[0.4em] bg-secondary/50 rounded-2xl border border-white/5 shadow-inner">
+            <div className="py-24 text-center text-muted  uppercase text-[11px] font-black tracking-[0.4em] bg-secondary/50 rounded-2xl border border-white/5 shadow-inner">
               Consulting the ritual archive...
             </div>
           )}
@@ -668,7 +668,7 @@ const FAQ = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
           <div>
             <p className="text-primary font-black uppercase tracking-[0.3em] text-[10px] mb-4">Curiosity Protocol</p>
-            <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mb-8 leading-none">Frequently <br /> <span className="italic text-transparent bg-clip-text bg-luxury-gradient">Asked Questions</span></h2>
+            <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mb-8 leading-none">Frequently <br /> <span className=" text-transparent bg-clip-text bg-luxury-gradient">Asked Questions</span></h2>
             <p className="text-muted text-sm md:text-base max-w-md uppercase font-bold tracking-widest leading-relaxed">
               Informing your journey through the Glow Saloon ecosystem. Clear answers for a clear mind.
             </p>
@@ -680,7 +680,7 @@ const FAQ = () => {
                   onClick={() => setOpen(open === i ? null : i)}
                   className="w-full px-8 py-6 flex items-center justify-between text-left"
                 >
-                  <span className="text-[11px] font-black text-white uppercase tracking-widest italic">{faq.q}</span>
+                  <span className="text-[11px] font-black text-white uppercase tracking-widest ">{faq.q}</span>
                   {open === i ? <Minus size={16} className="text-primary" /> : <Plus size={16} className="text-muted" />}
                 </button>
                 <AnimatePresence>

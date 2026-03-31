@@ -18,7 +18,7 @@ const StatsCounter = ({ target, label, duration = 3000 }) => {
 
   useEffect(() => {
     if (!isVisible) return;
-    
+
     let start = 0;
     const end = parseInt(target);
     if (start === end) return;
@@ -37,7 +37,7 @@ const StatsCounter = ({ target, label, duration = 3000 }) => {
 
   return (
     <div ref={sectionRef} className="flex flex-col items-center">
-      <h3 className="text-3xl md:text-5xl font-black text-primary italic tracking-tighter mb-2">
+      <h3 className="text-3xl md:text-5xl font-black text-primary  tracking-tighter mb-2">
         {isVisible ? count : 0}{target.includes('+') ? '+' : target.includes('★') ? '★' : ''}
       </h3>
       <p className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-[0.3em]">{label}</p>

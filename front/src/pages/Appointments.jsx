@@ -158,7 +158,7 @@ export default function Appointments() {
             <CalendarIcon size={32} strokeWidth={2.5} />
           </div>
           <div className="min-w-0">
-            <h1 className="text-3xl lg:text-4xl font-black text-white tracking-tighter uppercase leading-none truncate md:whitespace-normal font-luxury italic">Appointment Bookings</h1>
+            <h1 className="text-3xl lg:text-4xl font-black text-white tracking-tighter uppercase leading-none truncate md:whitespace-normal font-luxury ">Appointment Bookings</h1>
             <p className="text-[10px] font-black text-muted uppercase tracking-[0.3em] mt-3 opacity-60">Architectural Management of the Temporal Record</p>
           </div>
         </div>
@@ -184,8 +184,8 @@ export default function Appointments() {
 
             <div className="flex flex-col sm:flex-row gap-6 sm:items-center justify-between mb-12 relative z-10">
               <div className="flex flex-col">
-                <span className="text-[9px] font-black text-primary uppercase tracking-[0.5em] leading-none mb-3 italic">Temporal Matrix</span>
-                <h3 className="text-3xl font-black text-white uppercase tracking-tighter italic font-luxury">{format(currentDate, 'MMMM yyyy')}</h3>
+                <span className="text-[9px] font-black text-primary uppercase tracking-[0.5em] leading-none mb-3 ">Temporal Matrix</span>
+                <h3 className="text-3xl font-black text-white uppercase tracking-tighter  font-luxury">{format(currentDate, 'MMMM yyyy')}</h3>
               </div>
               <div className="flex gap-4">
                 <button
@@ -205,7 +205,7 @@ export default function Appointments() {
 
             <div className="grid grid-cols-7 gap-3 relative z-10">
               {['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map(day => (
-                <div key={day} className="text-center text-[9px] font-black text-muted/40 py-4 uppercase tracking-[0.4em] italic">{day}</div>
+                <div key={day} className="text-center text-[9px] font-black text-muted/40 py-4 uppercase tracking-[0.4em] ">{day}</div>
               ))}
               {days.map((day, i) => {
                 const isSelected = isSameDay(day, selectedDate);
@@ -240,7 +240,7 @@ export default function Appointments() {
         <div className="xl:col-span-4 space-y-10 lg:mt-0">
           <div className="flex items-center justify-between px-4">
             <div className="space-y-2">
-              <h3 className="text-2xl font-black text-white tracking-tighter uppercase leading-none font-luxury italic">Selected Protocol</h3>
+              <h3 className="text-2xl font-black text-white tracking-tighter uppercase leading-none font-luxury ">Selected Protocol</h3>
               <p className="text-primary font-black text-[9px] uppercase tracking-[0.3em]">{format(selectedDate, 'MMMM do, yyyy')}</p>
             </div>
             <div className="w-12 h-12 rounded-2xl bg-secondary border border-white/5 flex items-center justify-center text-primary font-black text-lg shadow-inner">
@@ -267,7 +267,7 @@ export default function Appointments() {
                       />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <h4 className="font-black text-white tracking-tighter uppercase text-sm truncate font-luxury italic leading-none mb-2">{app.client?.name}</h4>
+                      <h4 className="font-black text-white tracking-tighter uppercase text-sm truncate font-luxury  leading-none mb-2">{app.client?.name}</h4>
                       <div className="flex flex-wrap items-center gap-2">
                         <div className="flex items-center gap-1 text-[8px] font-black text-primary uppercase tracking-[0.1em] bg-primary/10 px-2 py-1 rounded-2xl border border-primary/20">
                           <Clock size={10} strokeWidth={3} className="opacity-50" />
@@ -287,7 +287,7 @@ export default function Appointments() {
                       return (
                         <div key={s._id || idx} className="flex items-center justify-between text-muted/60 group-hover:text-white transition-colors">
                           <span className="text-[9px] font-black uppercase tracking-widest truncate max-w-[150px]">{s.name}</span>
-                          <span className="text-[8px] font-black italic opacity-40">${s.price}</span>
+                          <span className="text-[8px] font-black  opacity-40">${s.price}</span>
                         </div>
                       );
                     })}
@@ -305,29 +305,29 @@ export default function Appointments() {
                         <Trash2 size={14} />
                       </button>
                     </div>
-                    <span className="text-xl font-black text-white group-hover:text-primary transition-all font-luxury italic">${app.totalPrice}</span>
+                    <span className="text-xl font-black text-white group-hover:text-primary transition-all font-luxury ">${app.totalPrice}</span>
                   </div>
                 </div>
 
                 <div className="absolute top-0 left-0 w-1 h-full bg-primary/10 group-hover:bg-primary transition-colors" />
               </motion.div>
             ))
-            : (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="py-32 text-center bg-secondary/20 rounded-2xl border border-dashed border-white/10"
-              >
-                <Clock className="mx-auto text-white/5 mb-6 rotate-12" size={64} strokeWidth={1} />
-                <p className="text-muted/40 font-black uppercase tracking-[0.4em] text-[10px] italic">No active protocols recorded</p>
-                <button
-                  onClick={() => setIsDrawerOpen(true)}
-                  className="mt-8 text-primary font-black text-[9px] uppercase tracking-[0.5em] flex items-center justify-center gap-3 mx-auto group hover:scale-105 transition-all"
+              : (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="py-32 text-center bg-secondary/20 rounded-2xl border border-dashed border-white/10"
                 >
-                  <Plus size={14} className="group-hover:rotate-90 transition-transform" /> Initialize Ritual
-                </button>
-              </motion.div>
-            )}
+                  <Clock className="mx-auto text-white/5 mb-6 rotate-12" size={64} strokeWidth={1} />
+                  <p className="text-muted/40 font-black uppercase tracking-[0.4em] text-[10px] ">No active protocols recorded</p>
+                  <button
+                    onClick={() => setIsDrawerOpen(true)}
+                    className="mt-8 text-primary font-black text-[9px] uppercase tracking-[0.5em] flex items-center justify-center gap-3 mx-auto group hover:scale-105 transition-all"
+                  >
+                    <Plus size={14} className="group-hover:rotate-90 transition-transform" /> Initialize Ritual
+                  </button>
+                </motion.div>
+              )}
           </div>
         </div>
       </div>
@@ -379,7 +379,7 @@ export default function Appointments() {
                 className="space-y-8 overflow-hidden bg-white/5 p-8 rounded-2xl border border-white/5"
               >
                 <div className="space-y-3">
-                  <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-2 italic">Legal Identifer</label>
+                  <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-2 ">Legal Identifer</label>
                   <input
                     name="clientName" onChange={formik.handleChange} value={formik.values.clientName}
                     className="w-full bg-background border border-white/5 focus:border-primary/30 rounded-xl px-6 py-4 text-xs font-bold outline-none transition-all text-white shadow-inner placeholder:text-white/5"
@@ -389,7 +389,7 @@ export default function Appointments() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-3">
-                    <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-2 italic">Contact Tether</label>
+                    <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-2 ">Contact Tether</label>
                     <input
                       name="clientPhone" onChange={formik.handleChange} value={formik.values.clientPhone}
                       className="w-full bg-background border border-white/5 focus:border-primary/30 rounded-xl px-6 py-4 text-xs font-bold outline-none transition-all text-white shadow-inner placeholder:text-white/5"
@@ -397,7 +397,7 @@ export default function Appointments() {
                     />
                   </div>
                   <div className="space-y-3">
-                    <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-2 italic">Digital Signature</label>
+                    <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-2 ">Digital Signature</label>
                     <input
                       name="clientEmail" onChange={formik.handleChange} value={formik.values.clientEmail}
                       className="w-full bg-background border border-white/5 focus:border-primary/30 rounded-xl px-6 py-4 text-xs font-bold outline-none transition-all text-white shadow-inner placeholder:text-white/5"
@@ -422,7 +422,7 @@ export default function Appointments() {
           </div>
 
           <div className="space-y-4">
-            <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-2 italic underline decoration-primary/30 decoration-2 underline-offset-8">Temporal Coordinates</label>
+            <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-2  underline decoration-primary/30 decoration-2 underline-offset-8">Temporal Coordinates</label>
             <input
               name="date" type="datetime-local" onChange={formik.handleChange} value={formik.values.date}
               className="w-full bg-secondary border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.2em] outline-none text-white shadow-2xl transition-all"
@@ -445,7 +445,7 @@ export default function Appointments() {
           <div className="pt-8">
             <button
               type="submit" disabled={formik.isSubmitting}
-              className="w-full py-6 bg-primary text-secondary rounded-2xl font-black uppercase text-xs tracking-[0.4em] shadow-2xl shadow-primary/20 hover:scale-[1.02] transition-all flex items-center justify-center gap-4 active:scale-[0.98] disabled:opacity-50 group font-luxury italic"
+              className="w-full py-6 bg-primary text-secondary rounded-2xl font-black uppercase text-xs tracking-[0.4em] shadow-2xl shadow-primary/20 hover:scale-[1.02] transition-all flex items-center justify-center gap-4 active:scale-[0.98] disabled:opacity-50 group font-luxury "
             >
               {formik.isSubmitting ? 'Architecting Matrix...' : selectedAppointment ? 'COMMIT REFINEMENTS' : 'AUTHORIZE INITIATION'}
               <Sparkles size={20} className="group-hover:rotate-12 transition-transform" />
@@ -466,14 +466,14 @@ export default function Appointments() {
             <AlertTriangle size={48} strokeWidth={1.5} />
           </div>
           <p className="text-muted font-black text-[10px] uppercase tracking-[0.3em] leading-relaxed mb-10">
-            Eliminating ritual record for <br /><span className="text-rose-500 text-base font-luxury italic underline decoration-rose-500/30 decoration-2 underline-offset-4">{appointmentToDelete?.client?.name}</span> <br /> from active reality.
+            Eliminating ritual record for <br /><span className="text-rose-500 text-base font-luxury  underline decoration-rose-500/30 decoration-2 underline-offset-4">{appointmentToDelete?.client?.name}</span> <br /> from active reality.
           </p>
           <div className="flex flex-col gap-4">
             <button
               onClick={handleDelete}
-              className="w-full py-5 bg-rose-500 text-white rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] shadow-xl shadow-rose-500/20 active:scale-95 hover:bg-rose-600 transition-all font-luxury italic"
+              className="w-full py-5 bg-rose-500 text-white rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] shadow-xl shadow-rose-500/20 active:scale-95 hover:bg-rose-600 transition-all font-luxury "
             >CONFIRM DISSOLUTION</button>
-            <button onClick={() => setIsDeleteModalOpen(false)} className="w-full py-5 bg-white/5 text-muted rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:text-white transition-all font-luxury italic">ABORT OPERATION</button>
+            <button onClick={() => setIsDeleteModalOpen(false)} className="w-full py-5 bg-white/5 text-muted rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:text-white transition-all font-luxury ">ABORT OPERATION</button>
           </div>
         </div>
       </Modal>

@@ -135,13 +135,13 @@ export default function Staff() {
             <LayoutGrid size={32} strokeWidth={2.5} />
           </div>
           <div className="min-w-0">
-            <h1 className="text-3xl lg:text-4xl font-black text-white tracking-tighter uppercase leading-none truncate md:whitespace-normal font-luxury italic">Artisan Collective</h1>
-            <p className="text-[10px] font-black text-muted uppercase tracking-[0.3em] mt-3 opacity-60 italic">Cataloging Master Grooming Specialists</p>
+            <h1 className="text-3xl lg:text-4xl font-black text-white tracking-tighter uppercase leading-none truncate md:whitespace-normal font-luxury ">Artisan Collective</h1>
+            <p className="text-[10px] font-black text-muted uppercase tracking-[0.3em] mt-3 opacity-60 ">Cataloging Master Grooming Specialists</p>
           </div>
         </div>
         <button
           onClick={() => setIsDrawerOpen(true)}
-          className="flex items-center gap-4 px-10 py-5 bg-primary text-secondary rounded-2xl font-black uppercase text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury italic"
+          className="flex items-center gap-4 px-10 py-5 bg-primary text-secondary rounded-2xl font-black uppercase text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury "
         >
           <Plus size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
           INDuct NEW ARTISAN
@@ -168,7 +168,7 @@ export default function Staff() {
                 <div className="absolute top-4 right-4 px-3 py-1 bg-background/90 backdrop-blur-md rounded-full text-[9px] font-black text-primary uppercase tracking-widest shadow-lg">
                   {member.role || "Artisan"}
                 </div>
-                
+
                 {/* Admin Actions Overlay */}
                 <div className="absolute top-4 left-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-x-[-10px] group-hover:translate-x-0">
                   <button
@@ -188,22 +188,22 @@ export default function Staff() {
 
               <div className="px-2 pb-2">
                 <div className="mb-4">
-                  <h3 className="text-lg font-black text-white uppercase tracking-tight line-clamp-1 font-luxury italic leading-none">{member.name}</h3>
+                  <h3 className="text-lg font-black text-white uppercase tracking-tight line-clamp-1 font-luxury  leading-none">{member.name}</h3>
                   <div className="flex items-center gap-2 mt-2">
                     <Mail size={10} className="text-primary/40" />
                     <span className="text-[9px] font-black text-muted uppercase tracking-widest truncate max-w-[150px]">{member.email}</span>
                   </div>
                 </div>
-                
+
                 <div className="flex flex-wrap gap-1.5 mb-6 h-12 overflow-y-auto no-scrollbar">
                   {member.services.map(s => (
-                    <span key={s._id} className="px-2 py-1 bg-primary/5 text-primary text-[7px] font-black uppercase tracking-widest rounded-2xl border border-primary/10 whitespace-nowrap italic">
+                    <span key={s._id} className="px-2 py-1 bg-primary/5 text-primary text-[7px] font-black uppercase tracking-widest rounded-2xl border border-primary/10 whitespace-nowrap ">
                       {s.name}
                     </span>
                   ))}
                 </div>
 
-                <button 
+                <button
                   onClick={() => { setProfileExpert(member); setIsProfileOpen(true); }}
                   className="w-full py-3.5 rounded-xl bg-background text-[10px] font-black uppercase tracking-[0.2em] text-white hover:bg-primary hover:text-secondary transition-all shadow-sm group-hover:shadow-primary/20"
                 >
@@ -232,11 +232,11 @@ export default function Staff() {
               ) : (
                 <div className="flex flex-col items-center text-white/5">
                   <Camera size={48} strokeWidth={1} />
-                  <span className="text-[10px] font-black uppercase tracking-[0.4em] mt-4 italic">Visionary Signature</span>
+                  <span className="text-[10px] font-black uppercase tracking-[0.4em] mt-4 ">Visionary Signature</span>
                 </div>
               )}
               <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-                 <Upload size={32} className="text-secondary" />
+                <Upload size={32} className="text-secondary" />
               </div>
             </div>
             <input
@@ -245,27 +245,27 @@ export default function Staff() {
               className="absolute inset-0 opacity-0 cursor-pointer z-20"
             />
             <div className="absolute -bottom-4 -right-4 w-12 h-12 bg-primary rounded-2xl flex items-center justify-center text-secondary shadow-xl">
-               <Plus size={24} strokeWidth={3} />
+              <Plus size={24} strokeWidth={3} />
             </div>
           </div>
         </div>
 
         <form onSubmit={formik.handleSubmit} className="space-y-10">
           <div className="space-y-4">
-            <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 italic underline decoration-primary/30 decoration-2 underline-offset-8">Artisan Nomenclature</label>
+            <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2  underline decoration-primary/30 decoration-2 underline-offset-8">Artisan Nomenclature</label>
             <input
               name="name"
               onChange={formik.handleChange}
               value={formik.values.name}
-              className="w-full bg-secondary border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.2em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5 font-luxury italic"
+              className="w-full bg-secondary border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.2em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5 font-luxury "
               placeholder="ENTER LEGAL IDENTITY"
             />
-            {formik.touched.name && formik.errors.name && <p className="text-rose-500 text-[9px] font-black ml-4 uppercase italic tracking-widest">{formik.errors.name}</p>}
+            {formik.touched.name && formik.errors.name && <p className="text-rose-500 text-[9px] font-black ml-4 uppercase  tracking-widest">{formik.errors.name}</p>}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-4">
-              <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 italic">Digital Beacon</label>
+              <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 ">Digital Beacon</label>
               <input
                 name="email"
                 onChange={formik.handleChange}
@@ -273,11 +273,11 @@ export default function Staff() {
                 className="w-full bg-secondary border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.2em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5"
                 placeholder="EMAIL@DOMAIN.COM"
               />
-              {formik.touched.email && formik.errors.email && <p className="text-rose-500 text-[9px] font-black ml-4 uppercase italic tracking-widest">{formik.errors.email}</p>}
+              {formik.touched.email && formik.errors.email && <p className="text-rose-500 text-[9px] font-black ml-4 uppercase  tracking-widest">{formik.errors.email}</p>}
             </div>
 
             <div className="space-y-4">
-              <label className="text-[10px) font-black text-muted uppercase tracking-[0.3em] ml-2 italic">Tether Signal</label>
+              <label className="text-[10px) font-black text-muted uppercase tracking-[0.3em] ml-2 ">Tether Signal</label>
               <input
                 name="phone"
                 onChange={formik.handleChange}
@@ -285,16 +285,16 @@ export default function Staff() {
                 className="w-full bg-secondary border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.2em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5"
                 placeholder="+XX XXXXX XXXXX"
               />
-              {formik.touched.phone && formik.errors.phone && <p className="text-rose-500 text-[9px] font-black ml-4 uppercase italic tracking-widest">{formik.errors.phone}</p>}
+              {formik.touched.phone && formik.errors.phone && <p className="text-rose-500 text-[9px] font-black ml-4 uppercase  tracking-widest">{formik.errors.phone}</p>}
             </div>
           </div>
 
           <div className="space-y-6">
-            <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 italic">Ritual Specializations</label>
+            <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 ">Ritual Specializations</label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[350px] overflow-y-auto pr-4 custom-scrollbar">
               {services.map(s => (
                 <label key={s._id} className={`flex items-center justify-between p-6 rounded-2xl cursor-pointer transition-all border border-white/5 group ${formik.values.services.includes(s._id) ? 'bg-primary text-secondary shadow-xl shadow-primary/20' : 'bg-background hover:bg-white/5 text-muted'}`}>
-                  <span className="text-[10px] font-black uppercase tracking-[0.2em] italic">{s.name}</span>
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] ">{s.name}</span>
                   <input
                     type="checkbox"
                     name="services"
@@ -319,7 +319,7 @@ export default function Staff() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-6 px-2 bg-primary text-secondary rounded-2xl text-[10px] font-black uppercase tracking-[0.5em] hover:bg-primary/90 transition-all shadow-2xl active:scale-[0.98] disabled:opacity-50 font-luxury italic"
+            className="w-full py-6 px-2 bg-primary text-secondary rounded-2xl text-[10px] font-black uppercase tracking-[0.5em] hover:bg-primary/90 transition-all shadow-2xl active:scale-[0.98] disabled:opacity-50 font-luxury "
           >
             {selectedExpert ? 'COMMIT PROTOCOL UPDATES' : 'AUTHORIZE ONBOARDING'}
           </button>
@@ -336,7 +336,7 @@ export default function Staff() {
           <>
             <button
               onClick={() => { setIsProfileOpen(false); handleEdit(profileExpert); }}
-              className="flex-1 py-5 bg-primary text-secondary rounded-2xl text-[10px] font-black uppercase tracking-[0.4em] hover:bg-primary/90 transition-all shadow-xl active:scale-95 font-luxury italic"
+              className="flex-1 py-5 bg-primary text-secondary rounded-2xl text-[10px] font-black uppercase tracking-[0.4em] hover:bg-primary/90 transition-all shadow-xl active:scale-95 font-luxury "
             >
               REDEFINE IDENTITY
             </button>
@@ -353,36 +353,36 @@ export default function Staff() {
           <div className="space-y-12 p-2">
             <div className="grid grid-cols-2 gap-6">
               <div className="p-6 bg-secondary/50 rounded-2xl border border-white/5 shadow-inner group">
-                <div className="flex items-center gap-3 text-primary mb-4 italic">
+                <div className="flex items-center gap-3 text-primary mb-4 ">
                   <Phone size={14} strokeWidth={2.5} />
                   <span className="text-[9px] font-black uppercase tracking-[0.3em]">Signal</span>
                 </div>
-                <div className="text-xs font-black text-white italic tracking-widest break-all group-hover:text-primary transition-colors">{profileExpert.phone || 'NO TETHER'}</div>
+                <div className="text-xs font-black text-white  tracking-widest break-all group-hover:text-primary transition-colors">{profileExpert.phone || 'NO TETHER'}</div>
               </div>
               <div className="p-6 bg-secondary/50 rounded-2xl border border-white/5 shadow-inner group">
-                <div className="flex items-center gap-3 text-primary mb-4 italic">
+                <div className="flex items-center gap-3 text-primary mb-4 ">
                   <Mail size={14} strokeWidth={2.5} />
                   <span className="text-[9px] font-black uppercase tracking-[0.3em]">Beacon</span>
                 </div>
-                <div className="text-xs font-black text-white italic tracking-widest break-all group-hover:text-primary transition-colors">{profileExpert.email || 'NO BEACON'}</div>
+                <div className="text-xs font-black text-white  tracking-widest break-all group-hover:text-primary transition-colors">{profileExpert.email || 'NO BEACON'}</div>
               </div>
             </div>
 
             <div className="space-y-6">
               <div className="flex items-center justify-between px-2">
                 <div className="flex items-center gap-4">
-                   <Award size={16} className="text-primary" />
-                   <span className="text-[10px] font-black text-white uppercase tracking-[0.4em] italic leading-none">Service Masteries</span>
+                  <Award size={16} className="text-primary" />
+                  <span className="text-[10px] font-black text-white uppercase tracking-[0.4em]  leading-none">Service Masteries</span>
                 </div>
                 <span className="h-[1px] flex-1 bg-white/5 mx-6" />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-[300px] overflow-y-auto custom-scrollbar pr-2">
                 {profileExpert.services.map(s => (
                   <div key={s._id} className="p-6 bg-background rounded-2xl border border-white/5 shadow-3xl hover:border-primary/20 transition-all group/skill">
-                    <div className="text-[11px] font-black text-white uppercase tracking-tighter italic font-luxury leading-none transition-all group-hover/skill:text-primary">{s.name}</div>
+                    <div className="text-[11px] font-black text-white uppercase tracking-tighter  font-luxury leading-none transition-all group-hover/skill:text-primary">{s.name}</div>
                     <div className="flex items-center justify-between mt-4">
-                       <div className="text-[8px] font-black text-primary uppercase tracking-[0.3em] italic opacity-60">Elite Professional</div>
-                       <Sparkles size={12} className="text-primary opacity-0 group-hover/skill:opacity-100 transition-opacity" />
+                      <div className="text-[8px] font-black text-primary uppercase tracking-[0.3em]  opacity-60">Elite Professional</div>
+                      <Sparkles size={12} className="text-primary opacity-0 group-hover/skill:opacity-100 transition-opacity" />
                     </div>
                   </div>
                 ))}
@@ -404,20 +404,20 @@ export default function Staff() {
             <Trash2 size={48} strokeWidth={1} />
           </div>
 
-          <p className="text-muted text-[10px] font-black uppercase tracking-[0.3em] mb-10 leading-relaxed italic">
-            Confirm permanent erasure of <br /><span className="text-rose-500 text-base font-luxury italic underline decoration-rose-500/30 decoration-2 underline-offset-4">{expertToDelete?.name}</span> <br /> from active archives?
+          <p className="text-muted text-[10px] font-black uppercase tracking-[0.3em] mb-10 leading-relaxed ">
+            Confirm permanent erasure of <br /><span className="text-rose-500 text-base font-luxury  underline decoration-rose-500/30 decoration-2 underline-offset-4">{expertToDelete?.name}</span> <br /> from active archives?
           </p>
 
           <div className="flex flex-col gap-4">
             <button
               onClick={confirmDelete}
-              className="w-full py-5 bg-rose-500 text-white rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:bg-rose-600 transition-all shadow-xl active:scale-95 font-luxury italic"
+              className="w-full py-5 bg-rose-500 text-white rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:bg-rose-600 transition-all shadow-xl active:scale-95 font-luxury "
             >
               CONFIRM ERASURE
             </button>
             <button
               onClick={() => setIsDeleteModalOpen(false)}
-              className="w-full py-5 bg-white/5 text-muted rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:text-white transition-all font-luxury italic"
+              className="w-full py-5 bg-white/5 text-muted rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:text-white transition-all font-luxury "
             >
               ABORT PROTOCOL
             </button>

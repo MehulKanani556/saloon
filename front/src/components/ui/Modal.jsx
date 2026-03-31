@@ -6,13 +6,13 @@ import { X } from 'lucide-react';
 /**
  * Reusable Cinematic Modal Component
  */
-const Modal = ({ 
-  isOpen, 
-  onClose, 
-  title, 
-  subtitle, 
-  children, 
-  maxWidth = 'max-w-lg', 
+const Modal = ({
+  isOpen,
+  onClose,
+  title,
+  subtitle,
+  children,
+  maxWidth = 'max-w-lg',
   maxHeight = 'max-h-[85vh]',
   headerImage,
   footer
@@ -37,7 +37,7 @@ const Modal = ({
           onClick={onClose}
           className="fixed inset-0 bg-background/80 backdrop-blur-xl cursor-pointer"
         />
-        
+
         <motion.div
           initial={{ opacity: 0, scale: 0.98, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -58,16 +58,16 @@ const Modal = ({
               </button>
               <div className="absolute bottom-8 left-8 z-10 pr-6">
                 {subtitle && <div className="px-3 py-1 bg-primary text-secondary text-[8px] font-black uppercase tracking-[0.2em] rounded-2xl inline-block mb-3 shadow-2xl">{subtitle}</div>}
-                <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tighter uppercase italic leading-tight font-luxury">{title}</h2>
+                <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tighter uppercase  leading-tight font-luxury">{title}</h2>
               </div>
             </div>
           ) : (
             <div className="px-10 py-8 border-b border-white/5 flex items-center justify-between bg-white/5 shrink-0">
               <div>
-                <h2 className="text-xl sm:text-2xl font-black text-white tracking-tighter uppercase leading-none italic font-luxury">
+                <h2 className="text-xl sm:text-2xl font-black text-white tracking-tighter uppercase leading-none  font-luxury">
                   {title}
                 </h2>
-                {subtitle && <p className="text-primary font-black text-[9px] uppercase tracking-[0.2em] mt-2 italic">{subtitle}</p>}
+                {subtitle && <p className="text-primary font-black text-[9px] uppercase tracking-[0.2em] mt-2 ">{subtitle}</p>}
               </div>
               <button onClick={onClose} className="p-2.5 bg-background border border-white/5 rounded-xl text-muted hover:text-primary transition-all hover:rotate-90 shadow-xl">
                 <X size={18} />

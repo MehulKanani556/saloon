@@ -57,9 +57,9 @@ export default function Sidebar({ isOpen, setIsOpen }) {
   }, []);
 
   const sidebarVariants = {
-    open: { x: 0, opacity: 1, width: 280 },
-    closed: { x: -280, opacity: 0, width: 0 },
-    desktop: { x: 0, opacity: 1, width: isCollapsed ? 100 : 280 }
+    open: { x: 0, opacity: 1, width: 260 },
+    closed: { x: -260, opacity: 0, width: 0 },
+    desktop: { x: 0, opacity: 1, width: isCollapsed ? 80 : 260 }
   };
 
   return (
@@ -70,14 +70,14 @@ export default function Sidebar({ isOpen, setIsOpen }) {
         variants={sidebarVariants}
         transition={{
           type: 'spring',
-          stiffness: 300,
-          damping: 30,
+          stiffness: 350,
+          damping: 35,
           mass: 1
         }}
-        className={`h-screen bg-secondary border-r border-white/5 flex flex-col p-4 z-[110] fixed xl:sticky top-0 overflow-hidden ${isDrawerMode && !isOpen ? 'pointer-events-none' : ''}`}
+        className={`h-screen bg-secondary border-r border-white/5 flex flex-col p-3 z-[110] fixed xl:sticky top-0 overflow-hidden ${isDrawerMode && !isOpen ? 'pointer-events-none' : ''}`}
       >
         {/* Header Section */}
-        <div className="flex items-center justify-between mb-12 px-2 mt-4 min-h-[40px]">
+        <div className="flex items-center justify-between mb-8 px-2 mt-4 min-h-[40px]">
           <AnimatePresence mode="wait">
             {(!isCollapsed || isDrawerMode) && (
               <motion.div
@@ -88,7 +88,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                 transition={{ duration: 0.3 }}
                 className="flex items-center gap-2"
               >
-                <img src={Logo} alt="Logo" className="h-10 w-auto object-contain brightness-0 invert shadow-primary/20 drop-shadow-[0_0_8px_rgba(201,162,39,0.2)]" />
+                <img src={Logo} alt="Logo" className="h-8 w-auto object-contain brightness-0 invert drop-shadow-[0_0_8px_rgba(201,162,39,0.2)]" />
               </motion.div>
             )}
           </AnimatePresence>
@@ -96,14 +96,14 @@ export default function Sidebar({ isOpen, setIsOpen }) {
           <motion.button
             layout
             onClick={() => isDrawerMode ? setIsOpen(false) : setIsCollapsed(!isCollapsed)}
-            className="p-2.5 bg-background border border-white/5 rounded-2xl shadow-premium text-primary hover:scale-105 active:scale-95 transition-all group"
+            className="p-2 bg-background border border-white/5 rounded-xl shadow-premium text-primary hover:scale-105 active:scale-95 transition-all group"
           >
-            {isCollapsed && !isDrawerMode ? <Menu size={20} strokeWidth={2.5} /> : <X size={20} className="text-primary" strokeWidth={2.5} />}
+            {isCollapsed && !isDrawerMode ? <Menu size={18} strokeWidth={2.5} /> : <X size={18} className="text-primary" strokeWidth={2.5} />}
           </motion.button>
         </div>
 
         {/* Navigation Links */}
-        <nav className="flex-1 space-y-2 px-1 overflow-y-auto custom-scrollbar">
+        <nav className="flex-1 space-y-1.5 px-0.5 overflow-y-auto custom-scrollbar">
           {sidebarItems.map((item) => (
             <NavLink
               key={item.path}
@@ -112,13 +112,13 @@ export default function Sidebar({ isOpen, setIsOpen }) {
             >
               {({ isActive }) => (
                 <div className={`
-                  flex items-center ${(isCollapsed && !isDrawerMode) ? 'justify-center' : 'gap-4'} px-4 py-4 rounded-2xl transition-all duration-300 group relative
+                  flex items-center ${(isCollapsed && !isDrawerMode) ? 'justify-center' : 'gap-3'} px-3.5 py-3.5 rounded-xl transition-all duration-300 group relative
                   ${isActive
-                    ? 'bg-primary text-secondary shadow-xl shadow-primary/10'
+                    ? 'bg-primary text-secondary shadow-lg shadow-primary/10'
                     : 'text-muted hover:bg-white/5 hover:text-white'
                   }
                 `}>
-                  <item.icon size={20} strokeWidth={2} className="shrink-0" />
+                  <item.icon size={18} strokeWidth={2.5} className="shrink-0" />
 
                   <AnimatePresence mode="wait">
                     {(!isCollapsed || isDrawerMode) && (
@@ -128,7 +128,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                         animate={{ opacity: 1, width: 'auto' }}
                         exit={{ opacity: 0, width: 0 }}
                         transition={{ duration: 0.3, ease: 'easeOut' }}
-                        className="font-black text-[10px] uppercase tracking-[0.2em] whitespace-nowrap overflow-hidden"
+                        className="font-black text-[9px] uppercase tracking-[0.2em] whitespace-nowrap overflow-hidden"
                       >
                         {item.label}
                       </motion.span>
@@ -137,7 +137,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
 
                   {(!isCollapsed || isDrawerMode) && (
                     <ChevronRight
-                      size={14}
+                      size={12}
                       strokeWidth={3}
                       className="ml-auto opacity-0 group-hover:opacity-40 transition-opacity"
                     />
@@ -149,20 +149,20 @@ export default function Sidebar({ isOpen, setIsOpen }) {
         </nav>
 
         {/* Profile Footer */}
-        <div className="mt-auto p-1">
+        <div className="mt-auto p-0.5">
           <motion.div
             layout
             className={`
-              flex items-center gap-3 p-3 rounded-2xl bg-background border border-white/5 shadow-premium overflow-hidden
+              flex items-center gap-3 p-2 rounded-xl bg-background border border-white/5 shadow-premium overflow-hidden
               ${(isCollapsed && !isDrawerMode) ? 'justify-center border-none' : ''}
             `}
           >
-            <div className="w-12 h-12 rounded-2xl bg-luxury-gradient p-[1px] shadow-lg shrink-0">
-              <div className="w-full h-full rounded-2xl bg-secondary overflow-hidden flex items-center justify-center p-[2px]">
+            <div className="w-10 h-10 rounded-xl bg-luxury-gradient p-[1px] shadow-lg shrink-0">
+              <div className="w-full h-full rounded-xl bg-secondary overflow-hidden flex items-center justify-center p-[1.5px]">
                 <img
                   src={userInfo?.avatar || `https://api.dicebear.com/9.x/adventurer/svg?seed=${userInfo?.name || 'Artisan'}`}
                   alt="Admin Profile"
-                  className="w-full h-full object-cover hover:scale-110 transition-transform duration-500 rounded-2xl"
+                  className="w-full h-full object-cover hover:scale-110 transition-transform duration-500 rounded-xl"
                 />
               </div>
             </div>

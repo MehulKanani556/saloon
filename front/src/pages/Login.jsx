@@ -54,8 +54,8 @@ export default function Login() {
     validationSchema,
     onSubmit: (values) => {
       // Ensure phone numbers match database format: +1 XXX-XXX-XXXX
-      const finalIdentity = isNumeric && !values.identity.startsWith('+') 
-        ? `+1 ${values.identity}` 
+      const finalIdentity = isNumeric && !values.identity.startsWith('+')
+        ? `+1 ${values.identity}`
         : values.identity;
       dispatch(loginUser({ ...values, identity: finalIdentity }));
     },
@@ -86,8 +86,8 @@ export default function Login() {
       formik.setFieldError('identity', 'Enter identity first');
       return;
     }
-    const finalIdentity = isNumeric && !formik.values.identity.startsWith('+') 
-      ? `+1 ${formik.values.identity}` 
+    const finalIdentity = isNumeric && !formik.values.identity.startsWith('+')
+      ? `+1 ${formik.values.identity}`
       : formik.values.identity;
     const result = await dispatch(sendOTP(finalIdentity));
     if (result.meta.requestStatus === 'fulfilled') {
@@ -123,7 +123,7 @@ export default function Login() {
           <div className="mb-6">
             <img src={Logo} alt="Glow Saloon" className="h-16 w-auto object-contain brightness-0 invert" />
           </div>
-          <h1 className="text-3xl font-black text-white tracking-tight leading-none uppercase font-luxury">Glow <span className="text-primary italic">Saloon</span></h1>
+          <h1 className="text-3xl font-black text-white tracking-tight leading-none uppercase font-luxury">Glow <span className="text-primary ">Saloon</span></h1>
           <p className="text-muted text-[10px] font-bold uppercase tracking-[0.2em] mt-3 underline decoration-primary/30 underline-offset-4 decoration-2">UNIFIED ACCESS PORTAL</p>
         </div>
 
@@ -158,12 +158,12 @@ export default function Login() {
           <div className="space-y-3">
             <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-1 flex justify-between">
               <span>Contact Signal</span>
-              <span className="text-[9px] lowercase font-medium italic">identity matrix</span>
+              <span className="text-[9px] lowercase font-medium ">identity matrix</span>
             </label>
             <div className={`relative flex items-center bg-background border rounded-2xl overflow-hidden transition-all duration-300 ${formik.touched.identity && formik.errors.identity ? 'border-red-500/50 shadow-[0_0_0_1px_rgba(239,68,68,0.1)]' : 'border-white/5 shadow-premium'}`}>
-              
+
               {/* Dynamic Prefix/Icon Area */}
-              <div className="flex items-center px-4 border-r border-white/5 bg-secondary min-w-[70px] justify-center transition-all">
+              <div className="flex items-center px-4 border-r border-white/5 min-w-[70px] justify-center transition-all">
                 {isNumeric ? (
                   <span className="text-primary font-black text-xs tracking-wider transition-opacity duration-300">+1</span>
                 ) : (

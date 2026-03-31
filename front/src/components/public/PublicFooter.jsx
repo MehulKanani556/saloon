@@ -17,22 +17,22 @@ const PublicFooter = () => {
                 className="h-14 w-auto brightness-0 invert drop-shadow-[0_0_8px_rgba(201,162,39,0.2)] transition-transform duration-500 group-hover:scale-105"
               />
               <div className="flex flex-col">
-                <h2 className="text-xl font-black text-white uppercase tracking-[0.3em] font-luxury italic">
+                <h2 className="text-xl font-black text-white uppercase tracking-[0.3em] font-luxury ">
                   Glow <span className="text-primary">&</span> Elegance
                 </h2>
                 <p className="text-[8px] font-black text-primary/60 uppercase tracking-[0.4em] mt-1 ml-1">Premium Saloon Collective</p>
               </div>
             </Link>
-            
+
             <p className="text-muted text-[10px] font-bold leading-relaxed uppercase tracking-[0.15em] max-w-[280px]">
               The ultimate destination for luxury beauty and lifestyle. Crafting your perfect aesthetic narrative since day one.
             </p>
-            
+
             <div className="flex items-center gap-4">
               {[Instagram, Facebook, Twitter].map((Icon, i) => (
-                <a 
-                  key={i} 
-                  href="#" 
+                <a
+                  key={i}
+                  href="#"
                   className="w-10 h-10 rounded-2xl bg-secondary border border-white/5 flex items-center justify-center text-muted hover:text-primary hover:border-primary/30 hover:scale-110 transition-all duration-300 shadow-xl"
                 >
                   <Icon size={18} />
@@ -46,9 +46,9 @@ const PublicFooter = () => {
             <h4 className="text-[11px] font-black text-white uppercase tracking-[0.3em] mb-10 border-b-2 border-primary/20 pb-2">Navigation</h4>
             <div className="flex flex-col gap-4">
               {['Home', 'Services', 'About', 'Contact'].map((item) => (
-                <Link 
-                  key={item} 
-                  to={item === 'Home' ? '/' : `/${item.toLowerCase()}`} 
+                <Link
+                  key={item}
+                  to={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
                   className="text-muted hover:text-primary transition-all duration-300 text-[10px] font-black uppercase tracking-widest flex items-center gap-2 group"
                 >
                   <span className="w-0 h-px bg-primary transition-all duration-300 group-hover:w-3" />
@@ -99,7 +99,7 @@ const PublicFooter = () => {
                 </div>
                 <div>
                   <p className="text-[8px] font-black text-muted uppercase tracking-widest mb-0.5">Physical HQ</p>
-                  <p className="text-[10px] text-white font-black tracking-widest uppercase leading-tight italic">
+                  <p className="text-[10px] text-white font-black tracking-widest uppercase leading-tight ">
                     123, Luxury Lane, Bandra West, Mumbai
                   </p>
                 </div>
@@ -110,7 +110,7 @@ const PublicFooter = () => {
 
         {/* Bottom Bar */}
         <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-8">
-          <p className="text-[8px] font-black text-muted/50 uppercase tracking-[0.3em] text-center italic">
+          <p className="text-[8px] font-black text-muted/50 uppercase tracking-[0.3em] text-center ">
             © 2026 GLOW & ELEGANCE COLLECTIVE. SYSTEM ARCHITECTURE BY ARCHITECTS OF BEAUTY.
           </p>
           <div className="flex items-center gap-3 text-[9px] font-black text-muted uppercase tracking-[0.2em]">

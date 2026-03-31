@@ -72,13 +72,13 @@ export default function Categories() {
             <LayoutGrid size={32} strokeWidth={2.5} />
           </div>
           <div className="min-w-0">
-            <h1 className="text-3xl lg:text-4xl font-black text-white tracking-tighter uppercase leading-none truncate md:whitespace-normal font-luxury italic underline-pink">Ritual Categories</h1>
-            <p className="text-[10px] font-black text-muted uppercase tracking-[0.3em] mt-3 opacity-60 italic">Architectural Classification & Service Taxonomy</p>
+            <h1 className="text-3xl lg:text-4xl font-black text-white tracking-tighter uppercase leading-none truncate md:whitespace-normal font-luxury  underline-pink">Ritual Categories</h1>
+            <p className="text-[10px] font-black text-muted uppercase tracking-[0.3em] mt-3 opacity-60 ">Architectural Classification & Service Taxonomy</p>
           </div>
         </div>
         <button
           onClick={() => { setEditingCategory(null); setShowForm(true); }}
-          className="flex items-center justify-center gap-4 px-10 py-5 bg-primary text-secondary rounded-2xl font-black uppercase text-[11px] tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury italic"
+          className="flex items-center justify-center gap-4 px-10 py-5 bg-primary text-secondary rounded-2xl font-black uppercase text-[11px] tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury "
         >
           <Plus size={22} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
           INDuct NEW CATEGORY
@@ -101,14 +101,14 @@ export default function Categories() {
         <div className="flex items-center gap-3 bg-background/50 p-2 rounded-2xl border border-white/5 shadow-inner">
           <button
             onClick={() => setViewMode('grid')}
-            className={`flex items-center gap-3 px-6 py-2.5 rounded-xl font-black text-[9px] uppercase tracking-[0.3em] transition-all italic font-luxury ${viewMode === 'grid' ? 'bg-primary text-secondary shadow-lg scale-105' : 'text-muted hover:text-white'}`}
+            className={`flex items-center gap-3 px-6 py-2.5 rounded-xl font-black text-[9px] uppercase tracking-[0.3em] transition-all  font-luxury ${viewMode === 'grid' ? 'bg-primary text-secondary shadow-lg scale-105' : 'text-muted hover:text-white'}`}
           >
             <LayoutGrid size={14} />
             Matrix View
           </button>
           <button
             onClick={() => setViewMode('list')}
-            className={`flex items-center gap-3 px-6 py-2.5 rounded-xl font-black text-[9px] uppercase tracking-[0.3em] transition-all italic font-luxury ${viewMode === 'list' ? 'bg-primary text-secondary shadow-lg scale-105' : 'text-muted hover:text-white'}`}
+            className={`flex items-center gap-3 px-6 py-2.5 rounded-xl font-black text-[9px] uppercase tracking-[0.3em] transition-all  font-luxury ${viewMode === 'list' ? 'bg-primary text-secondary shadow-lg scale-105' : 'text-muted hover:text-white'}`}
           >
             <List size={14} />
             Linear View
@@ -137,11 +137,11 @@ export default function Categories() {
                   <div className="w-20 h-20 rounded-2xl bg-secondary border border-white/5 flex items-center justify-center text-primary group-hover:scale-110 group-hover:rotate-6 transition-all duration-700 shadow-premium">
                     <LayoutGrid size={40} strokeWidth={1} />
                   </div>
-                  
+
                   {/* Category Status Badge */}
                   <div className="absolute top-4 right-4 flex items-center gap-2 px-3 py-1 bg-background/90 backdrop-blur-md rounded-full border border-white/5 shadow-lg">
                     <div className={`w-1.5 h-1.5 rounded-full ${cat.isActive ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-white/10'}`} />
-                    <span className="text-[8px] font-black text-white uppercase tracking-widest italic">{cat.isActive ? 'Active' : 'Inactive'}</span>
+                    <span className="text-[8px] font-black text-white uppercase tracking-widest ">{cat.isActive ? 'Active' : 'Inactive'}</span>
                   </div>
 
                   {/* Admin Actions Overlay */}
@@ -164,15 +164,15 @@ export default function Categories() {
                 </div>
 
                 <div className="px-2 pb-2 flex-grow flex flex-col">
-                  <h3 className="text-xl font-black text-white uppercase tracking-tight italic mb-3 leading-none group-hover:text-primary transition-colors font-luxury">
+                  <h3 className="text-xl font-black text-white uppercase tracking-tight  mb-3 leading-none group-hover:text-primary transition-colors font-luxury">
                     {cat.name}
                   </h3>
-                  <p className="text-muted text-[10px] uppercase font-black tracking-widest leading-relaxed line-clamp-2 italic opacity-60 group-hover:opacity-100 transition-opacity mb-6">
+                  <p className="text-muted text-[10px] uppercase font-black tracking-widest leading-relaxed line-clamp-2  opacity-60 group-hover:opacity-100 transition-opacity mb-6">
                     {cat.description || 'No conceptual context defined in the archives.'}
                   </p>
 
                   <div className="pt-4 border-t border-white/5 mt-auto flex items-center justify-between">
-                    <span className="text-[8px] font-black text-muted/30 uppercase tracking-[0.4em] italic">Protocol ID: {cat._id.slice(-6).toUpperCase()}</span>
+                    <span className="text-[8px] font-black text-muted/30 uppercase tracking-[0.4em] ">Protocol ID: {cat._id.slice(-6).toUpperCase()}</span>
                     <button
                       onClick={() => dispatch(updateCategory({ id: cat._id, categoryData: { isActive: !cat.isActive } }))}
                       className={`w-10 h-5 rounded-full relative transition-all duration-500 p-1 ${cat.isActive ? 'bg-emerald-500/20 border border-emerald-500/30' : 'bg-background border border-white/5'}`}
@@ -197,10 +197,10 @@ export default function Categories() {
           >
             {/* List Header */}
             <div className="hidden lg:grid grid-cols-[1.5fr_2fr_1.5fr_150px] gap-8 px-12 py-5 items-center">
-              <span className="text-[10px] font-black text-muted uppercase tracking-[0.5em] italic">Ritual Protocol</span>
-              <span className="text-[10px] font-black text-muted uppercase tracking-[0.5em] italic">Institutional Context</span>
-              <span className="text-[10px] font-black text-muted uppercase tracking-[0.5em] italic">Status Matrix</span>
-              <span className="text-[10px] font-black text-muted uppercase tracking-[0.5em] italic text-right">Actions</span>
+              <span className="text-[10px] font-black text-muted uppercase tracking-[0.5em] ">Ritual Protocol</span>
+              <span className="text-[10px] font-black text-muted uppercase tracking-[0.5em] ">Institutional Context</span>
+              <span className="text-[10px] font-black text-muted uppercase tracking-[0.5em] ">Status Matrix</span>
+              <span className="text-[10px] font-black text-muted uppercase tracking-[0.5em]  text-right">Actions</span>
             </div>
 
             {filteredCategories.map((cat, index) => (
@@ -218,14 +218,14 @@ export default function Categories() {
                       <LayoutGrid size={22} strokeWidth={2} />
                     </div>
                     <div className="min-w-0">
-                      <h3 className="text-xl font-black text-white uppercase tracking-tight italic group-hover:text-primary transition-colors font-luxury">{cat.name}</h3>
-                      <p className="lg:hidden text-[8px] font-black text-muted uppercase tracking-[0.4em] mt-2 italic">Ritual Protocol</p>
+                      <h3 className="text-xl font-black text-white uppercase tracking-tight  group-hover:text-primary transition-colors font-luxury">{cat.name}</h3>
+                      <p className="lg:hidden text-[8px] font-black text-muted uppercase tracking-[0.4em] mt-2 ">Ritual Protocol</p>
                     </div>
                   </div>
 
                   {/* Context */}
                   <div className="min-w-0">
-                    <p className="text-[11px] font-bold text-muted line-clamp-1 italic group-hover:text-white/60 transition-colors">
+                    <p className="text-[11px] font-bold text-muted line-clamp-1  group-hover:text-white/60 transition-colors">
                       {cat.description || 'No conceptual context defined in metadata.'}
                     </p>
                   </div>
@@ -233,7 +233,7 @@ export default function Categories() {
                   {/* Status Toggle */}
                   <div className="flex items-center gap-5">
                     <div className={`w-2.5 h-2.5 rounded-full ${cat.isActive ? 'bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.8)]' : 'bg-white/10'}`} />
-                    <span className="text-[10px] font-black text-white uppercase tracking-[0.3em] font-luxury italic">{cat.isActive ? 'OPERATIONAL' : 'HALTED'}</span>
+                    <span className="text-[10px] font-black text-white uppercase tracking-[0.3em] font-luxury ">{cat.isActive ? 'OPERATIONAL' : 'HALTED'}</span>
                     <button
                       onClick={() => dispatch(updateCategory({ id: cat._id, categoryData: { isActive: !cat.isActive } }))}
                       className={`ml-auto lg:ml-6 w-12 h-6 rounded-full relative transition-all duration-700 p-1 ${cat.isActive ? 'bg-emerald-500' : 'bg-background'}`}
@@ -278,33 +278,33 @@ export default function Categories() {
       >
         <form onSubmit={formik.handleSubmit} className="space-y-10 p-2">
           <div className="space-y-4">
-            <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2 italic underline decoration-primary/30 underline-offset-8">Category Nomenclature</label>
+            <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2  underline decoration-primary/30 underline-offset-8">Category Nomenclature</label>
             <input
               {...formik.getFieldProps('name')}
               placeholder="e.g. MAGNUM SKINCARE"
-              className={`w-full bg-secondary/50 border-2 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.3em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5 italic font-luxury ${formik.touched.name && formik.errors.name ? 'border-rose-500/50' : 'border-transparent focus:border-primary/50'}`}
+              className={`w-full bg-secondary/50 border-2 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.3em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5  font-luxury ${formik.touched.name && formik.errors.name ? 'border-rose-500/50' : 'border-transparent focus:border-primary/50'}`}
             />
             {formik.touched.name && formik.errors.name && (
-               <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-2 ml-4 text-rose-500">
-                  <ShieldAlert size={12} />
-                  <span className="text-[9px] font-black uppercase tracking-widest">{formik.errors.name}</span>
-               </motion.div>
+              <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-2 ml-4 text-rose-500">
+                <ShieldAlert size={12} />
+                <span className="text-[9px] font-black uppercase tracking-widest">{formik.errors.name}</span>
+              </motion.div>
             )}
           </div>
 
           <div className="space-y-4">
-            <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2 italic underline decoration-primary/30 underline-offset-8">Institutional Context</label>
+            <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2  underline decoration-primary/30 underline-offset-8">Institutional Context</label>
             <textarea
               {...formik.getFieldProps('description')}
               placeholder="Describe the conceptual scope of this classification protocol..."
-              className="w-full bg-secondary/50 border border-white/10 focus:border-primary/50 p-6 rounded-2xl outline-none font-black text-[11px] text-white shadow-2xl transition-all min-h-[160px] tracking-[0.2em] placeholder:text-white/5 italic"
+              className="w-full bg-secondary/50 border border-white/10 focus:border-primary/50 p-6 rounded-2xl outline-none font-black text-[11px] text-white shadow-2xl transition-all min-h-[160px] tracking-[0.2em] placeholder:text-white/5 "
             />
           </div>
 
           <button
             type="submit"
             disabled={formik.isSubmitting}
-            className="w-full py-6 bg-primary text-secondary rounded-2xl font-black text-[11px] uppercase tracking-[0.5em] shadow-2xl hover:bg-primary/90 transition-all flex items-center justify-center gap-4 active:scale-[0.98] disabled:opacity-50 font-luxury italic"
+            className="w-full py-6 bg-primary text-secondary rounded-2xl font-black text-[11px] uppercase tracking-[0.5em] shadow-2xl hover:bg-primary/90 transition-all flex items-center justify-center gap-4 active:scale-[0.98] disabled:opacity-50 font-luxury "
           >
             {formik.isSubmitting ? 'SYNCING MATRIX...' : (editingCategory ? 'COMMIT CLASSIFICATION' : 'AUTHORIZE TAXONOMY')}
           </button>
@@ -322,15 +322,15 @@ export default function Categories() {
           <div className="w-24 h-24 bg-rose-500/10 border border-rose-500/20 rounded-2xl flex items-center justify-center mx-auto text-rose-500 mb-8 shadow-2xl shadow-rose-500/20">
             <Trash2 size={40} strokeWidth={1} />
           </div>
-          <p className="text-muted font-black text-[10px] uppercase tracking-[0.3em] leading-relaxed mb-10 px-2 italic">
-            Eliding <br /><span className="text-rose-500 text-lg font-luxury font-black italic underline decoration-rose-500/30 decoration-2 underline-offset-8">"{deletingCategory?.name}"</span> <br /> from institutional matrix.
+          <p className="text-muted font-black text-[10px] uppercase tracking-[0.3em] leading-relaxed mb-10 px-2 ">
+            Eliding <br /><span className="text-rose-500 text-lg font-luxury font-black  underline decoration-rose-500/30 decoration-2 underline-offset-8">"{deletingCategory?.name}"</span> <br /> from institutional matrix.
           </p>
           <div className="flex flex-col gap-4">
             <button
               onClick={handleDelete}
-              className="w-full py-5 bg-rose-500 text-white rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] shadow-xl active:scale-95 transition-all font-luxury italic"
+              className="w-full py-5 bg-rose-500 text-white rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] shadow-xl active:scale-95 transition-all font-luxury "
             >CONFIRM PURGE</button>
-            <button onClick={() => setDeletingCategory(null)} className="w-full py-5 bg-secondary text-muted rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] border border-white/10 hover:text-white transition-all font-luxury italic">ABORT PROTOCOL</button>
+            <button onClick={() => setDeletingCategory(null)} className="w-full py-5 bg-secondary text-muted rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] border border-white/10 hover:text-white transition-all font-luxury ">ABORT PROTOCOL</button>
           </div>
         </div>
       </Modal>

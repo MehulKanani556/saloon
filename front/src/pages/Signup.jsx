@@ -53,7 +53,7 @@ export default function Signup() {
                     <div className="mb-6">
                         <img src={Logo} alt="Glow Saloon" className="h-16 w-auto object-contain brightness-0 invert" />
                     </div>
-                    <h1 className="text-2xl font-black text-white tracking-tight leading-none uppercase font-luxury">Establish <span className="text-primary italic">Identity</span></h1>
+                    <h1 className="text-2xl font-black text-white tracking-tight leading-none uppercase font-luxury">Establish <span className="text-primary ">Identity</span></h1>
                     <p className="text-muted text-[9px] font-bold uppercase tracking-[0.2em] mt-3 underline decoration-primary/30 underline-offset-4 decoration-2 text-center">Establish Customer Profile</p>
                 </div>
 
@@ -135,13 +135,13 @@ export default function Signup() {
                 <div className="mt-8 text-center flex flex-col gap-4">
                     <div className="h-[1px] w-full bg-white/5" />
                     <p className="text-[10px] font-bold text-muted uppercase tracking-widest">
-                        Already have an identity? 
+                        Already have an identity?
                         <Link to="/login" className="text-primary ml-2 hover:underline decoration-2">Access Portal</Link>
                     </p>
                 </div>
 
                 <p className="mt-10 text-center text-[8px] font-black text-muted uppercase tracking-[0.3em] leading-relaxed">
-                    Glow Saloon Collective <br/> Unified Customer Core
+                    Glow Saloon Collective <br /> Unified Customer Core
                 </p>
             </motion.div>
         </div>

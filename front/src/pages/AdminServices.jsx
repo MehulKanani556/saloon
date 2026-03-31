@@ -129,7 +129,7 @@ export default function AdminServices() {
       >
         <form onSubmit={formik.handleSubmit} className="space-y-10 p-2">
           <div className="space-y-4">
-            <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2 italic">Visual Archive Signature</label>
+            <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2 ">Visual Archive Signature</label>
             <div className="relative aspect-video rounded-2xl bg-background border-2 border-dashed border-white/10 overflow-hidden group cursor-pointer shadow-3xl hover:border-primary/40 transition-all duration-500">
               {preview ? (
                 <img
@@ -139,7 +139,7 @@ export default function AdminServices() {
               ) : (
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-white/5">
                   <ImageIcon size={48} strokeWidth={1} className="mb-4 opacity-50 group-hover:scale-110 transition-transform" />
-                  <span className="text-[10px] font-black uppercase tracking-[0.5em] italic">Commit Visual Protocol</span>
+                  <span className="text-[10px] font-black uppercase tracking-[0.5em] ">Commit Visual Protocol</span>
                 </div>
               )}
               <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
@@ -150,11 +150,11 @@ export default function AdminServices() {
           </div>
 
           <div className="space-y-4">
-            <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2 italic underline decoration-primary/30 underline-offset-8">Ritual Nomenclature</label>
+            <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2  underline decoration-primary/30 underline-offset-8">Ritual Nomenclature</label>
             <input
               {...formik.getFieldProps('name')}
               placeholder="e.g. MAGNUM OPUS CUT"
-              className="w-full bg-secondary/50 border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.3em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5 italic font-luxury"
+              className="w-full bg-secondary/50 border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.3em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5  font-luxury"
             />
           </div>
 
@@ -184,7 +184,7 @@ export default function AdminServices() {
               >
                 <div className="flex items-center gap-3 mb-2">
                   <Zap size={14} className="text-primary animate-pulse" />
-                  <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white/50 italic">Quick Classification Forge</span>
+                  <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white/50 ">Quick Classification Forge</span>
                 </div>
                 <input
                   placeholder="NEW NOMENCLATURE..." value={newCategoryName}
@@ -201,7 +201,7 @@ export default function AdminServices() {
                       setNewCategoryName('');
                       setIsAddingCategory(false);
                     }}
-                    className="flex-1 py-4 bg-primary text-secondary rounded-xl font-black text-[9px] uppercase tracking-[0.3em] hover:bg-primary/90 transition-all font-luxury italic"
+                    className="flex-1 py-4 bg-primary text-secondary rounded-xl font-black text-[9px] uppercase tracking-[0.3em] hover:bg-primary/90 transition-all font-luxury "
                   >COMMIT TAXONOMY</button>
                   <button type="button" onClick={() => setIsAddingCategory(false)} className="px-6 text-[9px] font-black uppercase tracking-widest text-muted hover:text-white transition-colors">ABORT</button>
                 </div>
@@ -211,7 +211,7 @@ export default function AdminServices() {
 
           <div className="grid grid-cols-2 gap-8">
             <div className="space-y-4">
-              <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 italic">Temporal Span (MIN)</label>
+              <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 ">Temporal Span (MIN)</label>
               <input
                 type="number"
                 {...formik.getFieldProps('duration')}
@@ -219,7 +219,7 @@ export default function AdminServices() {
               />
             </div>
             <div className="space-y-4">
-              <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 italic">Magnitude ($)</label>
+              <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 ">Magnitude ($)</label>
               <input
                 type="number"
                 {...formik.getFieldProps('price')}
@@ -231,7 +231,7 @@ export default function AdminServices() {
           <div className="flex items-center justify-between p-6 bg-secondary/30 backdrop-blur-md rounded-2xl border border-white/5 shadow-inner">
             <div className="flex items-center gap-4">
               <Activity size={18} className="text-primary" />
-              <span className="text-[10px] font-black text-white/60 uppercase tracking-[0.4em] italic">Availability Status</span>
+              <span className="text-[10px] font-black text-white/60 uppercase tracking-[0.4em] ">Availability Status</span>
             </div>
             <label className="relative inline-flex items-center cursor-pointer group">
               <input type="checkbox" checked={formik.values.isActive} onChange={(e) => formik.setFieldValue('isActive', e.target.checked)} className="sr-only peer" />
@@ -242,7 +242,7 @@ export default function AdminServices() {
           <button
             type="submit"
             disabled={formik.isSubmitting}
-            className="w-full py-6 bg-primary text-secondary rounded-2xl font-black text-[11px] uppercase tracking-[0.5em] shadow-2xl hover:bg-primary/90 transition-all flex items-center justify-center gap-4 active:scale-[0.98] disabled:opacity-50 font-luxury italic"
+            className="w-full py-6 bg-primary text-secondary rounded-2xl font-black text-[11px] uppercase tracking-[0.5em] shadow-2xl hover:bg-primary/90 transition-all flex items-center justify-center gap-4 active:scale-[0.98] disabled:opacity-50 font-luxury "
           >
             {formik.isSubmitting ? 'SYNCING MATRIX...' : (editingService ? 'COMMIT REFINEMENT' : 'AUTHORIZE CREATION')}
           </button>
@@ -260,8 +260,8 @@ export default function AdminServices() {
           <div className="w-24 h-24 bg-rose-500/10 border border-rose-500/20 rounded-2xl flex items-center justify-center mx-auto text-rose-500 mb-8 shadow-2xl shadow-rose-500/20">
             <Trash2 size={40} strokeWidth={1} />
           </div>
-          <p className="text-muted font-black text-[10px] uppercase tracking-[0.3em] leading-relaxed mb-10 px-2 italic">
-            Dissolving <br /><span className="text-rose-500 text-lg font-luxury font-black italic underline decoration-rose-500/30 decoration-2 underline-offset-8">"{services.find(s => s._id === deletingId)?.name}"</span> <br /> from active archives.
+          <p className="text-muted font-black text-[10px] uppercase tracking-[0.3em] leading-relaxed mb-10 px-2 ">
+            Dissolving <br /><span className="text-rose-500 text-lg font-luxury font-black  underline decoration-rose-500/30 decoration-2 underline-offset-8">"{services.find(s => s._id === deletingId)?.name}"</span> <br /> from active archives.
           </p>
           <div className="flex flex-col gap-4">
             <button
@@ -269,9 +269,9 @@ export default function AdminServices() {
                 dispatch(deleteService(deletingId));
                 setDeletingId(null);
               }}
-              className="w-full py-5 bg-rose-500 text-white rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] shadow-xl active:scale-95 transition-all font-luxury italic"
+              className="w-full py-5 bg-rose-500 text-white rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] shadow-xl active:scale-95 transition-all font-luxury "
             >CONFIRM PURGE</button>
-            <button onClick={() => setDeletingId(null)} className="w-full py-5 bg-secondary text-muted rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] border border-white/10 hover:text-white transition-all font-luxury italic">ABORT PROTOCOL</button>
+            <button onClick={() => setDeletingId(null)} className="w-full py-5 bg-secondary text-muted rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] border border-white/10 hover:text-white transition-all font-luxury ">ABORT PROTOCOL</button>
           </div>
         </div>
       </Modal>
@@ -282,8 +282,8 @@ export default function AdminServices() {
             <Scissors size={32} strokeWidth={2.5} />
           </div>
           <div className="min-w-0">
-            <h1 className="text-3xl lg:text-4xl font-black text-white tracking-tighter uppercase leading-none truncate md:whitespace-normal font-luxury italic underline-pink">Ritual Archives</h1>
-            <p className="text-[10px] font-black text-muted uppercase tracking-[0.3em] mt-3 opacity-60 italic">Operational Directory & Inventory Management</p>
+            <h1 className="text-3xl lg:text-4xl font-black text-white tracking-tighter uppercase leading-none truncate md:whitespace-normal font-luxury  underline-pink">Ritual Archives</h1>
+            <p className="text-[10px] font-black text-muted uppercase tracking-[0.3em] mt-3 opacity-60 ">Operational Directory & Inventory Management</p>
           </div>
         </div>
         <div className="flex flex-col sm:flex-row gap-6 w-full lg:w-auto items-center">
@@ -305,7 +305,7 @@ export default function AdminServices() {
               setImageFile(null);
               setShowForm(true);
             }}
-            className="w-full sm:w-auto flex items-center justify-center gap-4 px-10 py-5 bg-primary text-secondary rounded-2xl font-black text-[11px] uppercase tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury italic"
+            className="w-full sm:w-auto flex items-center justify-center gap-4 px-10 py-5 bg-primary text-secondary rounded-2xl font-black text-[11px] uppercase tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury "
           >
             <Plus size={22} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
             INDuct NEW RITUAL
@@ -333,7 +333,7 @@ export default function AdminServices() {
                 <div className="absolute top-4 right-4 px-3 py-1 bg-background/90 backdrop-blur-md rounded-full text-[9px] font-black text-primary uppercase tracking-widest shadow-lg">
                   {service.category?.name || "Ritual"}
                 </div>
-                
+
                 {/* Admin Actions Overlay */}
                 <div className="absolute top-4 left-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-x-[-10px] group-hover:translate-x-0">
                   <button
@@ -354,7 +354,7 @@ export default function AdminServices() {
 
                 {!service.isActive && (
                   <div className="absolute bottom-4 left-4">
-                    <div className="bg-rose-500/20 backdrop-blur-md text-rose-500 border border-rose-500/30 px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-[0.2em] animate-pulse italic">
+                    <div className="bg-rose-500/20 backdrop-blur-md text-rose-500 border border-rose-500/30 px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-[0.2em] animate-pulse ">
                       DECATALOGUED
                     </div>
                   </div>
@@ -363,10 +363,10 @@ export default function AdminServices() {
 
               <div className="px-2 pb-2">
                 <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-lg font-black text-white uppercase tracking-tight line-clamp-1 font-luxury italic leading-none">{service.name}</h3>
+                  <h3 className="text-lg font-black text-white uppercase tracking-tight line-clamp-1 font-luxury  leading-none">{service.name}</h3>
                   <span className="text-xl font-black text-primary leading-none">${service.price.toLocaleString()}</span>
                 </div>
-                
+
                 <div className="flex items-center gap-3 text-muted text-[9px] font-black uppercase tracking-widest mb-6">
                   <span className="flex items-center gap-1.5">
                     <Clock size={12} className="text-primary" /> {service.duration} Mins
@@ -378,7 +378,7 @@ export default function AdminServices() {
                 </div>
 
                 <div className="pt-2 border-t border-white/5 mt-auto">
-                   <p className="text-[8px] font-black text-muted/30 uppercase tracking-[0.4em] italic truncate">Protocol X-{service._id.slice(-8).toUpperCase()}</p>
+                  <p className="text-[8px] font-black text-muted/30 uppercase tracking-[0.4em]  truncate">Protocol X-{service._id.slice(-8).toUpperCase()}</p>
                 </div>
               </div>
             </motion.div>
@@ -400,7 +400,7 @@ export default function AdminServices() {
           <div className="w-32 h-32 bg-secondary/50 rounded-2xl flex items-center justify-center border border-white/5 shadow-3xl text-white/10 group-hover:text-primary/20 transition-all duration-700">
             <Target size={64} strokeWidth={1} className="group-hover:rotate-45 transition-transform duration-1000" />
           </div>
-          <p className="text-[11px] font-black text-muted uppercase tracking-[0.6em] italic">Archives yield no data matches.</p>
+          <p className="text-[11px] font-black text-muted uppercase tracking-[0.6em] ">Archives yield no data matches.</p>
         </div>
       )}
     </div>

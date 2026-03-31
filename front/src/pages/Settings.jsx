@@ -63,7 +63,7 @@ export default function Settings() {
             <Building2 size={24} md:size={32} strokeWidth={2.5} />
           </div>
           <div className="min-w-0">
-            <h1 className="text-xl sm:text-3xl lg:text-4xl font-black text-white tracking-tighter uppercase leading-none italic truncate md:whitespace-normal font-luxury">
+            <h1 className="text-xl sm:text-3xl lg:text-4xl font-black text-white tracking-tighter uppercase leading-none  truncate md:whitespace-normal font-luxury">
               Saloon Manifesto
             </h1>
             <p className="text-muted font-black text-[8px] sm:text-[9px] lg:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.25em] mt-2 lg:mt-4 opacity-70">
@@ -86,7 +86,7 @@ export default function Settings() {
         <div className="lg:col-span-2 space-y-10">
           <div className="bg-secondary p-6 md:p-10 rounded-2xl border border-white/5 shadow-2xl relative overflow-hidden group">
             <div className="absolute top-0 left-0 w-2 h-full bg-primary" />
-            <h3 className="text-lg md:text-xl font-black text-white mb-8 md:mb-10 flex items-center gap-4 uppercase tracking-tighter italic font-luxury">
+            <h3 className="text-lg md:text-xl font-black text-white mb-8 md:mb-10 flex items-center gap-4 uppercase tracking-tighter  font-luxury">
               <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-background flex items-center justify-center text-primary shadow-inner border border-white/5">
                 <Building2 size={24} />
               </div>
@@ -101,7 +101,7 @@ export default function Settings() {
                 { name: 'phone', label: 'Secure Line', icon: Phone }
               ].map((field) => (
                 <div key={field.name} className="space-y-3">
-                  <label className="text-[10px] font-black text-muted uppercase tracking-widest pl-2 flex items-center gap-2 italic">
+                  <label className="text-[10px] font-black text-muted uppercase tracking-widest pl-2 flex items-center gap-2 ">
                     <field.icon size={12} className="text-primary" />
                     {field.label}
                   </label>
@@ -120,7 +120,7 @@ export default function Settings() {
               ))}
 
               <div className="md:col-span-2 space-y-3">
-                <label className="text-[10px] font-black text-muted uppercase tracking-widest pl-2 flex items-center gap-2 italic">
+                <label className="text-[10px] font-black text-muted uppercase tracking-widest pl-2 flex items-center gap-2 ">
                   <MapPin size={12} className="text-primary" />
                   Operational Address
                 </label>
@@ -138,7 +138,7 @@ export default function Settings() {
 
           <div className="bg-secondary p-6 md:p-10 rounded-2xl border border-white/5 shadow-2xl relative overflow-hidden group">
             <div className="absolute top-0 left-0 w-2 h-full bg-primary" />
-            <h3 className="text-lg md:text-xl font-black text-white mb-8 md:mb-10 flex items-center gap-4 uppercase tracking-tighter italic font-luxury">
+            <h3 className="text-lg md:text-xl font-black text-white mb-8 md:mb-10 flex items-center gap-4 uppercase tracking-tighter  font-luxury">
               <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-background flex items-center justify-center text-primary border border-white/5 shadow-inner">
                 <Clock size={20} md:size={24} />
               </div>
@@ -147,7 +147,7 @@ export default function Settings() {
             <div className="space-y-3 md:space-y-4">
               {formik.values.businessHours.map((day, index) => (
                 <div key={day.day} className="flex flex-col md:flex-row md:items-center justify-between p-4 md:p-6 bg-background rounded-2xl border border-white/5 group hover:border-primary/20 transition-all gap-4 md:gap-0 shadow-inner">
-                  <span className="font-black text-[10px] md:text-sm text-white uppercase tracking-tighter italic group-hover:text-primary transition-colors font-luxury">{day.day}</span>
+                  <span className="font-black text-[10px] md:text-sm text-white uppercase tracking-tighter  group-hover:text-primary transition-colors font-luxury">{day.day}</span>
                   <div className="flex flex-col md:flex-row md:items-center justify-between md:justify-end gap-3 md:gap-6 w-full md:w-auto p-2 md:p-0 rounded-xl md:rounded-none">
                     <div className="flex items-center gap-2 md:gap-4 flex-1 md:flex-none">
                       <input
@@ -157,7 +157,7 @@ export default function Settings() {
                         value={day.open}
                         className="flex-1 md:flex-none bg-background px-2 py-1.5 md:px-4 md:py-2 rounded-xl font-black text-primary outline-none border border-white/5 text-[10px] md:text-xs shadow-inner min-w-0"
                       />
-                      <span className="text-muted font-black text-[8px] md:text-[10px] uppercase tracking-widest italic flex-shrink-0">to</span>
+                      <span className="text-muted font-black text-[8px] md:text-[10px] uppercase tracking-widest  flex-shrink-0">to</span>
                       <input
                         type="time"
                         name={`businessHours[${index}].close`}
@@ -185,7 +185,7 @@ export default function Settings() {
 
         <div className="space-y-6 md:space-y-10">
           <div className="bg-secondary p-6 md:p-10 rounded-2xl border border-white/5 shadow-2xl group text-center flex flex-col items-center">
-            <h3 className="text-md md:text-lg font-black text-white mb-6 md:mb-10 uppercase tracking-tighter italic font-luxury">Visual Landmark (Logo)</h3>
+            <h3 className="text-md md:text-lg font-black text-white mb-6 md:mb-10 uppercase tracking-tighter  font-luxury">Visual Landmark (Logo)</h3>
             <div
               onClick={() => logoInputRef.current?.click()}
               className="w-32 h-32 md:w-48 md:h-48 rounded-2xl bg-background border-4 border-dashed border-white/5 flex flex-col items-center justify-center text-muted mb-6 md:mb-8 cursor-pointer hover:border-primary/50 transition-all group overflow-hidden relative shadow-inner"
@@ -195,7 +195,7 @@ export default function Settings() {
               ) : (
                 <>
                   <Upload size={32} className="group-hover:scale-110 transition-all duration-700 text-white/20" />
-                  <span className="text-[8px] md:text-[10px] font-black mt-3 md:mt-4 uppercase tracking-[0.2em] italic">Upload Logo</span>
+                  <span className="text-[8px] md:text-[10px] font-black mt-3 md:mt-4 uppercase tracking-[0.2em] ">Upload Logo</span>
                 </>
               )}
               <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -216,13 +216,13 @@ export default function Settings() {
                 reader.readAsDataURL(file);
               }}
             />
-            <p className="text-[10px] text-muted font-bold leading-loose uppercase tracking-widest italic">
+            <p className="text-[10px] text-muted font-bold leading-loose uppercase tracking-widest ">
               Requirement Mapping:<br />512x512px Asset Frame<br />SVG or Transparent PNG
             </p>
           </div>
 
           <div className="bg-secondary p-6 md:p-10 rounded-2xl border border-white/5 shadow-2xl">
-            <h3 className="text-md md:text-lg font-black text-white mb-8 md:mb-10 uppercase tracking-tighter italic font-luxury">Vault Channels</h3>
+            <h3 className="text-md md:text-lg font-black text-white mb-8 md:mb-10 uppercase tracking-tighter  font-luxury">Vault Channels</h3>
             <div className="space-y-4">
               {formik.values.paymentMethods.map((method, index) => (
                 <div key={method.name} className="flex xl:flex-row lg:flex-col flex-row xl:items-center lg:items-start items-center justify-between p-4 md:p-6 rounded-2xl border border-white/5 bg-background group hover:border-primary/20 transition-all gap-4 shadow-inner">
@@ -230,7 +230,7 @@ export default function Settings() {
                     <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-secondary flex items-center justify-center text-primary shadow-sm border border-white/5 shrink-0">
                       <DollarSign size={18} md:size={22} />
                     </div>
-                    <span className="text-[12px] md:text-sm font-black text-white uppercase tracking-tighter italic group-hover:text-primary transition-colors leading-tight font-luxury">
+                    <span className="text-[12px] md:text-sm font-black text-white uppercase tracking-tighter  group-hover:text-primary transition-colors leading-tight font-luxury">
                       {method.name}
                     </span>
                   </div>

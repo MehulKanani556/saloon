@@ -60,7 +60,7 @@ export default function Sales() {
             <Wallet size={24} md:size={32} strokeWidth={2.5} />
           </div>
           <div className="space-y-1">
-            <h1 className="text-2xl md:text-4xl font-black text-white tracking-tighter uppercase leading-tight italic font-luxury">Financial Matrix</h1>
+            <h1 className="text-2xl md:text-4xl font-black text-white tracking-tighter uppercase leading-tight  font-luxury">Financial Matrix</h1>
             <p className="text-muted font-bold text-[8px] md:text-[10px] uppercase tracking-[0.15em] md:tracking-[0.25em] mt-2 opacity-70 group-hover:opacity-100 transition-opacity whitespace-normal">Real-time audit of saloon revenue ecosystems</p>
           </div>
         </div>
@@ -91,8 +91,8 @@ export default function Sales() {
                 {stat.trend}
               </div>
             </div>
-            <h3 className="text-muted text-[10px] font-black uppercase tracking-[0.2em] leading-none mb-3 italic">{stat.label}</h3>
-            <p className="text-2xl md:text-4xl font-black text-white tracking-tighter italic font-luxury">{stat.value}</p>
+            <h3 className="text-muted text-[10px] font-black uppercase tracking-[0.2em] leading-none mb-3 ">{stat.label}</h3>
+            <p className="text-2xl md:text-4xl font-black text-white tracking-tighter  font-luxury">{stat.value}</p>
           </div>
         ))}
       </div>
@@ -100,7 +100,7 @@ export default function Sales() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
         <div className="bg-secondary p-6 md:p-10 rounded-2xl shadow-2xl border border-white/5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 md:mb-12">
-            <h3 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase italic font-luxury">Revenue Velocity</h3>
+            <h3 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase  font-luxury">Revenue Velocity</h3>
             <div className="flex items-center gap-2 text-[10px] font-black text-muted uppercase tracking-widest bg-background px-4 py-2 rounded-xl w-fit border border-white/5">
               <TrendingUp size={14} className="text-primary" />
               Live Feed
@@ -124,8 +124,8 @@ export default function Sales() {
                     if (active && payload && payload.length) {
                       return (
                         <div className="bg-secondary/90 backdrop-blur-xl border border-white/10 p-4 rounded-2xl shadow-2xl z-[1000] relative">
-                          <p className="text-[10px] font-black text-muted uppercase tracking-widest mb-1 italic">{payload[0].payload.name} Forecast</p>
-                          <p className="text-xl font-black text-primary italic">${payload[0].value.toLocaleString()}</p>
+                          <p className="text-[10px] font-black text-muted uppercase tracking-widest mb-1 ">{payload[0].payload.name} Forecast</p>
+                          <p className="text-xl font-black text-primary ">${payload[0].value.toLocaleString()}</p>
                         </div>
                       );
                     }
@@ -140,7 +140,7 @@ export default function Sales() {
         </div>
 
         <div className="bg-secondary p-6 md:p-10 rounded-2xl shadow-2xl border border-white/5 flex flex-col items-center justify-center">
-          <h3 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase italic mb-8 md:mb-12 w-full text-left font-luxury">Niche Distribution</h3>
+          <h3 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase  mb-8 md:mb-12 w-full text-left font-luxury">Niche Distribution</h3>
           <div className="h-[250px] md:h-[300px] w-full relative">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -166,13 +166,13 @@ export default function Sales() {
                           <div className="flex items-center justify-between gap-4 mb-2">
                             <div className="flex items-center gap-3">
                               <div className="w-2 h-2 rounded-full" style={{ backgroundColor: payload[0].payload.color }} />
-                              <p className="text-[10px] font-black text-white uppercase tracking-widest italic leading-none">{payload[0].name}</p>
+                              <p className="text-[10px] font-black text-white uppercase tracking-widest  leading-none">{payload[0].name}</p>
                             </div>
                             <span className="text-[8px] font-black text-primary bg-primary/10 px-2 py-1 rounded-2xl uppercase tracking-widest leading-none">
                               {payload[0].payload.count} Rituals
                             </span>
                           </div>
-                          <p className="text-lg font-black text-primary italic leading-none">${payload[0].value.toLocaleString()}</p>
+                          <p className="text-lg font-black text-primary  leading-none">${payload[0].value.toLocaleString()}</p>
                         </div>
                       );
                     }
@@ -210,34 +210,34 @@ export default function Sales() {
         <div className="space-y-6">
           <div className="p-6 bg-primary rounded-xl text-secondary flex items-center justify-between shadow-xl shadow-primary/10">
             <div className="space-y-1">
-              <p className="text-[8px] font-black uppercase tracking-widest opacity-60 italic leading-none">In Vault</p>
-              <p className="text-2xl font-black tracking-tighter italic leading-none font-luxury">${matrix.totalRevenue.toLocaleString()}</p>
+              <p className="text-[8px] font-black uppercase tracking-widest opacity-60  leading-none">In Vault</p>
+              <p className="text-2xl font-black tracking-tighter  leading-none font-luxury">${matrix.totalRevenue.toLocaleString()}</p>
             </div>
             <Wallet size={32} className="opacity-20" />
           </div>
 
           <form onSubmit={withdrawalFormik.handleSubmit} className="space-y-6">
             <div className="space-y-3">
-              <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-2 italic">Extraction Amount ($)</label>
+              <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-2 ">Extraction Amount ($)</label>
               <input
                 name="amount" type="number" onChange={withdrawalFormik.handleChange} value={withdrawalFormik.values.amount}
                 className="w-full bg-background border-2 border-transparent focus:border-primary/30 rounded-xl px-5 py-4 text-sm font-black outline-none transition-all text-white shadow-inner"
                 placeholder="00.00"
               />
               {withdrawalFormik.touched.amount && withdrawalFormik.errors.amount && (
-                <p className="text-[8px] font-black uppercase text-red-500 ml-2 italic">{withdrawalFormik.errors.amount}</p>
+                <p className="text-[8px] font-black uppercase text-red-500 ml-2 ">{withdrawalFormik.errors.amount}</p>
               )}
             </div>
 
             <div className="space-y-3">
-              <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-2 italic">Destination Bank Tether</label>
+              <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-2 ">Destination Bank Tether</label>
               <input
                 name="bankAccount" onChange={withdrawalFormik.handleChange} value={withdrawalFormik.values.bankAccount}
                 className="w-full bg-background border-2 border-transparent focus:border-primary/30 rounded-xl px-5 py-4 text-xs font-bold outline-none transition-all text-white tracking-widest shadow-inner"
                 placeholder="Enter account sequence..."
               />
               {withdrawalFormik.touched.bankAccount && withdrawalFormik.errors.bankAccount && (
-                <p className="text-[8px] font-black uppercase text-red-500 ml-2 italic">{withdrawalFormik.errors.bankAccount}</p>
+                <p className="text-[8px] font-black uppercase text-red-500 ml-2 ">{withdrawalFormik.errors.bankAccount}</p>
               )}
             </div>
 
