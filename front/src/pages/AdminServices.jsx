@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchServices, addService, updateService, deleteService } from '../redux/slices/serviceSlice';
 import { fetchCategories, addCategory } from '../redux/slices/categorySlice';
+import Modal from '../components/ui/Modal';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import toast from 'react-hot-toast';
@@ -12,49 +13,74 @@ import { IMAGE_URL } from '../utils/BASE_URL';
 import CustomSelect from '../components/CustomSelect';
 import Pagination from '../components/Pagination';
 
-const serviceSchema = Yup.object().shape({
-  name: Yup.string().required('Service name is required').min(3, 'At least 3 characters'),
-  category: Yup.string().required('Category is required'),
-  price: Yup.number().positive('Price must be positive').required('Price is required'),
-  duration: Yup.number().positive('Duration must be positive').required('Duration is required'),
-});
 
-const ServiceForm = ({ onClose, initialData }) => {
+
+export default function AdminServices() {
+  const dispatch = useDispatch();
+  const { services, loading } = useSelector((state) => state.services);
+  const { categories } = useSelector(state => state.categories);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('All');
+  const [showForm, setShowForm] = useState(false);
+  const [editingService, setEditingService] = useState(null);
+  const [deletingId, setDeletingId] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
   const [imageFile, setImageFile] = useState(null);
-  const [preview, setPreview] = useState(initialData?.image || '');
+  const [preview, setPreview] = useState('');
   const [isAddingCategory, setIsAddingCategory] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState('');
-  const { categories } = useSelector(state => state.categories);
-  const dispatch = useDispatch();
+  const itemsPerPage = 9;
+
+  useEffect(() => {
+    dispatch(fetchServices());
+    dispatch(fetchCategories());
+  }, [dispatch]);
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      name: initialData?.name || '',
-      category: initialData?.category?._id || initialData?.category || '',
-      price: initialData?.price || '',
-      duration: initialData?.duration || '',
-      isActive: initialData?.isActive !== undefined ? initialData.isActive : true
+      name: editingService?.name || '',
+      category: editingService?.category?._id || editingService?.category || '',
+      price: editingService?.price || '',
+      duration: editingService?.duration || '',
+      isActive: editingService?.isActive !== undefined ? editingService.isActive : true
     },
-    validationSchema: serviceSchema,
+    validationSchema: Yup.object({
+      name: Yup.string().required('Service name is required').min(3, 'At least 3 characters'),
+      category: Yup.string().required('Category is required'),
+      price: Yup.number().positive('Price must be positive').required('Price is required'),
+      duration: Yup.number().positive('Duration must be positive').required('Duration is required'),
+    }),
     onSubmit: async (values) => {
       const formData = new FormData();
       Object.keys(values).forEach(key => formData.append(key, values[key]));
       if (imageFile) formData.append('image', imageFile);
 
-      const action = initialData?._id
-        ? updateService({ id: initialData._id, serviceData: formData })
-        : addService(formData);
-
-      if (!initialData?._id && !imageFile) return toast.error('Service image required');
+      if (!editingService?._id && !imageFile) return toast.error('Service image required');
 
       try {
-        await dispatch(action).unwrap();
-        onClose();
+        if (editingService?._id) {
+          await dispatch(updateService({ id: editingService._id, serviceData: formData })).unwrap();
+          toast.success('Service updated');
+        } else {
+          await dispatch(addService(formData)).unwrap();
+          toast.success('Service added');
+        }
+        setShowForm(false);
+        setEditingService(null);
+        setImageFile(null);
+        setPreview('');
       } catch (err) {
-        console.error('Service update failed:', err);
+        toast.error('Operation failed');
       }
     },
   });
+
+  const handleEdit = (service) => {
+    setEditingService(service);
+    setPreview(service.image || '');
+    setShowForm(true);
+  };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -63,232 +89,6 @@ const ServiceForm = ({ onClose, initialData }) => {
       setPreview(URL.createObjectURL(file));
     }
   };
-
-  return createPortal(
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[500] flex items-center justify-end"
-      onClick={onClose}
-    >
-      <motion.div
-        initial={{ x: '100%' }}
-        animate={{ x: 0 }}
-        exit={{ x: '100%' }}
-        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-        className="w-full max-w-md h-screen bg-white dark:bg-slate-900 shadow-2xl z-[510] flex flex-col border-l border-white/20"
-        onClick={e => e.stopPropagation()}
-      >
-        <div className="p-10 border-b border-slate-100 dark:border-white/5 flex items-center justify-between">
-          <div>
-            <h2 className="text-3xl font-black text-slate-800 dark:text-white tracking-tighter uppercase leading-none">
-              {initialData ? 'Edit Service' : 'Add Service'}
-            </h2>
-            <p className="text-slate-400 font-black text-[10px] uppercase tracking-widest mt-4">
-              {initialData ? 'Update service information' : 'Add a new service to your list'}
-            </p>
-          </div>
-          <button onClick={onClose} className="p-3 bg-slate-100 dark:bg-slate-800 rounded-2xl text-slate-400 hover:text-saloon-500 transition-all">
-            <X size={24} />
-          </button>
-        </div>
-
-        <div className="flex-1 overflow-y-auto p-12 space-y-10 custom-scrollbar">
-          <form onSubmit={formik.handleSubmit} className="space-y-10">
-            <div className="space-y-4">
-              <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Service Name</label>
-              <input
-                {...formik.getFieldProps('name')}
-                placeholder="e.g. Classic Haircut"
-                className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/30 rounded-2xl px-6 py-5 text-sm font-bold outline-none transition-all dark:text-white"
-              />
-              {formik.touched.name && formik.errors.name && <p className="text-[9px] text-red-500 font-bold uppercase ml-4">{formik.errors.name}</p>}
-            </div>
-
-            <div className="relative">
-              <CustomSelect
-                label="Category"
-                name="category"
-                value={formik.values.category}
-                onChange={(e) => {
-                  if (e.target.value === 'new_category') {
-                    setIsAddingCategory(true);
-                  } else {
-                    formik.handleChange(e);
-                  }
-                }}
-                options={[
-                  { label: 'Choose Category...', value: '' },
-                  { label: '+ Add New Category', value: 'new_category' },
-                  ...categories.map(cat => ({ label: cat.name, value: cat._id })),
-                ]}
-                icon={Layers}
-              />
-            </div>
-
-            <AnimatePresence>
-              {isAddingCategory && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  className="p-6 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-slate-100 dark:border-white/5 space-y-4 overflow-hidden"
-                >
-                  <input
-                    placeholder="New Category Name..."
-                    value={newCategoryName}
-                    onChange={(e) => setNewCategoryName(e.target.value)}
-                    className="w-full bg-white dark:bg-slate-900 p-4 rounded-xl outline-none font-bold text-sm border-2 border-transparent focus:border-saloon-500/20"
-                  />
-                  <div className="flex gap-2">
-                    <button
-                      type="button"
-                      onClick={async () => {
-                        if (!newCategoryName) return toast.error('Category name required');
-                        const created = await dispatch(addCategory({ name: newCategoryName })).unwrap();
-                        formik.setFieldValue('category', created._id);
-                        setNewCategoryName('');
-                        setIsAddingCategory(false);
-                      }}
-                      className="flex-1 py-3 bg-saloon-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-saloon-700 transition-all"
-                    >
-                      Save
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setIsAddingCategory(false)}
-                      className="px-4 bg-white dark:bg-slate-900 text-slate-400 rounded-xl hover:text-red-500 transition-all"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            <div className="grid grid-cols-2 gap-8">
-              <div className="space-y-4">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Duration (Min)</label>
-                <input
-                  type="number"
-                  {...formik.getFieldProps('duration')}
-                  className="w-full bg-slate-50 dark:bg-slate-800/80 p-5 rounded-2xl outline-none font-black text-slate-900 dark:text-white border-2 border-transparent focus:border-saloon-500/30"
-                />
-              </div>
-              <div className="space-y-4">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Price ($)</label>
-                <input
-                  type="number"
-                  {...formik.getFieldProps('price')}
-                  className="w-full bg-slate-50 dark:bg-slate-800/80 p-5 rounded-2xl outline-none font-black text-slate-900 dark:text-white border-2 border-transparent focus:border-saloon-500/30"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Service Image</label>
-              <div className="relative aspect-video rounded-2xl bg-slate-50 dark:bg-slate-800/60 border-2 border-dashed border-slate-200 dark:border-white/10 overflow-hidden group cursor-pointer shadow-inner">
-                {preview ? (
-                  <img src={preview.startsWith('blob') || !preview.startsWith('/uploads') ? preview : `${IMAGE_URL}${preview}`} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                ) : (
-                  <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-300 pointer-events-none">
-                    <ImageIcon size={48} strokeWidth={1} className="mb-4 opacity-50" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.3em]">Upload Image</span>
-                  </div>
-                )}
-                <input type="file" accept="image/*" onChange={handleImageChange} className="absolute inset-0 opacity-0 cursor-pointer" />
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between p-6 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-slate-100 dark:border-white/5">
-              <div className="flex items-center gap-4">
-                <Activity className="text-saloon-500" size={20} />
-                <span className="text-[10px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest">Active Status</span>
-              </div>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" checked={formik.values.isActive} onChange={(e) => formik.setFieldValue('isActive', e.target.checked)} className="sr-only peer" />
-                <div className="w-14 h-8 bg-slate-200 dark:bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-saloon-600"></div>
-              </label>
-            </div>
-
-            <button
-              type="submit"
-              disabled={formik.isSubmitting}
-              className="w-full py-6 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl hover:bg-saloon-600 dark:hover:bg-slate-100 transition-all flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50"
-            >
-              <Sparkles size={18} />
-              {formik.isSubmitting ? 'Syncing...' : (initialData ? 'Update Service' : 'Add Service')}
-            </button>
-          </form>
-        </div>
-      </motion.div>
-    </motion.div>,
-    document.body
-  );
-};
-
-const DeleteModal = ({ isOpen, onClose, onConfirm, itemName }) => (
-  createPortal(
-    <AnimatePresence>
-      {isOpen && (
-        <div className="fixed inset-0 z-[600] flex items-center justify-center p-6">
-          <motion.div
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            onClick={onClose}
-            className="absolute inset-0 bg-slate-950/90 backdrop-blur-xl"
-          />
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0, y: 30 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.9, opacity: 0, y: 30 }}
-            className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl p-12 shadow-2xl border border-white/10 text-center overflow-hidden"
-          >
-            <div className="absolute top-0 inset-x-0 h-2 bg-red-500" />
-            <div className="w-24 h-24 bg-red-500/10 text-red-500 rounded-2xl flex items-center justify-center mx-auto mb-10 shadow-inner">
-              <Trash2 size={48} strokeWidth={1.5} />
-            </div>
-            <h3 className="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tighter italic mb-4 leading-none">Delete Service?</h3>
-            <p className="text-slate-400 font-bold text-[11px] uppercase tracking-[0.2em] leading-relaxed mb-12 px-2">
-              You are about to permanently delete <span className="text-red-500">"{itemName}"</span> from your list.
-            </p>
-            <div className="grid grid-cols-2 gap-4">
-              <button
-                onClick={onClose}
-                className="py-5 bg-slate-100 dark:bg-slate-800 text-slate-400 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:text-slate-900 dark:hover:text-white transition-all active:scale-95"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={onConfirm}
-                className="py-5 bg-red-500 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-xl shadow-red-500/20 hover:bg-red-600 transition-all active:scale-95"
-              >
-                Delete Now
-              </button>
-            </div>
-          </motion.div>
-        </div>
-      )}
-    </AnimatePresence>,
-    document.body
-  )
-);
-
-export default function AdminServices() {
-  const dispatch = useDispatch();
-  const { services, loading } = useSelector((state) => state.services);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('All');
-  const [showForm, setShowForm] = useState(false);
-  const [editingService, setEditingService] = useState(null);
-  const [deletingId, setDeletingId] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 9;
-
-  useEffect(() => {
-    dispatch(fetchServices());
-    dispatch(fetchCategories());
-  }, [dispatch]);
 
   const filteredServices = services.filter(service => {
     const matchesSearch = service.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -319,27 +119,146 @@ export default function AdminServices() {
 
   return (
     <div className="space-y-6 md:space-y-12">
-      <AnimatePresence>
-        {showForm && (
-          <ServiceForm
-            onClose={() => {
-              setShowForm(false);
-              setEditingService(null);
-            }}
-            initialData={editingService}
-          />
-        )}
-      </AnimatePresence>
+      <Modal
+        isOpen={showForm}
+        onClose={() => {
+          setShowForm(false);
+          setEditingService(null);
+          setPreview('');
+          setImageFile(null);
+          formik.resetForm();
+        }}
+        title={editingService ? 'Refine Ritual' : 'New Service'}
+        subtitle="Operational Management"
+      >
+        <form onSubmit={formik.handleSubmit} className="space-y-6">
+          <div className="space-y-3">
+            <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-2 italic">Service Image</label>
+            <div className="relative aspect-video rounded-xl bg-slate-50 dark:bg-slate-800/60 border-2 border-dashed border-slate-200 dark:border-white/10 overflow-hidden group cursor-pointer shadow-inner">
+              {preview ? (
+                <img src={preview.startsWith('blob') || !preview.startsWith('/uploads') ? preview : `${IMAGE_URL}${preview}`} className="w-full h-full object-cover" />
+              ) : (
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-300">
+                  <ImageIcon size={32} strokeWidth={1} className="mb-2 opacity-50" />
+                  <span className="text-[8px] font-black uppercase tracking-[0.2em]">Upload Visual</span>
+                </div>
+              )}
+              <input type="file" accept="image/*" onChange={handleImageChange} className="absolute inset-0 opacity-0 cursor-pointer" />
+            </div>
+          </div>
 
-      <DeleteModal
+          <div className="space-y-3">
+            <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-2 italic">Ritual Nomenclature</label>
+            <input
+              {...formik.getFieldProps('name')}
+              placeholder="e.g. Classic Haircut"
+              className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/30 rounded-xl px-5 py-4 text-xs font-bold outline-none transition-all dark:text-white"
+            />
+          </div>
+
+          <div className="relative">
+            <CustomSelect
+              label="Classification"
+              name="category"
+              value={formik.values.category}
+              onChange={(e) => {
+                if (e.target.value === 'new_category') setIsAddingCategory(true);
+                else formik.handleChange(e);
+              }}
+              options={[
+                { label: 'Select Category...', value: '' },
+                { label: '+ Quick Create Category', value: 'new_category' },
+                ...categories.map(cat => ({ label: cat.name, value: cat._id })),
+              ]}
+              icon={Layers}
+            />
+          </div>
+
+          <AnimatePresence>
+            {isAddingCategory && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
+                className="p-4 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-100 dark:border-white/5 space-y-3 overflow-hidden"
+              >
+                <input
+                  placeholder="New Category Name..." value={newCategoryName}
+                  onChange={(e) => setNewCategoryName(e.target.value)}
+                  className="w-full bg-white dark:bg-slate-900 px-4 py-3 rounded-lg outline-none font-bold text-xs"
+                />
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      if (!newCategoryName) return toast.error('Name required');
+                      const created = await dispatch(addCategory({ name: newCategoryName })).unwrap();
+                      formik.setFieldValue('category', created._id);
+                      setNewCategoryName('');
+                      setIsAddingCategory(false);
+                    }}
+                    className="flex-1 py-3 bg-saloon-600 text-white rounded-lg font-black text-[9px] uppercase tracking-widest"
+                  >Save</button>
+                  <button type="button" onClick={() => setIsAddingCategory(false)} className="px-4 text-[9px] font-black uppercase text-slate-400">Cancel</button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-3">
+              <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-2 italic">Duration (Min)</label>
+              <input type="number" {...formik.getFieldProps('duration')} className="w-full bg-slate-50 dark:bg-slate-800/80 p-4 rounded-xl outline-none font-black text-xs" />
+            </div>
+            <div className="space-y-3">
+              <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-2 italic">Price ($)</label>
+              <input type="number" {...formik.getFieldProps('price')} className="w-full bg-slate-50 dark:bg-slate-800/80 p-4 rounded-xl outline-none font-black text-xs" />
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-100 dark:border-white/5">
+            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Active Status</span>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" checked={formik.values.isActive} onChange={(e) => formik.setFieldValue('isActive', e.target.checked)} className="sr-only peer" />
+              <div className="w-11 h-6 bg-slate-200 dark:bg-slate-700 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-saloon-600"></div>
+            </label>
+          </div>
+
+          <button
+            type="submit"
+            disabled={formik.isSubmitting}
+            className="w-full py-5 bg-slate-950 dark:bg-white text-white dark:text-slate-900 rounded-xl font-black text-[10px] uppercase tracking-[0.3em] shadow-xl hover:bg-saloon-600 transition-all flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50"
+          >
+            <Sparkles size={16} />
+            {formik.isSubmitting ? 'Syncing...' : (editingService ? 'Refine Protocol' : 'Deploy Service')}
+          </button>
+        </form>
+      </Modal>
+
+      <Modal
         isOpen={!!deletingId}
         onClose={() => setDeletingId(null)}
-        onConfirm={() => {
-          dispatch(deleteService(deletingId));
-          setDeletingId(null);
-        }}
-        itemName={services.find(s => s._id === deletingId)?.name}
-      />
+        title="Purge Ritual?"
+        subtitle="Final Deletion Protocol"
+        maxWidth="max-w-sm"
+      >
+        <div className="text-center">
+          <div className="w-16 h-16 bg-red-50 dark:bg-red-500/10 rounded-2xl flex items-center justify-center mx-auto text-red-500 mb-6">
+            <Trash2 size={32} />
+          </div>
+          <p className="text-slate-400 font-bold text-[10px] uppercase tracking-widest leading-relaxed mb-8 px-2">
+            Eliminating <span className="text-red-500">"{services.find(s => s._id === deletingId)?.name}"</span> from the operational list.
+          </p>
+          <div className="flex flex-col gap-3">
+            <button
+              onClick={() => {
+                dispatch(deleteService(deletingId));
+                setDeletingId(null);
+              }}
+              className="w-full py-4 bg-red-500 text-white rounded-xl font-black uppercase text-[10px] tracking-widest shadow-xl active:scale-95"
+            >Confirm Deletion</button>
+            <button onClick={() => setDeletingId(null)} className="w-full py-4 bg-slate-100 dark:bg-slate-800 text-slate-400 rounded-xl font-black uppercase text-[10px] tracking-widest">Abort Protocol</button>
+          </div>
+        </div>
+      </Modal>
 
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 md:gap-8 relative z-10">
         <div className="flex items-center gap-4 md:gap-6">
@@ -433,10 +352,7 @@ export default function AdminServices() {
 
                     <div className="flex gap-2">
                       <button
-                        onClick={() => {
-                          setEditingService(service);
-                          setShowForm(true);
-                        }}
+                        onClick={() => handleEdit(service)}
                         className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-white/5 rounded-2xl text-slate-400 hover:text-saloon-500 hover:bg-white dark:hover:bg-slate-700 transition-all shadow-sm"
                         title="Edit Ritual"
                       >

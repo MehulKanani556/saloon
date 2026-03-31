@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchAppointments, addAppointment, updateAppointment, deleteAppointment } from '../redux/slices/appointmentSlice';
 import { fetchServices } from '../redux/slices/serviceSlice';
 import { fetchClients } from '../redux/slices/clientSlice';
+import Modal from '../components/ui/Modal';
 import { IMAGE_URL } from '../utils/BASE_URL';
 import CustomSelect from '../components/CustomSelect';
 import toast from 'react-hot-toast';
@@ -328,241 +329,151 @@ export default function Appointments() {
         </div>
       </div>
 
-      {createPortal(
-        <AnimatePresence>
-          {isDrawerOpen && (
-            <div key="drawer-container">
+      <Modal
+        isOpen={isDrawerOpen}
+        onClose={() => {
+          setIsDrawerOpen(false);
+          setSelectedAppointment(null);
+          setIsNewClient(false);
+          formik.resetForm();
+        }}
+        title={selectedAppointment ? 'Edit Booking' : 'New Booking'}
+        subtitle="Operational Schedule"
+      >
+        <form onSubmit={formik.handleSubmit} className="space-y-6">
+          <div className="space-y-3.5">
+            <CustomSelect
+              label="Select Client Profile"
+              name="clientId"
+              value={formik.values.clientId}
+              onChange={(e) => {
+                const val = e.target.value;
+                formik.setFieldValue('clientId', val);
+                if (val === 'new') {
+                  setIsNewClient(true);
+                  formik.setValues({ ...formik.values, clientId: val, clientName: '', clientEmail: '', clientPhone: '' });
+                } else {
+                  setIsNewClient(false);
+                  const user = clients.find(c => c._id === val);
+                  if (user) {
+                    formik.setValues({ ...formik.values, clientId: val, clientName: user.name, clientEmail: user.email, clientPhone: user.phone || '' });
+                  }
+                }
+              }}
+              options={[
+                { label: 'Choose Profile...', value: '' },
+                ...(!selectedAppointment ? [{ label: '+ Quick Create Customer', value: 'new' }] : []),
+                ...clients.map(c => ({ label: `${c.name}`, value: c._id }))
+              ]}
+              icon={User}
+            />
+          </div>
+
+          <AnimatePresence>
+            {isNewClient && (
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={() => setIsDrawerOpen(false)}
-                className="fixed inset-0 bg-slate-950/60 backdrop-blur-md z-[200]"
-              />
-              <motion.div
-                initial={{ x: '100%' }}
-                animate={{ x: 0 }}
-                exit={{ x: '100%' }}
-                transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                className="fixed right-0 top-0 h-screen w-full max-w-md bg-white dark:bg-slate-900 shadow-2xl z-[210] flex flex-col border-l border-white/20"
+                initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
+                className="space-y-5 overflow-hidden"
               >
-                <div className="p-10 border-b border-slate-100 dark:border-white/5 flex items-center justify-between">
-                  <div>
-                    <h2 className="text-3xl font-black text-slate-800 dark:text-white tracking-tighter uppercase leading-none">
-                      {selectedAppointment ? 'Edit Booking' : 'New Booking'}
-                    </h2>
-                    <p className="text-slate-400 font-black text-[10px] uppercase tracking-widest mt-4">
-                      {selectedAppointment ? 'Update booking details' : 'Enter customer details for booking'}
-                    </p>
-                  </div>
-                  <button onClick={() => setIsDrawerOpen(false)} className="p-3 bg-slate-100 dark:bg-slate-800 rounded-2xl text-slate-400 hover:text-saloon-500 transition-all">
-                    <X size={24} />
-                  </button>
+                <div className="space-y-2">
+                  <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-2 italic">Customer Name</label>
+                  <input
+                    name="clientName" onChange={formik.handleChange} value={formik.values.clientName}
+                    className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/30 rounded-xl px-5 py-4 text-xs font-bold outline-none transition-all dark:text-white"
+                  />
+                  {formik.errors.clientName && <p className="text-[8px] text-red-500 font-bold uppercase ml-4">{formik.errors.clientName}</p>}
                 </div>
-                <div className="flex-1 overflow-y-auto p-12 space-y-12 custom-scrollbar">
-                  <form onSubmit={formik.handleSubmit} className="space-y-10">
-                    <div className="space-y-4">
-                      <CustomSelect
-                        label="Client Name"
-                        name="clientId"
-                        value={formik.values.clientId}
-                        onChange={(e) => {
-                          const val = e.target.value;
-                          formik.setFieldValue('clientId', val);
-                          if (val === 'new') {
-                            setIsNewClient(true);
-                            formik.setFieldValue('clientName', '');
-                            formik.setFieldValue('clientEmail', '');
-                            formik.setFieldValue('clientPhone', '');
-                          } else {
-                            setIsNewClient(false);
-                            if (val === '') {
-                              formik.setFieldValue('clientName', '');
-                              formik.setFieldValue('clientEmail', '');
-                              formik.setFieldValue('clientPhone', '');
-                            } else {
-                              const user = clients.find(c => c._id === val);
-                              if (user) {
-                                formik.setFieldValue('clientName', user.name);
-                                formik.setFieldValue('clientEmail', user.email);
-                                formik.setFieldValue('clientPhone', user.phone || '');
-                              }
-                            }
-                          }
-                        }}
-                        options={[
-                          { label: 'Choose Profile...', value: '' },
-                          ...(!selectedAppointment ? [{ label: '+ Add New Customer', value: 'new' }] : []),
-                          ...clients.map(c => ({ label: `${c.name}`, value: c._id }))
-                        ]}
-                      />
-                    </div>
 
-                    <AnimatePresence>
-                      {isNewClient && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: 'auto', opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          className="space-y-10 overflow-hidden"
-                        >
-                          <div className="space-y-4">
-                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Customer Name</label>
-                            <input
-                              name="clientName"
-                              onChange={formik.handleChange}
-                              value={formik.values.clientName}
-                              className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/30 rounded-2xl px-6 py-5 text-sm font-bold outline-none transition-all dark:text-white shadow-inner"
-                              placeholder="e.g. Liam Smith"
-                            />
-                            {formik.errors.clientName && <p className="text-[9px] text-red-500 font-bold uppercase ml-4">{formik.errors.clientName}</p>}
-                          </div>
+                <div className="space-y-2">
+                  <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-2 italic">Contact Phone</label>
+                  <input
+                    name="clientPhone" onChange={formik.handleChange} value={formik.values.clientPhone}
+                    className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/30 rounded-xl px-5 py-4 text-xs font-bold outline-none transition-all dark:text-white"
+                  />
+                  {formik.errors.clientPhone && <p className="text-[8px] text-red-500 font-bold uppercase ml-4">{formik.errors.clientPhone}</p>}
+                </div>
 
-                          <div className="space-y-4">
-                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Email Address</label>
-                            <input
-                              name="clientEmail"
-                              onChange={formik.handleChange}
-                              value={formik.values.clientEmail}
-                              className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/30 rounded-2xl px-6 py-5 text-sm font-bold outline-none transition-all dark:text-white shadow-inner"
-                              placeholder="liam@example.com"
-                            />
-                            {formik.errors.clientEmail && <p className="text-[9px] text-red-500 font-bold uppercase ml-4">{formik.errors.clientEmail}</p>}
-                          </div>
-
-                          <div className="space-y-4">
-                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Phone Number</label>
-                            <input
-                              name="clientPhone"
-                              onChange={formik.handleChange}
-                              value={formik.values.clientPhone}
-                              className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/30 rounded-2xl px-6 py-5 text-sm font-bold outline-none transition-all dark:text-white shadow-inner"
-                              placeholder="e.g. +91 9876543210"
-                            />
-                            {formik.errors.clientPhone && <p className="text-[9px] text-red-500 font-bold uppercase ml-4">{formik.errors.clientPhone}</p>}
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-
-                    <div className="">
-                      <CustomSelect
-                        label="Select Services"
-                        name="services"
-                        value={formik.values.services}
-                        onChange={formik.handleChange}
-                        isMulti={true}
-                        options={[
-                          ...services.map(s => ({ label: `${s.name} - $${s.price}`, value: s._id }))
-                        ]}
-                      />
-                      {formik.errors.services && <p className="text-[9px] text-red-500 font-bold uppercase ml-4 mt-1">{formik.errors.services}</p>}
-                    </div>
-
-                    <div className="space-y-4">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Date & Time</label>
-                      <input
-                        name="date"
-                        type="datetime-local"
-                        onChange={formik.handleChange}
-                        value={formik.values.date}
-                        className="w-full bg-slate-50 dark:bg-slate-800/80 rounded-2xl px-6 py-5 text-xs font-black uppercase tracking-widest outline-none dark:text-white border-none"
-                      />
-                      {formik.errors.date && <p className="text-[9px] text-red-500 font-bold uppercase ml-4">{formik.errors.date}</p>}
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-8">
-                      <CustomSelect
-                        label="Booking Status"
-                        name="status"
-                        value={formik.values.status}
-                        onChange={formik.handleChange}
-                        options={['Pending', 'Confirmed', 'Completed', 'Cancelled'].map(s => ({ label: s, value: s }))}
-                      />
-                      <CustomSelect
-                        label="Payment Status"
-                        name="paymentStatus"
-                        value={formik.values.paymentStatus}
-                        onChange={formik.handleChange}
-                        options={['Pending', 'Paid'].map(s => ({ label: s, value: s }))}
-                      />
-                    </div>
-
-                    <div className="pt-6">
-                      <button
-                        type="submit"
-                        disabled={formik.isSubmitting}
-                        className="w-full py-6 bg-slate-950 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-black uppercase tracking-[0.3em] shadow-xl hover:bg-saloon-600 dark:hover:bg-slate-100 transition-all flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50"
-                      >
-                        {formik.isSubmitting ? 'Saving...' : selectedAppointment ? 'Update Booking' : 'Confirm Booking'}
-                        <Sparkles size={20} />
-                      </button>
-                    </div>
-                  </form>
+                <div className="space-y-2">
+                  <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-2 italic">Digital Signature (Email)</label>
+                  <input
+                    name="clientEmail" onChange={formik.handleChange} value={formik.values.clientEmail}
+                    className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/30 rounded-xl px-5 py-4 text-xs font-bold outline-none transition-all dark:text-white"
+                  />
+                  {formik.errors.clientEmail && <p className="text-[8px] text-red-500 font-bold uppercase ml-4">{formik.errors.clientEmail}</p>}
                 </div>
               </motion.div>
-            </div>
-          )}
-        </AnimatePresence>,
-        document.body
-      )}
+            )}
+          </AnimatePresence>
 
-      {createPortal(
-        <AnimatePresence>
-          {isDeleteModalOpen && (
-            <div key="delete-modal-backdrop" className="fixed inset-0 z-[300] flex items-center justify-center p-6">
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={() => setIsDeleteModalOpen(false)}
-                className="absolute inset-0 bg-slate-950/80 backdrop-blur-xl"
-              />
-              <motion.div
-                initial={{ scale: 0.9, y: 20, opacity: 0 }}
-                animate={{ scale: 1, y: 0, opacity: 1 }}
-                exit={{ scale: 0.9, y: 20, opacity: 0 }}
-                className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl p-12 shadow-2xl overflow-hidden border border-white/20"
-              >
-                <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/10 blur-[50px] rounded-full" />
-                <div className="relative z-10 text-center space-y-8">
-                  <div className="w-20 h-20 bg-red-50 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto border border-red-100 dark:border-red-500/20 text-red-500">
-                    <AlertTriangle size={40} strokeWidth={2.5} />
-                  </div>
-                  <div>
-                    <h3 className="text-3xl font-black text-slate-800 dark:text-white uppercase tracking-tighter leading-none">Delete Booking?</h3>
-                    <p className="text-slate-400 font-black text-[10px] uppercase tracking-widest mt-4">This booking will be deleted forever.</p>
-                  </div>
-                  <div className="flex gap-4 p-2 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-white/5">
-                    <div className="w-12 h-12 rounded-2xl bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-slate-400">
-                      <User size={20} />
-                    </div>
-                    <div className="text-left">
-                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Customer Name</p>
-                      <p className="text-sm font-black text-slate-700 dark:text-white uppercase truncate max-w-[200px]">{appointmentToDelete?.client?.name}</p>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4 pt-4">
-                    <button
-                      onClick={() => setIsDeleteModalOpen(false)}
-                      className="py-5 bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-300 rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-slate-200 dark:hover:bg-white dark:hover:text-slate-900 transition-all active:scale-95"
-                    >
-                      Keep
-                    </button>
-                    <button
-                      onClick={handleDelete}
-                      className="py-5 bg-red-500 text-white rounded-2xl font-black uppercase text-xs tracking-widest shadow-lg shadow-red-500/20 hover:bg-red-600 transition-all active:scale-95 flex items-center justify-center gap-2"
-                    >
-                      Confirm Deletion
-                    </button>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-          )}
-        </AnimatePresence>,
-        document.body
-      )}
+          <div className="space-y-3.5">
+            <CustomSelect
+              label="Ritual Selections"
+              name="services"
+              value={formik.values.services}
+              onChange={formik.handleChange}
+              isMulti={true}
+              options={services.map(s => ({ label: `${s.name} - $${s.price}`, value: s._id }))}
+              icon={Sparkles}
+            />
+            {formik.errors.services && <p className="text-[8px] text-red-500 font-bold uppercase ml-4">{formik.errors.services}</p>}
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-2 italic">Temporal Coordinates (Date & Time)</label>
+            <input
+              name="date" type="datetime-local" onChange={formik.handleChange} value={formik.values.date}
+              className="w-full bg-slate-50 dark:bg-slate-800/80 rounded-xl px-5 py-4 text-[10px] font-black uppercase tracking-widest outline-none dark:text-white border-none"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <CustomSelect
+              label="Ritual Status" name="status" value={formik.values.status}
+              onChange={formik.handleChange}
+              options={['Pending', 'Confirmed', 'Completed', 'Cancelled'].map(s => ({ label: s, value: s }))}
+            />
+            <CustomSelect
+              label="Financial Status" name="paymentStatus" value={formik.values.paymentStatus}
+              onChange={formik.handleChange}
+              options={['Pending', 'Paid'].map(s => ({ label: s, value: s }))}
+            />
+          </div>
+
+          <div className="pt-4">
+            <button
+              type="submit" disabled={formik.isSubmitting}
+              className="w-full py-5 bg-slate-950 dark:bg-white text-white dark:text-slate-900 rounded-xl font-black uppercase text-[10px] tracking-[0.3em] shadow-xl hover:bg-saloon-600 transition-all flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50"
+            >
+              {formik.isSubmitting ? 'Syncing...' : selectedAppointment ? 'Update Ritual' : 'Commit Booking'}
+              <Sparkles size={16} />
+            </button>
+          </div>
+        </form>
+      </Modal>
+
+      <Modal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        title="Purge Booking?"
+        subtitle="Final Dissolution protocol"
+        maxWidth="max-w-sm"
+      >
+        <div className="text-center">
+          <div className="w-16 h-16 bg-red-50 dark:bg-red-500/10 rounded-2xl flex items-center justify-center mx-auto text-red-500 mb-6">
+            <AlertTriangle size={32} strokeWidth={2.5} />
+          </div>
+          <p className="text-slate-400 font-bold text-[10px] uppercase tracking-widest leading-relaxed mb-6 px-2">
+            Eliminating booking for <span className="text-red-500 font-black italic">{appointmentToDelete?.client?.name}</span> from the temporal record.
+          </p>
+          <div className="flex flex-col gap-3">
+            <button
+              onClick={handleDelete}
+              className="w-full py-4 bg-red-500 text-white rounded-xl font-black uppercase text-[10px] tracking-widest shadow-xl active:scale-95"
+            >Confirm Purge</button>
+            <button onClick={() => setIsDeleteModalOpen(false)} className="w-full py-4 bg-slate-100 dark:bg-slate-800 text-slate-400 rounded-xl font-black uppercase text-[10px] tracking-widest">Abort Protocol</button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

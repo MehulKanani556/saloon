@@ -199,11 +199,7 @@ const TeamSection = () => {
                 <h4 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none group-hover:text-saloon-500 transition-colors">{member.name}</h4>
                 <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest leading-none">{member.email.split('@')[0]}</p>
                 
-                <div className="flex items-center justify-center gap-1 py-2">
-                  {[...Array(5)].map((_, star) => (
-                    <Star key={star} size={10} className={star < (member.ratings || 5) ? "text-saloon-500 fill-saloon-500" : "text-slate-200"} />
-                  ))}
-                </div>
+
 
                 <div className="flex flex-wrap justify-center gap-2 pt-2">
                   {(member.services || []).slice(0, 3).map((s, si) => (
@@ -217,8 +213,7 @@ const TeamSection = () => {
               {/* Status Indicator */}
               <div className="pt-8 mt-8 border-t border-slate-50 dark:border-white/5">
                 <span className="inline-flex items-center gap-2 text-[9px] font-black text-saloon-500 uppercase tracking-widest">
-                  <div className="w-1.5 h-1.5 bg-saloon-500 rounded-full animate-pulse" />
-                  {member.availability || "Design Specialist"}
+                  {member.email.split('@')[0]}
                 </span>
               </div>
             </motion.div>
@@ -263,7 +258,7 @@ const SalonInfo = () => {
         <div>
           <div className="flex items-center gap-4 mb-8">
             <Clock className="text-saloon-500" />
-            <h3 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter">Availability Rituals</h3>
+            <h3 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter">Operational Hours</h3>
           </div>
           
           <div className="bg-slate-50 dark:bg-slate-900 rounded-[2.5rem] p-10 border border-slate-100 dark:border-white/5 shadow-inner">

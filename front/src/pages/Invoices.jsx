@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchAppointments, exportInvoicePDF } from '../redux/slices/appointmentSlice';
 import { FileText, Search, Download, Eye, Printer, X, CheckCircle, Clock, AlertCircle, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { createPortal } from 'react-dom';
+import Modal from '../components/ui/Modal';
 import { useSearchParams } from 'react-router-dom';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
@@ -30,156 +30,119 @@ const InvoiceDetailModal = ({ appointment, onClose }) => {
     }
   };
 
-  return createPortal(
-    <AnimatePresence>
-      <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 md:p-8">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={onClose}
-          className="absolute inset-0 bg-slate-950/80 backdrop-blur-xl"
-        />
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0, y: 20 }}
-          animate={{ scale: 1, opacity: 1, y: 0 }}
-          exit={{ scale: 0.9, opacity: 0, y: 20 }}
-          className="relative w-full max-w-4xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] border border-white/20"
-        >
-          {/* Modal Header */}
-          <div className="p-8 border-b border-slate-100 dark:border-white/5 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/30">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-saloon-500/10 flex items-center justify-center text-saloon-600 shadow-inner">
-                <FileText size={24} />
-              </div>
+  return (
+    <Modal
+      isOpen={!!appointment}
+      onClose={onClose}
+      title="Financial Archive"
+      subtitle={`Ref: INV-${appointment._id.substring(0, 8).toUpperCase()}`}
+      maxWidth="max-w-4xl"
+    >
+      <div className="flex flex-col max-h-[70vh] -mx-10 -my-10">
+        <div className="p-8 md:p-12 overflow-y-auto custom-scrollbar bg-white dark:bg-slate-900 printable-area text-slate-900 dark:text-white">
+          <div className="flex flex-col md:flex-row justify-between gap-10 mb-16">
+            <div className="space-y-6">
               <div>
-                <h2 className="text-2xl font-black text-slate-800 dark:text-white uppercase tracking-tighter leading-none italic">Invoice Archive</h2>
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2 italic">Ref: INV-{appointment._id.substring(0, 8).toUpperCase()}</p>
+                <h1 className="text-3xl font-black tracking-tighter italic uppercase text-saloon-600 mb-1">Glow Saloon</h1>
+                <p className="text-[8px] font-black uppercase tracking-[0.3em] text-slate-400 italic">Luxury Saloon & Spa</p>
+              </div>
+              <div className="space-y-1 text-xs font-bold text-slate-500 italic">
+                <p>123 Luxury Lane, Diamond District</p>
+                <p>Mumbai, Maharashtra - 400001</p>
+                <p>contact@glowsaloon.com</p>
               </div>
             </div>
-            <div className="flex gap-4">
-              <button
-                onClick={handleExportPDF}
-                className="p-3 bg-white dark:bg-slate-800 border border-slate-100 dark:border-white/5 rounded-2xl text-slate-400 hover:text-saloon-500 transition-all shadow-sm group"
-              >
-                <Download size={20} className="group-hover:translate-y-0.5 transition-transform" />
-              </button>
-              <button
-                onClick={onClose}
-                className="p-3 bg-white dark:bg-slate-800 border border-slate-100 dark:border-white/5 rounded-2xl text-slate-400 hover:text-red-500 transition-all shadow-sm"
-              >
-                <X size={24} />
-              </button>
+            <div className="text-left md:text-right space-y-6">
+              <h2 className="text-4xl font-black tracking-tighter italic text-slate-100 dark:text-white/5 uppercase select-none leading-none">Invoice</h2>
+              <div className="space-y-1">
+                <p className="text-[9px] font-black uppercase tracking-widest text-slate-400 italic">Financial Summary For</p>
+                <p className="text-lg font-black tracking-tight uppercase italic">{appointment.client?.name}</p>
+                <p className="text-[10px] font-bold text-slate-500">{appointment.client?.email}</p>
+              </div>
             </div>
           </div>
 
-          {/* Invoice Body (Scrollable) */}
-          <div className="p-12 overflow-y-auto custom-scrollbar bg-white dark:bg-slate-900 printable-area text-slate-900 dark:text-white">
-            <div className="grid grid-cols-2 gap-20 mb-20">
-              <div className="space-y-8">
-                <div>
-                  <h1 className="text-4xl font-black tracking-tighter italic uppercase text-saloon-600 mb-2">Glow Saloon</h1>
-                  <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 italic">Luxury Saloon & Spa Narrative</p>
-                </div>
-                <div className="space-y-1 text-sm font-bold text-slate-500 italic">
-                  <p>123 Luxury Lane, Diamond District</p>
-                  <p>Mumbai, Maharashtra - 400001</p>
-                  <p>contact@glowsaloon.com</p>
-                  <p>+91 98765 43210</p>
-                </div>
+          <div className="mb-12 grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div className="p-6 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-white/5 shadow-inner">
+              <p className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1 italic">Creation Date</p>
+              <p className="font-black italic text-xs">{format(new Date(appointment.createdAt), 'MMMM dd, yyyy')}</p>
+            </div>
+            <div className="p-6 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-white/5 shadow-inner">
+              <p className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1 italic">Ritual Identity</p>
+              <p className="font-black italic text-xs">#INV-{appointment._id.substring(18).toUpperCase()}</p>
+            </div>
+            <div className="p-6 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-white/5 shadow-inner flex justify-between items-center sm:block sm:space-y-3">
+              <div>
+                <p className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1 italic">Protocol</p>
+                <p className={`font-black italic text-[10px] uppercase tracking-widest ${appointment.status === 'Cancelled' ? 'text-red-500' : appointment.status === 'Completed' ? 'text-green-500' : 'text-slate-500'}`}>
+                  {appointment.status || 'Pending'}
+                </p>
               </div>
-              <div className="text-right space-y-8">
-                <h2 className="text-6xl font-black tracking-tighter italic text-slate-100 dark:text-white/5 uppercase select-none">Invoice</h2>
-                <div className="space-y-2">
-                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 italic">Financial Summary For</p>
-                  <p className="text-xl font-black tracking-tight uppercase italic">{appointment.client?.name}</p>
-                  <p className="text-xs font-bold text-slate-500">{appointment.client?.email}</p>
-                  <p className="text-xs font-bold text-slate-500">{appointment.client?.phone}</p>
-                </div>
+              <div className="border-l border-slate-200 dark:border-white/10 pl-4 sm:border-l-0 sm:pl-0">
+                <p className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1 italic">Settlement</p>
+                <p className={`font-black italic text-[10px] uppercase tracking-widest ${appointment.paymentStatus === 'Paid' ? 'text-indigo-500' : 'text-amber-500'}`}>
+                  {appointment.paymentStatus || 'Pending'}
+                </p>
               </div>
             </div>
+          </div>
 
-            <div className="mb-20 grid grid-cols-3 gap-8">
-              <div className="p-8 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-white/5 shadow-inner">
-                <p className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2 italic">Creation Date</p>
-                <p className="font-black italic text-sm">{format(new Date(appointment.createdAt), 'MMMM dd, yyyy')}</p>
-              </div>
-              <div className="p-8 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-white/5 shadow-inner">
-                <p className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2 italic">Ritual Identity</p>
-                <p className="font-black italic text-sm">#INV-{appointment._id.substring(18).toUpperCase()}</p>
-              </div>
-              <div className="p-8 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-white/5 shadow-inner space-y-4">
-                <div>
-                  <p className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2 italic">Protocol Status</p>
-                  <p className={`font-black italic text-sm uppercase tracking-widest ${appointment.status === 'Cancelled' ? 'text-red-500' : appointment.status === 'Completed' ? 'text-green-500' : 'text-slate-500'}`}>
-                    {appointment.status || 'Pending'}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2 italic">Settlement</p>
-                  <p className={`font-black italic text-sm uppercase tracking-widest ${appointment.paymentStatus === 'Paid' ? 'text-indigo-500' : 'text-amber-500'}`}>
-                    {appointment.paymentStatus || 'Pending'}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <table className="w-full mb-20">
+          <div className="overflow-x-auto mb-12">
+            <table className="w-full">
               <thead>
-                <tr className="border-b-2 border-slate-100 dark:border-white/5">
-                  <th className="text-left pb-6 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 italic px-4">Masterpiece / Service</th>
-                  <th className="text-right pb-6 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 italic px-4">Execution Date</th>
-                  <th className="text-right pb-6 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 italic px-4 w-32">Vault Value</th>
+                <tr className="border-b border-slate-100 dark:border-white/5 text-left">
+                  <th className="pb-4 text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 italic px-2">Masterpiece</th>
+                  <th className="pb-4 text-right text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 italic px-2">Date</th>
+                  <th className="pb-4 text-right text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 italic px-2">Value</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-slate-50 dark:divide-white/5">
                 {appointment.services?.map((service, idx) => (
-                  <tr key={service._id || idx} className="group">
-                    <td className="py-8 px-4">
-                      <p className="font-black text-lg tracking-tight uppercase italic">{service.name}</p>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase mt-2 italic">{service.category?.name || 'General Ritual'}</p>
+                  <tr key={service._id || idx}>
+                    <td className="py-6 px-2">
+                      <p className="font-black text-sm tracking-tight uppercase italic">{service.name}</p>
+                      <p className="text-[9px] font-bold text-slate-400 uppercase mt-1 italic">{service.category?.name || 'General Ritual'}</p>
                     </td>
-                    <td className="py-8 px-4 text-right align-top">
-                      <p className="font-black text-sm italic">{format(new Date(appointment.appointmentDate), 'MMM dd, HH:mm')}</p>
+                    <td className="py-6 px-2 text-right">
+                      <p className="font-black text-[10px] italic">{format(new Date(appointment.appointmentDate), 'MMM dd, HH:mm')}</p>
                     </td>
-                    <td className="py-8 px-4 text-right align-top">
-                      <p className="font-black text-lg italic text-saloon-600">${service.price?.toLocaleString()}</p>
+                    <td className="py-6 px-2 text-right">
+                      <p className="font-black text-sm italic text-saloon-600">${service.price?.toLocaleString()}</p>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+          </div>
 
-            <div className="flex justify-end pt-10 border-t-2 border-slate-100 dark:border-white/5">
-              <div className="w-1/3 space-y-6">
-                <div className="flex justify-between items-center px-4">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 italic">Sub-Total Value</span>
-                  <span className="font-black italic">${appointment.totalPrice.toLocaleString()}</span>
-                </div>
-                <div className="flex justify-between items-center px-4">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 italic">Protocol Tax (0%)</span>
-                  <span className="font-black italic">$0</span>
-                </div>
-                <div className="flex justify-between items-center p-6 bg-saloon-600 rounded-2xl text-white shadow-xl shadow-saloon-600/20">
-                  <span className="text-[11px] font-black uppercase tracking-[0.2em] italic">Total Extraction</span>
-                  <span className="text-2xl font-black italic tracking-tighter">${appointment.totalPrice.toLocaleString()}</span>
-                </div>
+          <div className="flex justify-end pt-8 border-t border-slate-100 dark:border-white/5">
+            <div className="w-full sm:w-1/2 space-y-4">
+              <div className="flex justify-between items-center px-2">
+                <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 italic">Sub-Total Extract</span>
+                <span className="font-black italic text-xs">${appointment.totalPrice.toLocaleString()}</span>
               </div>
-            </div>
-
-            <div className="mt-20 pt-20 border-t border-slate-100 dark:border-white/5 text-center space-y-4">
-              <p className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-300 italic">Validated Financial Intelligence</p>
-              <div className="flex items-center justify-center gap-4 text-slate-300">
-                <div className="h-[1px] w-20 bg-slate-100 dark:bg-white/5" />
-                <Sparkles size={16} />
-                <div className="h-[1px] w-20 bg-slate-100 dark:bg-white/5" />
+              <div className="flex justify-between items-center p-5 bg-saloon-600 rounded-xl text-white shadow-xl shadow-saloon-600/10">
+                <span className="text-[9px] font-black uppercase tracking-[0.2em] italic">Total Extraction</span>
+                <span className="text-xl font-black italic tracking-tighter">${appointment.totalPrice.toLocaleString()}</span>
               </div>
             </div>
           </div>
-        </motion.div>
+
+          <div className="mt-12 pt-12 border-t border-slate-100 dark:border-white/5 text-center space-y-3">
+            <p className="text-[8px] font-black uppercase tracking-[0.5em] text-slate-300 italic">Financial Intelligence Authenticated</p>
+            <div className="flex items-center justify-center gap-3">
+              <button
+                onClick={handleExportPDF}
+                className="flex items-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-lg font-black text-[9px] uppercase tracking-widest hover:bg-saloon-600 transition-all active:scale-95 shadow-lg"
+              >
+                <Download size={12} />
+                Export Mastery Archive
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-    </AnimatePresence>,
-    document.body
+    </Modal>
   );
 };
 

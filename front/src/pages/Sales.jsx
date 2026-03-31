@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchFinancialMatrix, processWithdrawal } from '../redux/slices/salesSlice';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { createPortal } from 'react-dom';
+import Modal from '../components/ui/Modal';
 
 export default function Sales() {
   const dispatch = useDispatch();
@@ -200,99 +200,57 @@ export default function Sales() {
         </div>
       </div>
 
-      {createPortal(
-        <AnimatePresence>
-          {isWithdrawModalOpen && (
-            <>
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={() => setIsWithdrawModalOpen(false)}
-                className="fixed inset-0 bg-slate-950/80 backdrop-blur-xl z-[400] flex items-center justify-center p-6"
-              >
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9, y: 30 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.9, y: 30 }}
-                  onClick={(e) => e.stopPropagation()}
-                  className="w-full max-w-lg bg-white dark:bg-slate-900 rounded-2xl shadow-2xl overflow-hidden border border-white/10"
-                >
-                  <div className="p-6 md:p-12 space-y-8 md:space-y-10">
-                    <div className="flex items-center justify-between">
-                      <div className="max-w-[80%]">
-                        <h2 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white tracking-tighter uppercase italic leading-none">Withdraw Funds</h2>
-                        <p className="text-[9px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest mt-3 md:mt-4">Initiating extraction protocol</p>
-                      </div>
-                      <button onClick={() => setIsWithdrawModalOpen(false)} className="p-2 md:p-3 bg-slate-100 dark:bg-slate-800 rounded-xl md:rounded-2xl text-slate-400 hover:text-red-500 transition-all">
-                        <X size={20} md:size={24} />
-                      </button>
-                    </div>
+      <Modal
+        isOpen={isWithdrawModalOpen}
+        onClose={() => setIsWithdrawModalOpen(false)}
+        title="Withdraw Funds"
+        subtitle="Initiating extraction protocol"
+        maxWidth="max-w-md"
+      >
+        <div className="space-y-6">
+          <div className="p-6 bg-saloon-600 rounded-xl text-white flex items-center justify-between shadow-xl shadow-saloon-600/10">
+            <div className="space-y-1">
+              <p className="text-[8px] font-black uppercase tracking-widest opacity-60 italic leading-none">In Vault</p>
+              <p className="text-2xl font-black tracking-tighter italic leading-none">${matrix.totalRevenue.toLocaleString()}</p>
+            </div>
+            <Wallet size={32} className="opacity-20" />
+          </div>
 
-                    <div className="p-6 md:p-8 bg-saloon-600 rounded-xl md:rounded-2xl text-white flex items-center justify-between shadow-xl shadow-saloon-600/20">
-                      <div className="space-y-1">
-                        <p className="text-[8px] md:text-[10px] font-black uppercase tracking-widest opacity-60 italic leading-none">In Vault</p>
-                        <p className="text-2xl md:text-4xl font-black tracking-tighter italic leading-none">${matrix.totalRevenue.toLocaleString()}</p>
-                      </div>
-                      <Wallet size={32} md:size={48} className="opacity-20" />
-                    </div>
+          <form onSubmit={withdrawalFormik.handleSubmit} className="space-y-6">
+            <div className="space-y-3">
+              <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-2 italic">Extraction Amount ($)</label>
+              <input
+                name="amount" type="number" onChange={withdrawalFormik.handleChange} value={withdrawalFormik.values.amount}
+                className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/30 rounded-xl px-5 py-4 text-sm font-black outline-none transition-all dark:text-white"
+                placeholder="00.00"
+              />
+              {withdrawalFormik.touched.amount && withdrawalFormik.errors.amount && (
+                <p className="text-[8px] font-black uppercase text-red-500 ml-2 italic">{withdrawalFormik.errors.amount}</p>
+              )}
+            </div>
 
-                    <form onSubmit={withdrawalFormik.handleSubmit} className="space-y-8">
-                      <div className="space-y-4">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2 italic">Extraction Amount ($)</label>
-                        <input
-                          name="amount"
-                          type="number"
-                          onChange={withdrawalFormik.handleChange}
-                          onBlur={withdrawalFormik.handleBlur}
-                          value={withdrawalFormik.values.amount}
-                          className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/30 rounded-xl md:rounded-2xl px-6 py-4 md:px-8 md:py-6 text-lg md:text-xl font-black outline-none transition-all dark:text-white shadow-inner"
-                          placeholder="00.00"
-                        />
-                        {withdrawalFormik.touched.amount && withdrawalFormik.errors.amount && (
-                          <div className="flex items-center gap-2 text-red-500 ml-2 animate-pulse">
-                            <AlertCircle size={14} />
-                            <p className="text-[10px] font-black uppercase italic">{withdrawalFormik.errors.amount}</p>
-                          </div>
-                        )}
-                      </div>
+            <div className="space-y-3">
+              <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-2 italic">Destination Bank Tether</label>
+              <input
+                name="bankAccount" onChange={withdrawalFormik.handleChange} value={withdrawalFormik.values.bankAccount}
+                className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/30 rounded-xl px-5 py-4 text-xs font-bold outline-none transition-all dark:text-white tracking-widest"
+                placeholder="Enter account sequence..."
+              />
+              {withdrawalFormik.touched.bankAccount && withdrawalFormik.errors.bankAccount && (
+                <p className="text-[8px] font-black uppercase text-red-500 ml-2 italic">{withdrawalFormik.errors.bankAccount}</p>
+              )}
+            </div>
 
-                      <div className="space-y-4">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2 italic">Destination Bank Tether</label>
-                        <input
-                          name="bankAccount"
-                          onChange={withdrawalFormik.handleChange}
-                          onBlur={withdrawalFormik.handleBlur}
-                          value={withdrawalFormik.values.bankAccount}
-                          className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/30 rounded-xl md:rounded-2xl px-6 py-4 md:px-8 md:py-6 text-xs md:text-sm font-bold outline-none transition-all dark:text-white shadow-inner tracking-widest"
-                          placeholder="Enter account sequence..."
-                        />
-                        {withdrawalFormik.touched.bankAccount && withdrawalFormik.errors.bankAccount && (
-                          <div className="flex items-center gap-2 text-red-500 ml-2 animate-pulse">
-                            <AlertCircle size={14} />
-                            <p className="text-[10px] font-black uppercase italic">{withdrawalFormik.errors.bankAccount}</p>
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="pt-4 md:pt-6">
-                        <button
-                          type="submit"
-                          disabled={loading}
-                          className="w-full py-4 md:py-6 dark:bg-slate-800 bg-slate-900 text-white rounded-xl md:rounded-2xl text-[10px] md:text-[11px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] hover:bg-saloon-600 transition-all shadow-2xl active:scale-95 disabled:opacity-50"
-                        >
-                          Confirm Extraction
-                        </button>
-                      </div>
-                    </form>
-                  </div>
-                </motion.div>
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>,
-        document.body
-      )}
+            <button
+              type="submit" disabled={loading}
+              className="w-full py-5 bg-slate-950 dark:bg-white text-white dark:text-slate-900 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] hover:bg-saloon-600 transition-all shadow-xl active:scale-95 disabled:opacity-50 flex items-center justify-center gap-3"
+            >
+              Confirm Extraction
+              <ChevronRight size={16} />
+            </button>
+          </form>
+        </div>
+      </Modal>
     </div>
   );
 }

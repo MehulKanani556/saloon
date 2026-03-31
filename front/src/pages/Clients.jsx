@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Mail, Phone, ShoppingBag, Plus, Star, Trash2, Edit3, X, User, Eye, Calendar, Clock, Award, FileText, User2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchClients, addClient, updateClient, deleteClient } from '../redux/slices/clientSlice';
 import { fetchAppointments } from '../redux/slices/appointmentSlice';
-import { createPortal } from 'react-dom';
+import Modal from '../components/ui/Modal';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { IMAGE_URL } from '../utils/BASE_URL';
@@ -235,317 +235,202 @@ export default function Clients() {
         </div>
       </div>
 
-      {createPortal(
-        <AnimatePresence>
-          {isDrawerOpen && (
-            <>
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={handleCloseDrawer}
-                className="fixed inset-0 bg-slate-950/60 backdrop-blur-md z-[200]"
+      <Modal
+        isOpen={isDrawerOpen}
+        onClose={handleCloseDrawer}
+        title={selectedClient ? 'Edit Info' : 'New Customer'}
+        subtitle="Customer Management"
+      >
+        <div className="flex flex-col items-center mb-8">
+          <div className="relative group">
+            <div className="w-32 h-32 rounded-2xl bg-slate-50 dark:bg-slate-800 border-4 border-slate-100 dark:border-white/5 flex items-center justify-center text-slate-300 dark:text-slate-600 shadow-inner overflow-hidden transition-all group-hover:border-saloon-500/20">
+              {imagePreview ? (
+                <img src={imagePreview.startsWith('blob') || !imagePreview.startsWith('/uploads') ? imagePreview : `${IMAGE_URL}${imagePreview}`} className="w-full h-full object-cover" alt="Preview" />
+              ) : (
+                <User size={48} strokeWidth={1} />
+              )}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.currentTarget.files[0];
+                  if (file) {
+                    formik.setFieldValue('imageFile', file);
+                    setImagePreview(URL.createObjectURL(file));
+                  }
+                }}
+                className="absolute inset-0 opacity-0 cursor-pointer z-10"
               />
-              <motion.div
-                initial={{ x: '100%' }}
-                animate={{ x: 0 }}
-                exit={{ x: '100%' }}
-                transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                className="fixed right-0 top-0 h-screen w-full max-w-md bg-white dark:bg-slate-900 shadow-2xl z-[210] flex flex-col border-l border-white/20"
-              >
-                <div className="p-10 border-b border-slate-100 dark:border-white/5 flex items-center justify-between">
-                  <div>
-                    <h2 className="text-3xl font-black text-slate-800 dark:text-white tracking-tighter uppercase leading-none">
-                      {selectedClient ? 'Edit Info' : 'New Customer'}
-                    </h2>
-                    <p className="text-slate-400 font-black text-[10px] uppercase tracking-widest mt-4">Add or update customer details</p>
-                  </div>
-                  <button onClick={handleCloseDrawer} className="p-3 bg-slate-100 dark:bg-slate-800 rounded-2xl text-slate-400 hover:text-saloon-500 transition-all">
-                    <X size={24} />
-                  </button>
+            </div>
+          </div>
+          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-4 italic">Customer Identity</p>
+        </div>
+
+        <form onSubmit={formik.handleSubmit} className="space-y-6">
+          <div className="space-y-3.5">
+            <label className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2 italic">Full Name</label>
+            <input
+              name="name"
+              onChange={formik.handleChange}
+              value={formik.values.name}
+              className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/30 rounded-xl px-5 py-4 text-xs font-bold outline-none transition-all dark:text-white shadow-inner"
+              placeholder="John Doe"
+            />
+            {formik.touched.name && formik.errors.name && <p className="text-red-500 text-[9px] font-bold ml-2 uppercase italic">{formik.errors.name}</p>}
+          </div>
+
+          <div className="space-y-3.5">
+            <label className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2 italic">Email Address</label>
+            <input
+              name="email"
+              onChange={formik.handleChange}
+              value={formik.values.email}
+              className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/30 rounded-xl px-5 py-4 text-xs font-bold outline-none transition-all dark:text-white shadow-inner"
+              placeholder="john@example.com"
+            />
+            {formik.touched.email && formik.errors.email && <p className="text-red-500 text-[9px] font-bold ml-2 uppercase italic">{formik.errors.email}</p>}
+          </div>
+
+          <div className="space-y-3.5">
+            <label className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2 italic">Phone Number</label>
+            <input
+              name="phone"
+              onChange={formik.handleChange}
+              value={formik.values.phone}
+              className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/30 rounded-xl px-5 py-4 text-xs font-bold outline-none transition-all dark:text-white shadow-inner"
+              placeholder="+1 234 567 890"
+            />
+            {formik.touched.phone && formik.errors.phone && <p className="text-red-500 text-[9px] font-bold ml-2 uppercase italic">{formik.errors.phone}</p>}
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-5 dark:bg-slate-800 dark:hover:bg-saloon-600 bg-slate-900 text-white rounded-xl text-xs font-black uppercase tracking-[0.3em] hover:bg-saloon-600 transition-all shadow-2xl active:scale-95 disabled:opacity-50"
+          >
+            {selectedClient ? 'Save Changes' : 'Add Customer Member'}
+          </button>
+        </form>
+      </Modal>
+
+      <Modal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        title="Delete Customer?"
+        subtitle="Administrative Action"
+        maxWidth="max-w-sm"
+      >
+        <div className="text-center">
+          <div className="w-16 h-16 bg-red-50 dark:bg-red-500/10 rounded-2xl flex items-center justify-center mx-auto text-red-500 mb-6">
+            <Trash2 size={32} />
+          </div>
+          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-relaxed mb-8">
+            Eliminating the digital footprint of <span className="text-red-500">{clientToDelete?.name}</span>. <br />Historical rituals will persist in archive.
+          </p>
+          <div className="flex flex-col gap-3">
+            <button
+              onClick={() => {
+                dispatch(deleteClient(clientToDelete._id));
+                setIsDeleteModalOpen(false);
+              }}
+              className="w-full py-4 bg-red-500 text-white rounded-xl text-[10px] font-black uppercase tracking-[0.2em] hover:bg-red-600 transition-all shadow-xl active:scale-95"
+            >
+              Confirm Delete
+            </button>
+            <button
+              onClick={() => setIsDeleteModalOpen(false)}
+              className="w-full py-4 bg-slate-100 dark:bg-slate-800 text-slate-400 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] hover:text-slate-900 transition-all border border-slate-200 dark:border-white/5"
+            >
+              Abort Protocol
+            </button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal
+        isOpen={isProfileOpen}
+        onClose={() => { setIsProfileOpen(false); setProfileClient(null); }}
+        title={profileClient?.name}
+        subtitle="Premium Client"
+        headerImage={profileClient?.profileImage ? (profileClient.profileImage.startsWith('/uploads') ? `${IMAGE_URL}${profileClient.profileImage}` : profileClient.profileImage) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${profileClient?.name}`}
+        footer={(
+          <>
+            <button
+              onClick={() => { setIsProfileOpen(false); handleEdit(profileClient); }}
+              className="flex-1 py-4 bg-slate-900 dark:bg-slate-800 text-white rounded-xl text-[10px] font-black uppercase tracking-[0.2em] hover:bg-saloon-600 transition-all shadow-xl active:scale-95"
+            >
+              Refine Identity
+            </button>
+            <button
+              onClick={() => { setIsProfileOpen(false); setProfileClient(null); }}
+              className="px-6 flex items-center justify-center bg-white dark:bg-slate-700 rounded-xl text-slate-400 hover:text-red-500 transition-all border border-slate-100 dark:border-white/5"
+            >
+              <X size={18} />
+            </button>
+          </>
+        )}
+      >
+        {profileClient && (
+          <div className="space-y-8">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-100 dark:border-white/5">
+                <div className="flex items-center gap-2 text-saloon-500 mb-2">
+                  <ShoppingBag size={14} />
+                  <span className="text-[9px] font-black uppercase tracking-widest">Rituals</span>
                 </div>
-
-                <div className="flex-1 overflow-y-auto px-10 py-8 space-y-12 custom-scrollbar">
-                  <div className="flex flex-col items-center">
-                    <div className="relative group">
-                      <div className="w-40 h-40 rounded-2xl bg-slate-50 dark:bg-slate-800 border-4 border-slate-100 dark:border-white/5 flex items-center justify-center text-slate-300 dark:text-slate-600 shadow-inner overflow-hidden transition-all group-hover:border-saloon-500/20">
-                        {imagePreview ? (
-                          <img src={imagePreview.startsWith('blob') || !imagePreview.startsWith('/uploads') ? imagePreview : `${IMAGE_URL}${imagePreview}`} className="w-full h-full object-cover" alt="Preview" />
-                        ) : (
-                          <User size={64} strokeWidth={1} />
-                        )}
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => {
-                            const file = e.currentTarget.files[0];
-                            if (file) {
-                              formik.setFieldValue('imageFile', file);
-                              setImagePreview(URL.createObjectURL(file));
-                            }
-                          }}
-                          className="absolute inset-0 opacity-0 cursor-pointer z-10"
-                        />
-                      </div>
-                      <div className="absolute -bottom-2 -right-2 w-12 h-12 bg-saloon-600 rounded-2xl flex items-center justify-center text-white shadow-xl border-4 border-white dark:border-slate-900 group-hover:scale-110 transition-transform">
-                        <Plus size={20} />
-                      </div>
-                    </div>
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-6 italic">Customer Photo</p>
-                  </div>
-
-                  <form onSubmit={formik.handleSubmit} className="space-y-10">
-                    <div className="space-y-4">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2 italic">Full Name</label>
-                      <input
-                        name="name"
-                        onChange={formik.handleChange}
-                        value={formik.values.name}
-                        className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/30 rounded-2xl px-6 py-5 text-sm font-bold outline-none transition-all dark:text-white shadow-inner"
-                        placeholder="John Doe"
-                      />
-                      {formik.touched.name && formik.errors.name && <p className="text-red-500 text-[10px] font-bold ml-2 uppercase italic">{formik.errors.name}</p>}
-                    </div>
-
-                    <div className="space-y-4">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2 italic">Email Address</label>
-                      <input
-                        name="email"
-                        onChange={formik.handleChange}
-                        value={formik.values.email}
-                        className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/30 rounded-2xl px-6 py-5 text-sm font-bold outline-none transition-all dark:text-white shadow-inner"
-                        placeholder="john@example.com"
-                      />
-                      {formik.touched.email && formik.errors.email && <p className="text-red-500 text-[10px] font-bold ml-2 uppercase italic">{formik.errors.email}</p>}
-                    </div>
-
-                    <div className="space-y-4">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2 italic">Phone Number</label>
-                      <input
-                        name="phone"
-                        onChange={formik.handleChange}
-                        value={formik.values.phone}
-                        className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/30 rounded-2xl px-6 py-5 text-sm font-bold outline-none transition-all dark:text-white shadow-inner"
-                        placeholder="+1 234 567 890"
-                      />
-                      {formik.touched.phone && formik.errors.phone && <p className="text-red-500 text-[10px] font-bold ml-2 uppercase italic">{formik.errors.phone}</p>}
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={loading}
-                      className="w-full py-6 dark:bg-slate-800 bg-slate-900 text-white rounded-2xl text-sm font-black uppercase tracking-[0.3em] hover:bg-saloon-600 transition-all shadow-2xl active:scale-95 disabled:opacity-50"
-                    >
-                      {selectedClient ? 'Save Changes' : 'Add Customer'}
-                    </button>
-                  </form>
+                <div className="text-lg font-black text-slate-800 dark:text-white">{(profileClient.bookingHistory?.length || 0).toString().padStart(2, '0')} Count</div>
+              </div>
+              <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-100 dark:border-white/5">
+                <div className="flex items-center gap-2 text-blue-500 mb-2">
+                  <Mail size={14} />
+                  <span className="text-[9px] font-black uppercase tracking-widest">Email</span>
                 </div>
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>,
-        document.body
-      )}
+                <div className="text-[10px] font-bold text-slate-800 dark:text-slate-300 truncate">{profileClient.email}</div>
+              </div>
+            </div>
 
-      {createPortal(
-        <AnimatePresence>
-          {isDeleteModalOpen && clientToDelete && (
-            <>
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={() => setIsDeleteModalOpen(false)}
-                className="fixed inset-0 bg-slate-950/80 backdrop-blur-xl z-[300] flex items-center justify-center p-6"
-              >
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                  onClick={(e) => e.stopPropagation()}
-                  className="w-full max-w-sm bg-white dark:bg-slate-900 rounded-2xl shadow-2xl overflow-hidden border border-white/10"
-                >
-                  <div className="p-12 text-center space-y-8">
-                    <div className="w-24 h-24 bg-red-50 dark:bg-red-500/10 rounded-2xl flex items-center justify-center mx-auto text-red-500 animate-pulse">
-                      <Trash2 size={40} />
-                    </div>
-                    <div className="space-y-4">
-                      <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter uppercase italic">Delete Customer?</h3>
-                      <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">
-                        You are about to eliminate the digital footprint of <span className="text-red-500">{clientToDelete.name}</span>. Historical rituals will persist, but the contact tether will be surgically removed.
+            <div className="p-6 bg-slate-50 dark:bg-slate-800 rounded-xl flex items-center justify-between group">
+              <div>
+                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1 italic">Tether</p>
+                <p className="text-lg font-black text-slate-900 dark:text-white tracking-tighter">{profileClient.phone}</p>
+              </div>
+              <div className="w-10 h-10 bg-white dark:bg-slate-700 rounded-xl flex items-center justify-center text-slate-400">
+                <Phone size={18} />
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Ritual Archive</span>
+                <span className="h-[1px] flex-1 bg-slate-100 dark:bg-white/5 mx-4" />
+                <Calendar size={14} className="text-slate-400" />
+              </div>
+
+              <div className="space-y-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                {appointments.filter(app => app.client?._id === profileClient._id).map((app) => (
+                  <div key={app._id} className="p-4 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-100 dark:border-white/5">
+                    <div className="flex items-center justify-between mb-3">
+                      <p className="text-[10px] font-black text-slate-800 dark:text-white uppercase tracking-tighter">
+                        {new Date(app.appointmentDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                       </p>
-                    </div>
-                    <div className="flex flex-col gap-3 pt-6">
-                      <button
-                        onClick={() => {
-                          dispatch(deleteClient(clientToDelete._id));
-                          setIsDeleteModalOpen(false);
-                        }}
-                        className="w-full py-5 bg-red-500 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] hover:bg-red-600 transition-all shadow-xl shadow-red-500/20 active:scale-95"
-                      >
-                        Confirm Delete
-                      </button>
-                      <button
-                        onClick={() => setIsDeleteModalOpen(false)}
-                        className="w-full py-5 bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] hover:text-slate-900 dark:hover:text-white transition-all active:scale-95"
-                      >
-                        Abort Protocol
-                      </button>
-                    </div>
-                  </div>
-                </motion.div>
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>,
-        document.body
-      )}
-
-      {createPortal(
-        <AnimatePresence>
-          {isProfileOpen && profileClient && (
-            <>
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={() => { setIsProfileOpen(false); setProfileClient(null); }}
-                className="fixed inset-0 bg-slate-950/60 backdrop-blur-md z-[300]"
-              />
-              <motion.div
-                initial={{ x: '100%' }}
-                animate={{ x: 0 }}
-                exit={{ x: '100%' }}
-                transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                className="fixed right-0 top-0 h-screen w-full max-w-lg bg-white dark:bg-slate-900 shadow-2xl z-[310] flex flex-col border-l border-white/20"
-              >
-                <div className="relative h-72 w-full overflow-hidden">
-                  <img
-                    src={profileClient.profileImage ? (profileClient.profileImage.startsWith('/uploads') ? `${IMAGE_URL}${profileClient.profileImage}` : profileClient.profileImage) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${profileClient.name}`}
-                    className="w-full h-full object-cover grayscale-[40%] hover:grayscale-0 transition-all duration-700"
-                    alt={profileClient.name}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
-                  <button
-                    onClick={() => { setIsProfileOpen(false); setProfileClient(null); }}
-                    className="absolute top-8 right-8 p-3 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl text-white hover:bg-saloon-500 transition-all"
-                  >
-                    <X size={20} />
-                  </button>
-                  <div className="absolute bottom-10 left-10">
-                    <div className="px-3 py-1 bg-saloon-600 text-white text-[9px] font-black uppercase tracking-widest rounded-lg inline-block mb-3 italic">Premium Gentleman</div>
-                    <h2 className="text-4xl font-black text-white tracking-tighter uppercase italic">{profileClient.name}</h2>
-                  </div>
-                </div>
-
-                <div className="flex-1 overflow-y-auto p-10 space-y-12 custom-scrollbar text-slate-800 dark:text-white">
-                  <div className="grid grid-cols-2 gap-6">
-                    <div className="p-6 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-100 dark:border-white/5">
-                      <div className="flex items-center gap-3 text-saloon-500 mb-2">
-                        <ShoppingBag size={16} />
-                        <span className="text-[10px] font-black uppercase tracking-widest">Ritual Count</span>
-                      </div>
-                      <div className="text-2xl font-black text-slate-800 dark:text-white">{(profileClient.bookingHistory?.length || 0).toString().padStart(2, '0')} Engagements</div>
-                    </div>
-                    <div className="p-6 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-100 dark:border-white/5">
-                      <div className="flex items-center gap-3 text-blue-500 mb-2">
-                        <Mail size={16} />
-                        <span className="text-[10px] font-black uppercase tracking-widest">Digital Signature</span>
-                      </div>
-                      <div className="text-[11px] font-bold text-slate-800 dark:text-slate-300 break-all">{profileClient.email}</div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-6">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Contact Intelligence</span>
-                      <span className="h-[2px] flex-1 bg-slate-100 dark:bg-white/5 mx-6" />
-                      <Phone size={16} className="text-slate-400" />
-                    </div>
-                    <div className="p-8 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-between group hover:bg-saloon-500/5 transition-all cursor-pointer">
-                      <div>
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 italic">Verified Tether</p>
-                        <p className="text-xl font-black text-slate-900 dark:text-white tracking-tighter">{profileClient.phone}</p>
-                      </div>
-                      <div className="w-12 h-12 bg-white dark:bg-slate-700 rounded-2xl flex items-center justify-center text-slate-400 group-hover:text-saloon-500 transition-colors shadow-sm">
-                        <Phone size={20} />
+                      <div className={`px-3 py-1 rounded-md text-[7px] font-black uppercase tracking-widest ${app.status === 'Completed' ? 'bg-green-500/10 text-green-500' : 'bg-blue-500/10 text-blue-500'}`}>
+                        {app.status}
                       </div>
                     </div>
-                  </div>
-
-                  <div className="space-y-6">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Ritual History Archive</span>
-                      <span className="h-[2px] flex-1 bg-slate-100 dark:bg-white/5 mx-6" />
-                      <Calendar size={16} className="text-slate-400" />
-                    </div>
-
-                    <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
-                      {appointments.filter(app => app.client?._id === profileClient._id).length > 0 ? (
-                        appointments
-                          .filter(app => app.client?._id === profileClient._id)
-                          .map((app, idx) => (
-                            <div key={app._id} className="p-6 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-slate-100 dark:border-white/5 group hover:bg-saloon-500/5 transition-all">
-                              <div className="flex items-center justify-between mb-4">
-                                <div className="space-y-1">
-                                  <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1 italic">Engagement Date</p>
-                                  <p className="text-xs font-black text-slate-800 dark:text-white uppercase tracking-tighter">
-                                    {new Date(app.appointmentDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                                  </p>
-                                </div>
-                                <div className={`px-4 py-1.5 rounded-lg border text-[8px] font-black uppercase tracking-widest transition-all ${app.status === 'Completed' ? 'bg-green-500/10 text-green-500 border-green-500/20' :
-                                  app.status === 'Cancelled' ? 'bg-red-500/10 text-red-500 border-red-500/20 shadow-[0_0_15px_rgba(239,68,68,0.1)]' :
-                                    app.status === 'Confirmed' ? 'bg-blue-500/10 text-blue-500 border-blue-500/20' :
-                                      'bg-amber-500/10 text-amber-500 border-amber-500/20 animate-pulse'
-                                  }`}>
-                                  {app.status}
-                                </div>
-                              </div>
-
-                              <div className="flex items-center justify-between pt-4 border-t border-slate-200/50 dark:border-white/5">
-                                <div className="flex flex-col gap-1">
-                                  <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest italic">Service Protocol</p>
-                                  <p className="text-[10px] font-bold text-slate-600 dark:text-slate-300 truncate max-w-[180px]">
-                                    {app.services?.map(s => s.name).join(', ')}
-                                  </p>
-                                </div>
-                                <div className="text-right">
-                                  <p className="text-[8px] font-mono text-slate-300 dark:text-slate-600 mb-1 tracking-widest">ID: {app._id.slice(-6).toUpperCase()}</p>
-                                  <p className="text-sm font-black text-saloon-600 italic">${app.totalPrice?.toLocaleString()}</p>
-                                </div>
-                              </div>
-                            </div>
-                          ))
-                      ) : (
-                        <div className="py-20 text-center border-2 border-dashed border-slate-100 dark:border-white/5 rounded-[2.5rem] opacity-30">
-                          <Clock size={40} className="mx-auto mb-4 opacity-20" />
-                          <p className="text-[10px] font-black uppercase tracking-[0.3em]">No historical archives found</p>
-                        </div>
-                      )}
+                    <div className="flex items-center justify-between text-[9px] font-bold text-slate-400">
+                      <span className="truncate max-w-[150px]">{app.services?.map(s => s.name).join(', ')}</span>
+                      <span className="text-saloon-600 font-black italic">${app.totalPrice}</span>
                     </div>
                   </div>
-                </div>
-
-                <div className="p-10 border-t border-slate-100 dark:border-white/5 flex gap-4 bg-slate-50/50 dark:bg-slate-800/10">
-                  <button
-                    onClick={() => { setIsProfileOpen(false); handleEdit(profileClient); }}
-                    className="flex-1 py-5 bg-slate-900 dark:bg-slate-800 text-white rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] hover:bg-saloon-600 transition-all shadow-xl active:scale-95"
-                  >
-                    Refine Identity
-                  </button>
-                  <button
-                    onClick={() => { setIsProfileOpen(false); setProfileClient(null); }}
-                    className="w-20 flex items-center justify-center bg-white dark:bg-slate-700 rounded-2xl text-slate-400 hover:text-red-500 transition-all border border-slate-100 dark:border-white/5 shadow-sm"
-                  >
-                    <X size={20} />
-                  </button>
-                </div>
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>,
-        document.body
-      )}
+                ))}
+                {appointments.filter(app => app.client?._id === profileClient._id).length === 0 && (
+                  <div className="py-10 text-center opacity-30 italic text-[10px] uppercase font-black tracking-widest">No archives found</div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }

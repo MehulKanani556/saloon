@@ -7,11 +7,11 @@ const getStaff = async (req, res) => {
 };
 
 const createStaff = async (req, res) => {
-    let { name, email, services, profileImage, availability, ratings } = req.body;
+    let { name, email, services, profileImage, phone } = req.body;
     if (services) {
         services = Array.isArray(services) ? services : [services];
     }
-    const staff = new User({ name, email, services, profileImage, availability, ratings, role: 'Staff' });
+    const staff = new User({ name, email, services, profileImage, phone, role: 'Staff' });
     let createdStaff = await staff.save();
     createdStaff = await createdStaff.populate('services');
     res.status(201).json(createdStaff);
@@ -31,9 +31,8 @@ const updateStaff = async (req, res) => {
         
         staff.name = req.body.name || staff.name;
         staff.email = req.body.email || staff.email;
+        staff.phone = req.body.phone || staff.phone;
         staff.profileImage = req.body.profileImage || staff.profileImage;
-        staff.availability = req.body.availability || staff.availability;
-        staff.ratings = req.body.ratings || staff.ratings;
         staff.isActive = req.body.isActive !== undefined ? req.body.isActive : staff.isActive;
         let updatedStaff = await staff.save();
         updatedStaff = await updatedStaff.populate('services');

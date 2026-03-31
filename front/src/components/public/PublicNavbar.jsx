@@ -52,7 +52,7 @@ const PublicNavbar = () => {
             </Link>
           ))}
           <button 
-            onClick={() => navigate(adminInfo ? '/dashboard' : '/login')}
+            onClick={() => navigate(adminInfo ? '/admin/dashboard' : '/login')}
             className={`premium-button-primary !py-2 !px-6 text-[10px] font-black uppercase tracking-widest flex items-center gap-2 group ${showSolid ? '' : 'bg-white text-slate-900 border-none'}`}
           >
             <LogIn size={14} className="group-hover:translate-x-1 transition-transform" />

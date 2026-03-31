@@ -73,7 +73,7 @@ const Hero = () => {
             className="w-2 h-2 rounded-full bg-saloon-500"
           />
           <span className="text-[9px] md:text-[10px] font-black text-white uppercase tracking-[0.2em]">
-            ⭐ 4.9 Rating | 500+ Happy Clients
+            500+ Happy Clients
           </span>
         </motion.div>
 
@@ -391,11 +391,7 @@ const TeamPreview = () => {
                   <div className="px-3 py-1 bg-white/5 rounded-full mb-4">
                     <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">{artist.services?.[0]?.name || "Senior Stylist"}</span>
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} size={10} className={i < (artist.ratings || 5) ? "text-saloon-500 fill-saloon-500" : "text-slate-700"} />
-                    ))}
-                  </div>
+
                 </div>
               </motion.div>
             ))

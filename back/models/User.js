@@ -16,8 +16,6 @@ const userSchema = new mongoose.Schema({
     
     // Staff specific fields
     services: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Service' }],
-    availability: { type: String, default: 'Full-time' },
-    ratings: { type: Number, default: 4.5 },
     isActive: { type: Boolean, default: true },
 
     // Client/User specific fields
