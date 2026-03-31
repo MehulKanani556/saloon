@@ -274,7 +274,7 @@ const DeleteModal = ({ isOpen, onClose, onConfirm, itemName }) => (
   )
 );
 
-export default function Services() {
+export default function AdminServices() {
   const dispatch = useDispatch();
   const { services, loading } = useSelector((state) => state.services);
   const [searchTerm, setSearchTerm] = useState('');
