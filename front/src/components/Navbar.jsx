@@ -40,7 +40,7 @@ export default function Navbar({ darkMode, setDarkMode, onMenuClick }) {
 
         <div className="hidden lg:flex items-center gap-6 px-1 py-1">
           <div className="flex items-center gap-4">
-            <img src={Logo} alt="Logo" className="h-8 w-auto object-contain" />
+            <img src={Logo} alt="Logo" className="h-8 w-auto object-contain dark:brightness-0 dark:invert" />
             <div className="flex flex-col">
               <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] leading-none mb-1">Status</p>
               <div className="flex items-center gap-2">

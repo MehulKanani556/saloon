@@ -73,7 +73,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                 transition={{ duration: 0.3 }}
                 className="flex items-center gap-2"
               >
-                <img src={Logo} alt="Logo" className="h-10 w-auto object-contain" />
+                <img src={Logo} alt="Logo" className="h-10 w-auto object-contain dark:brightness-0 dark:invert" />
               </motion.div>
             )}
           </AnimatePresence>
