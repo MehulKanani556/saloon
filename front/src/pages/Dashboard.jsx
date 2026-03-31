@@ -77,7 +77,7 @@ export default function Dashboard() {
           </div>
         </div>
         
-        <div className="flex items-center gap-8 bg-secondary/40 backdrop-blur-md px-10 py-6 rounded-[2rem] border border-white/5 shadow-3xl group hover:border-primary/20 transition-all duration-500">
+        <div className="flex items-center gap-8 bg-secondary/40 backdrop-blur-md px-10 py-6 rounded-2xl border border-white/5 shadow-3xl group hover:border-primary/20 transition-all duration-500">
           <div className="text-left">
             <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em] leading-none mb-3 italic">Total Archive Value</p>
             <p className="text-4xl font-black text-white tracking-tighter italic font-luxury leading-none group-hover:scale-105 transition-transform duration-500">
@@ -100,36 +100,36 @@ export default function Dashboard() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 }}
-            className="bg-secondary/40 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white/5 shadow-3xl relative overflow-hidden group hover:border-primary/20 transition-all duration-500"
+            className="bg-secondary rounded-2xl p-6 border border-white/5 shadow-3xl relative overflow-hidden group hover:border-primary/20 transition-all duration-500"
           >
             <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
                <stat.icon size={64} strokeWidth={1} />
             </div>
             
-            <div className="flex items-center justify-between relative z-10 mb-10">
-              <div className="w-14 h-14 rounded-2xl bg-background flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-secondary transition-all duration-500 shadow-premium border border-white/5">
-                <stat.icon size={26} strokeWidth={2.5} />
+            <div className="flex items-center justify-between relative z-10 mb-8">
+              <div className="w-12 h-12 rounded-xl bg-background flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-secondary transition-all duration-500 shadow-premium border border-white/5">
+                <stat.icon size={22} strokeWidth={2.5} />
               </div>
-              <div className="flex items-center gap-2 text-[10px] font-black text-primary bg-primary/10 border border-primary/20 px-4 py-2 rounded-xl uppercase tracking-[0.2em] italic">
-                <TrendingUp size={14} strokeWidth={3} />
+              <div className="flex items-center gap-2 text-[9px] font-black text-primary bg-primary/10 border border-primary/20 px-3 py-1.5 rounded-2xl uppercase tracking-[0.2em] italic">
+                <TrendingUp size={12} strokeWidth={3} />
                 {stat.trend}
               </div>
             </div>
 
             <div className="relative z-10">
-              <h3 className="text-muted text-[10px] font-black uppercase tracking-[0.4em] mb-4 italic leading-none opacity-60 group-hover:opacity-100 transition-opacity">
+              <h3 className="text-muted text-[9px] font-black uppercase tracking-[0.4em] mb-3 italic leading-none opacity-60 group-hover:opacity-100 transition-opacity">
                 {stat.label}
               </h3>
-              <p className="text-4xl font-black text-white tracking-tighter leading-none italic font-luxury overflow-hidden truncate">{stat.value}</p>
+              <p className="text-3xl font-black text-white tracking-tighter leading-none italic font-luxury overflow-hidden truncate">{stat.value}</p>
             </div>
             
-            <div className="absolute bottom-0 left-0 w-full h-1 bg-luxury-gradient opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="absolute bottom-0 left-0 w-full h-[1px] bg-luxury-gradient opacity-0 group-hover:opacity-100 transition-opacity" />
           </motion.div>
         ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-        <div className="lg:col-span-2 bg-secondary/30 backdrop-blur-sm p-10 rounded-[3rem] border border-white/5 shadow-3xl relative overflow-hidden group">
+        <div className="lg:col-span-2 bg-secondary/30 backdrop-blur-sm p-10 rounded-2xl border border-white/5 shadow-3xl relative overflow-hidden group">
           <div className="absolute top-0 left-0 w-1 h-full bg-luxury-gradient opacity-20" />
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-16 relative z-10">
             <div>
@@ -166,7 +166,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="bg-secondary/30 backdrop-blur-sm p-10 rounded-[3rem] border border-white/5 shadow-3xl relative flex flex-col">
+        <div className="bg-secondary/30 backdrop-blur-sm p-10 rounded-2xl border border-white/5 shadow-3xl relative flex flex-col">
           <h3 className="text-2xl font-black text-white tracking-tighter uppercase mb-12 italic font-luxury flex items-center gap-4">
              <Star className="text-primary" size={24} />
              Ritual Hierarchy
@@ -201,7 +201,7 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-        <div className="bg-secondary/30 backdrop-blur-md p-10 rounded-[3rem] border border-white/5 shadow-3xl relative overflow-hidden group">
+        <div className="bg-secondary/30 backdrop-blur-md p-10 rounded-2xl border border-white/5 shadow-3xl relative overflow-hidden group">
           <div className="flex items-center justify-between gap-6 mb-12 relative z-10 leading-none">
             <div>
               <h3 className="text-2xl font-black text-white tracking-tighter uppercase mb-3 italic font-luxury">Previous Rituals</h3>
@@ -213,7 +213,7 @@ export default function Dashboard() {
           </div>
           <div className="space-y-6 relative z-10">
             {data.recentBookings.map((app, i) => (
-              <div key={app._id} className="flex items-center justify-between p-6 rounded-[2rem] bg-background/50 border border-white/10 group/item hover:bg-white/5 transition-all">
+              <div key={app._id} className="flex items-center justify-between p-6 rounded-2xl bg-background/50 border border-white/10 group/item hover:bg-white/5 transition-all">
                 <div className="flex items-center gap-5">
                   <div className="w-12 h-12 rounded-2xl bg-secondary p-1 border border-white/5 flex items-center justify-center text-primary group-hover/item:rotate-12 transition-all duration-500">
                     <img 
@@ -232,7 +232,7 @@ export default function Dashboard() {
                 </div>
                 <div className="text-right space-y-3">
                   <p className="text-lg font-black text-white italic font-luxury leading-none">${app.totalPrice}</p>
-                  <div className={`text-[8px] font-black uppercase tracking-[0.3em] px-3 py-1.5 rounded-lg border italic
+                  <div className={`text-[8px] font-black uppercase tracking-[0.3em] px-3 py-1.5 rounded-2xl border italic
                     ${app.status === 'Completed' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' :
                       app.status === 'Cancelled' ? 'bg-rose-500/10 text-rose-500 border-rose-500/20' :
                         'bg-primary/10 text-primary border-primary/20'}
@@ -245,13 +245,13 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="bg-secondary/30 backdrop-blur-md p-10 rounded-[3rem] border border-white/5 shadow-3xl relative overflow-hidden group">
+        <div className="bg-secondary/30 backdrop-blur-md p-10 rounded-2xl border border-white/5 shadow-3xl relative overflow-hidden group">
           <div className="flex items-center justify-between gap-6 mb-12 relative z-10 leading-none">
             <div>
               <h3 className="text-2xl font-black text-white tracking-tighter uppercase mb-3 italic font-luxury">Diurnal Pipeline</h3>
               <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em] italic opacity-60">Pending masterpieces today</p>
             </div>
-            <div className="w-14 h-14 rounded-[1.5rem] bg-primary text-secondary flex items-center justify-center font-black text-xl border-4 border-white/10 shadow-2xl font-luxury italic">
+            <div className="w-14 h-14 rounded-2xl bg-primary text-secondary flex items-center justify-center font-black text-xl border-4 border-white/10 shadow-2xl font-luxury italic">
               {data.upcomingRituals.length.toString().padStart(2, '0')}
             </div>
           </div>
@@ -260,7 +260,7 @@ export default function Dashboard() {
               <motion.div 
                 key={app._id} 
                 whileHover={{ scale: 1.02, x: 10 }}
-                className="flex items-center justify-between p-8 rounded-[2.5rem] bg-primary text-secondary shadow-2xl relative overflow-hidden group/ritual cursor-pointer"
+                className="flex items-center justify-between p-8 rounded-2xl bg-primary text-secondary shadow-2xl relative overflow-hidden group/ritual cursor-pointer"
               >
                 <div className="absolute inset-0 bg-white/10 opacity-0 group-hover/ritual:opacity-100 transition-opacity duration-500" />
                 <div className="flex items-center gap-6 relative z-10">
@@ -281,7 +281,7 @@ export default function Dashboard() {
                 </div>
               </motion.div>
             )) : (
-              <div className="py-24 text-center border-2 border-dashed border-white/5 rounded-[3rem] bg-background/30">
+              <div className="py-24 text-center border-2 border-dashed border-white/5 rounded-2xl bg-background/30">
                 <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
                    <CheckCircle2 size={32} className="text-white/10" strokeWidth={1} />
                 </div>
@@ -292,7 +292,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="bg-secondary/30 backdrop-blur-sm p-10 rounded-[3rem] border border-white/5 shadow-3xl relative overflow-hidden group">
+      <div className="bg-secondary/30 backdrop-blur-sm p-10 rounded-2xl border border-white/5 shadow-3xl relative overflow-hidden group">
         <div className="absolute top-0 left-0 w-full h-[1px] bg-luxury-gradient opacity-10" />
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-16 relative z-10">
           <div>
@@ -325,4 +325,5 @@ export default function Dashboard() {
     </div>
   );
 }
+
 

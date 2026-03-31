@@ -16,10 +16,12 @@ const InvoiceDetailModal = ({ appointment, onClose }) => {
   const handleExportPDF = async () => {
     try {
       const result = await dispatch(exportInvoicePDF(appointment._id)).unwrap();
+      const clientName = appointment.client?.name?.split(' ').join('_') || 'Client';
+      const appointmentId = appointment.appointmentId || appointment._id.toString().substring(18).toUpperCase();
       const url = window.URL.createObjectURL(new Blob([result.data]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `Invoice-${appointment._id.substring(0, 8)}.pdf`);
+      link.setAttribute('download', `Invoice-${clientName}-${appointmentId}.pdf`);
       document.body.appendChild(link);
       link.click();
     } catch (err) {
@@ -32,11 +34,11 @@ const InvoiceDetailModal = ({ appointment, onClose }) => {
       isOpen={!!appointment}
       onClose={onClose}
       title="Financial Archive"
-      subtitle={`Ref: INV-${appointment._id.substring(0, 8).toUpperCase()}`}
+      subtitle={`Ref: ${appointment.appointmentId || appointment._id.substring(18).toUpperCase()}`}
       maxWidth="max-w-4xl"
     >
       <div className="flex flex-col max-h-[70vh] -my-10">
-        <div className="p-8 md:p-12 bg-secondary/80 backdrop-blur-xl rounded-[2.5rem] border border-white/5 relative overflow-hidden">
+        <div className="p-8 md:p-12 bg-secondary/80 backdrop-blur-xl rounded-2xl border border-white/5 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-[1px] bg-luxury-gradient opacity-10" />
           
           <div className="flex flex-col md:flex-row justify-between gap-10 mb-16">
@@ -62,15 +64,15 @@ const InvoiceDetailModal = ({ appointment, onClose }) => {
           </div>
 
           <div className="mb-12 grid grid-cols-1 sm:grid-cols-3 gap-8">
-            <div className="p-8 rounded-[2.5rem] bg-background/50 border border-white/5 shadow-inner group">
+            <div className="p-8 rounded-2xl bg-background/50 border border-white/5 shadow-inner group">
               <p className="text-[9px] font-black uppercase tracking-[0.4em] text-primary mb-3 italic">Creation Archive</p>
               <p className="font-black italic text-sm text-white tracking-widest">{format(new Date(appointment.createdAt), 'MMMM dd, yyyy')}</p>
             </div>
-            <div className="p-8 rounded-[2.5rem] bg-background/50 border border-white/5 shadow-inner group">
+            <div className="p-8 rounded-2xl bg-background/50 border border-white/5 shadow-inner group">
               <p className="text-[9px] font-black uppercase tracking-[0.4em] text-primary mb-3 italic">Ritual Identity</p>
-              <p className="font-black italic text-sm text-white tracking-widest">#INV-{appointment._id.substring(18).toUpperCase()}</p>
+              <p className="font-black italic text-sm text-white tracking-widest">#{appointment.appointmentId || appointment._id.substring(18).toUpperCase()}</p>
             </div>
-            <div className="p-8 rounded-[2.5rem] bg-background/50 border border-white/5 shadow-inner flex justify-between items-center sm:block sm:space-y-4">
+            <div className="p-8 rounded-2xl bg-background/50 border border-white/5 shadow-inner flex justify-between items-center sm:block sm:space-y-4">
               <div>
                 <p className="text-[9px] font-black uppercase tracking-[0.4em] text-primary mb-3 italic">Ritual State</p>
                 <p className={`font-black italic text-[11px] uppercase tracking-[0.3em] ${appointment.status === 'Cancelled' ? 'text-rose-500' : appointment.status === 'Completed' ? 'text-emerald-500' : 'text-primary'}`}>
@@ -124,7 +126,7 @@ const InvoiceDetailModal = ({ appointment, onClose }) => {
                 <span className="text-[10px] font-black uppercase tracking-[0.4em] text-muted italic">Ritual Summation</span>
                 <span className="font-black italic text-sm text-white tracking-widest">${appointment.totalPrice.toLocaleString()}</span>
               </div>
-              <div className="flex justify-between items-center p-8 bg-primary rounded-[2rem] text-secondary shadow-2xl shadow-primary/20 relative overflow-hidden group">
+              <div className="flex justify-between items-center p-8 bg-primary rounded-2xl text-secondary shadow-2xl shadow-primary/20 relative overflow-hidden group">
                 <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
                 <span className="text-[11px] font-black uppercase tracking-[0.5em] italic relative z-10">Eternal Value</span>
                 <span className="text-3xl font-black italic tracking-tighter font-luxury relative z-10 leading-none">${appointment.totalPrice.toLocaleString()}</span>
@@ -173,16 +175,20 @@ export default function Invoices() {
   const filteredInvoices = appointments.filter(app =>
     app.client?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     app.services?.some(s => s.name?.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    app.appointmentId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     app._id?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleQuickExport = async (id) => {
+  const handleQuickExport = async (invoice) => {
     try {
-      const result = await dispatch(exportInvoicePDF(id)).unwrap();
+      const { _id, client, appointmentId } = invoice;
+      const result = await dispatch(exportInvoicePDF(_id)).unwrap();
+      const clientName = client?.name?.split(' ').join('_') || 'Client';
+      const aptId = appointmentId || _id.substring(18).toUpperCase();
       const url = window.URL.createObjectURL(new Blob([result.data]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `Invoice-${id.substring(0, 8)}.pdf`);
+      link.setAttribute('download', `Invoice-${clientName}-${aptId}.pdf`);
       document.body.appendChild(link);
       link.click();
     } catch (err) {
@@ -223,7 +229,7 @@ export default function Invoices() {
         </div>
       </div>
 
-      <div className="bg-secondary/30 backdrop-blur-sm rounded-[2.5rem] overflow-hidden shadow-3xl border border-white/5 relative">
+      <div className="bg-secondary/30 backdrop-blur-sm rounded-2xl overflow-hidden shadow-3xl border border-white/5 relative">
         <div className="absolute top-0 left-0 w-full h-[1px] bg-luxury-gradient opacity-10" />
         <div className="overflow-x-auto custom-scrollbar">
           <table className="w-full text-left border-collapse">
@@ -249,8 +255,8 @@ export default function Invoices() {
                     className="group border-b border-white/5 hover:bg-white/5 transition-all"
                   >
                     <td className="px-10 py-8">
-                      <span className="text-[10px] font-black text-muted tracking-widest uppercase italic bg-background/50 px-3 py-1.5 rounded-lg border border-white/5 shadow-inner">
-                        #INV-{invoice._id.substring(18).toUpperCase()}
+                      <span className="text-[10px] font-black text-muted tracking-widest uppercase italic bg-background/50 px-3 py-1.5 rounded-2xl border border-white/5 shadow-inner">
+                        #{invoice.appointmentId || invoice._id.substring(18).toUpperCase()}
                       </span>
                     </td>
                     <td className="px-10 py-8">
@@ -259,7 +265,7 @@ export default function Invoices() {
                           <img
                             src={invoice.client?.profileImage ? `${IMAGE_URL}${invoice.client.profileImage}` : `https://api.dicebear.com/9.x/adventurer/svg?seed=${invoice.client?.name || 'Client'}`}
                             alt={invoice.client?.name || 'Client'}
-                            className="w-full h-full rounded-[14px] object-cover grayscale transition-all duration-700 group-hover:grayscale-0"
+                            className="w-full h-full rounded-2xl object-cover grayscale transition-all duration-700 group-hover:grayscale-0"
                           />
                         </div>
                         <div>
@@ -310,13 +316,13 @@ export default function Invoices() {
                           <>
                             <button
                               onClick={() => setSelectedInvoice(invoice)}
-                              className="p-4 bg-background border border-white/5 rounded-[1.5rem] text-muted hover:text-primary shadow-2xl transition-all hover:scale-110 active:scale-95"
+                              className="p-4 bg-background border border-white/5 rounded-2xl text-muted hover:text-primary shadow-2xl transition-all hover:scale-110 active:scale-95"
                             >
                               <Eye size={18} />
                             </button>
                             <button
-                              onClick={() => handleQuickExport(invoice._id)}
-                              className="p-4 bg-background border border-white/5 rounded-[1.5rem] text-muted hover:text-primary shadow-2xl transition-all hover:scale-110 active:scale-95"
+                              onClick={() => handleQuickExport(invoice)}
+                              className="p-4 bg-background border border-white/5 rounded-2xl text-muted hover:text-primary shadow-2xl transition-all hover:scale-110 active:scale-95"
                             >
                               <Download size={18} />
                             </button>
@@ -333,7 +339,7 @@ export default function Invoices() {
 
         {!filteredInvoices.length && (
           <div className="p-32 text-center space-y-8">
-            <div className="w-24 h-24 bg-white/5 rounded-[3rem] flex items-center justify-center mx-auto border border-dashed border-white/10 animate-pulse">
+            <div className="w-24 h-24 bg-white/5 rounded-2xl flex items-center justify-center mx-auto border border-dashed border-white/10 animate-pulse">
                <AlertCircle className="text-white/10" size={48} strokeWidth={1} />
             </div>
             <p className="text-muted/40 font-black uppercase tracking-[0.5em] text-[10px] italic">No Masterpiece Records Detected in Matrix</p>
@@ -350,4 +356,5 @@ export default function Invoices() {
     </div>
   );
 }
+
 

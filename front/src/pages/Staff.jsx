@@ -157,65 +157,58 @@ export default function Staff() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ delay: index * 0.05, type: 'spring', damping: 20 }}
-              className="group relative bg-secondary/30 backdrop-blur-sm rounded-[2.5rem] p-8 border border-white/5 shadow-3xl hover:border-primary/20 transition-all duration-700 overflow-hidden"
+              className="group relative bg-secondary rounded-2xl p-4 border border-white/5 shadow-3xl transition-all duration-500 hover:border-primary/20"
             >
-              <div className="absolute top-0 right-0 w-40 h-40 bg-luxury-gradient opacity-0 group-hover:opacity-10 rounded-bl-[4rem] -mr-10 -mt-10 transition-opacity duration-700" />
-
-              <div className="relative z-10 flex items-start justify-between">
-                <div className="relative">
-                  <div className="w-32 h-32 rounded-[2.5rem] overflow-hidden border border-white/10 shadow-2xl group-hover:rotate-6 transition-all duration-700 p-1 bg-background">
-                    <img
-                      src={member.profileImage?.startsWith('/uploads') ? `${IMAGE_URL}${member.profileImage}` : member.profileImage}
-                      alt={member.name}
-                      className="w-full h-full object-cover rounded-[2rem] grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700"
-                    />
-                  </div>
+              <div className="relative overflow-hidden rounded-2xl aspect-[4/3] mb-6 shadow-inner bg-background">
+                <img
+                  src={member.profileImage?.startsWith('/uploads') ? `${IMAGE_URL}${member.profileImage}` : member.profileImage}
+                  alt={member.name}
+                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110"
+                />
+                <div className="absolute top-4 right-4 px-3 py-1 bg-background/90 backdrop-blur-md rounded-full text-[9px] font-black text-primary uppercase tracking-widest shadow-lg">
+                  {member.role || "Artisan"}
                 </div>
-                <div className="flex flex-col gap-3 translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-500">
+                
+                {/* Admin Actions Overlay */}
+                <div className="absolute top-4 left-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-x-[-10px] group-hover:translate-x-0">
                   <button
                     onClick={() => handleEdit(member)}
-                    className="p-4 bg-background/80 border border-white/5 rounded-2xl text-muted hover:text-primary transition-all shadow-xl backdrop-blur-md"
+                    className="p-3 bg-background/80 border border-white/5 rounded-xl text-muted hover:text-primary transition-all shadow-xl backdrop-blur-md"
                   >
-                    <Pencil size={18} />
+                    <Pencil size={14} />
                   </button>
                   <button
                     onClick={() => handleDeleteClick(member)}
-                    className="p-4 bg-background/80 border border-rose-500/10 rounded-2xl text-muted hover:text-rose-500 transition-all shadow-xl backdrop-blur-md"
+                    className="p-3 bg-background/80 border border-rose-500/10 rounded-xl text-muted hover:text-rose-500 transition-all shadow-xl backdrop-blur-md"
                   >
-                    <Trash2 size={18} />
+                    <Trash2 size={14} />
                   </button>
                 </div>
               </div>
 
-              <div className="mt-10">
-                <h3 className="text-2xl font-black text-white tracking-tighter uppercase italic group-hover:text-primary transition-colors font-luxury leading-none mb-6">{member.name}</h3>
-                <div className="flex flex-wrap gap-2 mb-8 h-20 overflow-y-auto no-scrollbar">
+              <div className="px-2 pb-2">
+                <div className="mb-4">
+                  <h3 className="text-lg font-black text-white uppercase tracking-tight line-clamp-1 font-luxury italic leading-none">{member.name}</h3>
+                  <div className="flex items-center gap-2 mt-2">
+                    <Mail size={10} className="text-primary/40" />
+                    <span className="text-[9px] font-black text-muted uppercase tracking-widest truncate max-w-[150px]">{member.email}</span>
+                  </div>
+                </div>
+                
+                <div className="flex flex-wrap gap-1.5 mb-6 h-12 overflow-y-auto no-scrollbar">
                   {member.services.map(s => (
-                    <span key={s._id} className="px-3 py-1.5 bg-primary/5 text-primary text-[8px] font-black uppercase tracking-widest rounded-lg border border-primary/10 whitespace-nowrap italic">
+                    <span key={s._id} className="px-2 py-1 bg-primary/5 text-primary text-[7px] font-black uppercase tracking-widest rounded-2xl border border-primary/10 whitespace-nowrap italic">
                       {s.name}
                     </span>
                   ))}
                 </div>
-                
-                <div className="pt-6 border-t border-white/5 flex items-center justify-between">
-                   <div className="space-y-3">
-                      <p className="text-[9px] font-black text-muted uppercase tracking-widest flex items-center gap-3 italic">
-                        <Mail size={12} className="text-primary/40" /> {member.email}
-                      </p>
-                      <p className="text-[9px] font-black text-muted uppercase tracking-widest flex items-center gap-3 italic">
-                        <Phone size={12} className="text-primary/40" /> {member.phone || 'NO TETHER'}
-                      </p>
-                   </div>
-                </div>
-                
-                <div className="mt-8">
-                   <button 
-                      onClick={() => { setProfileExpert(member); setIsProfileOpen(true); }}
-                      className="w-full py-4 bg-background/50 border border-white/5 rounded-2xl text-[9px] font-black text-primary uppercase tracking-[0.4em] hover:bg-primary hover:text-secondary transition-all shadow-inner italic font-luxury"
-                   >
-                     REVEAL DOSSIER
-                   </button>
-                </div>
+
+                <button 
+                  onClick={() => { setProfileExpert(member); setIsProfileOpen(true); }}
+                  className="w-full py-3.5 rounded-xl bg-background text-[10px] font-black uppercase tracking-[0.2em] text-white hover:bg-primary hover:text-secondary transition-all shadow-sm group-hover:shadow-primary/20"
+                >
+                  Induct Ritual
+                </button>
               </div>
             </motion.div>
           ))}
@@ -230,7 +223,7 @@ export default function Staff() {
       >
         <div className="flex flex-col items-center mb-12">
           <div className="relative group">
-            <div className="w-40 h-40 rounded-[2.5rem] bg-background border-4 border-dashed border-white/5 flex items-center justify-center overflow-hidden transition-all duration-500 group-hover:border-primary/40 group-hover:scale-105 shadow-inner">
+            <div className="w-40 h-40 rounded-2xl bg-background border-4 border-dashed border-white/5 flex items-center justify-center overflow-hidden transition-all duration-500 group-hover:border-primary/40 group-hover:scale-105 shadow-inner">
               {imagePreview ? (
                 <img
                   src={imagePreview.startsWith('blob') || !imagePreview.startsWith('/uploads') ? imagePreview : `${IMAGE_URL}${imagePreview}`}
@@ -317,7 +310,7 @@ export default function Staff() {
                     }}
                     className="hidden"
                   />
-                  {formik.values.services.includes(s._id) ? <UserCheck size={18} strokeWidth={3} /> : <div className="w-5 h-5 rounded-lg border-2 border-white/10 group-hover:border-primary/30 transition-colors" />}
+                  {formik.values.services.includes(s._id) ? <UserCheck size={18} strokeWidth={3} /> : <div className="w-5 h-5 rounded-2xl border-2 border-white/10 group-hover:border-primary/30 transition-colors" />}
                 </label>
               ))}
             </div>
@@ -326,7 +319,7 @@ export default function Staff() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-6 px-2 bg-primary text-secondary rounded-[2.5rem] text-[10px] font-black uppercase tracking-[0.5em] hover:bg-primary/90 transition-all shadow-2xl active:scale-[0.98] disabled:opacity-50 font-luxury italic"
+            className="w-full py-6 px-2 bg-primary text-secondary rounded-2xl text-[10px] font-black uppercase tracking-[0.5em] hover:bg-primary/90 transition-all shadow-2xl active:scale-[0.98] disabled:opacity-50 font-luxury italic"
           >
             {selectedExpert ? 'COMMIT PROTOCOL UPDATES' : 'AUTHORIZE ONBOARDING'}
           </button>
@@ -343,7 +336,7 @@ export default function Staff() {
           <>
             <button
               onClick={() => { setIsProfileOpen(false); handleEdit(profileExpert); }}
-              className="flex-1 py-5 bg-primary text-secondary rounded-[2.5rem] text-[10px] font-black uppercase tracking-[0.4em] hover:bg-primary/90 transition-all shadow-xl active:scale-95 font-luxury italic"
+              className="flex-1 py-5 bg-primary text-secondary rounded-2xl text-[10px] font-black uppercase tracking-[0.4em] hover:bg-primary/90 transition-all shadow-xl active:scale-95 font-luxury italic"
             >
               REDEFINE IDENTITY
             </button>
@@ -359,14 +352,14 @@ export default function Staff() {
         {profileExpert && (
           <div className="space-y-12 p-2">
             <div className="grid grid-cols-2 gap-6">
-              <div className="p-6 bg-secondary/50 rounded-[2.5rem] border border-white/5 shadow-inner group">
+              <div className="p-6 bg-secondary/50 rounded-2xl border border-white/5 shadow-inner group">
                 <div className="flex items-center gap-3 text-primary mb-4 italic">
                   <Phone size={14} strokeWidth={2.5} />
                   <span className="text-[9px] font-black uppercase tracking-[0.3em]">Signal</span>
                 </div>
                 <div className="text-xs font-black text-white italic tracking-widest break-all group-hover:text-primary transition-colors">{profileExpert.phone || 'NO TETHER'}</div>
               </div>
-              <div className="p-6 bg-secondary/50 rounded-[2.5rem] border border-white/5 shadow-inner group">
+              <div className="p-6 bg-secondary/50 rounded-2xl border border-white/5 shadow-inner group">
                 <div className="flex items-center gap-3 text-primary mb-4 italic">
                   <Mail size={14} strokeWidth={2.5} />
                   <span className="text-[9px] font-black uppercase tracking-[0.3em]">Beacon</span>
@@ -385,7 +378,7 @@ export default function Staff() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-[300px] overflow-y-auto custom-scrollbar pr-2">
                 {profileExpert.services.map(s => (
-                  <div key={s._id} className="p-6 bg-background rounded-[2rem] border border-white/5 shadow-3xl hover:border-primary/20 transition-all group/skill">
+                  <div key={s._id} className="p-6 bg-background rounded-2xl border border-white/5 shadow-3xl hover:border-primary/20 transition-all group/skill">
                     <div className="text-[11px] font-black text-white uppercase tracking-tighter italic font-luxury leading-none transition-all group-hover/skill:text-primary">{s.name}</div>
                     <div className="flex items-center justify-between mt-4">
                        <div className="text-[8px] font-black text-primary uppercase tracking-[0.3em] italic opacity-60">Elite Professional</div>
@@ -407,7 +400,7 @@ export default function Staff() {
         maxWidth="max-w-sm"
       >
         <div className="text-center p-4">
-          <div className="w-24 h-24 bg-rose-500/10 border border-rose-500/20 rounded-[2.5rem] flex items-center justify-center text-rose-500 mx-auto mb-10 shadow-2xl shadow-rose-500/20">
+          <div className="w-24 h-24 bg-rose-500/10 border border-rose-500/20 rounded-2xl flex items-center justify-center text-rose-500 mx-auto mb-10 shadow-2xl shadow-rose-500/20">
             <Trash2 size={48} strokeWidth={1} />
           </div>
 
@@ -434,6 +427,7 @@ export default function Staff() {
     </div>
   );
 }
+
 
 
 

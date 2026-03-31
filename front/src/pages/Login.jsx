@@ -117,7 +117,7 @@ export default function Login() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-secondary/40 backdrop-blur-xl w-full max-w-lg p-8 md:p-10 border border-white/5 rounded-[2.5rem] shadow-premium relative z-10"
+        className="bg-secondary/40 backdrop-blur-xl w-full max-w-lg p-8 md:p-10 border border-white/5 rounded-2xl shadow-premium relative z-10"
       >
         <div className="flex flex-col items-center text-center mb-10">
           <div className="mb-6">
@@ -302,3 +302,4 @@ export default function Login() {
     </div>
   );
 }
+

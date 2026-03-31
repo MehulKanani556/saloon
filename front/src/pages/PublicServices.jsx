@@ -11,7 +11,7 @@ import PublicNavbar from '../components/public/PublicNavbar';
 import PublicFooter from '../components/public/PublicFooter';
 import { IMAGE_URL } from '../utils/BASE_URL';
 
-const ITEMS_PER_PAGE = 9;
+const ITEMS_PER_PAGE = 12;
 
 // --- Sub-components ---
 
@@ -78,7 +78,7 @@ const BookingCTA = () => {
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="relative overflow-hidden bg-secondary rounded-[3rem] py-20 px-8 text-center text-white border border-white/5 shadow-3xl"
+          className="relative overflow-hidden bg-secondary rounded-2xl py-20 px-8 text-center text-white border border-white/5 shadow-3xl"
         >
           <div className="absolute inset-0 opacity-5 pointer-events-none"
             style={{ backgroundImage: 'radial-gradient(circle at 1.5px 1.5px, #C9A227 1px, transparent 0)', backgroundSize: '32px 32px' }} />
@@ -212,14 +212,14 @@ export default function PublicServices() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -30 }}
                 transition={{ duration: 0.5, ease: "circOut" }}
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12"
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 md:gap-12"
               >
                 {(servicesLoading || categoriesLoading) ? (
                   [...Array(6)].map((_, i) => (
-                    <div key={i} className="bg-secondary rounded-[2.5rem] overflow-hidden shadow-sm animate-pulse border border-white/5">
+                    <div key={i} className="bg-secondary rounded-2xl overflow-hidden shadow-sm animate-pulse border border-white/5">
                       <div className="aspect-[4/3] bg-white/5" />
                       <div className="p-10 space-y-4">
-                        <div className="h-6 w-3/4 bg-white/5 rounded-lg" />
+                        <div className="h-6 w-3/4 bg-white/5 rounded-2xl" />
                         <div className="h-20 w-full bg-white/5 rounded-2xl" />
                       </div>
                     </div>
@@ -229,58 +229,56 @@ export default function PublicServices() {
                     <motion.div
                       key={service._id}
                       layout
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className="group bg-secondary rounded-[3rem] overflow-hidden border border-white/5 transition-all duration-700 hover:shadow-[0_40px_100px_-20px_rgba(201,162,39,0.15)] hover:-translate-y-3"
+                      initial={{ opacity: 0, y: 30 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      whileHover={{ y: -10 }}
+                      className="group relative bg-secondary rounded-2xl p-4 border border-white/5 transition-all duration-500"
                     >
-                      <div className="relative aspect-[4/3] overflow-hidden">
+                      <div className="relative overflow-hidden rounded-2xl aspect-[4/3] mb-6 shadow-inner">
                         <img
-                          src={service.image?.startsWith('/uploads') ? `${IMAGE_URL}${service.image}` : service.image}
+                          src={service.image?.startsWith('/uploads') ? `${IMAGE_URL}${service.image}` : (service.image || "https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1074&auto=format&fit=crop")}
                           alt={service.name}
-                          className="w-full h-full object-cover transition-transform duration-[2.5s] ease-out group-hover:scale-110"
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                          onError={(e) => {
+                            e.target.src = "https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1074&auto=format&fit=crop";
+                          }}
                         />
-                        <div className="absolute top-8 left-8">
-                          <div className="px-5 py-2.5 bg-primary/90 backdrop-blur-md text-secondary rounded-2xl text-[9px] font-black uppercase tracking-[0.2em] shadow-2xl">
-                            {service.category?.name || "Ritual"}
-                          </div>
+                        <div className="absolute top-4 right-4 px-3 py-1 bg-background/90 backdrop-blur-md rounded-full text-[9px] font-black text-primary uppercase tracking-widest shadow-lg">
+                          {service.category?.name || "Ritual"}
                         </div>
-                        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-700" />
                       </div>
 
-                      <div className="p-10 md:p-12">
-                        <div className="flex items-center gap-3 text-[9px] font-black text-muted uppercase tracking-[0.3em] mb-6">
-                          <Clock size={14} className="text-primary opacity-50" />
-                          <span className="italic">{service.duration} Minutes Session</span>
+                      <div className="px-2 pb-2">
+                        <div className="flex justify-between items-start mb-2">
+                          <h3 className="text-lg font-black text-white uppercase tracking-tight line-clamp-1 font-luxury italic leading-none">{service.name}</h3>
+                          <span className="text-xl font-black text-primary">${service.price}</span>
                         </div>
-
-                        <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter mb-10 group-hover:text-primary transition-colors duration-500 font-luxury leading-tight">
-                          {service.name}
-                        </h3>
-
-                        <div className="flex items-center justify-between pt-10 border-t border-white/5">
-                          <div className="flex flex-col">
-                            <span className="text-[8px] font-black text-muted/60 uppercase tracking-[0.4em] mb-1 italic">Investment</span>
-                            <span className="text-3xl font-black text-white tracking-tighter">${service.price}</span>
-                          </div>
-
-                          <button
-                            onClick={() => {
-                              if (!userInfo) navigate('/login');
-                              else if (userInfo.role === 'Admin') navigate('/admin/dashboard');
-                              else if (userInfo.role === 'Staff') navigate('/staff/dashboard');
-                              else navigate('/book');
-                            }}
-                            className="w-16 h-16 rounded-2xl bg-secondary border border-white/10 text-primary flex items-center justify-center transition-all hover:bg-primary hover:text-secondary hover:border-primary shadow-2xl group/btn"
-                          >
-                            <ChevronRight size={28} className="transition-transform group-hover/btn:translate-x-1" />
-                          </button>
+                        <div className="flex items-center gap-3 text-muted text-[9px] font-black uppercase tracking-widest mb-6">
+                          <span className="flex items-center gap-1.5">
+                            <Clock size={12} className="text-primary" /> {service.duration} Mins
+                          </span>
+                          <span className="h-1 w-1 bg-white/10 rounded-full" />
+                          <span className="flex items-center gap-1.5">
+                            <Sparkles size={12} className="text-primary" /> Professional Care
+                          </span>
                         </div>
+                        <button
+                          onClick={() => {
+                            if (!userInfo) navigate('/login');
+                            else if (userInfo.role === 'Admin') navigate('/admin/dashboard');
+                            else if (userInfo.role === 'Staff') navigate('/staff/dashboard');
+                            else navigate('/book');
+                          }}
+                          className="w-full py-3.5 rounded-xl bg-background text-[10px] font-black uppercase tracking-[0.2em] text-white hover:bg-primary hover:text-secondary transition-all shadow-sm group-hover:shadow-primary/20"
+                        >
+                          Book Ritual Now
+                        </button>
                       </div>
                     </motion.div>
                   ))
                 ) : (
                   <div className="col-span-full flex flex-col items-center justify-center py-56 text-center">
-                    <div className="w-32 h-32 bg-secondary rounded-[3rem] flex items-center justify-center mb-10 text-white/5 border border-white/10 shadow-inner">
+                    <div className="w-32 h-32 bg-secondary rounded-2xl flex items-center justify-center mb-10 text-white/5 border border-white/10 shadow-inner">
                       <LayoutGrid size={64} strokeWidth={1} />
                     </div>
                     <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-4 font-luxury">No Matches Found</h3>
@@ -342,3 +340,4 @@ export default function PublicServices() {
     </div>
   );
 }
+

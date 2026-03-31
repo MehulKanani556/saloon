@@ -33,7 +33,7 @@ export default function Navbar({ onMenuClick }) {
       <div className="flex items-center gap-3 md:gap-8">
         <button
           onClick={onMenuClick}
-          className="p-1.5 sm:p-2.5 bg-secondary border border-white/5 rounded-lg sm:rounded-2xl text-muted xl:hidden hover:text-primary transition-colors"
+          className="p-2.5 bg-secondary border border-white/5 rounded-2xl text-muted xl:hidden hover:text-primary transition-colors"
         >
           <Menu size={18} />
         </button>
@@ -77,8 +77,8 @@ export default function Navbar({ onMenuClick }) {
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           className="group relative cursor-pointer"
         >
-          <div className="w-10 h-10 md:w-11 md:h-11 rounded-xl bg-luxury-gradient p-[1px] shadow-lg shadow-primary/5 group-hover:scale-105 transition-transform">
-            <div className="w-full h-full rounded-[11px] bg-secondary flex items-center justify-center text-primary font-black text-sm uppercase tracking-tighter shadow-inner">
+          <div className="w-10 h-10 md:w-11 md:h-11 rounded-2xl bg-luxury-gradient p-[1px] shadow-lg shadow-primary/5 group-hover:scale-105 transition-transform">
+            <div className="w-full h-full rounded-2xl bg-secondary flex items-center justify-center text-primary font-black text-sm uppercase tracking-tighter shadow-inner">
               {userInfo?.name?.charAt(0)}
             </div>
           </div>
@@ -107,7 +107,7 @@ export default function Navbar({ onMenuClick }) {
                     setIsDropdownOpen(false);
                     dispatch(logoutUser());
                   }}
-                  className="w-full flex items-center justify-between px-4 py-3 rounded-xl hover:bg-red-500/10 text-muted hover:text-red-500 transition-all group"
+                  className="w-full flex items-center justify-between px-4 py-3 rounded-2xl hover:bg-red-500/10 text-muted hover:text-red-500 transition-all group"
                 >
                   <span className="text-[10px] font-black uppercase tracking-[0.2em]">Terminate Session</span>
                   <LogOut size={16} className="group-hover:translate-x-1 transition-transform" />
@@ -120,3 +120,4 @@ export default function Navbar({ onMenuClick }) {
     </nav>
   );
 }
+

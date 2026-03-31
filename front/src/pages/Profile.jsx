@@ -79,7 +79,7 @@ export default function Profile() {
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-dark-card backdrop-blur-3xl border border-white/10 rounded-[3.5rem] p-8 lg:p-16 relative overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,1)] ring-1 ring-white/5"
+          className="bg-dark-card backdrop-blur-3xl border border-white/10 rounded-2xl p-8 lg:p-16 relative overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,1)] ring-1 ring-white/5"
         >
           {/* Decorative Ethereal Blobs */}
           <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/10 rounded-full blur-[120px] pointer-events-none animate-pulse" />
@@ -88,8 +88,8 @@ export default function Profile() {
           {/* Header Profile Section */}
           <div className="flex flex-col md:flex-row items-center gap-10 mb-12 pb-10 border-b border-white/5 relative z-10">
             <div className="relative group cursor-pointer" onClick={handleImageClick}>
-              <div className={`w-36 h-36 md:w-44 md:h-44 rounded-[3rem] p-[2px] transition-all duration-1000 ${isEditing ? 'bg-luxury-gradient shadow-[0_0_60px_rgba(201,162,39,0.3)] scale-[1.05] rotate-3' : 'bg-white/10'}`}>
-                <div className="w-full h-full rounded-[2.9rem] bg-background overflow-hidden relative border border-white/5">
+              <div className={`w-36 h-36 md:w-44 md:h-44 rounded-2xl p-[2px] transition-all duration-1000 ${isEditing ? 'bg-luxury-gradient shadow-[0_0_60px_rgba(201,162,39,0.3)] scale-[1.05] rotate-3' : 'bg-white/10'}`}>
+                <div className="w-full h-full rounded-2xl bg-background overflow-hidden relative border border-white/5">
                   {preview || user?.profileImage ? (
                     <img
                       src={preview || (user.profileImage?.startsWith('http') ? user.profileImage : `${IMAGE_URL}${user.profileImage}`)}
@@ -138,7 +138,7 @@ export default function Profile() {
 
             <button
               onClick={() => setIsEditing(!isEditing)}
-              className={`hidden md:flex items-center gap-4 px-12 py-5 rounded-[2.5rem] font-black uppercase text-[11px] tracking-[0.4em] transition-all duration-500 border group ${isEditing ? 'bg-background border-white/10 text-muted/40 hover:text-white' : 'bg-luxury-gradient text-secondary border-transparent shadow-xl hover:scale-105 active:scale-95'}`}
+              className={`hidden md:flex items-center gap-4 px-12 py-5 rounded-2xl font-black uppercase text-[11px] tracking-[0.4em] transition-all duration-500 border group ${isEditing ? 'bg-background border-white/10 text-muted/40 hover:text-white' : 'bg-luxury-gradient text-secondary border-transparent shadow-xl hover:scale-105 active:scale-95'}`}
             >
               <Edit3 size={20} className={`${!isEditing && 'group-hover:rotate-12 transition-transform'}`} />
               <span className="font-luxury italic">{isEditing ? 'Abort Record' : 'Modify Matrix'}</span>
@@ -158,7 +158,7 @@ export default function Profile() {
                     {...formik.getFieldProps('name')}
                     disabled={!isEditing}
                     placeholder="Enter Identity Name"
-                    className={`w-full bg-background/30 border p-8 pl-20 rounded-[2.5rem] outline-none transition-all duration-1000 font-black text-[12px] uppercase tracking-[0.3em] ${isEditing ? 'border-primary shadow-[0_0_40px_rgba(201,162,39,0.05)] text-white ring-1 ring-primary/20' : 'border-white/[0.03] cursor-not-allowed opacity-30 text-muted'}`}
+                    className={`w-full bg-background/30 border p-8 pl-20 rounded-2xl outline-none transition-all duration-1000 font-black text-[12px] uppercase tracking-[0.3em] ${isEditing ? 'border-primary shadow-[0_0_40px_rgba(201,162,39,0.05)] text-white ring-1 ring-primary/20' : 'border-white/[0.03] cursor-not-allowed opacity-30 text-muted'}`}
                   />
                   {!isEditing && <Shield className="absolute right-8 top-1/2 -translate-y-1/2 text-white/5" size={20} />}
                 </div>
@@ -175,7 +175,7 @@ export default function Profile() {
                   <input
                     value={user?.email || ''}
                     disabled
-                    className="w-full bg-background/20 border border-white/[0.02] p-8 pl-20 rounded-[2.5rem] outline-none font-black text-[12px] uppercase tracking-[0.3em] text-muted/20 cursor-not-allowed italic"
+                    className="w-full bg-background/20 border border-white/[0.02] p-8 pl-20 rounded-2xl outline-none font-black text-[12px] uppercase tracking-[0.3em] text-muted/20 cursor-not-allowed italic"
                   />
                   <div className="absolute right-8 top-1/2 -translate-y-1/2 flex gap-2">
                     <div className="w-2 h-2 rounded-full bg-primary/20 shadow-[0_0_15px_rgba(201,162,39,0.3)]" />
@@ -194,7 +194,7 @@ export default function Profile() {
                   <input
                     value={user?.phone || ''}
                     disabled
-                    className="w-full bg-background/20 border border-white/[0.02] p-8 pl-20 rounded-[2.5rem] outline-none font-black text-[12px] uppercase tracking-[0.3em] text-muted/20 cursor-not-allowed italic"
+                    className="w-full bg-background/20 border border-white/[0.02] p-8 pl-20 rounded-2xl outline-none font-black text-[12px] uppercase tracking-[0.3em] text-muted/20 cursor-not-allowed italic"
                   />
                   <div className="absolute right-8 top-1/2 -translate-y-1/2">
                     <div className="w-3 h-3 rounded-full border border-primary/20 animate-ping" />
@@ -221,7 +221,7 @@ export default function Profile() {
                   <button
                     type="submit"
                     disabled={updating}
-                    className="px-20 py-6 bg-luxury-gradient text-secondary rounded-[2.5rem] flex items-center justify-center gap-5 shadow-[0_20px_50px_rgba(201,162,39,0.2)] hover:scale-105 active:scale-95 transition-all font-black text-[11px] uppercase tracking-[0.5em] font-luxury italic"
+                    className="px-20 py-6 bg-luxury-gradient text-secondary rounded-2xl flex items-center justify-center gap-5 shadow-[0_20px_50px_rgba(201,162,39,0.2)] hover:scale-105 active:scale-95 transition-all font-black text-[11px] uppercase tracking-[0.5em] font-luxury italic"
                   >
                     {updating ? (
                       <>

@@ -69,7 +69,7 @@ const Hero = () => {
           className="relative h-[500px] lg:h-[600px] group"
         >
           <div className="absolute inset-0 bg-primary/10 blur-[100px] rounded-full group-hover:bg-primary/20 transition-all" />
-          <div className="relative h-full w-full rounded-[3rem] overflow-hidden border border-white/10">
+          <div className="relative h-full w-full rounded-2xl overflow-hidden border border-white/10">
             <img 
               src="https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=1169&auto=format&fit=crop" 
               alt="Salon Interior" 
@@ -120,7 +120,7 @@ const MissionValues = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.2 }}
-              className="group relative p-10 bg-secondary rounded-[2.5rem] border border-white/5 hover:border-primary/30 transition-all overflow-hidden"
+              className="group relative p-10 bg-secondary rounded-2xl border border-white/5 hover:border-primary/30 transition-all overflow-hidden"
             >
               <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform`}>
                 {item.icon}
@@ -162,7 +162,7 @@ const TeamSection = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {loading ? (
             [...Array(4)].map((_, i) => (
-              <div key={i} className="h-[450px] bg-secondary rounded-[3rem] animate-pulse shadow-sm border border-white/5" />
+              <div key={i} className="h-[450px] bg-secondary rounded-2xl animate-pulse shadow-sm border border-white/5" />
             ))
           ) : staff.map((member, i) => (
                <motion.div
@@ -172,7 +172,7 @@ const TeamSection = () => {
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
               whileHover={{ y: -12 }}
-              className="group relative bg-secondary rounded-[3rem] p-10 border border-white/5 transition-all text-center hover:shadow-3xl hover:shadow-primary/10"
+              className="group relative bg-secondary rounded-2xl p-10 border border-white/5 transition-all text-center hover:shadow-3xl hover:shadow-primary/10"
             >
               {/* Profile Image & Ring */}
                <div className="relative w-32 h-32 mx-auto mb-8 rounded-full p-1.5 bg-luxury-gradient shadow-xl overflow-hidden group-hover:scale-105 transition-transform duration-500">
@@ -240,7 +240,7 @@ const SalonInfo = () => {
             <h3 className="text-2xl font-black text-white uppercase tracking-tighter">Operational Hours</h3>
           </div>
           
-          <div className="bg-secondary rounded-[2.5rem] p-10 border border-white/5 shadow-inner">
+          <div className="bg-secondary rounded-2xl p-10 border border-white/5 shadow-inner">
             <div className="space-y-6">
               {businessHours.map((h, i) => (
                 <div key={i} className="flex items-center justify-between py-1.5 group border-b border-white/5 last:border-none">
@@ -254,7 +254,7 @@ const SalonInfo = () => {
 
         <div className="space-y-12">
           {/* Address Card */}
-          <div className="bg-secondary rounded-[2.5rem] p-12 text-white shadow-2xl relative overflow-hidden group border border-white/5">
+          <div className="bg-secondary rounded-2xl p-12 text-white shadow-2xl relative overflow-hidden group border border-white/5">
             <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none group-hover:rotate-12 transition-transform duration-700">
                <MapPin size={120} strokeWidth={1} />
             </div>
@@ -280,7 +280,7 @@ const SalonInfo = () => {
           </div>
 
           {/* Payment Methods */}
-          <div className="p-10 bg-secondary rounded-[2.5rem] border border-white/5">
+          <div className="p-10 bg-secondary rounded-2xl border border-white/5">
             <div className="flex items-center gap-4 mb-6">
               <CreditCard className="text-primary" size={18} />
               <h5 className="text-[10px] font-black text-white uppercase tracking-[0.2em]">Settlement Methods</h5>
@@ -379,3 +379,4 @@ export default function About() {
     </div>
   );
 }
+

@@ -130,7 +130,7 @@ export default function AdminServices() {
         <form onSubmit={formik.handleSubmit} className="space-y-10 p-2">
           <div className="space-y-4">
             <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2 italic">Visual Archive Signature</label>
-            <div className="relative aspect-video rounded-[2rem] bg-background border-2 border-dashed border-white/10 overflow-hidden group cursor-pointer shadow-3xl hover:border-primary/40 transition-all duration-500">
+            <div className="relative aspect-video rounded-2xl bg-background border-2 border-dashed border-white/10 overflow-hidden group cursor-pointer shadow-3xl hover:border-primary/40 transition-all duration-500">
               {preview ? (
                 <img
                   src={preview.startsWith('blob') || !preview.startsWith('/uploads') ? preview : `${IMAGE_URL}${preview}`}
@@ -180,7 +180,7 @@ export default function AdminServices() {
             {isAddingCategory && (
               <motion.div
                 initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
-                className="p-6 bg-background rounded-[2rem] border border-white/10 space-y-4 overflow-hidden shadow-inner"
+                className="p-6 bg-background rounded-2xl border border-white/10 space-y-4 overflow-hidden shadow-inner"
               >
                 <div className="flex items-center gap-3 mb-2">
                   <Zap size={14} className="text-primary animate-pulse" />
@@ -228,7 +228,7 @@ export default function AdminServices() {
             </div>
           </div>
 
-          <div className="flex items-center justify-between p-6 bg-secondary/30 backdrop-blur-md rounded-[2rem] border border-white/5 shadow-inner">
+          <div className="flex items-center justify-between p-6 bg-secondary/30 backdrop-blur-md rounded-2xl border border-white/5 shadow-inner">
             <div className="flex items-center gap-4">
               <Activity size={18} className="text-primary" />
               <span className="text-[10px] font-black text-white/60 uppercase tracking-[0.4em] italic">Availability Status</span>
@@ -242,7 +242,7 @@ export default function AdminServices() {
           <button
             type="submit"
             disabled={formik.isSubmitting}
-            className="w-full py-6 bg-primary text-secondary rounded-[2.5rem] font-black text-[11px] uppercase tracking-[0.5em] shadow-2xl hover:bg-primary/90 transition-all flex items-center justify-center gap-4 active:scale-[0.98] disabled:opacity-50 font-luxury italic"
+            className="w-full py-6 bg-primary text-secondary rounded-2xl font-black text-[11px] uppercase tracking-[0.5em] shadow-2xl hover:bg-primary/90 transition-all flex items-center justify-center gap-4 active:scale-[0.98] disabled:opacity-50 font-luxury italic"
           >
             {formik.isSubmitting ? 'SYNCING MATRIX...' : (editingService ? 'COMMIT REFINEMENT' : 'AUTHORIZE CREATION')}
           </button>
@@ -257,7 +257,7 @@ export default function AdminServices() {
         maxWidth="max-w-sm"
       >
         <div className="text-center p-4">
-          <div className="w-24 h-24 bg-rose-500/10 border border-rose-500/20 rounded-[2.5rem] flex items-center justify-center mx-auto text-rose-500 mb-8 shadow-2xl shadow-rose-500/20">
+          <div className="w-24 h-24 bg-rose-500/10 border border-rose-500/20 rounded-2xl flex items-center justify-center mx-auto text-rose-500 mb-8 shadow-2xl shadow-rose-500/20">
             <Trash2 size={40} strokeWidth={1} />
           </div>
           <p className="text-muted font-black text-[10px] uppercase tracking-[0.3em] leading-relaxed mb-10 px-2 italic">
@@ -287,7 +287,7 @@ export default function AdminServices() {
           </div>
         </div>
         <div className="flex flex-col sm:flex-row gap-6 w-full lg:w-auto items-center">
-          <div className="bg-secondary/40 backdrop-blur-md px-8 py-5 rounded-[2rem] border border-white/5 shadow-3xl flex items-center gap-5 w-full sm:w-96 group focus-within:border-primary/40 transition-all duration-500">
+          <div className="bg-secondary/40 backdrop-blur-md px-8 py-5 rounded-2xl border border-white/5 shadow-3xl flex items-center gap-5 w-full sm:w-96 group focus-within:border-primary/40 transition-all duration-500">
             <Search size={20} className="text-primary/40 group-focus-within:text-primary transition-colors" />
             <input
               type="text"
@@ -305,7 +305,7 @@ export default function AdminServices() {
               setImageFile(null);
               setShowForm(true);
             }}
-            className="w-full sm:w-auto flex items-center justify-center gap-4 px-10 py-5 bg-primary text-secondary rounded-[2rem] font-black text-[11px] uppercase tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury italic"
+            className="w-full sm:w-auto flex items-center justify-center gap-4 px-10 py-5 bg-primary text-secondary rounded-2xl font-black text-[11px] uppercase tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury italic"
           >
             <Plus size={22} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
             INDuct NEW RITUAL
@@ -313,7 +313,7 @@ export default function AdminServices() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
         <AnimatePresence mode="popLayout">
           {currentItems.map((service, index) => (
             <motion.div
@@ -322,73 +322,63 @@ export default function AdminServices() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ delay: index * 0.05, type: 'spring', damping: 20 }}
-              className="bg-secondary/30 backdrop-blur-sm rounded-[3rem] border border-white/5 shadow-3xl group overflow-hidden transition-all duration-700 hover:border-primary/20"
+              className="group relative bg-secondary rounded-2xl p-4 border border-white/5 shadow-3xl transition-all duration-500 hover:border-primary/20"
             >
-              <div className="p-4">
-                {/* Panoramic Image Container */}
-                <div className="aspect-video rounded-[2.5rem] overflow-hidden relative mb-10 shadow-2xl bg-background p-1 border border-white/5 group/img">
-                  <img
-                    src={service.image?.startsWith('/uploads') ? `${IMAGE_URL}${service.image}` : service.image}
-                    alt={service.name}
-                    className="w-full h-full object-cover rounded-[2.2rem] grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-[1.5s] ease-out"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:group-hover/img:opacity-100 transition-opacity duration-700" />
-
-                  <div className="absolute top-6 left-6">
-                    <div className="bg-background/80 backdrop-blur-xl px-5 py-2.5 rounded-[1.5rem] text-[9px] font-black text-primary uppercase tracking-[0.3em] border border-white/10 shadow-glass italic">
-                      {service.category?.name || 'GENERIC'}
-                    </div>
-                  </div>
-
-                  {!service.isActive && (
-                    <div className="absolute top-6 right-6">
-                      <div className="bg-rose-500/20 backdrop-blur-md text-rose-500 border border-rose-500/30 px-5 py-2.5 rounded-[1.5rem] text-[9px] font-black uppercase tracking-[0.3em] animate-pulse italic">
-                        DECATALOGUED
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="absolute bottom-6 left-6 opacity-0 group-hover/img:opacity-100 transition-all duration-500 translate-y-4 group-hover/img:translate-y-0">
-                    <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.5em] italic">Protocol X-{service._id.slice(-6)}</span>
-                  </div>
+              <div className="relative overflow-hidden rounded-2xl aspect-[4/3] mb-6 shadow-inner bg-background">
+                <img
+                  src={service.image?.startsWith('/uploads') ? `${IMAGE_URL}${service.image}` : service.image}
+                  alt={service.name}
+                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110"
+                />
+                <div className="absolute top-4 right-4 px-3 py-1 bg-background/90 backdrop-blur-md rounded-full text-[9px] font-black text-primary uppercase tracking-widest shadow-lg">
+                  {service.category?.name || "Ritual"}
+                </div>
+                
+                {/* Admin Actions Overlay */}
+                <div className="absolute top-4 left-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-x-[-10px] group-hover:translate-x-0">
+                  <button
+                    onClick={() => handleEdit(service)}
+                    className="p-3 bg-background/80 border border-white/5 rounded-xl text-muted hover:text-primary transition-all shadow-xl backdrop-blur-md"
+                    title="Refine Ritual"
+                  >
+                    <Pencil size={14} />
+                  </button>
+                  <button
+                    onClick={() => setDeletingId(service._id)}
+                    className="p-3 bg-background/80 border border-rose-500/10 rounded-xl text-muted hover:text-rose-500 transition-all shadow-xl backdrop-blur-md"
+                    title="Purge Ritual"
+                  >
+                    <Trash2 size={14} />
+                  </button>
                 </div>
 
-                {/* Technical Data Panel */}
-                <div className="px-6 pb-8">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-3 text-[10px] font-black text-muted uppercase tracking-[0.4em] italic group-hover:text-primary transition-colors">
-                      <Clock size={14} strokeWidth={2.5} />
-                      {service.duration} MIN PROTOCOL
+                {!service.isActive && (
+                  <div className="absolute bottom-4 left-4">
+                    <div className="bg-rose-500/20 backdrop-blur-md text-rose-500 border border-rose-500/30 px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-[0.2em] animate-pulse italic">
+                      DECATALOGUED
                     </div>
                   </div>
+                )}
+              </div>
 
-                  <h3 className="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase leading-none mb-10 font-luxury italic group-hover:translate-x-2 transition-transform duration-500">
-                    {service.name}
-                  </h3>
+              <div className="px-2 pb-2">
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="text-lg font-black text-white uppercase tracking-tight line-clamp-1 font-luxury italic leading-none">{service.name}</h3>
+                  <span className="text-xl font-black text-primary leading-none">${service.price.toLocaleString()}</span>
+                </div>
+                
+                <div className="flex items-center gap-3 text-muted text-[9px] font-black uppercase tracking-widest mb-6">
+                  <span className="flex items-center gap-1.5">
+                    <Clock size={12} className="text-primary" /> {service.duration} Mins
+                  </span>
+                  <span className="h-1 w-1 bg-white/10 rounded-full" />
+                  <span className="flex items-center gap-1.5">
+                    <Sparkles size={12} className="text-primary" /> Professional
+                  </span>
+                </div>
 
-                  <div className="flex items-center justify-between pt-8 border-t border-white/5">
-                    <div className="flex flex-col">
-                      <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em] mb-2 italic opacity-60">Magnitude</p>
-                      <p className="text-3xl font-black text-primary tracking-tighter italic font-luxury leading-none">${service.price.toLocaleString()}</p>
-                    </div>
-
-                    <div className="flex gap-3">
-                      <button
-                        onClick={() => handleEdit(service)}
-                        className="w-12 h-12 md:w-14 md:h-14 flex items-center justify-center bg-background/50 border border-white/5 rounded-2xl text-muted hover:text-primary hover:bg-primary/10 transition-all shadow-inner active:scale-90"
-                        title="Refine Ritual"
-                      >
-                        <Pencil size={20} />
-                      </button>
-                      <button
-                        onClick={() => setDeletingId(service._id)}
-                        className="w-12 h-12 md:w-14 md:h-14 flex items-center justify-center bg-background/50 border border-white/5 rounded-2xl text-muted hover:text-rose-500 hover:bg-rose-500/10 transition-all shadow-inner active:scale-90"
-                        title="Purge Ritual"
-                      >
-                        <Trash2 size={20} />
-                      </button>
-                    </div>
-                  </div>
+                <div className="pt-2 border-t border-white/5 mt-auto">
+                   <p className="text-[8px] font-black text-muted/30 uppercase tracking-[0.4em] italic truncate">Protocol X-{service._id.slice(-8).toUpperCase()}</p>
                 </div>
               </div>
             </motion.div>
@@ -407,7 +397,7 @@ export default function AdminServices() {
 
       {!filteredServices.length && (
         <div className="flex flex-col items-center justify-center py-40 space-y-10 group">
-          <div className="w-32 h-32 bg-secondary/50 rounded-[3rem] flex items-center justify-center border border-white/5 shadow-3xl text-white/10 group-hover:text-primary/20 transition-all duration-700">
+          <div className="w-32 h-32 bg-secondary/50 rounded-2xl flex items-center justify-center border border-white/5 shadow-3xl text-white/10 group-hover:text-primary/20 transition-all duration-700">
             <Target size={64} strokeWidth={1} className="group-hover:rotate-45 transition-transform duration-1000" />
           </div>
           <p className="text-[11px] font-black text-muted uppercase tracking-[0.6em] italic">Archives yield no data matches.</p>
@@ -416,4 +406,5 @@ export default function AdminServices() {
     </div>
   );
 }
+
 

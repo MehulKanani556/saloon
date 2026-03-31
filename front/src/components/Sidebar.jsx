@@ -162,7 +162,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                 <img
                   src={userInfo?.avatar || `https://api.dicebear.com/9.x/adventurer/svg?seed=${userInfo?.name || 'Artisan'}`}
                   alt="Admin Profile"
-                  className="w-full h-full object-cover hover:scale-110 transition-transform duration-500 rounded-[10px]"
+                  className="w-full h-full object-cover hover:scale-110 transition-transform duration-500 rounded-2xl"
                 />
               </div>
             </div>
@@ -189,3 +189,4 @@ export default function Sidebar({ isOpen, setIsOpen }) {
     </>
   );
 }
+

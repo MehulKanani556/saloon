@@ -70,14 +70,14 @@ export default function ChangePassword() {
         <motion.div
            initial={{ opacity: 0, y: 30 }}
            animate={{ opacity: 1, y: 0 }}
-           className="bg-dark-card backdrop-blur-3xl border border-white/10 rounded-[3rem] p-8 lg:p-16 relative overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,1)] ring-1 ring-white/5"
+           className="bg-dark-card backdrop-blur-3xl border border-white/10 rounded-2xl p-8 lg:p-16 relative overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,1)] ring-1 ring-white/5"
          >
            {/* Dynamic Ethereal Background */}
            <div className="absolute -top-32 -right-32 w-80 h-80 bg-primary/10 rounded-full blur-[120px] pointer-events-none animate-pulse" />
            <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-primary/5 rounded-full blur-[150px] pointer-events-none" />
            
            <div className="flex items-center gap-8 mb-16 pb-12 border-b border-white/5 relative z-10">
-             <div className="w-20 h-20 rounded-[2rem] bg-luxury-gradient flex items-center justify-center text-secondary shadow-[0_15px_40px_rgba(201,162,39,0.3)] border border-white/20">
+             <div className="w-20 h-20 rounded-2xl bg-luxury-gradient flex items-center justify-center text-secondary shadow-[0_15px_40px_rgba(201,162,39,0.3)] border border-white/20">
                <KeyRound size={32} strokeWidth={2.5} />
              </div>
              <div>
@@ -89,7 +89,7 @@ export default function ChangePassword() {
            {!hasPassword && (
              <motion.div 
                initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
-               className="mb-12 p-8 bg-primary/5 border border-primary/20 rounded-3xl flex items-start gap-6 backdrop-blur-md relative z-10"
+               className="mb-12 p-8 bg-primary/5 border border-primary/20 rounded-2xl flex items-start gap-6 backdrop-blur-md relative z-10"
              >
                <AlertCircle className="text-primary shrink-0 mt-1" size={24} />
                <div>
@@ -112,7 +112,7 @@ export default function ChangePassword() {
                      type="password"
                      {...formik.getFieldProps('currentPassword')}
                      placeholder="••••••••••••"
-                     className="w-full bg-background/30 border border-white/[0.03] p-8 pl-20 rounded-[2.5rem] outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/5 transition-all duration-1000 font-black text-base tracking-[0.6em] text-white"
+                     className="w-full bg-background/30 border border-white/[0.03] p-8 pl-20 rounded-2xl outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/5 transition-all duration-1000 font-black text-base tracking-[0.6em] text-white"
                    />
                  </div>
                  {formik.touched.currentPassword && formik.errors.currentPassword && <p className="text-primary/80 text-[10px] uppercase font-black tracking-widest pl-4 italic animate-pulse">{formik.errors.currentPassword}</p>}
@@ -131,7 +131,7 @@ export default function ChangePassword() {
                      type="password"
                      {...formik.getFieldProps('newPassword')}
                      placeholder="ENTROPY-X"
-                     className="w-full bg-background/30 border border-white/[0.03] p-8 pl-20 rounded-[2.5rem] outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/5 transition-all duration-1000 font-black text-base tracking-[0.6em] text-white"
+                     className="w-full bg-background/30 border border-white/[0.03] p-8 pl-20 rounded-2xl outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/5 transition-all duration-1000 font-black text-base tracking-[0.6em] text-white"
                    />
                  </div>
                  {formik.touched.newPassword && formik.errors.newPassword && <p className="text-primary/80 text-[10px] uppercase font-black tracking-widest pl-4 italic animate-pulse">{formik.errors.newPassword}</p>}
@@ -148,7 +148,7 @@ export default function ChangePassword() {
                      type="password"
                      {...formik.getFieldProps('confirmPassword')}
                      placeholder="REPEAT-SEC"
-                     className="w-full bg-background/30 border border-white/[0.03] p-8 pl-20 rounded-[2.5rem] outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/5 transition-all duration-1000 font-black text-base tracking-[0.6em] text-white"
+                     className="w-full bg-background/30 border border-white/[0.03] p-8 pl-20 rounded-2xl outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/5 transition-all duration-1000 font-black text-base tracking-[0.6em] text-white"
                    />
                  </div>
                  {formik.touched.confirmPassword && formik.errors.confirmPassword && <p className="text-primary/80 text-[10px] uppercase font-black tracking-widest pl-4 italic animate-pulse">{formik.errors.confirmPassword}</p>}
@@ -159,7 +159,7 @@ export default function ChangePassword() {
                <button
                  type="submit"
                  disabled={loading}
-                 className="w-full py-8 bg-luxury-gradient text-secondary rounded-[2.5rem] flex items-center justify-center gap-6 shadow-[0_25px_60px_rgba(201,162,39,0.25)] hover:scale-[1.02] active:scale-[0.98] transition-all font-black text-[12px] uppercase tracking-[0.6em] font-luxury italic group"
+                 className="w-full py-8 bg-luxury-gradient text-secondary rounded-2xl flex items-center justify-center gap-6 shadow-[0_25px_60px_rgba(201,162,39,0.25)] hover:scale-[1.02] active:scale-[0.98] transition-all font-black text-[12px] uppercase tracking-[0.6em] font-luxury italic group"
                >
                  {loading ? (
                    <>
@@ -180,3 +180,4 @@ export default function ChangePassword() {
     </UserPanelLayout>
   );
 }
+

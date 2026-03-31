@@ -138,7 +138,7 @@ export default function Clients() {
         </div>
       </div>
 
-      <div className="bg-secondary/30 backdrop-blur-sm rounded-[2.5rem] overflow-hidden shadow-3xl border border-white/5 relative">
+      <div className="bg-secondary/30 backdrop-blur-sm rounded-2xl overflow-hidden shadow-3xl border border-white/5 relative">
         <div className="absolute top-0 left-0 w-full h-[1px] bg-luxury-gradient opacity-10" />
         <div className="overflow-x-auto custom-scrollbar">
           <table className="w-full text-left border-collapse">
@@ -163,7 +163,7 @@ export default function Clients() {
                   >
                     <td className="px-10 py-8">
                       <div className="flex items-center gap-6">
-                        <div className="w-16 h-16 rounded-[1.5rem] bg-background p-1 border border-white/10 group-hover:rotate-6 transition-all duration-500 shadow-2xl relative overflow-hidden">
+                        <div className="w-16 h-16 rounded-2xl bg-background p-1 border border-white/10 group-hover:rotate-6 transition-all duration-500 shadow-2xl relative overflow-hidden">
                           <img
                             src={client.profileImage ? (client.profileImage.startsWith('/uploads') ? `${IMAGE_URL}${client.profileImage}` : client.profileImage) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${client.name}`}
                             alt={client.name}
@@ -193,7 +193,7 @@ export default function Clients() {
                     </td>
 
                     <td className="px-10 py-8 text-center">
-                      <div className="inline-flex flex-col items-center bg-background/50 px-6 py-4 rounded-3xl border border-white/5 group-hover:bg-primary transition-all duration-500">
+                      <div className="inline-flex flex-col items-center bg-background/50 px-6 py-4 rounded-2xl border border-white/5 group-hover:bg-primary transition-all duration-500">
                         <span className="text-xl font-black text-white tracking-tighter whitespace-nowrap group-hover:text-secondary">{(client.bookingHistory?.length || 0).toString().padStart(2, '0')}</span>
                         <span className="text-[8px] font-black text-primary uppercase tracking-[0.3em] mt-1 whitespace-nowrap group-hover:text-secondary group-hover:opacity-40 italic">Rituals</span>
                       </div>
@@ -248,7 +248,7 @@ export default function Clients() {
       >
         <div className="flex flex-col items-center mb-12">
           <div className="relative group">
-            <div className="w-40 h-40 rounded-[2.5rem] bg-background border-4 border-white/5 flex items-center justify-center text-white/5 shadow-inner overflow-hidden transition-all duration-500 group-hover:border-primary/20 group-hover:scale-105">
+            <div className="w-40 h-40 rounded-2xl bg-background border-4 border-white/5 flex items-center justify-center text-white/5 shadow-inner overflow-hidden transition-all duration-500 group-hover:border-primary/20 group-hover:scale-105">
               {imagePreview ? (
                 <img src={imagePreview.startsWith('blob') || !imagePreview.startsWith('/uploads') ? imagePreview : `${IMAGE_URL}${imagePreview}`} className="w-full h-full object-cover grayscale transition-all duration-700 group-hover:grayscale-0" alt="Preview" />
               ) : (
@@ -320,7 +320,7 @@ export default function Clients() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-6 bg-primary text-secondary rounded-[2.5rem] text-[10px] font-black uppercase tracking-[0.5em] hover:bg-primary/90 transition-all shadow-2xl shadow-primary/20 active:scale-[0.98] disabled:opacity-50 font-luxury italic"
+              className="w-full py-6 bg-primary text-secondary rounded-2xl text-[10px] font-black uppercase tracking-[0.5em] hover:bg-primary/90 transition-all shadow-2xl shadow-primary/20 active:scale-[0.98] disabled:opacity-50 font-luxury italic"
             >
               {selectedClient ? 'COMMIT IDENTITY UPDATE' : 'AUTHORIZE PROTOCOL ENTRY'}
             </button>
@@ -336,7 +336,7 @@ export default function Clients() {
         maxWidth="max-w-sm"
       >
         <div className="text-center p-4">
-          <div className="w-24 h-24 bg-rose-500/10 border border-rose-500/20 rounded-[2.5rem] flex items-center justify-center mx-auto text-rose-500 mb-10 shadow-2xl shadow-rose-500/20">
+          <div className="w-24 h-24 bg-rose-500/10 border border-rose-500/20 rounded-2xl flex items-center justify-center mx-auto text-rose-500 mb-10 shadow-2xl shadow-rose-500/20">
             <Trash2 size={48} strokeWidth={1} />
           </div>
           <p className="text-muted font-black text-[10px] uppercase tracking-[0.3em] leading-relaxed mb-10 italic">
@@ -372,7 +372,7 @@ export default function Clients() {
           <>
             <button
               onClick={() => { setIsProfileOpen(false); handleEdit(profileClient); }}
-              className="flex-1 py-5 bg-primary text-secondary rounded-[2.5rem] text-[10px] font-black uppercase tracking-[0.4em] hover:bg-primary/90 transition-all shadow-xl active:scale-95 font-luxury italic"
+              className="flex-1 py-5 bg-primary text-secondary rounded-2xl text-[10px] font-black uppercase tracking-[0.4em] hover:bg-primary/90 transition-all shadow-xl active:scale-95 font-luxury italic"
             >
               REDEFINE PROTOCOL
             </button>
@@ -388,14 +388,14 @@ export default function Clients() {
         {profileClient && (
           <div className="space-y-12 p-2">
             <div className="grid grid-cols-2 gap-6">
-              <div className="p-6 bg-secondary/50 rounded-[2.5rem] border border-white/5 shadow-inner">
+              <div className="p-6 bg-secondary/50 rounded-2xl border border-white/5 shadow-inner">
                 <div className="flex items-center gap-3 text-primary mb-4 italic">
                   <ShoppingBag size={14} strokeWidth={2.5} />
                   <span className="text-[9px] font-black uppercase tracking-[0.3em]">Rituals</span>
                 </div>
                 <div className="text-3xl font-black text-white italic font-luxury leading-none">{(profileClient.bookingHistory?.length || 0).toString().padStart(2, '0')}</div>
               </div>
-              <div className="p-6 bg-secondary/50 rounded-[2.5rem] border border-white/5 shadow-inner">
+              <div className="p-6 bg-secondary/50 rounded-2xl border border-white/5 shadow-inner">
                 <div className="flex items-center gap-3 text-primary mb-4 italic">
                   <Award size={14} strokeWidth={2.5} />
                   <span className="text-[9px] font-black uppercase tracking-[0.3em]">Status</span>
@@ -404,12 +404,12 @@ export default function Clients() {
               </div>
             </div>
 
-            <div className="p-8 bg-background/50 rounded-[3rem] border border-white/5 flex items-center justify-between group shadow-3xl hover:border-primary/20 transition-all duration-500">
+            <div className="p-8 bg-background/50 rounded-2xl border border-white/5 flex items-center justify-between group shadow-3xl hover:border-primary/20 transition-all duration-500">
               <div className="space-y-4">
                 <p className="text-[9px] font-black text-muted uppercase tracking-[0.5em] italic">Active Tether</p>
                 <p className="text-2xl font-black text-white tracking-tighter italic font-luxury group-hover:text-primary transition-all">{profileClient.phone}</p>
               </div>
-              <div className="w-16 h-16 bg-secondary rounded-[2rem] flex items-center justify-center text-muted group-hover:bg-primary group-hover:text-secondary transition-all duration-500 shadow-xl border border-white/5">
+              <div className="w-16 h-16 bg-secondary rounded-2xl flex items-center justify-center text-muted group-hover:bg-primary group-hover:text-secondary transition-all duration-500 shadow-xl border border-white/5">
                 <Phone size={24} strokeWidth={2.5} />
               </div>
             </div>
@@ -425,7 +425,7 @@ export default function Clients() {
 
               <div className="space-y-4 max-h-[350px] overflow-y-auto pr-4 custom-scrollbar">
                 {appointments.filter(app => app.client?._id === profileClient._id).map((app) => (
-                  <div key={app._id} className="p-6 bg-secondary/30 rounded-[2.5rem] border border-white/5 hover:border-white/10 transition-all group">
+                  <div key={app._id} className="p-6 bg-secondary/30 rounded-2xl border border-white/5 hover:border-white/10 transition-all group">
                     <div className="flex items-center justify-between mb-6">
                       <div className="flex items-center gap-3">
                         <div className="w-2 h-2 rounded-full bg-primary" />
@@ -444,7 +444,7 @@ export default function Clients() {
                   </div>
                 ))}
                 {appointments.filter(app => app.client?._id === profileClient._id).length === 0 && (
-                  <div className="py-20 text-center bg-white/5 rounded-[3rem] border border-dashed border-white/10">
+                  <div className="py-20 text-center bg-white/5 rounded-2xl border border-dashed border-white/10">
                     <Clock className="mx-auto text-white/5 mb-6" size={48} strokeWidth={1} />
                     <p className="text-muted/40 italic text-[10px] uppercase font-black tracking-[0.4em]">No archives found in matrix</p>
                   </div>
@@ -457,4 +457,5 @@ export default function Clients() {
     </div>
   );
 }
+
 

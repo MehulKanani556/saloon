@@ -183,7 +183,7 @@ const ServicesPreview = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {loading ? (
             [...Array(8)].map((_, i) => (
-              <div key={i} className="bg-secondary rounded-3xl p-6 h-[400px] animate-pulse">
+              <div key={i} className="bg-secondary rounded-2xl p-6 h-[400px] animate-pulse">
                 <div className="w-full h-48 bg-background rounded-2xl mb-6" />
                 <div className="h-6 w-3/4 bg-background rounded mb-4" />
                 <div className="h-4 w-1/2 bg-background rounded mb-8" />
@@ -199,9 +199,9 @@ const ServicesPreview = () => {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
                 whileHover={{ y: -10 }}
-                className="group relative bg-secondary rounded-[2rem] p-4 border border-white/5"
+                className="group relative bg-secondary rounded-2xl p-4 border border-white/5"
               >
-                <div className="relative overflow-hidden rounded-[1.5rem] aspect-[4/3] mb-6 shadow-inner">
+                <div className="relative overflow-hidden rounded-2xl aspect-[4/3] mb-6 shadow-inner">
                   <img
                     src={service.image?.startsWith('/uploads') ? `${IMAGE_URL}${service.image}` : (service.image || "https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1074&auto=format&fit=crop")}
                     alt={service.name}
@@ -320,7 +320,7 @@ const WhyChooseUs = () => {
                     transition={{ delay: i * 0.1 }}
                     className="group relative flex items-start gap-6 p-6 rounded-2xl bg-secondary border border-white/5 hover:border-primary/30 transition-all duration-500"
                   >
-                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-background flex items-center justify-center text-primary shadow-xl group-hover:scale-110 group-hover:bg-primary group-hover:text-secondary transition-all">
+                    <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-background flex items-center justify-center text-primary shadow-xl group-hover:scale-110 group-hover:bg-primary group-hover:text-secondary transition-all">
                       {f.icon}
                     </div>
                     <div>
@@ -344,7 +344,7 @@ const WhyChooseUs = () => {
               initial={{ opacity: 0, scale: 1.1 }}
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.5 }}
-              className="absolute inset-0 rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl"
+              className="absolute inset-0 rounded-2xl overflow-hidden border border-white/10 shadow-2xl"
             >
               <img
                 src="/salon_ambiance.png"
@@ -366,7 +366,7 @@ const WhyChooseUs = () => {
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="absolute bottom-12 right-12 bg-secondary/40 backdrop-blur-3xl border border-white/10 p-10 rounded-[2.5rem] shadow-3xl max-w-[280px]"
+              className="absolute bottom-12 right-12 bg-secondary/40 backdrop-blur-3xl border border-white/10 p-10 rounded-2xl shadow-3xl max-w-[280px]"
             >
               <div className="text-center">
                 <span className="text-7xl font-black text-transparent bg-clip-text bg-luxury-gradient tracking-tighter italic">12+</span>
@@ -424,7 +424,7 @@ const TeamPreview = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {loading ? (
             [...Array(4)].map((_, i) => (
-              <div key={i} className="h-80 bg-secondary rounded-[2rem] animate-pulse" />
+              <div key={i} className="h-80 bg-secondary rounded-2xl animate-pulse" />
             ))
           ) : (
             staff.map((artist, i) => (
@@ -435,21 +435,41 @@ const TeamPreview = () => {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
                 whileHover={{ y: -10 }}
-                className="group bg-secondary rounded-[2rem] p-8 border border-white/5 transition-all hover:border-primary/20"
+                className="group relative bg-secondary rounded-2xl p-4 border border-white/5 transition-all duration-500 hover:border-primary/20"
               >
-                <div className="flex flex-col items-center">
-                  <div className="w-28 h-28 rounded-full p-1 bg-luxury-gradient mb-6 group-hover:scale-110 transition-transform duration-500 shadow-xl shadow-primary/10">
-                    <img
-                      src={artist.profileImage ? (artist.profileImage.startsWith('http') ? artist.profileImage : `${IMAGE_URL}${artist.profileImage}`) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${artist.name}`}
-                      alt={artist.name}
-                      className="w-full h-full rounded-full object-cover bg-secondary border-2 border-background"
-                    />
+                <div className="relative overflow-hidden rounded-2xl aspect-[4/3] mb-6 shadow-inner bg-background/50">
+                  <img
+                    src={artist.profileImage ? (artist.profileImage.startsWith('http') ? artist.profileImage : `${IMAGE_URL}${artist.profileImage}`) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${artist.name}`}
+                    alt={artist.name}
+                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110"
+                  />
+                  <div className="absolute top-4 right-4 px-3 py-1 bg-background/90 backdrop-blur-md rounded-full text-[9px] font-black text-primary uppercase tracking-widest shadow-lg">
+                    {artist.role || "Expert"}
                   </div>
-                  <h4 className="text-lg font-black text-white uppercase tracking-tight mb-2 group-hover:text-primary transition-colors">{artist.name}</h4>
-                  <div className="px-3 py-1 bg-white/5 rounded-full mb-4">
-                    <span className="text-[8px] font-black text-muted uppercase tracking-widest">{artist.services?.[0]?.name || "Senior Stylist"}</span>
+                </div>
+
+                <div className="px-2 pb-2">
+                  <div className="mb-4">
+                    <h4 className="text-lg font-black text-white uppercase tracking-tight line-clamp-1 font-luxury italic leading-none">{artist.name}</h4>
+                    <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mt-2 mb-1 opacity-80 italic">Senior Artisan</p>
+                  </div>
+                  
+                  <div className="flex items-center gap-3 text-muted text-[9px] font-black uppercase tracking-widest mb-6">
+                    <span className="flex items-center gap-1.5">
+                      <Sparkles size={12} className="text-primary" /> Specialist
+                    </span>
+                    <span className="h-1 w-1 bg-white/10 rounded-full" />
+                    <span className="flex items-center gap-1.5">
+                       Mastery v3.0
+                    </span>
                   </div>
 
+                  <button
+                    onClick={() => navigate('/book')}
+                    className="w-full py-3.5 rounded-xl bg-background text-[10px] font-black uppercase tracking-[0.2em] text-white hover:bg-primary hover:text-secondary transition-all shadow-sm group-hover:shadow-primary/20"
+                  >
+                    Induct Ritual
+                  </button>
                 </div>
               </motion.div>
             ))
@@ -485,7 +505,7 @@ const Testimonials = () => {
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
-            className="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center mx-auto mb-12 shadow-sm"
+            className="w-12 h-12 bg-secondary rounded-2xl flex items-center justify-center mx-auto mb-12 shadow-sm"
           >
             <Sparkles size={24} className="text-primary" />
           </motion.div>
@@ -569,8 +589,8 @@ const RitualMenu = () => {
                 key={cat._id}
                 onClick={() => setActiveCat(cat._id)}
                 className={`px-7 py-3 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 border ${activeCat === cat._id
-                    ? "bg-primary border-primary text-secondary shadow-lg"
-                    : "bg-secondary border-transparent text-muted hover:bg-white/10 hover:text-white"
+                  ? "bg-primary border-primary text-secondary shadow-lg"
+                  : "bg-secondary border-transparent text-muted hover:bg-white/10 hover:text-white"
                   }`}
               >
                 {cat.name}
@@ -617,7 +637,7 @@ const RitualMenu = () => {
           </AnimatePresence>
 
           {filteredServices.length === 0 && (
-            <div className="py-24 text-center text-muted italic uppercase text-[11px] font-black tracking-[0.4em] bg-secondary/50 rounded-[3rem] border border-white/5 shadow-inner">
+            <div className="py-24 text-center text-muted italic uppercase text-[11px] font-black tracking-[0.4em] bg-secondary/50 rounded-2xl border border-white/5 shadow-inner">
               Consulting the ritual archive...
             </div>
           )}
@@ -697,7 +717,7 @@ const BookingCTA = () => {
           initial={{ opacity: 0, scale: 0.98 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          className="relative overflow-hidden bg-luxury-gradient rounded-[2.5rem] py-16 px-8 text-center text-secondary shadow-2xl shadow-primary/20"
+          className="relative overflow-hidden bg-luxury-gradient rounded-2xl py-16 px-8 text-center text-secondary shadow-2xl shadow-primary/20"
         >
           {/* Decorative Pattern */}
           <div className="absolute inset-0 opacity-5 pointer-events-none"
@@ -754,3 +774,4 @@ export default function Home() {
     </div>
   );
 }
+

@@ -43,7 +43,7 @@ const Modal = ({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.98, y: 20 }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
-          className={`relative w-full ${maxWidth} ${maxHeight} bg-secondary shadow-3xl rounded-[2rem] flex flex-col border border-white/10 overflow-hidden pointer-events-auto`}
+          className={`relative w-full ${maxWidth} ${maxHeight} bg-secondary shadow-3xl rounded-2xl flex flex-col border border-white/10 overflow-hidden pointer-events-auto`}
         >
           {/* Header Implementation */}
           {headerImage ? (
@@ -57,7 +57,7 @@ const Modal = ({
                 <X size={18} />
               </button>
               <div className="absolute bottom-8 left-8 z-10 pr-6">
-                {subtitle && <div className="px-3 py-1 bg-primary text-secondary text-[8px] font-black uppercase tracking-[0.2em] rounded-lg inline-block mb-3 shadow-2xl">{subtitle}</div>}
+                {subtitle && <div className="px-3 py-1 bg-primary text-secondary text-[8px] font-black uppercase tracking-[0.2em] rounded-2xl inline-block mb-3 shadow-2xl">{subtitle}</div>}
                 <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tighter uppercase italic leading-tight font-luxury">{title}</h2>
               </div>
             </div>
@@ -94,3 +94,4 @@ const Modal = ({
 };
 
 export default Modal;
+

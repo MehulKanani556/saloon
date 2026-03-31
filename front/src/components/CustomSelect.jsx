@@ -84,7 +84,7 @@ const CustomSelect = ({
         </span>
         <div className="flex items-center gap-3">
           {isMulti && Array.isArray(value) && value.length > 0 && (
-            <span className="px-2 py-0.5 bg-primary text-secondary text-[8px] font-black rounded-md">
+            <span className="px-2 py-0.5 bg-primary text-secondary text-[8px] font-black rounded-2xl">
               {value.length}
             </span>
           )}
@@ -126,7 +126,7 @@ const CustomSelect = ({
                     <motion.div 
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      className="p-1 bg-primary/10 rounded-lg"
+                      className="p-1 bg-primary/10 rounded-2xl"
                     >
                       <Check size={14} className="text-primary" />
                     </motion.div>
@@ -142,3 +142,4 @@ const CustomSelect = ({
 };
 
 export default CustomSelect;
+

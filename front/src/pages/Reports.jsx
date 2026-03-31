@@ -55,13 +55,14 @@ export default function Reports() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 }}
-            className="bg-secondary p-8 rounded-[2.5rem] border border-white/5 shadow-2xl relative group hover:translate-y-[-4px] transition-all"
+            className="bg-secondary p-6 rounded-2xl border border-white/5 shadow-2xl relative group hover:border-primary/20 transition-all duration-500"
           >
-            <div className="w-14 h-14 rounded-2xl bg-background border border-white/5 flex items-center justify-center mb-8 text-muted group-hover:bg-primary group-hover:text-secondary transition-all duration-500 shadow-inner">
-              <stat.icon size={26} />
+            <div className="w-12 h-12 rounded-xl bg-background border border-white/5 flex items-center justify-center mb-6 text-muted group-hover:bg-primary group-hover:text-secondary transition-all duration-500 shadow-inner">
+              <stat.icon size={22} />
             </div>
-            <h3 className="text-muted text-[10px] font-black uppercase tracking-[0.2em] leading-none mb-3 italic">{stat.label}</h3>
+            <h3 className="text-muted text-[9px] font-black uppercase tracking-[0.2em] leading-none mb-3 italic opacity-60 group-hover:opacity-100 transition-opacity">{stat.label}</h3>
             <p className="text-3xl font-black text-white tracking-tighter italic font-luxury">{stat.value}</p>
+            <div className="absolute bottom-0 left-0 w-full h-[1px] bg-luxury-gradient opacity-0 group-hover:opacity-100 transition-opacity" />
           </motion.div>
         ))}
       </div>
@@ -169,3 +170,4 @@ export default function Reports() {
     </div>
   );
 }
+

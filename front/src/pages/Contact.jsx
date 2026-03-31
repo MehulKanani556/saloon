@@ -109,7 +109,7 @@ export default function Contact() {
                  initial={{ opacity: 0, y: 30 }}
                  whileInView={{ opacity: 1, y: 0 }}
                  viewport={{ once: true }}
-                 className="bg-secondary rounded-[3rem] p-10 md:p-16 shadow-2xl border border-white/5 relative overflow-hidden"
+                 className="bg-secondary rounded-2xl p-10 md:p-16 shadow-2xl border border-white/5 relative overflow-hidden"
                >
                   <div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none">
                      <Sparkles size={150} strokeWidth={1} className="text-primary" />
@@ -178,3 +178,4 @@ export default function Contact() {
     </div>
   );
 }
+

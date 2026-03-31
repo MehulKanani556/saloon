@@ -12,26 +12,37 @@ const generateInvoicePDF = async (req, res) => {
          return res.status(404).json({ message: 'Ritual session not found for invoice' });
       }
 
+      console.log(appointment,"appointment");
+
       const doc = new PDFDocument({
          margin: 50,
          size: 'A4'
       });
 
+      // Handle PDF generation errors
+      doc.on('error', (err) => {
+         if (!res.headersSent) {
+            res.status(500).json({ message: 'Internal PDF Generation Error', error: err.message });
+         }
+      });
+
       // Set response headers
+      const clientName = appointment.client?.name?.split(' ').join('_') || 'Client';
+      const appointmentId = appointment.appointmentId || appointment._id.toString().substring(18).toUpperCase();
       res.setHeader('Content-Type', 'application/pdf');
-      res.setHeader('Content-Disposition', `attachment; filename=Invoice-${appointment._id.toString().substring(0, 8)}.pdf`);
+      res.setHeader('Content-Disposition', `attachment; filename=Invoice-${clientName}-${appointmentId}.pdf`);
 
       // Stream the PDF to the response
       doc.pipe(res);
 
       const colors = {
-         brand: '#d97706',    // Saloon 600 (Amber)
-         accent: '#f59e0b',   // Saloon 500 (Amber)
-         void: '#0f172a',     // Slate 900
-         neutral: '#64748b',  // Slate 500
-         wash: '#f8fafc',
-         stroke: '#e2e8f0',
-         watermark: '#f1f5f9'
+         brand: '#C9A227',    // Gold
+         accent: '#B8860B',   // Darker Gold
+         void: '#0F0F0F',     // Deep Black
+         neutral: '#666666',  // Grey
+         wash: '#FAFAFA',     // Off-white
+         stroke: '#E5E5E5',   // Light stroke
+         watermark: '#F5F5F5' // Light watermark
       };
 
       // --- Immersive Background Sentinel ---
@@ -42,14 +53,14 @@ const generateInvoicePDF = async (req, res) => {
 
       // --- Header Protocol ---
       doc.fillColor(colors.brand)
-         .fontSize(32)
+         .fontSize(22)
          .font('Helvetica-BoldOblique')
-         .text('GLOW SALOON', 50, 60, { characterSpacing: -1 });
+         .text('GLOW & ELEGANCE SALOON', 50, 60, { characterSpacing: -0.5, width: 330 });
 
       doc.fillColor(colors.neutral)
          .fontSize(10)
          .font('Helvetica-Bold')
-         .text('LUXURY SALOON & SPA NARRATIVE', 51, 95, { characterSpacing: 3 });
+         .text('LUXURY SALOON & SPA NARRATIVE', 51, 85, { characterSpacing: 2.5 });
 
       // Tactical Metadata
       doc.fillColor(colors.neutral)
@@ -63,7 +74,7 @@ const generateInvoicePDF = async (req, res) => {
       doc.moveDown(5);
 
       // --- High-Precision Discovery Grid ---
-      const metaY = 160;
+      const metaY = 180; // Shifted grid down from 160 to 180
 
       // Origin Protocol
       doc.fillColor(colors.brand).fontSize(8).font('Helvetica-Bold').text('RITUAL ORIGIN', 50, metaY, { characterSpacing: 2 });
@@ -76,10 +87,10 @@ const generateInvoicePDF = async (req, res) => {
       // Masterpiece Recipient
       doc.fillColor(colors.brand).fontSize(8).font('Helvetica-Bold').text('MASTERPIECE RECIPIENT', 350, metaY, { characterSpacing: 2 });
       doc.fillColor(colors.void).fontSize(12).font('Helvetica-BoldOblique')
-         .text(appointment.client.name.toUpperCase(), 350, metaY + 15)
+         .text(appointment.client?.name?.toUpperCase() || 'ANONYMOUS CLIENT', 350, metaY + 15)
          .font('Helvetica').fillColor(colors.neutral).fontSize(9)
-         .text(appointment.client.phone || 'N/A', 350, metaY + 33)
-         .text(appointment.client.email || 'N/A', 350, metaY + 46);
+         .text(appointment.client?.phone || 'N/A', 350, metaY + 33)
+         .text(appointment.client?.email || 'N/A', 350, metaY + 46);
 
       // --- Metadata Sentinel Banner ---
       const bannerY = 240;
@@ -95,13 +106,10 @@ const generateInvoicePDF = async (req, res) => {
       doc.fillColor(colors.neutral).text('RITUAL IDENTITY', 75 + colWidth, bannerY + 18, { characterSpacing: 1 });
       doc.fillColor(colors.void).text(`#${appointment._id.toString().substring(18).toUpperCase()}`, 75 + colWidth, bannerY + 35);
 
-      // Col 3: Status
-      //   doc.fillColor(colors.neutral).text('PROTOCOL STATUS', 75 + colWidth * 2, bannerY + 18, { characterSpacing: 1 });
-      //   doc.fillColor(appointment.status === 'Completed' ? '#10b981' : colors.brand)
-      //      .text(appointment.status.toUpperCase(), 75 + colWidth * 2, bannerY + 35);
-
-      // Extract services from assignments for PDF rendering
-      const renderedServices = appointment.assignments.map(a => a.service).filter(s => s);
+      // Col 3: Protocol Status
+      doc.fillColor(colors.neutral).text('PROTOCOL STATUS', 75 + colWidth * 2, bannerY + 18, { characterSpacing: 1 });
+      doc.fillColor(appointment.status === 'Completed' ? '#10b981' : colors.brand)
+         .text(appointment.status.toUpperCase(), 75 + colWidth * 2, bannerY + 35);
 
       // --- Ritual Portfolio Stream ---
       const tableY = 340;
@@ -109,35 +117,24 @@ const generateInvoicePDF = async (req, res) => {
          .text('RITUAL DESCRIPTION', 50, tableY, { characterSpacing: 2 })
          .text('CURRENCY EXTRACTION', 0, tableY, { align: 'right', characterSpacing: 2 });
 
-        // Ritual Entries
-        let currentY = tableY + 40;
-        appointment.assignments.forEach((asm, idx) => {
-            const service = asm.service;
-            doc.fillColor(colors.void).fontSize(14).font('Helvetica-BoldOblique')
-               .text(service.name.toUpperCase(), 50, currentY);
-            
-            doc.fillColor(colors.brand).fontSize(16).font('Helvetica-BoldOblique')
-               .text(`$ ${service.price.toLocaleString()}`, 0, currentY, { align: 'right' });
-
       // Ritual Entries
       let currentY = tableY + 40;
-      renderedServices.forEach((service, idx) => {
-         doc.fillColor(colors.void).fontSize(14).font('Helvetica-BoldOblique')
-            .text(service.name ? service.name.toUpperCase() : 'UNKNOWN RITUAL', 50, currentY);
+      appointment.assignments.forEach((asm, idx) => {
+         const service = asm.service;
+         if (!service) return;
 
-            currentY += 60;
-            
-            if (idx < appointment.assignments.length - 1) {
-                doc.strokeColor(colors.stroke).dash(2, { space: 2 }).moveTo(50, currentY - 20).lineTo(550, currentY - 20).stroke().undash();
-            }
-        });
+         doc.fillColor(colors.void).fontSize(14).font('Helvetica-BoldOblique')
+            .text(service.name.toUpperCase(), 50, currentY);
+
+         doc.fillColor(colors.brand).fontSize(16).font('Helvetica-BoldOblique')
+            .text(`$ ${service.price.toLocaleString()}`, 0, currentY, { align: 'right' });
 
          doc.fillColor(colors.neutral).fontSize(8).font('Helvetica-Bold')
             .text(service.category?.name?.toUpperCase() || 'PREMIUM PROTOCOL', 50, currentY + 18, { characterSpacing: 1 });
 
          currentY += 60;
 
-         if (idx < renderedServices.length - 1) {
+         if (idx < appointment.assignments.length - 1) {
             doc.strokeColor(colors.stroke).dash(2, { space: 2 }).moveTo(50, currentY - 20).lineTo(550, currentY - 20).stroke().undash();
          }
       });
@@ -163,7 +160,10 @@ const generateInvoicePDF = async (req, res) => {
       doc.end();
 
    } catch (err) {
-      res.status(500).json({ message: 'Financial export protocol failed', error: err.message });
+      console.error('PDF Generation Error:', err);
+      if (!res.headersSent) {
+         res.status(500).json({ message: 'Financial export protocol failed', error: err.message });
+      }
    }
 };
 

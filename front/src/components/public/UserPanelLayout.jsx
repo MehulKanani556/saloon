@@ -48,7 +48,7 @@ export default function UserPanelLayout({ children, title }) {
           <div className="flex flex-col lg:flex-row gap-12">
             {/* Sidebar Linkage */}
             <aside className="lg:w-85 shrink-0">
-              <div className="bg-dark-card backdrop-blur-3xl border border-white/10 rounded-[2.5rem] p-5 sticky top-32 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.8)] ring-1 ring-white/5">
+              <div className="bg-dark-card backdrop-blur-3xl border border-white/10 rounded-2xl p-5 sticky top-32 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.8)] ring-1 ring-white/5">
                 <nav className="flex flex-col gap-3">
                   {menuItems.map((item) => {
                     const isActive = location.pathname === item.path;
@@ -103,3 +103,4 @@ export default function UserPanelLayout({ children, title }) {
     </div>
   );
 }
+

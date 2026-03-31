@@ -18,3 +18,4 @@ export const CardSkeleton = () => (
         </div>
     </div>
 )
+

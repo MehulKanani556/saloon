@@ -38,7 +38,7 @@ const SuccessModal = ({ data, onClose }) => {
       <motion.div 
         initial={{ scale: 0.9, y: 20 }}
         animate={{ scale: 1, y: 0 }}
-        className="w-full max-w-lg bg-secondary rounded-[3rem] p-12 text-center shadow-2xl relative border border-white/5 overflow-hidden"
+        className="w-full max-w-lg bg-secondary rounded-2xl p-12 text-center shadow-2xl relative border border-white/5 overflow-hidden"
       >
         {/* Simple CSS Confetti Burst Placeholder Animation */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -63,7 +63,7 @@ const SuccessModal = ({ data, onClose }) => {
           Your transformation at Glow & Elegance is officially in the chronicles. We've sent a detailed confirmation to your email.
         </p>
 
-        <div className="bg-background rounded-3xl p-6 mb-10 text-left space-y-4 border border-white/5">
+        <div className="bg-background rounded-2xl p-6 mb-10 text-left space-y-4 border border-white/5">
           <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
             <span className="text-muted">Reference:</span>
             <span className="text-white">#{data.id || 'N/A'}</span>
@@ -216,7 +216,7 @@ export default function BookAppointment() {
       <main className="pt-32 pb-24">
         <div className="container mx-auto px-6 mb-16 text-center">
           <div className="flex justify-center mb-6">
-            <div className="w-16 h-16 rounded-[2rem] bg-secondary text-primary flex items-center justify-center shadow-xl border border-white/10">
+            <div className="w-16 h-16 rounded-2xl bg-secondary text-primary flex items-center justify-center shadow-xl border border-white/10">
               <Scissors size={28} />
             </div>
           </div>
@@ -228,7 +228,7 @@ export default function BookAppointment() {
           
           {/* Main Form Area */}
           <div className="lg:col-span-8">
-            <div className="bg-secondary rounded-[3rem] p-8 md:p-12 shadow-2xl border border-white/5 overflow-hidden">
+            <div className="bg-secondary rounded-2xl p-8 md:p-12 shadow-2xl border border-white/5 overflow-hidden">
               
               {/* Step Indicator */}
               <div className="flex items-center justify-between mb-20 relative px-4 md:px-10">
@@ -287,7 +287,7 @@ export default function BookAppointment() {
                     <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-6">
                       {(servicesLoading || staffLoading) ? (
                         [...Array(6)].map((_, i) => (
-                          <div key={i} className="aspect-square bg-background rounded-3xl animate-pulse" />
+                          <div key={i} className="aspect-square bg-background rounded-2xl animate-pulse" />
                         ))
                       ) : services.map((service) => {
                         const isSelected = selectedServices.find(s => s._id === service._id);
@@ -296,18 +296,21 @@ export default function BookAppointment() {
                             key={service._id}
                             whileTap={{ scale: 0.98 }}
                             onClick={() => toggleService(service)}
-                            className={`group cursor-pointer relative p-6 rounded-3xl border-2 transition-all duration-300 ${
+                            className={`group cursor-pointer relative p-4 rounded-2xl border-2 transition-all duration-300 ${
                               isSelected 
                                 ? 'bg-primary/5 border-primary shadow-xl shadow-primary/10' 
                                 : 'bg-background border-white/5 hover:border-primary/20 shadow-inner'
                             }`}
                           >
-                            <div className="aspect-video rounded-xl overflow-hidden mb-4 relative">
+                            <div className="relative overflow-hidden rounded-xl aspect-[4/3] mb-6 shadow-inner">
                               <img 
-                                src={service.image?.startsWith('/uploads') ? `${IMAGE_URL}${service.image}` : service.image} 
+                                src={service.image?.startsWith('/uploads') ? `${IMAGE_URL}${service.image}` : (service.image || "https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1074&auto=format&fit=crop")} 
                                 alt={service.name}
-                                className="w-full h-full object-cover transition-transform group-hover:scale-110"
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                               />
+                               <div className="absolute top-3 right-3 px-2 py-1 bg-background/90 backdrop-blur-md rounded-full text-[8px] font-black text-primary uppercase tracking-widest shadow-lg">
+                                {service.category?.name || "Ritual"}
+                              </div>
                               {isSelected && (
                                 <div className="absolute inset-0 bg-primary/40 backdrop-blur-[2px] flex items-center justify-center">
                                   <div className="w-10 h-10 bg-white text-primary rounded-full flex items-center justify-center shadow-lg">
@@ -316,12 +319,19 @@ export default function BookAppointment() {
                                 </div>
                               )}
                             </div>
-                            <h4 className="text-xs font-black text-white uppercase tracking-tight mb-2 truncate font-luxury">{service.name}</h4>
-                            <div className="flex items-center justify-between">
-                              <span className="text-[10px] font-black text-primary font-luxury">${service.price}</span>
-                              <div className="flex items-center gap-1.5 text-[8px] font-black text-muted uppercase">
-                                <Clock size={10} />
-                                {service.duration} Min
+                            <div className="px-1 pb-1">
+                              <div className="flex justify-between items-start mb-2">
+                                <h4 className="text-[13px] font-black text-white uppercase tracking-tight line-clamp-1 font-luxury italic leading-none">{service.name}</h4>
+                                <span className="text-[15px] font-black text-primary leading-none">${service.price}</span>
+                              </div>
+                              <div className="flex items-center gap-2.5 text-muted text-[8px] font-black uppercase tracking-widest">
+                                <span className="flex items-center gap-1">
+                                  <Clock size={10} className="text-primary" /> {service.duration} Mins
+                                </span>
+                                <span className="h-0.5 w-0.5 bg-white/10 rounded-full" />
+                                <span className="flex items-center gap-1">
+                                  <Sparkles size={10} className="text-primary" /> Elite Care
+                                </span>
                               </div>
                             </div>
                           </motion.div>
@@ -433,7 +443,7 @@ export default function BookAppointment() {
                           {selectedServices.map(service => {
                             const eligibleStaff = allStaff.filter(s => s.services?.some(ser => (typeof ser === 'string' ? ser === service._id : ser._id === service._id)));
                             return (
-                              <div key={service._id} className="bg-background p-4 rounded-3xl border border-white/5 flex items-center justify-between shadow-sm">
+                              <div key={service._id} className="bg-background p-4 rounded-2xl border border-white/5 flex items-center justify-between shadow-sm">
                                 <div className="flex flex-col">
                                   <span className="text-[10px] font-black uppercase text-primary truncate max-w-[120px] font-luxury">{service.name}</span>
                                   <span className="text-[8px] text-muted font-black uppercase tracking-tighter">performed by</span>
@@ -458,7 +468,7 @@ export default function BookAppointment() {
                         <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Preferred Time Slot</label>
                         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 relative min-h-[100px]">
                           {slotsLoading && (
-                            <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/60 backdrop-blur-[1px] rounded-3xl">
+                            <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/60 backdrop-blur-[1px] rounded-2xl">
                                <Loader2 className="animate-spin text-primary" strokeWidth={3} />
                             </div>
                           )}
@@ -546,7 +556,7 @@ export default function BookAppointment() {
                     exit={{ opacity: 0, x: -50 }}
                     className="space-y-10"
                   >
-                    <div className="bg-background rounded-[2.5rem] p-10 text-white shadow-2xl relative overflow-hidden border border-white/5">
+                    <div className="bg-background rounded-2xl p-10 text-white shadow-2xl relative overflow-hidden border border-white/5">
                        <div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none text-primary">
                           <CheckCircle2 size={150} strokeWidth={1} />
                        </div>
@@ -620,7 +630,7 @@ export default function BookAppointment() {
           {/* Sticky Selection Sidebar (Desktop) */}
           <div className="lg:col-span-4 hidden lg:block">
             <div className="sticky top-32 space-y-8">
-              <div className="bg-secondary rounded-[2.5rem] p-10 border border-white/5 shadow-xl">
+              <div className="bg-secondary rounded-2xl p-10 border border-white/5 shadow-xl">
                  <div className="flex items-center gap-4 mb-10 pb-6 border-b border-white/5">
                     <ShoppingBag className="text-primary" />
                     <h3 className="text-xl font-black uppercase tracking-tighter italic font-luxury text-white">Your Rituals</h3>
@@ -665,13 +675,13 @@ export default function BookAppointment() {
                     </div>
                     <div className="flex justify-between items-center">
                        <span className="text-[9px] font-black text-muted uppercase tracking-[0.3em]">Total Investment</span>
-                       <span className="text-3xl font-black text-primary tracking-tighter italic font-luxury font-luxury">${totalPrice}</span>
+                       <span className="text-3xl font-black text-primary tracking-tighter italic font-luxury">${totalPrice}</span>
                     </div>
                  </div>
               </div>
 
               {/* Trust Badge */}
-              <div className="bg-background rounded-[2.5rem] border border-white/5 p-8 text-center shadow-inner">
+              <div className="bg-background rounded-2xl border border-white/5 p-8 text-center shadow-inner">
                  <div className="flex justify-center gap-1 mb-4">
                     {[...Array(5)].map((_, i) => <Star key={i} size={12} className="text-primary fill-primary" />)}
                  </div>
@@ -705,3 +715,4 @@ export default function BookAppointment() {
     </div>
   );
 }
+

@@ -30,13 +30,13 @@ export default function DeleteAccount() {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-dark-card backdrop-blur-3xl border border-red-500/20 rounded-[3.5rem] p-8 lg:p-16 relative overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,1)] ring-1 ring-white/5"
+          className="bg-dark-card backdrop-blur-3xl border border-red-500/20 rounded-2xl p-8 lg:p-16 relative overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,1)] ring-1 ring-white/5"
         >
           {/* Accent Glow */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/10 rounded-full blur-[100px] pointer-events-none animate-pulse" />
           
           <div className="flex items-center gap-8 mb-16 pb-12 border-b border-white/5 relative z-10">
-            <div className="w-24 h-24 rounded-[2.5rem] bg-red-500/10 flex items-center justify-center text-red-500 border border-red-500/20 shadow-[0_15px_40px_rgba(239,68,68,0.2)]">
+            <div className="w-24 h-24 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-500 border border-red-500/20 shadow-[0_15px_40px_rgba(239,68,68,0.2)]">
               <Trash2 size={40} strokeWidth={2.5} />
             </div>
             <div>
@@ -48,8 +48,8 @@ export default function DeleteAccount() {
           </div>
 
           <div className="space-y-16 relative z-10">
-            <div className="bg-background/40 border border-red-500/10 rounded-[2.5rem] p-10 md:p-14 flex flex-col md:flex-row items-center md:items-start gap-12 backdrop-blur-md shadow-inner">
-              <div className="w-20 h-20 rounded-3xl bg-red-500/10 flex items-center justify-center shrink-0 border border-red-500/20 animate-pulse">
+            <div className="bg-background/40 border border-red-500/10 rounded-2xl p-10 md:p-14 flex flex-col md:flex-row items-center md:items-start gap-12 backdrop-blur-md shadow-inner">
+              <div className="w-20 h-20 rounded-2xl bg-red-500/10 flex items-center justify-center shrink-0 border border-red-500/20 animate-pulse">
                 <ShieldAlert className="text-red-500" size={36} />
               </div>
               <div className="text-center md:text-left space-y-8">
@@ -76,7 +76,7 @@ export default function DeleteAccount() {
               
               <button 
                 onClick={() => setShowConfirm(true)}
-                className="w-full bg-red-500/10 hover:bg-red-500 border border-red-500/20 hover:border-transparent py-8 rounded-[2rem] text-[12px] font-black uppercase tracking-[0.5em] text-red-500 hover:text-white transition-all duration-700 shadow-2xl hover:shadow-[0_25px_60px_rgba(239,68,68,0.3)] group flex items-center justify-center gap-8 active:scale-[0.98] font-luxury italic"
+                className="w-full bg-red-500/10 hover:bg-red-500 border border-red-500/20 hover:border-transparent py-8 rounded-2xl text-[12px] font-black uppercase tracking-[0.5em] text-red-500 hover:text-white transition-all duration-700 shadow-2xl hover:shadow-[0_25px_60px_rgba(239,68,68,0.3)] group flex items-center justify-center gap-8 active:scale-[0.98] font-luxury italic"
               >
                 Initalize Final Dissolution Protocol
                 <ChevronRight size={24} className="group-hover:translate-x-4 transition-transform duration-700" />
@@ -93,7 +93,7 @@ export default function DeleteAccount() {
                 initial={{ opacity: 0, scale: 0.9, y: 40 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 40 }}
-                className="bg-dark-card border border-red-500/30 p-12 md:p-20 rounded-[4rem] w-full max-w-2xl relative shadow-[0_100px_200px_-50px_rgba(0,0,0,1)] overflow-hidden ring-1 ring-white/10"
+                className="bg-dark-card border border-red-500/30 p-12 md:p-20 rounded-2xl w-full max-w-2xl relative shadow-[0_100px_200px_-50px_rgba(0,0,0,1)] overflow-hidden ring-1 ring-white/10"
               >
                 {/* Decorative Elements */}
                 <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/20 rounded-full blur-[100px] pointer-events-none animate-pulse" />
@@ -107,7 +107,7 @@ export default function DeleteAccount() {
                 </button>
 
                 <div className="text-center">
-                  <div className="w-28 h-28 bg-red-500/10 rounded-[2.5rem] flex items-center justify-center mx-auto mb-12 animate-bounce shadow-[0_20px_50px_rgba(239,68,68,0.2)] border border-red-500/30 text-red-500">
+                  <div className="w-28 h-28 bg-red-500/10 rounded-2xl flex items-center justify-center mx-auto mb-12 animate-bounce shadow-[0_20px_50px_rgba(239,68,68,0.2)] border border-red-500/30 text-red-500">
                     <ShieldAlert size={56} strokeWidth={1.5} />
                   </div>
                   
@@ -122,21 +122,21 @@ export default function DeleteAccount() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••••••"
-                        className="w-full bg-background/40 border border-white/5 p-8 rounded-[2.5rem] outline-none focus:border-red-500 focus:ring-4 focus:ring-red-500/5 transition-all duration-1000 font-black text-xl tracking-[0.8em] text-red-500 text-center uppercase"
+                        className="w-full bg-background/40 border border-white/5 p-8 rounded-2xl outline-none focus:border-red-500 focus:ring-4 focus:ring-red-500/5 transition-all duration-1000 font-black text-xl tracking-[0.8em] text-red-500 text-center uppercase"
                       />
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-6 pt-10">
                       <button 
                         onClick={() => setShowConfirm(false)}
-                        className="flex-1 px-12 py-7 border border-white/5 rounded-[2.5rem] text-[11px] font-black uppercase tracking-[0.5em] hover:bg-white/5 text-muted/40 hover:text-white transition-all duration-700 italic font-luxury"
+                        className="flex-1 px-12 py-7 border border-white/5 rounded-2xl text-[11px] font-black uppercase tracking-[0.5em] hover:bg-white/5 text-muted/40 hover:text-white transition-all duration-700 italic font-luxury"
                       >
                         Abort Sequence
                       </button>
                       <button 
                         onClick={handleDissolve}
                         disabled={loading || !password}
-                        className="flex-1 px-12 py-7 bg-red-600 text-white rounded-[2.5rem] text-[11px] font-black uppercase tracking-[0.5em] shadow-[0_25px_60px_rgba(220,38,38,0.4)] disabled:opacity-10 flex items-center justify-center gap-5 transition-all duration-700 hover:scale-[1.05] active:translate-y-1 italic font-luxury"
+                        className="flex-1 px-12 py-7 bg-red-600 text-white rounded-2xl text-[11px] font-black uppercase tracking-[0.5em] shadow-[0_25px_60px_rgba(220,38,38,0.4)] disabled:opacity-10 flex items-center justify-center gap-5 transition-all duration-700 hover:scale-[1.05] active:translate-y-1 italic font-luxury"
                       >
                         {loading ? <Loader2 className="animate-spin" size={24} /> : <Trash2 size={24} />}
                         Final Dissolve
@@ -152,3 +152,4 @@ export default function DeleteAccount() {
     </UserPanelLayout>
   );
 }
+

@@ -47,7 +47,7 @@ export default function Signup() {
             <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="bg-secondary/40 backdrop-blur-xl w-full max-w-lg p-10 border border-white/5 rounded-[2.5rem] shadow-premium relative z-10"
+                className="bg-secondary/40 backdrop-blur-xl w-full max-w-lg p-10 border border-white/5 rounded-2xl shadow-premium relative z-10"
             >
                 <div className="flex flex-col items-center text-center mb-8">
                     <div className="mb-6">
@@ -147,3 +147,4 @@ export default function Signup() {
         </div>
     );
 }
+

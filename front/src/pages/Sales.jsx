@@ -168,7 +168,7 @@ export default function Sales() {
                               <div className="w-2 h-2 rounded-full" style={{ backgroundColor: payload[0].payload.color }} />
                               <p className="text-[10px] font-black text-white uppercase tracking-widest italic leading-none">{payload[0].name}</p>
                             </div>
-                            <span className="text-[8px] font-black text-primary bg-primary/10 px-2 py-1 rounded-lg uppercase tracking-widest leading-none">
+                            <span className="text-[8px] font-black text-primary bg-primary/10 px-2 py-1 rounded-2xl uppercase tracking-widest leading-none">
                               {payload[0].payload.count} Rituals
                             </span>
                           </div>
@@ -254,3 +254,4 @@ export default function Sales() {
     </div>
   );
 }
+

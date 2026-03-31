@@ -139,7 +139,7 @@ const PublicNavbar = () => {
 
                       <button
                         onClick={handleLogout}
-                        className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-red-50 text-red-500 transition-colors group"
+                        className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-red-500/10 text-red-500 transition-colors group"
                       >
                         <LogOut size={16} />
                         <span className="text-[10px] font-black uppercase tracking-widest text-left">Logout Protocol</span>
@@ -213,3 +213,4 @@ const PublicNavbar = () => {
 };
 
 export default PublicNavbar;
+
