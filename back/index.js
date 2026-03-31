@@ -13,8 +13,12 @@ connectDB();
 const app = express();
 
 app.use(cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173', // Adjust host for frontend
-    credentials: true
+    origin: [
+        'http://localhost:5173',
+        process.env.CLIENT_URL,
+        'http://localhost:5174',
+    ],
+    credentials: true   
 }));
 
 // Augmented payload capacity for high-fidelity data transfers

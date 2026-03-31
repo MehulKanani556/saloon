@@ -11,16 +11,19 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import PublicNavbar from '../components/public/PublicNavbar';
 import PublicFooter from '../components/public/PublicFooter';
+import { BASE_URL, IMAGE_URL } from '../utils/BASE_URL';
 
-const BASE_URL = 'http://localhost:5000/api';
-const IMAGE_URL = 'http://localhost:5000';
+// const BASE_URL = 'http://localhost:5000/api';
+// const IMAGE_URL = 'http://localhost:5000';
 
 // --- Validation Schema ---
 const appointmentSchema = Yup.object().shape({
   clientName: Yup.string().required('Full name is required').min(3, 'At least 3 characters'),
-  clientEmail: Yup.string().email('Invalid email').required('Email is required'),
-  clientPhone: Yup.string().matches(/^[0-9]{10}$/, 'Must be 10 digits').required('Phone is required'),
-  date: Yup.date().min(new Date(), 'Date cannot be in the past').required('Date is required'),
+  clientEmail: Yup.string(), 
+  clientPhone: Yup.string()
+    .matches(/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/, 'Must be in 416-123-4567 format')
+    .required('Phone is required'),
+  date: Yup.date().min(new Date(new Date().setHours(0,0,0,0)), 'Date cannot be in the past').required('Date is required'),
   time: Yup.string().required('Time is required'),
 });
 
@@ -64,7 +67,7 @@ const SuccessModal = ({ data, onClose }) => {
         <div className="bg-slate-50 dark:bg-slate-800/40 rounded-3xl p-6 mb-10 text-left space-y-4">
           <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
             <span className="text-slate-400">Reference:</span>
-            <span className="text-slate-900 dark:text-white">#{Math.random().toString(36).substr(2, 9).toUpperCase()}</span>
+            <span className="text-slate-900 dark:text-white">#{data.id || 'N/A'}</span>
           </div>
           <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
             <span className="text-slate-400">Schedule:</span>
@@ -90,15 +93,24 @@ export default function BookAppointment() {
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [occupiedSlots, setOccupiedSlots] = useState([]);
+  const [slotsLoading, setSlotsLoading] = useState(false);
+  const [bookingResponse, setBookingResponse] = useState(null);
+  const [allStaff, setAllStaff] = useState([]);
+  const [staffAssignments, setStaffAssignments] = useState({}); // { serviceId: staffId }
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const res = await axios.get(`${BASE_URL}/services`);
-        setServices(Array.isArray(res.data) ? res.data : []);
+        const [sRes, stRes] = await Promise.all([
+          axios.get(`${BASE_URL}/services`),
+          axios.get(`${BASE_URL}/staff`)
+        ]);
+        setServices(Array.isArray(sRes.data) ? sRes.data : []);
+        setAllStaff(Array.isArray(stRes.data) ? stRes.data : []);
       } catch (err) {
-        toast.error("Failed to load services");
+        toast.error("Failed to load salon assets");
       } finally {
         setLoading(false);
       }
@@ -128,11 +140,15 @@ export default function BookAppointment() {
         const body = {
           clientName: values.clientName,
           clientEmail: values.clientEmail,
-          clientPhone: values.clientPhone,
-          services: selectedServices.map(s => s._id),
+          clientPhone: `+1 ${values.clientPhone}`, // Added space for "+1 XXX-XXX-XXXX" format
+          assignments: selectedServices.map(s => ({
+            service: s._id,
+            staff: staffAssignments[s._id] || null // null triggers auto-assignment
+          })),
           date: new Date(`${values.date}T${time24}:00`).toISOString(),
         };
-        await axios.post(`${BASE_URL}/appointments`, body);
+        const res = await axios.post(`${BASE_URL}/appointments`, body);
+        setBookingResponse(res.data);
         setShowSuccess(true);
       } catch (err) {
         toast.error(err.response?.data?.message || "Booking failed. Please try again.");
@@ -141,6 +157,42 @@ export default function BookAppointment() {
       }
     },
   });
+
+  useEffect(() => {
+    const fetchOccupiedSlots = async () => {
+      if (formik.values.date && selectedServices.length > 0) {
+        setSlotsLoading(true);
+        try {
+          const serviceIds = selectedServices.map(s => s._id).join(',');
+          const staffIds = Object.values(staffAssignments).filter(id => id).join(',');
+          const res = await axios.get(`${BASE_URL}/appointments/occupied-slots`, {
+            params: { 
+              date: formik.values.date,
+              serviceIds,
+              staffIds
+            }
+          });
+          setOccupiedSlots(res.data.occupiedSlots || []);
+        } catch (err) {
+          console.error("Failed to load availability matrix");
+        } finally {
+          setSlotsLoading(false);
+        }
+      }
+    };
+    fetchOccupiedSlots();
+  }, [formik.values.date, selectedServices, staffAssignments]);
+
+  const handlePhoneChange = (e) => {
+    let val = e.target.value.replace(/\D/g, '').substring(0, 10);
+    // Format: XXX-XXX-XXXX
+    if (val.length > 6) {
+      val = `${val.slice(0, 3)}-${val.slice(3, 6)}-${val.slice(6)}`;
+    } else if (val.length > 3) {
+      val = `${val.slice(0, 3)}-${val.slice(3)}`;
+    }
+    formik.setFieldValue('clientPhone', val);
+  };
 
   const toggleService = (service) => {
     if (selectedServices.find(s => s._id === service._id)) {
@@ -193,31 +245,47 @@ export default function BookAppointment() {
             <div className="bg-white dark:bg-slate-900 rounded-[3rem] p-8 md:p-12 shadow-2xl border border-slate-100 dark:border-white/5 overflow-hidden">
               
               {/* Step Indicator */}
-              <div className="flex items-center justify-between mb-16 relative">
-                 <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-slate-100 dark:bg-white/5 -translate-y-1/2 -z-0" />
+              <div className="flex items-center justify-between mb-20 relative px-4 md:px-10">
+                 {/* Connection Pipe */}
+                 <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-slate-100 dark:bg-white/10 -translate-y-1/2 z-0 mx-10 md:mx-20" />
+                 
+                 {/* Progress Pipe */}
                  <motion.div 
                     initial={{ width: 0 }}
-                    animate={{ width: `${((step - 1) / (steps.length - 1)) * 100}%` }}
-                    className="absolute top-1/2 left-0 h-0.5 bg-saloon-500 -translate-y-1/2 z-0" 
+                    animate={{ width: `calc(${((step - 1) / (steps.length - 1)) * 100}% - ${step === steps.length ? '0px' : '40px'})` }}
+                    className="absolute top-1/2 left-10 md:left-20 h-[2px] bg-saloon-500 -translate-y-1/2 z-0 transition-all duration-700 ease-in-out" 
                  />
-
-                 {steps.map((s, i) => (
-                   <div key={i} className="relative z-10 flex flex-col items-center gap-3">
-                     <motion.div 
-                        initial={false}
-                        animate={{ 
-                          backgroundColor: step > i + 1 ? "#10b981" : step === i + 1 ? "#f59e0b" : "#f1f5f9",
-                          color: step >= i + 1 ? "#ffffff" : "#94a3b8"
-                        }}
-                        className="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center text-sm font-black shadow-lg"
-                      >
-                        {step > i + 1 ? <Check size={20} strokeWidth={3} /> : i + 1}
-                     </motion.div>
-                     <span className={`text-[9px] font-black uppercase tracking-widest hidden md:block ${step === i + 1 ? 'text-saloon-600' : 'text-slate-400'}`}>
-                        {s.title}
-                     </span>
-                   </div>
-                 ))}
+ 
+                 {steps.map((s, i) => {
+                   const isActive = step === i + 1;
+                   const isCompleted = step > i + 1;
+                   
+                   return (
+                     <div key={i} className="relative z-10 flex flex-col items-center group">
+                        <motion.div 
+                           initial={false}
+                           animate={{ 
+                             scale: isActive ? 1.2 : 1,
+                             backgroundColor: isCompleted ? "#10b981" : isActive ? "#f59e0b" : "rgba(255,255,255,1)",
+                             borderColor: isCompleted ? "#10b981" : isActive ? "#f59e0b" : "#e2e8f0"
+                           }}
+                           className={`w-10 h-10 md:w-14 md:h-14 rounded-2xl border-2 flex items-center justify-center transition-all duration-500 shadow-xl ${
+                             isActive ? 'rotate-12' : ''
+                           }`}
+                         >
+                           <div className={`transition-transform duration-500 ${isActive ? '-rotate-12' : ''} ${isActive || isCompleted ? 'text-white' : 'text-slate-300'}`}>
+                              {isCompleted ? <CheckCircle2 size={24} /> : s.icon}
+                           </div>
+                        </motion.div>
+                        
+                        <div className="absolute -bottom-10 whitespace-nowrap text-center">
+                           <span className={`text-[8px] font-black uppercase tracking-[0.2em] transition-colors duration-500 ${isActive ? 'text-saloon-600' : 'text-slate-400'}`}>
+                             {s.title}
+                           </span>
+                        </div>
+                     </div>
+                   );
+                 })}
               </div>
 
               {/* Steps Animation */}
@@ -339,13 +407,20 @@ export default function BookAppointment() {
 
                       <div className="space-y-3">
                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-3">Contact Signal</label>
-                        <div className="relative">
-                          <Phone size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-saloon-400" />
-                          <input 
-                            {...formik.getFieldProps('clientPhone')}
-                            placeholder="10-digit number"
-                            className="w-full bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus:border-saloon-500/20 rounded-2xl px-14 py-4 text-sm font-bold outline-none transition-all dark:text-white"
-                          />
+                        <div className="flex bg-slate-50 dark:bg-slate-800/80 border-2 border-transparent focus-within:border-saloon-500/20 rounded-2xl transition-all overflow-hidden">
+                           <div className="flex items-center pl-6 pr-4 border-r border-slate-200 dark:border-white/5 bg-slate-100/30 dark:bg-white/5">
+                              <span className="text-sm font-black text-slate-400 leading-none">+1</span>
+                           </div>
+                           <div className="relative flex-1">
+                             <input 
+                               name="clientPhone"
+                               value={formik.values.clientPhone}
+                               onChange={handlePhoneChange}
+                               onBlur={formik.handleBlur}
+                               placeholder="416-123-4567"
+                               className="w-full bg-transparent px-6 py-4 text-sm font-bold outline-none dark:text-white"
+                             />
+                           </div>
                         </div>
                         {formik.touched.clientPhone && formik.errors.clientPhone && (
                           <p className="text-[9px] text-red-500 font-bold uppercase ml-4">{formik.errors.clientPhone}</p>
@@ -365,23 +440,91 @@ export default function BookAppointment() {
                         </div>
                       </div>
 
+                      {/* Staff Selection Section */}
+                      <div className="md:col-span-2 space-y-4 pt-6 border-t border-slate-100 dark:border-white/5">
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-3">Select Your Master (Specialize for each ritual)</label>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {selectedServices.map(service => {
+                            const eligibleStaff = allStaff.filter(s => s.services?.some(ser => (typeof ser === 'string' ? ser === service._id : ser._id === service._id)));
+                            return (
+                              <div key={service._id} className="bg-white dark:bg-slate-800/40 p-4 rounded-3xl border border-slate-50 dark:border-white/5 flex items-center justify-between shadow-sm">
+                                <div className="flex flex-col">
+                                  <span className="text-[10px] font-black uppercase text-saloon-600 dark:text-saloon-400 truncate max-w-[120px]">{service.name}</span>
+                                  <span className="text-[8px] text-slate-400 font-black uppercase tracking-tighter">performed by</span>
+                                </div>
+                                <select 
+                                  value={staffAssignments[service._id] || ""}
+                                  onChange={(e) => setStaffAssignments({...staffAssignments, [service._id]: e.target.value})}
+                                  className="bg-slate-50 dark:bg-slate-900/50 px-3 py-2 rounded-xl text-[9px] font-black uppercase outline-none cursor-pointer text-slate-900 dark:text-white border-none focus:ring-0"
+                                >
+                                  <option value="">Any Master</option>
+                                  {eligibleStaff.map(stf => (
+                                    <option key={stf._id} value={stf._id}>{stf.name}</option>
+                                  ))}
+                                </select>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+
                       <div className="space-y-3 md:col-span-2">
                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-3">Preferred Time Slot</label>
-                        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
-                          {timeSlots.map(time => (
-                            <button
-                              key={time}
-                              type="button"
-                              onClick={() => formik.setFieldValue('time', time)}
-                              className={`py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
-                                formik.values.time === time 
-                                  ? 'bg-saloon-500 text-white shadow-lg' 
-                                  : 'bg-slate-50 dark:bg-slate-800/50 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700'
-                              }`}
-                            >
-                              {time}
-                            </button>
-                          ))}
+                        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 relative min-h-[100px]">
+                          {slotsLoading && (
+                            <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/60 dark:bg-slate-900/60 backdrop-blur-[1px] rounded-3xl">
+                               <Loader2 className="animate-spin text-saloon-500" strokeWidth={3} />
+                            </div>
+                          )}
+                          
+                          {timeSlots.map(time => {
+                            const [timePart, ampm] = time.split(' ');
+                            let [hours, minutes] = timePart.split(':');
+                            hours = parseInt(hours);
+                            if (ampm === 'PM' && hours < 12) hours += 12;
+                            if (ampm === 'AM' && hours === 12) hours = 0;
+                            let isOccupied = false;
+                            const isSelected = formik.values.time === time;
+
+                            if (formik.values.date) {
+                              const timeIso = new Date(`${formik.values.date}T${hours.toString().padStart(2, '0')}:${minutes}:00`).toISOString();
+                              isOccupied = occupiedSlots.includes(timeIso);
+
+                              // Disable if date is today and time is already past
+                              const now = new Date();
+                              const selectedDate = new Date(formik.values.date);
+                              const isToday = selectedDate.toDateString() === now.toDateString();
+                              
+                              if (isToday) {
+                                // Create a date object for this specific slot in local time to compare accurately
+                                const slotDateTime = new Date(`${formik.values.date}T${hours.toString().padStart(2, '0')}:${minutes}:00`);
+                                if (slotDateTime < now) {
+                                  isOccupied = true; 
+                                }
+                              }
+                            }
+
+                            return (
+                              <button
+                                key={time}
+                                type="button"
+                                disabled={isOccupied || slotsLoading}
+                                onClick={() => formik.setFieldValue('time', time)}
+                                className={`py-4 rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all relative overflow-hidden ${
+                                  isSelected 
+                                    ? 'bg-saloon-500 text-white shadow-xl scale-105 z-1' 
+                                    : isOccupied
+                                      ? 'bg-slate-100 dark:bg-slate-800/20 text-slate-300 dark:text-slate-700 cursor-not-allowed grayscale'
+                                      : 'bg-slate-50 dark:bg-slate-800/50 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 hover:shadow-md'
+                                }`}
+                              >
+                                {time}
+                                {isOccupied && (
+                                  <div className="absolute inset-0 bg-red-400/5 rotate-45 translate-y-2 pointer-events-none" />
+                                )}
+                              </button>
+                            );
+                          })}
                         </div>
                         {formik.touched.time && formik.errors.time && (
                           <p className="text-[9px] text-red-500 font-bold uppercase ml-4">{formik.errors.time}</p>
@@ -561,7 +704,11 @@ export default function BookAppointment() {
       <AnimatePresence>
         {showSuccess && (
           <SuccessModal 
-            data={{ ...formik.values, date: new Date(formik.values.date) }} 
+            data={{ 
+              ...formik.values, 
+              date: new Date(formik.values.date),
+              id: bookingResponse?.appointmentId
+            }} 
             onClose={() => {
               setShowSuccess(false);
               navigate('/');

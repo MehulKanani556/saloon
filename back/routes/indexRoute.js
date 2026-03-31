@@ -30,7 +30,8 @@ router.post('/auth/logout', authController.logoutAdmin);
 // APPOINTMENT ROUTES
 // ==========================================
 router.get('/appointments', protect, authorize('Admin'), appointmentController.getAppointments);
-router.post('/appointments', protect, authorize('Admin'), appointmentController.createAppointment);
+router.get('/appointments/occupied-slots', appointmentController.getOccupiedSlots);
+router.post('/appointments', appointmentController.createAppointment);
 router.put('/appointments/:id', protect, authorize('Admin'), appointmentController.updateAppointment);
 router.delete('/appointments/:id', protect, authorize('Admin'), appointmentController.deleteAppointment);
 router.put('/appointments/:id/status', protect, authorize('Admin'), appointmentController.updateAppointmentStatus);

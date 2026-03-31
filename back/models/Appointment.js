@@ -3,7 +3,10 @@ const mongoose = require('mongoose');
 const appointmentSchema = new mongoose.Schema({
     appointmentId: { type: String, unique: true, sparse: true }, // SKU-style ID: APT-DDMMYY-1234
     client: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    services: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Service', required: true }],
+    assignments: [{
+        service: { type: mongoose.Schema.Types.ObjectId, ref: 'Service', required: true },
+        staff: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
+    }],
     appointmentDate: { type: Date, required: true },
     status: { type: String, enum: ['Pending', 'Confirmed', 'Completed', 'Cancelled'], default: 'Pending' },
     paymentStatus: { type: String, enum: ['Pending', 'Paid'], default: 'Pending' },
