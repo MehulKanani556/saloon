@@ -66,7 +66,7 @@ const PageHero = () => {
 };
 
 const BookingCTA = () => {
-  const { adminInfo } = useSelector((state) => state.auth);
+  const { userInfo } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
   return (
@@ -89,10 +89,15 @@ const BookingCTA = () => {
               Book your appointment today and experience luxury like never before.
             </p>
             <button 
-              onClick={() => navigate(adminInfo ? '/dashboard' : '/login')}
+              onClick={() => {
+                if (!userInfo) navigate('/login');
+                else if (userInfo.role === 'Admin') navigate('/admin/dashboard');
+                else if (userInfo.role === 'Staff') navigate('/staff/dashboard');
+                else navigate('/book');
+              }}
               className="bg-white text-saloon-600 px-10 py-4 rounded-xl text-xs font-black uppercase tracking-[0.2em] flex items-center gap-3 mx-auto group shadow-lg"
             >
-              {adminInfo ? 'Go to Dashboard' : 'Book Now'}
+              {userInfo ? 'Go to Dashboard' : 'Book Now'}
               <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
@@ -108,7 +113,7 @@ export default function PublicServices() {
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState("All");
   const navigate = useNavigate();
-  const { adminInfo } = useSelector((state) => state.auth);
+  const { userInfo } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -231,7 +236,12 @@ export default function PublicServices() {
                           </div>
                           
                           <button 
-                            onClick={() => navigate(adminInfo ? '/dashboard' : '/login')}
+                            onClick={() => {
+                              if (!userInfo) navigate('/login');
+                              else if (userInfo.role === 'Admin') navigate('/admin/dashboard');
+                              else if (userInfo.role === 'Staff') navigate('/staff/dashboard');
+                              else navigate('/book');
+                            }}
                             className="w-14 h-14 rounded-2xl bg-slate-950 dark:bg-white dark:text-slate-900 text-white flex items-center justify-center transition-all hover:bg-saloon-500 hover:text-white dark:hover:bg-saloon-500 dark:hover:text-white shadow-xl shadow-slate-200/50 dark:shadow-none"
                           >
                             <ChevronRight size={24} />

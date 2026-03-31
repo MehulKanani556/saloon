@@ -18,7 +18,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector } from 'react-redux';
 import Logo from '../assets/logo.png';
 
-const sidebarItems = [
+const adminItems = [
   { icon: LayoutDashboard, label: 'Dashboard', path: '/admin/dashboard' },
   { icon: CalendarCheck2, label: 'Bookings', path: '/admin/appointments' },
   { icon: Scissors, label: 'Service List', path: '/admin/services' },
@@ -30,10 +30,25 @@ const sidebarItems = [
   { icon: Settings, label: 'Settings', path: '/admin/settings' },
 ];
 
+const staffItems = [
+  { icon: LayoutDashboard, label: 'Dashboard', path: '/staff/dashboard' },
+  { icon: CalendarCheck2, label: 'Appointments', path: '/staff/appointments' },
+];
+
+const userItems = [
+  { icon: LayoutDashboard, label: 'Dashboard', path: '/profile' },
+  { icon: CalendarCheck2, label: 'Appointments', path: '/my-appointments' },
+];
+
 export default function Sidebar({ isOpen, setIsOpen }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isDrawerMode, setIsDrawerMode] = useState(window.innerWidth < 1280);
-  const { adminInfo } = useSelector((state) => state.auth);
+  const { userInfo } = useSelector((state) => state.auth);
+
+  const sidebarItems = 
+    userInfo?.role === 'Admin' ? adminItems : 
+    userInfo?.role === 'Staff' ? staffItems : 
+    userItems;
 
   useEffect(() => {
     const handleResize = () => setIsDrawerMode(window.innerWidth < 1280);
@@ -160,10 +175,10 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                   exit={{ opacity: 0, x: -20 }}
                   className="overflow-hidden min-w-[120px]"
                 >
-                  <p className="text-xs font-black text-rosegold-500 truncate uppercase tracking-tight mb-1">{adminInfo?.name || 'Jay Gandhi'}</p>
+                  <p className="text-xs font-black text-rosegold-500 truncate uppercase tracking-tight mb-1">{userInfo?.name || 'Artisan'}</p>
                   <div className="flex items-center gap-1.5">
                     <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                    <p className="text-[9px] font-black text-slate-400 truncate uppercase tracking-widest">{adminInfo?.role || 'Admin'}</p>
+                    <p className="text-[9px] font-black text-slate-400 truncate uppercase tracking-widest">{userInfo?.role || 'Staff'}</p>
                   </div>
                 </motion.div>
               )}

@@ -250,4 +250,24 @@ const getOccupiedSlots = async (req, res) => {
     }
 };
 
-module.exports = { createAppointment, getAppointments, updateAppointmentStatus, updateAppointment, deleteAppointment, getOccupiedSlots };
+const getMyAppointments = async (req, res) => {
+    try {
+        const appointments = await Appointment.find({ client: req.user._id })
+            .populate('assignments.service')
+            .populate('assignments.staff', 'name email phone avatar')
+            .sort({ appointmentDate: -1 });
+        res.json(appointments);
+    } catch (error) {
+        res.status(500).json({ message: 'History retrieval failed', error: error.message });
+    }
+};
+
+module.exports = { 
+    createAppointment, 
+    getAppointments, 
+    getMyAppointments,
+    updateAppointmentStatus, 
+    updateAppointment, 
+    deleteAppointment, 
+    getOccupiedSlots 
+};

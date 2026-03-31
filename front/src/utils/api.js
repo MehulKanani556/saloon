@@ -38,7 +38,7 @@ api.interceptors.response.use(
             } catch (refreshError) {
                 // Refresh token expired or invalid
                 localStorage.removeItem('token');
-                localStorage.removeItem('adminInfo');
+                localStorage.removeItem('userInfo');
                 if (window.location.pathname !== '/login') {
                     window.location.href = '/login';
                 }

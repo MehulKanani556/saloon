@@ -27,7 +27,9 @@ const userSchema = new mongoose.Schema({
         logo: { type: String },
         contact: { type: String },
         workingHours: { type: String }
-    }
+    },
+    otp: { type: String },
+    otpExpires: { type: Date }
 }, { timestamps: true });
 
 userSchema.pre('save', async function (next) {
