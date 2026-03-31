@@ -54,6 +54,50 @@ export const logoutUser = createAsyncThunk('auth/logout', async (_, { dispatch }
     }
 });
 
+export const fetchCurrentUser = createAsyncThunk('auth/fetchMe', async (_, { rejectWithValue }) => {
+    try {
+        const { data } = await api.get('/auth/me');
+        return data;
+    } catch (error) {
+        return rejectWithValue(error.response.data);
+    }
+});
+
+export const updateUserProfile = createAsyncThunk('auth/updateProfile', async (userData, { rejectWithValue }) => {
+    try {
+        const { data } = await api.put('/auth/profile', userData);
+        localStorage.setItem('userInfo', JSON.stringify(data));
+        toast.success('Identity matrix synchronized');
+        return data;
+    } catch (error) {
+        toast.error(error.response?.data?.message || 'Synchronization failed');
+        return rejectWithValue(error.response.data);
+    }
+});
+
+export const changePassword = createAsyncThunk('auth/changePassword', async (values, { rejectWithValue }) => {
+    try {
+        const { data } = await api.put('/auth/change-password', values);
+        toast.success('Security protocol updated');
+        return data;
+    } catch (error) {
+        toast.error(error.response?.data?.message || 'Protocol update failed');
+        return rejectWithValue(error.response.data);
+    }
+});
+
+export const deleteAccount = createAsyncThunk('auth/deleteAccount', async (credentials, { dispatch, rejectWithValue }) => {
+    try {
+        await api.delete('/auth/profile', { data: credentials });
+        toast.success('Identity dissolved');
+        dispatch(logout());
+        return true;
+    } catch (error) {
+        toast.error(error.response?.data?.message || 'Dissolution failed');
+        return rejectWithValue(error.response.data);
+    }
+});
+
 const authSlice = createSlice({
     name: 'auth',
     initialState: {
@@ -65,6 +109,8 @@ const authSlice = createSlice({
         logout: (state) => {
             state.userInfo = null;
             state.error = null;
+            localStorage.removeItem('token');
+            localStorage.removeItem('userInfo');
         }
     },
     extraReducers: (builder) => {
@@ -86,7 +132,16 @@ const authSlice = createSlice({
             .addCase(signupUser.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
-            });
+            })
+            .addCase(fetchCurrentUser.fulfilled, (state, action) => {
+                state.userInfo = action.payload;
+            })
+            .addCase(updateUserProfile.pending, (state) => { state.loading = true; })
+            .addCase(updateUserProfile.fulfilled, (state, action) => {
+                state.loading = false;
+                state.userInfo = action.payload;
+            })
+            .addCase(updateUserProfile.rejected, (state) => { state.loading = false; });
     }
 });
 

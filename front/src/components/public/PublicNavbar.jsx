@@ -90,8 +90,8 @@ const PublicNavbar = () => {
                 <div className="w-8 h-8 rounded-full bg-luxury-gradient flex items-center justify-center text-secondary font-black text-xs shadow-lg">
                   {userInfo.name.charAt(0).toUpperCase()}
                 </div>
-                {/* <span className="text-[10px] font-black uppercase tracking-widest hidden xl:block">Menu</span>
-                <ChevronDown size={14} className={`transition-transform duration-300 ${isProfileOpen ? 'rotate-180' : ''}`} /> */}
+                <span className="text-[10px] font-black uppercase tracking-widest hidden xl:block">{userInfo.name}</span>
+                <ChevronDown size={14} className={`transition-transform duration-300 ${isProfileOpen ? 'rotate-180' : ''}`} />
               </button>
 
               <AnimatePresence>
@@ -127,13 +127,13 @@ const PublicNavbar = () => {
                         <span className="text-[10px] font-black uppercase tracking-widest text-left">Profile Section</span>
                       </button>
 
-                      <button
+                      {/* <button
                         onClick={() => { setIsProfileOpen(false); navigate('/my-appointments'); }}
                         className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 text-white transition-colors group"
                       >
                         <Calendar size={16} className="group-hover:text-primary transition-colors" />
                         <span className="text-[10px] font-black uppercase tracking-widest text-left">My Appointments</span>
-                      </button>
+                      </button> */}
 
                       <hr className="my-1 border-white/5" />
 

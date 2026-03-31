@@ -62,6 +62,15 @@ export const exportInvoicePDF = createAsyncThunk('appointments/exportPDF', async
     }
 });
 
+export const fetchMyAppointments = createAsyncThunk('appointments/fetchMy', async (_, { rejectWithValue }) => {
+    try {
+        const { data } = await api.get('/appointments/my');
+        return data;
+    } catch (err) {
+        return rejectWithValue(err.response?.data || 'Failed to fetch personal archive');
+    }
+});
+
 const appointmentSlice = createSlice({
     name: 'appointments',
     initialState: {
@@ -99,7 +108,14 @@ const appointmentSlice = createSlice({
             // Occupied slots
             .addCase(fetchOccupiedSlots.fulfilled, (state, action) => {
                 state.occupiedSlots = action.payload;
-            });
+            })
+            // My appointments
+            .addCase(fetchMyAppointments.pending, (state) => { state.loading = true; })
+            .addCase(fetchMyAppointments.fulfilled, (state, action) => {
+                state.loading = false;
+                state.appointments = action.payload;
+            })
+            .addCase(fetchMyAppointments.rejected, (state) => { state.loading = false; });
     }
 });
 

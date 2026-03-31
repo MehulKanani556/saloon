@@ -91,8 +91,6 @@ export default function BookAppointment() {
   const [selectedServices, setSelectedServices] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [occupiedSlots, setOccupiedSlots] = useState([]);
-  const [slotsLoading, setSlotsLoading] = useState(false);
   const [bookingResponse, setBookingResponse] = useState(null);
   const [staffAssignments, setStaffAssignments] = useState({});
 
@@ -100,6 +98,7 @@ export default function BookAppointment() {
   const navigate = useNavigate();
   const { services, loading: servicesLoading } = useSelector(state => state.services);
   const { staff: allStaff, loading: staffLoading } = useSelector(state => state.staff);
+  const { occupiedSlots, loading: slotsLoading } = useSelector(state => state.appointments);
 
   useEffect(() => {
     dispatch(fetchServices());
@@ -159,26 +158,15 @@ export default function BookAppointment() {
   }, [userInfo]);
 
   useEffect(() => {
-    const getSlots = async () => {
-      if (formik.values.date && selectedServices.length > 0) {
-        setSlotsLoading(true);
-        try {
-          const serviceIds = selectedServices.map(s => s._id).join(',');
-          const staffIds = Object.values(staffAssignments).filter(id => id).join(',');
-          const slots = await dispatch(fetchOccupiedSlots({
-            date: formik.values.date,
-            serviceIds,
-            staffIds
-          })).unwrap();
-          setOccupiedSlots(slots);
-        } catch (err) {
-          console.error("Failed to load availability matrix");
-        } finally {
-          setSlotsLoading(false);
-        }
-      }
-    };
-    getSlots();
+    if (formik.values.date && selectedServices.length > 0) {
+      const serviceIds = selectedServices.map(s => s._id).join(',');
+      const staffIds = Object.values(staffAssignments).filter(id => id).join(',');
+      dispatch(fetchOccupiedSlots({
+        date: formik.values.date,
+        serviceIds,
+        staffIds
+      }));
+    }
   }, [formik.values.date, selectedServices, staffAssignments, dispatch]);
 
   const handlePhoneChange = (e) => {

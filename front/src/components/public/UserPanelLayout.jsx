@@ -27,25 +27,29 @@ export default function UserPanelLayout({ children, title }) {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-950 text-white selection:bg-saloon-500">
+    <div className="min-h-screen flex flex-col bg-background text-white selection:bg-primary/40 selection:text-white font-sans antialiased">
       <PublicNavbar />
       
-      <main className="flex-1 pt-32 pb-24">
-        <div className="w-full px-4 lg:px-12">
+      <main className="flex-1 pt-32 pb-24 relative overflow-hidden">
+        {/* Background Atmosphere */}
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[150px] -z-10 animate-pulse" />
+        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-primary/[0.02] rounded-full blur-[180px] -z-10" />
+
+        <div className="container mx-auto px-6 relative z-10">
           {/* Breadcrumbs */}
-          <div className="flex items-center gap-3 mb-12 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">
-            <Link to="/" className="hover:text-saloon-500 flex items-center gap-2">
-              <Home size={12} /> Home
+          <div className="flex items-center gap-4 mb-12 text-[10px] font-black uppercase tracking-[0.5em] text-muted/60">
+            <Link to="/" className="hover:text-primary flex items-center gap-2 transition-all hover:scale-105 active:scale-95">
+              <Home size={14} className="text-primary/40" /> <span className="font-luxury italic">Threshold</span>
             </Link>
-            <ChevronRight size={10} />
-            <span className="text-white italic">{title}</span>
+            <div className="w-1.5 h-px bg-white/10" />
+            <span className="text-white italic tracking-[0.2em] font-luxury">{title}</span>
           </div>
 
-          <div className="flex flex-col lg:flex-row gap-6">
-            {/* Sidebar */}
-            <aside className="lg:w-72 shrink-0">
-              <div className="bg-slate-900/50 backdrop-blur-3xl border border-white/5 rounded-2xl p-3 sticky top-32">
-                <nav className="flex flex-col gap-2">
+          <div className="flex flex-col lg:flex-row gap-12">
+            {/* Sidebar Linkage */}
+            <aside className="lg:w-85 shrink-0">
+              <div className="bg-dark-card backdrop-blur-3xl border border-white/10 rounded-[2.5rem] p-5 sticky top-32 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.8)] ring-1 ring-white/5">
+                <nav className="flex flex-col gap-3">
                   {menuItems.map((item) => {
                     const isActive = location.pathname === item.path;
                     if (item.path === 'logout') {
@@ -53,10 +57,10 @@ export default function UserPanelLayout({ children, title }) {
                         <button
                           key={item.label}
                           onClick={handleLogout}
-                          className="flex items-center gap-4 px-6 py-4 rounded-2xl text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition-all text-xs font-black uppercase tracking-widest text-left"
+                          className="flex items-center gap-5 px-8 py-5 rounded-2xl text-muted/50 hover:bg-red-500/10 hover:text-red-400 transition-all text-[11px] font-black uppercase tracking-[0.3em] text-left mt-6 border-t border-white/5 pt-8 group"
                         >
-                          <item.icon size={18} />
-                          {item.label}
+                          <item.icon size={20} className="opacity-30 group-hover:opacity-100 group-hover:rotate-12 transition-all duration-500" />
+                          <span className="font-luxury italic">{item.label}</span>
                         </button>
                       );
                     }
@@ -64,17 +68,22 @@ export default function UserPanelLayout({ children, title }) {
                       <Link
                         key={item.label}
                         to={item.path}
-                        className={`flex items-center justify-between px-6 py-4 rounded-2xl transition-all text-xs font-black uppercase tracking-[0.1em] ${
+                        className={`flex items-center justify-between px-8 py-5 rounded-2xl transition-all duration-500 text-[11px] font-black uppercase tracking-[0.3em] relative group ${
                           isActive 
-                            ? 'bg-gradient-to-r from-saloon-500 to-rosegold-500 text-white shadow-lg shadow-saloon-500/20' 
-                            : 'text-slate-400 hover:bg-white/5 hover:text-white'
+                            ? 'bg-luxury-gradient text-secondary shadow-[0_20px_40px_-10px_rgba(201,162,39,0.3)] scale-[1.03] ring-1 ring-white/20' 
+                            : 'text-muted/60 hover:bg-white/[0.03] hover:text-white'
                         }`}
                       >
-                        <div className="flex items-center gap-4">
-                          <item.icon size={18} />
-                          {item.label}
+                        <div className="flex items-center gap-5">
+                          <item.icon size={20} className={`${isActive ? 'opacity-100' : 'opacity-30 group-hover:opacity-100 group-hover:scale-110 transition-all'} duration-500`} />
+                          <span className={`${isActive ? 'font-luxury' : ''}`}>{item.label}</span>
                         </div>
-                        {isActive && <div className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_10px_white]" />}
+                        {isActive && (
+                          <motion.div 
+                            layoutId="active-nav"
+                            className="w-1.5 h-1.5 rounded-full bg-secondary shadow-[0_0_15px_white]" 
+                          />
+                        )}
                       </Link>
                     )
                   })}

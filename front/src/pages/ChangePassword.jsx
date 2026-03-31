@@ -1,32 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Lock, Shield, Save, KeyRound, AlertCircle, Loader2 } from 'lucide-react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import api from '../utils/api';
-import toast from 'react-hot-toast';
 import UserPanelLayout from '../components/public/UserPanelLayout';
+import { fetchCurrentUser, changePassword } from '../redux/slices/authSlice';
+import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 
 export default function ChangePassword() {
-  const { userInfo } = useSelector((state) => state.auth);
-  const [user, setUser] = useState(userInfo);
+  const dispatch = useDispatch();
+  const { userInfo: user, loading: rtkLoading } = useSelector((state) => state.auth);
+  const [syncing, setSyncing] = useState(!user);
   const [loading, setLoading] = useState(false);
-  const [syncing, setSyncing] = useState(true);
 
   useEffect(() => {
-    const fetchLatestProfile = async () => {
-      try {
-        const { data } = await api.get('/auth/me');
-        setUser(data);
-      } catch (error) {
-        console.error('Security sync failed', error);
-      } finally {
-        setSyncing(false);
-      }
+    const syncSecurity = async () => {
+      await dispatch(fetchCurrentUser());
+      setSyncing(false);
     };
-    fetchLatestProfile();
-  }, []);
+    syncSecurity();
+  }, [dispatch]);
 
   const hasPassword = !!user?.password;
 
@@ -51,27 +44,21 @@ export default function ChangePassword() {
     }),
     onSubmit: async (values) => {
       setLoading(true);
-      try {
-        await api.put('/auth/change-password', values);
-        toast.success('Security credentials synchronized');
+      const result = await dispatch(changePassword(values));
+      setLoading(false);
+      if (!result.error) {
         formik.resetForm();
-        // Update local user state
-        const { data } = await api.get('/auth/me');
-        setUser(data);
-      } catch (error) {
-        toast.error(error.response?.data?.message || 'Access denied');
-      } finally {
-        setLoading(false);
+        dispatch(fetchCurrentUser());
       }
     },
   });
 
-  if (syncing) {
+  if (syncing || (!user && rtkLoading)) {
     return (
       <UserPanelLayout title="Change Password">
         <div className="flex flex-col items-center justify-center py-32 gap-6">
-          <Loader2 className="w-16 h-16 text-saloon-500 animate-spin" />
-          <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-500 animate-pulse italic">Synchronizing Security Matrix...</p>
+          <Loader2 className="w-16 h-16 text-primary animate-spin" />
+          <p className="text-[10px] font-black uppercase tracking-[0.4em] text-muted animate-pulse italic">Synchronizing Security Matrix...</p>
         </div>
       </UserPanelLayout>
     )
@@ -81,103 +68,114 @@ export default function ChangePassword() {
     <UserPanelLayout title="Change Password">
       <div className="w-full">
         <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="bg-slate-900/40 backdrop-blur-3xl border border-white/5 rounded-3xl p-6 lg:p-10 relative overflow-hidden"
-        >
-          {/* Dynamic Background */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-rosegold-500/5 rounded-full blur-[100px] pointer-events-none" />
-          
-          <div className="flex items-center gap-6 mb-12 pb-10 border-b border-white/5">
-            <div className="w-14 h-14 rounded-2xl bg-saloon-500/10 flex items-center justify-center text-saloon-500 border border-saloon-500/20 shadow-inner">
-              <KeyRound size={28} />
-            </div>
-            <div>
-              <h2 className="text-3xl font-black text-white uppercase tracking-tighter italic leading-none mb-1">Security Matrix</h2>
-              <p className="text-slate-500 text-[9px] font-black uppercase tracking-[0.3em]">Synchronize access credentials</p>
-            </div>
-          </div>
-
-          {!hasPassword && (
-            <div className="mb-10 p-5 bg-saloon-500/10 border border-saloon-500/20 rounded-2xl flex items-start gap-4 ring-1 ring-saloon-500/10">
-              <AlertCircle className="text-saloon-500 shrink-0 mt-0.5" size={18} />
-              <div>
-                <p className="text-[10px] font-black text-saloon-500 uppercase tracking-widest mb-1 leading-none">Initialization Required</p>
-                <p className="text-[11px] text-slate-400 font-bold leading-relaxed uppercase italic">Initialize your matrix for password-based access.</p>
-              </div>
-            </div>
-          )}
-
-          <form onSubmit={formik.handleSubmit} className="space-y-8">
-            {/* Current Password - Only show if they have one */}
-            {hasPassword && (
-              <div className="space-y-3">
-                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest pl-1">Current Secret Key</label>
-                <div className="relative group">
-                  <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-hover:text-saloon-500 transition-colors">
-                    <Lock size={18} />
-                  </div>
-                  <input
-                    type="password"
-                    {...formik.getFieldProps('currentPassword')}
-                    placeholder="••••••••"
-                    className="w-full bg-slate-950/50 border border-white/5 p-5 pl-14 rounded-2xl outline-none focus:border-saloon-500/50 transition-all font-black text-xs tracking-widest"
-                  />
-                </div>
-                {formik.touched.currentPassword && formik.errors.currentPassword && <p className="text-red-500/80 text-[10px] uppercase font-black tracking-widest pl-1 italic">{formik.errors.currentPassword}</p>}
-              </div>
-            )}
-
-            {/* New Password */}
-            <div className="space-y-3">
-              <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest pl-1">New Security Entropy</label>
-              <div className="relative group">
-                <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-hover:text-saloon-500 transition-colors">
-                  <Shield size={18} />
-                </div>
-                <input
-                  type="password"
-                  {...formik.getFieldProps('newPassword')}
-                  placeholder="New Matrix Key"
-                  className="w-full bg-slate-950/50 border border-white/5 p-5 pl-14 rounded-2xl outline-none focus:border-saloon-500/50 transition-all font-black text-xs tracking-widest"
-                />
-              </div>
-              {formik.touched.newPassword && formik.errors.newPassword && <p className="text-red-500/80 text-[10px] uppercase font-black tracking-widest pl-1 italic">{formik.errors.newPassword}</p>}
-            </div>
-
-            {/* Confirm Password */}
-            <div className="space-y-3">
-              <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest pl-1">Verify Synchronization</label>
-              <div className="relative group">
-                <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-hover:text-saloon-500 transition-colors">
-                  <KeyRound size={18} />
-                </div>
-                <input
-                  type="password"
-                  {...formik.getFieldProps('confirmPassword')}
-                  placeholder="Repeat Secret Key"
-                  className="w-full bg-slate-950/50 border border-white/5 p-5 pl-14 rounded-2xl outline-none focus:border-saloon-500/50 transition-all font-black text-xs tracking-widest"
-                />
-              </div>
-              {formik.touched.confirmPassword && formik.errors.confirmPassword && <p className="text-red-500/80 text-[10px] uppercase font-black tracking-widest pl-1 italic">{formik.errors.confirmPassword}</p>}
-            </div>
-
-            <div className="pt-6">
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full premium-button-primary !py-5 flex items-center justify-center gap-3"
-              >
-                {loading ? 'Processing Cryptography...' : (
-                  <>
-                    <Save size={18} />
-                    Apply Protocol
-                  </>
-                )}
-              </button>
-            </div>
-          </form>
-        </motion.div>
+           initial={{ opacity: 0, y: 30 }}
+           animate={{ opacity: 1, y: 0 }}
+           className="bg-dark-card backdrop-blur-3xl border border-white/10 rounded-[3rem] p-8 lg:p-16 relative overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,1)] ring-1 ring-white/5"
+         >
+           {/* Dynamic Ethereal Background */}
+           <div className="absolute -top-32 -right-32 w-80 h-80 bg-primary/10 rounded-full blur-[120px] pointer-events-none animate-pulse" />
+           <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-primary/5 rounded-full blur-[150px] pointer-events-none" />
+           
+           <div className="flex items-center gap-8 mb-16 pb-12 border-b border-white/5 relative z-10">
+             <div className="w-20 h-20 rounded-[2rem] bg-luxury-gradient flex items-center justify-center text-secondary shadow-[0_15px_40px_rgba(201,162,39,0.3)] border border-white/20">
+               <KeyRound size={32} strokeWidth={2.5} />
+             </div>
+             <div>
+               <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-[-0.05em] italic leading-none mb-3 font-luxury">Security <span className="text-primary/50">Matrix</span></h2>
+               <p className="text-muted/60 text-[10px] font-black uppercase tracking-[0.5em] italic">Synchronize Access Credentials</p>
+             </div>
+           </div>
+ 
+           {!hasPassword && (
+             <motion.div 
+               initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
+               className="mb-12 p-8 bg-primary/5 border border-primary/20 rounded-3xl flex items-start gap-6 backdrop-blur-md relative z-10"
+             >
+               <AlertCircle className="text-primary shrink-0 mt-1" size={24} />
+               <div>
+                 <p className="text-[11px] font-black text-primary uppercase tracking-[0.4em] mb-2 leading-none font-luxury italic">Initialization Required</p>
+                 <p className="text-[12px] text-muted/80 font-bold leading-relaxed uppercase italic tracking-widest">Construct your security matrix for password-based authentication.</p>
+               </div>
+             </motion.div>
+           )}
+ 
+           <form onSubmit={formik.handleSubmit} className="space-y-12 relative z-10">
+             {/* Current Password - Only show if they have one */}
+             {hasPassword && (
+               <div className="space-y-6">
+                 <label className="text-[11px] font-black text-muted/40 uppercase tracking-[0.5em] pl-4 italic">Current Secret Protocol</label>
+                 <div className="relative group/field">
+                   <div className="absolute left-8 top-1/2 -translate-y-1/2 text-muted/20 group-focus-within/field:text-primary group-focus-within/field:scale-110 transition-all duration-700">
+                     <Lock size={26} />
+                   </div>
+                   <input
+                     type="password"
+                     {...formik.getFieldProps('currentPassword')}
+                     placeholder="••••••••••••"
+                     className="w-full bg-background/30 border border-white/[0.03] p-8 pl-20 rounded-[2.5rem] outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/5 transition-all duration-1000 font-black text-base tracking-[0.6em] text-white"
+                   />
+                 </div>
+                 {formik.touched.currentPassword && formik.errors.currentPassword && <p className="text-primary/80 text-[10px] uppercase font-black tracking-widest pl-4 italic animate-pulse">{formik.errors.currentPassword}</p>}
+               </div>
+             )}
+ 
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16">
+               {/* New Password */}
+               <div className="space-y-6">
+                 <label className="text-[11px] font-black text-muted/40 uppercase tracking-[0.5em] pl-4 italic">New Security Entropy</label>
+                 <div className="relative group/field">
+                   <div className="absolute left-8 top-1/2 -translate-y-1/2 text-muted/20 group-focus-within/field:text-primary transition-all duration-700">
+                     <Shield size={26} />
+                   </div>
+                   <input
+                     type="password"
+                     {...formik.getFieldProps('newPassword')}
+                     placeholder="ENTROPY-X"
+                     className="w-full bg-background/30 border border-white/[0.03] p-8 pl-20 rounded-[2.5rem] outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/5 transition-all duration-1000 font-black text-base tracking-[0.6em] text-white"
+                   />
+                 </div>
+                 {formik.touched.newPassword && formik.errors.newPassword && <p className="text-primary/80 text-[10px] uppercase font-black tracking-widest pl-4 italic animate-pulse">{formik.errors.newPassword}</p>}
+               </div>
+ 
+               {/* Confirm Password */}
+               <div className="space-y-6">
+                 <label className="text-[11px] font-black text-muted/40 uppercase tracking-[0.5em] pl-4 italic">Verify Synchronization</label>
+                 <div className="relative group/field">
+                   <div className="absolute left-8 top-1/2 -translate-y-1/2 text-muted/20 group-focus-within/field:text-primary transition-all duration-700">
+                     <KeyRound size={26} />
+                   </div>
+                   <input
+                     type="password"
+                     {...formik.getFieldProps('confirmPassword')}
+                     placeholder="REPEAT-SEC"
+                     className="w-full bg-background/30 border border-white/[0.03] p-8 pl-20 rounded-[2.5rem] outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/5 transition-all duration-1000 font-black text-base tracking-[0.6em] text-white"
+                   />
+                 </div>
+                 {formik.touched.confirmPassword && formik.errors.confirmPassword && <p className="text-primary/80 text-[10px] uppercase font-black tracking-widest pl-4 italic animate-pulse">{formik.errors.confirmPassword}</p>}
+               </div>
+             </div>
+ 
+             <div className="pt-12 border-t border-white/5">
+               <button
+                 type="submit"
+                 disabled={loading}
+                 className="w-full py-8 bg-luxury-gradient text-secondary rounded-[2.5rem] flex items-center justify-center gap-6 shadow-[0_25px_60px_rgba(201,162,39,0.25)] hover:scale-[1.02] active:scale-[0.98] transition-all font-black text-[12px] uppercase tracking-[0.6em] font-luxury italic group"
+               >
+                 {loading ? (
+                   <>
+                     <Loader2 className="animate-spin" size={24} />
+                     Processing Cryptography...
+                   </>
+                 ) : (
+                   <>
+                     <Save size={24} className="group-hover:rotate-12 transition-transform" />
+                     Commit Protocol Update
+                   </>
+                 )}
+               </button>
+             </div>
+           </form>
+         </motion.div>
       </div>
     </UserPanelLayout>
   );

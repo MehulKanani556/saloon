@@ -28,6 +28,11 @@ import MyAppointments from './pages/MyAppointments'
 import ChangePassword from './pages/ChangePassword'
 import DeleteAccount from './pages/DeleteAccount'
 
+const WrappedLayout = ({ children, isAuthPage, isLandingPage }) => {
+  if (isAuthPage || isLandingPage) return <>{children}</>;
+  return <Layout>{children}</Layout>;
+};
+
 const AppContent = () => {
   const { userInfo } = useSelector((state) => state.auth);
   const location = useLocation();
@@ -42,13 +47,8 @@ const AppContent = () => {
     }
   }, [userInfo, isAuthPage, isLandingPage, navigate]);
 
-  const WrappedLayout = ({ children }) => {
-    if (isAuthPage || isLandingPage) return <>{children}</>;
-    return <Layout>{children}</Layout>;
-  };
-
   return (
-    <WrappedLayout>
+    <WrappedLayout isAuthPage={isAuthPage} isLandingPage={isLandingPage}>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/services" element={<PublicServices />} />

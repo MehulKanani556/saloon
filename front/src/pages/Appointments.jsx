@@ -274,7 +274,7 @@ export default function Appointments() {
                         <div className="flex flex-wrap items-center gap-2">
                           <div className="flex items-center gap-2 text-[8px] font-black text-primary uppercase tracking-[0.2em] bg-primary/10 px-2.5 py-1.5 rounded-lg border border-primary/20">
                             <Clock size={12} strokeWidth={3} className="opacity-50" />
-                            {format(new Date(app.appointmentDate), "HH:mm 'PROTOCOL'")}
+                            {format(new Date(app.appointmentDate), "HH:mm") + ' PROTOCOL'}
                           </div>
                           <div className={`text-[8px] font-black uppercase tracking-[0.2em] px-2.5 py-1.5 rounded-lg border ${getStatusStyles(app.status)}`}>
                             {app.status}
