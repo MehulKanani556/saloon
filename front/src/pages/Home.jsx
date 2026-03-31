@@ -20,7 +20,7 @@ const IMAGE_URL = 'http://localhost:5000';
 
 
 const Hero = () => {
-  const { adminInfo } = useSelector((state) => state.auth);
+  const { userInfo } = useSelector((state) => state.auth);
   const headlineWords = "WHERE BEAUTY MEETS ARTISTRY".split(" ");
   const navigate = useNavigate();
   
@@ -113,10 +113,15 @@ const Hero = () => {
           <motion.button 
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => navigate(adminInfo ? '/dashboard' : '/login')}
+            onClick={() => {
+              if (!userInfo) navigate('/login');
+              else if (userInfo.role === 'Admin') navigate('/admin/dashboard');
+              else if (userInfo.role === 'Staff') navigate('/staff/dashboard');
+              else navigate('/book');
+            }}
             className="premium-button-primary !px-8 !py-4 text-xs font-black uppercase tracking-[0.2em] shadow-2xl shadow-saloon-500/20"
           >
-            {adminInfo ? 'Go to Dashboard' : 'Book Appointment'}
+            {userInfo ? 'Go to Dashboard' : 'Book Appointment'}
           </motion.button>
           <a href="#services">
             <motion.button 
@@ -469,7 +474,7 @@ const Testimonials = () => {
 };
 
 const BookingCTA = () => {
-  const { adminInfo } = useSelector((state) => state.auth);
+  const { userInfo } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
   return (
@@ -495,10 +500,15 @@ const BookingCTA = () => {
             <motion.button 
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => navigate(adminInfo ? '/dashboard' : '/login')}
+              onClick={() => {
+                if (!userInfo) navigate('/login');
+                else if (userInfo.role === 'Admin') navigate('/admin/dashboard');
+                else if (userInfo.role === 'Staff') navigate('/staff/dashboard');
+                else navigate('/book');
+              }}
               className="bg-white text-saloon-600 px-10 py-4 rounded-xl text-xs font-black uppercase tracking-[0.2em] flex items-center gap-3 mx-auto group shadow-lg"
             >
-              {adminInfo ? 'Go to Dashboard' : 'Book Now'}
+              {userInfo ? 'Go to Dashboard' : 'Book Now'}
               <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </motion.button>
           </div>

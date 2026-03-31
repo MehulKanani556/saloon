@@ -21,14 +21,17 @@ const { upload, processAndStoreImage } = require('../middleware/uploadMiddleware
 // ==========================================
 // AUTH ROUTES
 // ==========================================
-router.post('/auth/register', authController.registerAdmin);
-router.post('/auth/login', authController.loginAdmin);
+router.post('/auth/register', authController.registerUser);
+router.post('/auth/send-otp', authController.sendOTP);
+router.post('/auth/login', authController.loginUser);
 router.post('/auth/refresh', authController.refresh);
-router.post('/auth/logout', authController.logoutAdmin);
+router.post('/auth/logout', authController.logoutUser);
+router.put('/auth/profile', protect, authController.updateUserProfile);
 
 // ==========================================
 // APPOINTMENT ROUTES
 // ==========================================
+router.get('/appointments/my', protect, appointmentController.getMyAppointments);
 router.get('/appointments', protect, authorize('Admin'), appointmentController.getAppointments);
 router.get('/appointments/occupied-slots', appointmentController.getOccupiedSlots);
 router.post('/appointments', appointmentController.createAppointment);

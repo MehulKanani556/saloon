@@ -38,8 +38,8 @@ const InvoiceDetailModal = ({ appointment, onClose }) => {
       subtitle={`Ref: INV-${appointment._id.substring(0, 8).toUpperCase()}`}
       maxWidth="max-w-4xl"
     >
-      <div className="flex flex-col max-h-[70vh] -mx-10 -my-10">
-        <div className="p-8 md:p-12 overflow-y-auto custom-scrollbar bg-white dark:bg-slate-900 printable-area text-slate-900 dark:text-white">
+      <div className="flex flex-col max-h-[70vh] -my-10">
+        <div className="p-8 md:p-12 bg-white dark:bg-slate-900 printable-area text-slate-900 dark:text-white">
           <div className="flex flex-col md:flex-row justify-between gap-10 mb-16">
             <div className="space-y-6">
               <div>
@@ -96,21 +96,25 @@ const InvoiceDetailModal = ({ appointment, onClose }) => {
                   <th className="pb-4 text-right text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 italic px-2">Value</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-50 dark:divide-white/5">
-                {appointment.services?.map((service, idx) => (
-                  <tr key={service._id || idx}>
-                    <td className="py-6 px-2">
-                      <p className="font-black text-sm tracking-tight uppercase italic">{service.name}</p>
-                      <p className="text-[9px] font-bold text-slate-400 uppercase mt-1 italic">{service.category?.name || 'General Ritual'}</p>
-                    </td>
-                    <td className="py-6 px-2 text-right">
-                      <p className="font-black text-[10px] italic">{format(new Date(appointment.appointmentDate), 'MMM dd, HH:mm')}</p>
-                    </td>
-                    <td className="py-6 px-2 text-right">
-                      <p className="font-black text-sm italic text-saloon-600">${service.price?.toLocaleString()}</p>
-                    </td>
-                  </tr>
-                ))}
+               <tbody className="divide-y divide-slate-50 dark:divide-white/5">
+                {appointment.assignments?.map((asm, idx) => {
+                  const service = asm.service;
+                  if (!service) return null;
+                  return (
+                    <tr key={service._id || idx}>
+                      <td className="py-6 px-2">
+                        <p className="font-black text-sm tracking-tight uppercase italic">{service.name}</p>
+                        <p className="text-[9px] font-bold text-slate-400 uppercase mt-1 italic">{service.category?.name || 'General Ritual'}</p>
+                      </td>
+                      <td className="py-6 px-2 text-right">
+                        <p className="font-black text-[10px] italic">{format(new Date(appointment.appointmentDate), 'MMM dd, HH:mm')}</p>
+                      </td>
+                      <td className="py-6 px-2 text-right">
+                        <p className="font-black text-sm italic text-saloon-600">${service.price?.toLocaleString()}</p>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -167,9 +171,9 @@ export default function Invoices() {
   }, [initialId, appointments]);
 
   const filteredInvoices = appointments.filter(app =>
-    app.client?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    app.services?.some(s => s.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
-    app._id.toLowerCase().includes(searchTerm.toLowerCase())
+    app.client?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    app.services?.some(s => s.name?.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    app._id?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleQuickExport = async (id) => {
@@ -261,8 +265,8 @@ export default function Invoices() {
                       <div className="flex items-center gap-4">
                         <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 p-0.5 border border-slate-200/50 dark:border-white/10 shadow-sm transition-transform group-hover:-rotate-3">
                           <img
-                            src={invoice.client?.profileImage ? `${IMAGE_URL}${invoice.client?.profileImage}` : `https://api.dicebear.com/9.x/adventurer/svg?seed=${invoice.client?.name}`}
-                            alt={invoice.client?.name}
+                            src={invoice.client?.profileImage ? `${IMAGE_URL}${invoice.client.profileImage}` : `https://api.dicebear.com/9.x/adventurer/svg?seed=${invoice.client?.name || 'Client'}`}
+                            alt={invoice.client?.name || 'Client'}
                             className="w-full h-full rounded-lg object-cover"
                           />
                         </div>
@@ -273,7 +277,7 @@ export default function Invoices() {
                       </div>
                     </td>
                     <td className="px-4 md:px-8 md:py-8 py-4">
-                      <p className="text-[11px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-[0.1em] italic whitespace-nowrap">{invoice.services.map(s => s.name).join(', ')}</p>
+                      <p className="text-[11px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-[0.1em] italic whitespace-nowrap">{invoice.assignments?.map(a => a.service?.name).join(', ')}</p>
                     </td>
                     <td className="px-4 md:px-8 md:py-8 py-4">
                       <div className="flex flex-col">

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Search, Moon, Sun, LogOut, Menu, ChevronDown, User, ShieldCheck } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../redux/slices/authSlice';
+import { logoutUser } from '../redux/slices/authSlice';
 import { motion, AnimatePresence } from 'framer-motion';
 import Logo from '../assets/logo.png';
 
@@ -9,7 +9,7 @@ export default function Navbar({ darkMode, setDarkMode, onMenuClick }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const dispatch = useDispatch();
-  const { adminInfo } = useSelector((state) => state.auth);
+  const { userInfo } = useSelector((state) => state.auth);
 
   const [currentTime, setCurrentTime] = useState(new Date());
 
@@ -66,15 +66,15 @@ export default function Navbar({ darkMode, setDarkMode, onMenuClick }) {
         >
           <div className="text-right hidden sm:flex flex-col items-end">
             <p className="text-xs md:text-sm font-black text-rosegold-500 uppercase tracking-tight truncate max-w-[120px]">
-              {adminInfo?.name}
+              {userInfo?.name}
             </p>
             <p className="text-[8px] md:text-[9px] text-slate-400 font-black tracking-widest uppercase flex items-center gap-1">
-              <ShieldCheck size={8} /> {adminInfo?.role}
+              <ShieldCheck size={8} /> {userInfo?.role}
             </p>
           </div>
           <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-gradient-to-br from-saloon-400 to-rosegold-500 p-[2px]">
             <div className="w-full h-full rounded-[10px] bg-white dark:bg-slate-900 flex items-center justify-center text-saloon-500 font-black text-xs md:text-sm uppercase tracking-tighter">
-              {adminInfo?.name?.charAt(0)}
+              {userInfo?.name?.charAt(0)}
             </div>
           </div>
           <ChevronDown
@@ -121,7 +121,7 @@ export default function Navbar({ darkMode, setDarkMode, onMenuClick }) {
                 <button
                   onClick={() => {
                     setIsDropdownOpen(false);
-                    dispatch(logout());
+                    dispatch(logoutUser());
                   }}
                   className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-red-50 dark:hover:bg-red-900/10 text-red-500 transition-all group"
                 >

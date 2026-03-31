@@ -26,7 +26,7 @@ const getReportIntel = async (req, res) => {
                 id: app._id,
                 type: app.status === 'Completed' ? 'completed' : app.status === 'Cancelled' ? 'cancelled' : 'scheduled',
                 title: `Appointment — ${app.client?.name || 'Unknown Client'}`,
-                description: app.services?.map(s => s.name).join(', ') || 'No services',
+                description: app.assignments?.map(a => a.service?.name).join(', ') || 'No services',
                 amount: app.totalPrice || 0,
                 status: app.status,
                 paymentStatus: app.paymentStatus,

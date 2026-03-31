@@ -109,7 +109,15 @@ const generateInvoicePDF = async (req, res) => {
          .text('RITUAL DESCRIPTION', 50, tableY, { characterSpacing: 2 })
          .text('CURRENCY EXTRACTION', 0, tableY, { align: 'right', characterSpacing: 2 });
 
-      doc.strokeColor(colors.void).lineWidth(1).moveTo(50, tableY + 15).lineTo(550, tableY + 15).stroke();
+        // Ritual Entries
+        let currentY = tableY + 40;
+        appointment.assignments.forEach((asm, idx) => {
+            const service = asm.service;
+            doc.fillColor(colors.void).fontSize(14).font('Helvetica-BoldOblique')
+               .text(service.name.toUpperCase(), 50, currentY);
+            
+            doc.fillColor(colors.brand).fontSize(16).font('Helvetica-BoldOblique')
+               .text(`$ ${service.price.toLocaleString()}`, 0, currentY, { align: 'right' });
 
       // Ritual Entries
       let currentY = tableY + 40;
@@ -117,8 +125,12 @@ const generateInvoicePDF = async (req, res) => {
          doc.fillColor(colors.void).fontSize(14).font('Helvetica-BoldOblique')
             .text(service.name ? service.name.toUpperCase() : 'UNKNOWN RITUAL', 50, currentY);
 
-         doc.fillColor(colors.brand).fontSize(16).font('Helvetica-BoldOblique')
-            .text(`$ ${service.price ? service.price.toLocaleString() : '0'}`, 0, currentY, { align: 'right' });
+            currentY += 60;
+            
+            if (idx < appointment.assignments.length - 1) {
+                doc.strokeColor(colors.stroke).dash(2, { space: 2 }).moveTo(50, currentY - 20).lineTo(550, currentY - 20).stroke().undash();
+            }
+        });
 
          doc.fillColor(colors.neutral).fontSize(8).font('Helvetica-Bold')
             .text(service.category?.name?.toUpperCase() || 'PREMIUM PROTOCOL', 50, currentY + 18, { characterSpacing: 1 });

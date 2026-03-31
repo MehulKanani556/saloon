@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Lock, User, Sparkles, ArrowRight, AlertCircle } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { signupAdmin } from '../redux/slices/authSlice';
+import { signupUser } from '../redux/slices/authSlice';
 import { useNavigate, Link } from 'react-router-dom';
 import Logo from '../assets/logo.png';
 import { useFormik } from 'formik';
@@ -11,7 +11,7 @@ import * as Yup from 'yup';
 const validationSchema = Yup.object().shape({
     name: Yup.string().required('Full name is required'),
     email: Yup.string()
-        .email('Please enter a valid business email')
+        .email('Please enter a valid email')
         .required('Email identity is strictly required'),
     password: Yup.string()
         .min(6, 'Passkey must be at least 6 characters')
@@ -21,19 +21,19 @@ const validationSchema = Yup.object().shape({
 export default function Signup() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { adminInfo, loading } = useSelector((state) => state.auth);
+    const { userInfo, loading } = useSelector((state) => state.auth);
 
     useEffect(() => {
-        if (adminInfo) {
+        if (userInfo) {
             navigate('/');
         }
-    }, [adminInfo, navigate]);
+    }, [userInfo, navigate]);
 
     const formik = useFormik({
         initialValues: { name: '', email: '', password: '' },
         validationSchema,
         onSubmit: (values) => {
-            dispatch(signupAdmin(values));
+            dispatch(signupUser(values));
         },
     });
 
@@ -53,8 +53,8 @@ export default function Signup() {
                     <div className="mb-6">
                         <img src={Logo} alt="Glow & Elegance" className="h-16 w-auto object-contain" />
                     </div>
-                    <h1 className="text-2xl font-black text-slate-800 tracking-tight leading-none">JOIN THE ELITE</h1>
-                    <p className="text-slate-400 text-[9px] font-bold uppercase tracking-[0.2em] mt-3 underline decoration-saloon-100 underline-offset-4 decoration-2">Create Admin Profile</p>
+                    <h1 className="text-2xl font-black text-slate-800 tracking-tight leading-none uppercase">Join the Collective</h1>
+                    <p className="text-slate-400 text-[9px] font-bold uppercase tracking-[0.2em] mt-3 underline decoration-saloon-100 underline-offset-4 decoration-2 text-center">Establish Customer Profile</p>
                 </div>
 
                 <form onSubmit={formik.handleSubmit} className="grid grid-cols-1 gap-5">
@@ -66,7 +66,7 @@ export default function Signup() {
                                 name="name"
                                 type="text"
                                 {...formik.getFieldProps('name')}
-                                placeholder="Glow Saloon Admin"
+                                placeholder="Glow Customer Name"
                                 className={`w-full bg-white/50 border p-3.5 pl-11 rounded-2xl outline-none focus:bg-white transition-all font-bold text-slate-700 placeholder:text-slate-300 ${formik.touched.name && formik.errors.name ? 'border-red-200' : 'border-white focus:border-saloon-200'}`}
                             />
                         </div>
@@ -79,14 +79,14 @@ export default function Signup() {
                     </div>
 
                     <div className="space-y-1.5">
-                        <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Business Email</label>
+                        <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Email Identity</label>
                         <div className="relative group">
                             <Mail size={16} className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors ${formik.touched.email && formik.errors.email ? 'text-red-400' : 'text-slate-300 group-focus-within:text-saloon-400'}`} />
                             <input
                                 name="email"
                                 type="email"
                                 {...formik.getFieldProps('email')}
-                                placeholder="contact@glowsaloon.com"
+                                placeholder="contact@youremail.com"
                                 className={`w-full bg-white/50 border p-3.5 pl-11 rounded-2xl outline-none focus:bg-white transition-all font-bold text-slate-700 placeholder:text-slate-300 ${formik.touched.email && formik.errors.email ? 'border-red-200' : 'border-white focus:border-saloon-200'}`}
                             />
                         </div>
@@ -140,7 +140,7 @@ export default function Signup() {
                 </div>
 
                 <p className="mt-10 text-center text-[8px] font-black text-slate-300 uppercase tracking-[0.3em] leading-relaxed">
-                    Glow & Elegance Collective <br/> Global Administrative Core
+                    Glow & Elegance Collective <br/> Unified Customer Core
                 </p>
             </motion.div>
         </div>

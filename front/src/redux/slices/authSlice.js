@@ -2,11 +2,11 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../utils/api';
 import toast from 'react-hot-toast';
 
-export const loginAdmin = createAsyncThunk('auth/login', async (credentials, { rejectWithValue }) => {
+export const loginUser = createAsyncThunk('auth/login', async (credentials, { rejectWithValue }) => {
     try {
         const { data } = await api.post('/auth/login', credentials);
         localStorage.setItem('token', data.accessToken);
-        localStorage.setItem('adminInfo', JSON.stringify(data));
+        localStorage.setItem('userInfo', JSON.stringify(data));
         toast.success(`Welcome back, ${data.name}!`);
         return data;
     } catch (error) {
@@ -15,11 +15,22 @@ export const loginAdmin = createAsyncThunk('auth/login', async (credentials, { r
     }
 });
 
-export const signupAdmin = createAsyncThunk('auth/signup', async (credentials, { rejectWithValue }) => {
+export const sendOTP = createAsyncThunk('auth/sendOTP', async (identity, { rejectWithValue }) => {
+    try {
+        const { data } = await api.post('/auth/send-otp', { identity });
+        toast.success(data.message);
+        return data;
+    } catch (error) {
+        toast.error(error.response?.data?.message || 'Failed to send OTP');
+        return rejectWithValue(error.response.data);
+    }
+});
+
+export const signupUser = createAsyncThunk('auth/signup', async (credentials, { rejectWithValue }) => {
     try {
         const { data } = await api.post('/auth/register', credentials);
         localStorage.setItem('token', data.accessToken);
-        localStorage.setItem('adminInfo', JSON.stringify(data));
+        localStorage.setItem('userInfo', JSON.stringify(data));
         toast.success(`Success! Welcome ${data.name}!`);
         return data;
     } catch (error) {
@@ -28,17 +39,17 @@ export const signupAdmin = createAsyncThunk('auth/signup', async (credentials, {
     }
 });
 
-export const logoutAdmin = createAsyncThunk('auth/logout', async (_, { dispatch }) => {
+export const logoutUser = createAsyncThunk('auth/logout', async (_, { dispatch }) => {
     try {
         await api.post('/auth/logout');
         localStorage.removeItem('token');
-        localStorage.removeItem('adminInfo');
+        localStorage.removeItem('userInfo');
         dispatch(logout());
         toast.success('Successfully logged out');
     } catch (error) {
         console.error('Logout error', error);
         localStorage.removeItem('token');
-        localStorage.removeItem('adminInfo');
+        localStorage.removeItem('userInfo');
         dispatch(logout());
     }
 });
@@ -46,33 +57,33 @@ export const logoutAdmin = createAsyncThunk('auth/logout', async (_, { dispatch 
 const authSlice = createSlice({
     name: 'auth',
     initialState: {
-        adminInfo: (localStorage.getItem('adminInfo') && localStorage.getItem('token')) ? JSON.parse(localStorage.getItem('adminInfo')) : null,
+        userInfo: (localStorage.getItem('userInfo') && localStorage.getItem('token')) ? JSON.parse(localStorage.getItem('userInfo')) : null,
         loading: false,
         error: null
     },
     reducers: {
         logout: (state) => {
-            state.adminInfo = null;
+            state.userInfo = null;
             state.error = null;
         }
     },
     extraReducers: (builder) => {
         builder
-            .addCase(loginAdmin.pending, (state) => { state.loading = true; })
-            .addCase(loginAdmin.fulfilled, (state, action) => {
+            .addCase(loginUser.pending, (state) => { state.loading = true; })
+            .addCase(loginUser.fulfilled, (state, action) => {
                 state.loading = false;
-                state.adminInfo = action.payload;
+                state.userInfo = action.payload;
             })
-            .addCase(loginAdmin.rejected, (state, action) => {
+            .addCase(loginUser.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             })
-            .addCase(signupAdmin.pending, (state) => { state.loading = true; })
-            .addCase(signupAdmin.fulfilled, (state, action) => {
+            .addCase(signupUser.pending, (state) => { state.loading = true; })
+            .addCase(signupUser.fulfilled, (state, action) => {
                 state.loading = false;
-                state.adminInfo = action.payload;
+                state.userInfo = action.payload;
             })
-            .addCase(signupAdmin.rejected, (state, action) => {
+            .addCase(signupUser.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             });
