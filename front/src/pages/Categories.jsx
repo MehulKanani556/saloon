@@ -99,7 +99,7 @@ export default function Categories() {
             className="w-full bg-slate-50 dark:bg-slate-800/50 py-3 pl-12 pr-4 rounded-xl outline-none font-bold text-xs text-slate-800 dark:text-white border border-transparent focus:border-saloon-500/20 transition-all shadow-inner"
           />
         </div>
-        
+
         <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-800/50 p-1.5 rounded-xl border border-slate-100 dark:border-white/5">
           <button
             onClick={() => setViewMode('grid')}

@@ -96,7 +96,7 @@ const InvoiceDetailModal = ({ appointment, onClose }) => {
                   <th className="pb-4 text-right text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 italic px-2">Value</th>
                 </tr>
               </thead>
-               <tbody className="divide-y divide-slate-50 dark:divide-white/5">
+              <tbody className="divide-y divide-slate-50 dark:divide-white/5">
                 {appointment.assignments?.map((asm, idx) => {
                   const service = asm.service;
                   if (!service) return null;
@@ -197,7 +197,7 @@ export default function Invoices() {
     <div className="flex items-center justify-center h-[60vh]">
       <div className="w-12 h-12 border-4 border-slate-200 border-t-saloon-600 rounded-full animate-spin" />
     </div>
-  ); 
+  );
 
   return (
     <div className="space-y-6 md:space-y-12">

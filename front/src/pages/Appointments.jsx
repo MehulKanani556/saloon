@@ -180,14 +180,14 @@ export default function Appointments() {
                   <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-slate-800 dark:text-white uppercase tracking-tighter italic">{format(currentDate, 'MMMM yyyy')}</h3>
                 </div>
                 <div className="flex gap-2 md:gap-3">
-                  <button 
-                    onClick={() => setCurrentDate(subMonths(currentDate, 1))} 
+                  <button
+                    onClick={() => setCurrentDate(subMonths(currentDate, 1))}
                     className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-xl md:rounded-2xl hover:bg-saloon-500 hover:text-white transition-all shadow-sm active:scale-95"
                   >
                     <StepBack size={18} md:size={20} />
                   </button>
-                  <button 
-                    onClick={() => setCurrentDate(addMonths(currentDate, 1))} 
+                  <button
+                    onClick={() => setCurrentDate(addMonths(currentDate, 1))}
                     className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-xl md:rounded-2xl hover:bg-saloon-500 hover:text-white transition-all shadow-sm active:scale-95"
                   >
                     <StepForward size={18} md:size={20} />

@@ -52,31 +52,28 @@ const PublicNavbar = () => {
   };
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${
-      showSolid 
-        ? 'bg-white/90 dark:bg-slate-930 backdrop-blur-md border-b border-slate-100 dark:border-white/5 shadow-2xl py-1' 
-        : 'bg-transparent py-3 md:py-5'
-    }`}>
+    <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${showSolid
+      ? 'bg-white/90 dark:bg-slate-930 backdrop-blur-md shadow-2xl py-2'
+      : 'bg-transparent py-2'
+      }`}>
       <div className="container mx-auto px-6 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 group">
-          <img 
-            src={Logo} 
-            alt="Glow & Elegance" 
-            className={`h-8 md:h-12 w-auto object-contain transition-all duration-500 ${
-              showSolid ? '' : 'brightness-0 invert drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]'
-            }`} 
+          <img
+            src={Logo}
+            alt="Glow & Elegance"
+            className={`h-8 md:h-12 w-auto object-contain transition-all duration-500 ${showSolid ? '' : 'brightness-0 invert drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]'
+              }`}
           />
         </Link>
 
         {/* Desktop Links */}
         <div className="hidden lg:flex items-center gap-8">
           {['Home', 'Services', 'About', 'Contact', 'Book'].map((link) => (
-            <Link 
-              key={link} 
+            <Link
+              key={link}
               to={link === 'Home' ? '/' : link === 'Book' ? '/book' : `/${link.toLowerCase()}`}
-              className={`text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:text-saloon-500 ${
-                showSolid ? 'text-slate-600 dark:text-slate-300' : 'text-white/80'
-              }`}
+              className={`text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:text-saloon-500 ${showSolid ? 'text-slate-600 dark:text-slate-300' : 'text-white/80'
+                }`}
             >
               {link === 'Book' ? 'Book Appointment' : link}
             </Link>
@@ -166,7 +163,7 @@ const PublicNavbar = () => {
         </div>
 
         {/* Mobile Toggle */}
-        <button 
+        <button
           className="lg:hidden p-2"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
@@ -189,8 +186,8 @@ const PublicNavbar = () => {
           >
             <div className="container mx-auto px-6 py-8 flex flex-col gap-6">
               {['Home', 'Services', 'About', 'Contact', 'Book Appointment'].map((link) => (
-                <Link 
-                  key={link} 
+                <Link
+                  key={link}
                   to={link === 'Home' ? '/' : link === 'Book Appointment' ? '/book' : `/${link.toLowerCase()}`}
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="text-sm font-black text-slate-800 dark:text-white uppercase tracking-widest hover:text-saloon-500 transition-colors"
@@ -199,7 +196,7 @@ const PublicNavbar = () => {
                 </Link>
               ))}
               <hr className="border-slate-100 dark:border-white/5 my-2" />
-              <button 
+              <button
                 onClick={() => {
                   setIsMobileMenuOpen(false);
                   handleAuthRedirect();

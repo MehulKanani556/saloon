@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
+import {
   Scissors, Clock, Sparkles, ChevronRight, Search, Target
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -16,13 +16,13 @@ const IMAGE_URL = 'http://localhost:5000';
 
 const PageHero = () => {
   const title = "OUR SERVICES".split("");
-  
+
   return (
     <section className="relative h-[40vh] flex items-center justify-center overflow-hidden bg-slate-950">
       <div className="absolute inset-0 z-0">
-        <img 
-          src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?q=80&w=2070&auto=format&fit=crop" 
-          alt="Luxury Salon" 
+        <img
+          src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?q=80&w=2070&auto=format&fit=crop"
+          alt="Luxury Salon"
           className="w-full h-full object-cover opacity-30 scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/60 to-slate-950" />
@@ -30,13 +30,13 @@ const PageHero = () => {
 
       <div className="container mx-auto px-6 relative z-10 text-center">
         <div className="flex justify-center mb-4">
-          <motion.div 
+          <motion.div
             initial={{ width: 0 }}
             animate={{ width: 40 }}
             className="h-0.5 bg-saloon-500 rounded-full"
           />
         </div>
-        
+
         <h1 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter flex justify-center gap-[2px]">
           {title.map((char, i) => (
             <motion.span
@@ -50,7 +50,7 @@ const PageHero = () => {
           ))}
         </h1>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
@@ -72,15 +72,15 @@ const BookingCTA = () => {
   return (
     <section className="py-20 bg-white dark:bg-slate-950">
       <div className="container mx-auto px-6">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           className="relative overflow-hidden bg-gradient-to-br from-saloon-500 to-rosegold-500 rounded-[2.5rem] py-16 px-8 text-center text-white shadow-2xl shadow-saloon-200/20"
         >
-          <div className="absolute inset-0 opacity-5 pointer-events-none" 
-               style={{ backgroundImage: 'radial-gradient(circle at 1.5px 1.5px, white 1px, transparent 0)', backgroundSize: '24px 24px' }} />
-          
+          <div className="absolute inset-0 opacity-5 pointer-events-none"
+            style={{ backgroundImage: 'radial-gradient(circle at 1.5px 1.5px, white 1px, transparent 0)', backgroundSize: '24px 24px' }} />
+
           <div className="relative z-10 max-w-2xl mx-auto">
             <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter mb-6 leading-none whitespace-pre-line">
               READY FOR YOUR {"\n"} TRANSFORMATION?
@@ -88,7 +88,7 @@ const BookingCTA = () => {
             <p className="text-white/90 text-sm md:text-base font-semibold uppercase tracking-widest mb-10 max-w-md mx-auto">
               Book your appointment today and experience luxury like never before.
             </p>
-            <button 
+            <button
               onClick={() => {
                 if (!userInfo) navigate('/login');
                 else if (userInfo.role === 'Admin') navigate('/admin/dashboard');
@@ -133,38 +133,36 @@ export default function PublicServices() {
     fetchData();
   }, []);
 
-  const filteredServices = services.filter(s => 
+  const filteredServices = services.filter(s =>
     activeCategory === "All" || s.category?._id === activeCategory || s.category === activeCategory
   );
 
   return (
     <div className="relative selection:bg-saloon-500 selection:text-white bg-white dark:bg-slate-950 font-sans min-h-screen">
-      <PublicNavbar />      
+      <PublicNavbar />
       <main>
         <PageHero />
         {/* Filter Bar */}
-        <section className="sticky top-[60px] md:top-[57px] z-[50] bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-100 dark:border-white/5 py-4">
+        <section className="sticky top-[60px] md:top-[62px] z-[50] bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-100 dark:border-white/5 py-4">
           <div className="container mx-auto px-6">
             <div className="flex items-center gap-4 overflow-x-auto pb-2 no-scrollbar">
-              <button 
+              <button
                 onClick={() => setActiveCategory("All")}
-                className={`px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap border-2 ${
-                  activeCategory === "All" 
-                    ? "bg-saloon-500 border-saloon-500 text-white shadow-lg shadow-saloon-500/20" 
+                className={`px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap border-2 ${activeCategory === "All"
+                    ? "bg-saloon-500 border-saloon-500 text-white shadow-lg shadow-saloon-500/20"
                     : "bg-white dark:bg-slate-900 border-transparent text-slate-500 hover:border-saloon-500/30"
-                }`}
+                  }`}
               >
                 All Services
               </button>
               {categories.map(cat => (
-                <button 
+                <button
                   key={cat._id}
                   onClick={() => setActiveCategory(cat._id)}
-                  className={`px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap border-2 ${
-                    activeCategory === cat._id
-                      ? "bg-saloon-500 border-saloon-500 text-white shadow-lg shadow-saloon-500/20" 
+                  className={`px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap border-2 ${activeCategory === cat._id
+                      ? "bg-saloon-500 border-saloon-500 text-white shadow-lg shadow-saloon-500/20"
                       : "bg-white dark:bg-slate-900 border-transparent text-slate-500 hover:border-saloon-500/30"
-                  }`}
+                    }`}
                 >
                   {cat.name}
                 </button>
@@ -177,7 +175,7 @@ export default function PublicServices() {
         <section className="py-20 lg:py-32 bg-slate-50/50 dark:bg-slate-900/20">
           <div className="container mx-auto px-6">
             <AnimatePresence mode="wait">
-              <motion.div 
+              <motion.div
                 key={activeCategory}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -206,8 +204,8 @@ export default function PublicServices() {
                       className="group bg-white dark:bg-slate-900 rounded-[2.5rem] overflow-hidden border border-slate-100 dark:border-white/5 transition-all duration-500 hover:shadow-2xl hover:shadow-saloon-500/10 hover:-translate-y-2"
                     >
                       <div className="relative aspect-video overflow-hidden">
-                        <img 
-                          src={service.image?.startsWith('/uploads') ? `${IMAGE_URL}${service.image}` : service.image} 
+                        <img
+                          src={service.image?.startsWith('/uploads') ? `${IMAGE_URL}${service.image}` : service.image}
                           alt={service.name}
                           className="w-full h-full object-cover transition-transform duration-[1.5s] group-hover:scale-110"
                         />
@@ -224,18 +222,18 @@ export default function PublicServices() {
                           <Clock size={14} className="text-saloon-500" />
                           {service.duration} Minutes
                         </div>
-                        
+
                         <h3 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter mb-8 group-hover:text-saloon-600 transition-colors">
                           {service.name}
                         </h3>
 
                         <div className="flex items-center justify-between pt-8 border-t border-slate-50 dark:border-white/5">
                           <div className="flex flex-col">
-                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Investment</span>
+                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Price</span>
                             <span className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white tracking-tighter">${service.price}</span>
                           </div>
-                          
-                          <button 
+
+                          <button
                             onClick={() => {
                               if (!userInfo) navigate('/login');
                               else if (userInfo.role === 'Admin') navigate('/admin/dashboard');

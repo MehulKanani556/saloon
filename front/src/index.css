@@ -46,7 +46,7 @@
   }
   
   .premium-button-primary {
-    @apply premium-button bg-gradient-to-r from-saloon-500 to-rosegold-400 text-white hover:shadow-md hover:shadow-saloon-200;
+    @apply premium-button bg-gradient-to-r from-saloon-500 to-rosegold-400 text-white;
   }
 }
 
