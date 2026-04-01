@@ -23,7 +23,7 @@ const createAppointment = async (req, res) => {
     serviceIds = Array.isArray(serviceIds) ? serviceIds.filter(s => s && s.length === 24) : [];
 
     // 2. Validate Temple Coordinates (Date)
-    const normalizedDate = moment(date, ["DD/MM/YYYY", "YYYY-MM-DD", "MM/DD/YYYY"], true);
+    const normalizedDate = moment(date, ["DD/MM/YYYY", "YYYY-MM-DD", "MM/DD/YYYY", moment.ISO_8601], true);
     if (!date || !normalizedDate.isValid()) {
         return res.status(400).json({ message: 'Temporal coordinates are invalid or missing. Ensure format is DD/MM/YYYY or YYYY-MM-DD.' });
     }
@@ -163,7 +163,7 @@ const updateAppointment = async (req, res) => {
         }
 
         if (date) {
-            const normalizedDate = moment(date, ["DD/MM/YYYY", "YYYY-MM-DD", "MM/DD/YYYY"], true);
+            const normalizedDate = moment(date, ["DD/MM/YYYY", "YYYY-MM-DD", "MM/DD/YYYY", moment.ISO_8601], true);
             if (!normalizedDate.isValid()) {
                 return res.status(400).json({ message: 'Updated temporal coordinates are invalid. Ensure DD/MM/YYYY or YYYY-MM-DD.' });
             }
@@ -202,7 +202,7 @@ const getOccupiedSlots = async (req, res) => {
         const requestedServices = serviceIds.split(',');
         const requestedStaffIds = staffIds ? staffIds.split(',') : null;
 
-        const normalizedDate = moment(date, ["DD/MM/YYYY", "YYYY-MM-DD", "MM/DD/YYYY"], true);
+        const normalizedDate = moment(date, ["DD/MM/YYYY", "YYYY-MM-DD", "MM/DD/YYYY", moment.ISO_8601], true);
         if (!normalizedDate.isValid()) {
             return res.status(400).json({ message: 'Target temporal window is invalid. Ensure DD/MM/YYYY or YYYY-MM-DD.' });
         }
@@ -255,10 +255,13 @@ const getOccupiedSlots = async (req, res) => {
         });
 
         const timeSlots = [];
-        for (let hour = 0; hour < 24; hour++) {
-            [0, 30].forEach(min => {
-                timeSlots.push(new Date(Date.UTC(year, month - 1, day, hour, min)));
-            });
+        for (let hour = 9; hour <= 19; hour++) {
+            const h0 = normalizedDate.clone().hour(hour).minute(0).second(0).millisecond(0).toDate();
+            timeSlots.push(h0);
+            if (hour < 19) {
+                const h30 = normalizedDate.clone().hour(hour).minute(30).second(0).millisecond(0).toDate();
+                timeSlots.push(h30);
+            }
         }
 
         const occupiedSlots = [];

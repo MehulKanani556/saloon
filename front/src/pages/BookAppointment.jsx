@@ -14,6 +14,7 @@ import { fetchServices } from '../redux/slices/serviceSlice';
 import { fetchStaff } from '../redux/slices/staffSlice';
 import { addAppointment, fetchOccupiedSlots } from '../redux/slices/appointmentSlice';
 import { useNavigate, useLocation } from 'react-router-dom';
+import confetti from 'canvas-confetti';
 
 // --- Validation Schema ---
 const appointmentSchema = Yup.object().shape({
@@ -29,6 +30,29 @@ const appointmentSchema = Yup.object().shape({
 // --- Components ---
 
 const SuccessModal = ({ data, onClose }) => {
+  useEffect(() => {
+    // Professional Confetti Burst
+    const duration = 3 * 1000;
+    const animationEnd = Date.now() + duration;
+    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 2000 };
+
+    const randomInRange = (min, max) => Math.random() * (max - min) + min;
+
+    const interval = setInterval(() => {
+      const timeLeft = animationEnd - Date.now();
+
+      if (timeLeft <= 0) {
+        return clearInterval(interval);
+      }
+
+      const particleCount = 50 * (timeLeft / duration);
+      confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
+      confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
+    }, 250);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -40,20 +64,6 @@ const SuccessModal = ({ data, onClose }) => {
         animate={{ scale: 1, y: 0 }}
         className="w-full max-w-lg bg-secondary rounded-2xl p-12 text-center shadow-2xl relative border border-white/5 overflow-hidden"
       >
-        {/* Simple CSS Confetti Burst Placeholder Animation */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {[...Array(20)].map((_, i) => (
-            <motion.div
-              key={i}
-              initial={{ y: 500, x: 0, opacity: 1 }}
-              animate={{ y: -100, x: (i - 10) * 20, opacity: 0 }}
-              transition={{ duration: 2, repeat: Infinity, delay: i * 0.1 }}
-              className="absolute w-2 h-2 bg-primary rounded-full"
-              style={{ left: '50%' }}
-            />
-          ))}
-        </div>
-
         <div className="w-24 h-24 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-8 border border-primary/20 shadow-inner">
           <CheckCircle2 size={56} strokeWidth={1.5} />
         </div>
@@ -105,8 +115,11 @@ export default function BookAppointment() {
   useEffect(() => {
     if (location.state?.serviceId && services.length > 0) {
       const service = services.find(s => s._id === location.state.serviceId);
-      if (service && !selectedServices.find(s => s._id === service._id)) {
-        setSelectedServices([service]);
+      if (service) {
+        setSelectedServices(prev => {
+          if (prev.find(s => s._id === service._id)) return prev;
+          return [...prev, service];
+        });
       }
     }
   }, [location.state, services]);
@@ -114,7 +127,39 @@ export default function BookAppointment() {
   useEffect(() => {
     dispatch(fetchServices());
     dispatch(fetchStaff());
+
+    // Load persisted state
+    const savedServices = localStorage.getItem('selected_services');
+    const savedStaff = localStorage.getItem('staff_assignments');
+    const savedStep = localStorage.getItem('booking_step');
+    
+    if (savedServices) {
+      try {
+        setSelectedServices(JSON.parse(savedServices));
+      } catch (e) { console.error("Error loading services:", e); }
+    }
+    if (savedStaff) {
+      try {
+        setStaffAssignments(JSON.parse(savedStaff));
+      } catch (e) { console.error("Error loading staff:", e); }
+    }
+    if (savedStep) {
+      setStep(parseInt(savedStep));
+    }
   }, [dispatch]);
+
+  // Persist State
+  useEffect(() => {
+    localStorage.setItem('selected_services', JSON.stringify(selectedServices));
+  }, [selectedServices]);
+
+  useEffect(() => {
+    localStorage.setItem('staff_assignments', JSON.stringify(staffAssignments));
+  }, [staffAssignments]);
+
+  useEffect(() => {
+    localStorage.setItem('booking_step', step.toString());
+  }, [step]);
 
   const formik = useFormik({
     initialValues: {
@@ -151,6 +196,14 @@ export default function BookAppointment() {
         localStorage.setItem('guest_name', values.clientName);
         localStorage.setItem('guest_email', values.clientEmail);
         localStorage.setItem('guest_phone', values.clientPhone);
+
+        // Clear temporary selections
+        localStorage.removeItem('selected_services');
+        localStorage.removeItem('staff_assignments');
+        localStorage.removeItem('booking_step');
+        setSelectedServices([]);
+        setStaffAssignments({});
+        setStep(1);
 
         setBookingResponse(res);
         setShowSuccess(true);
