@@ -153,7 +153,7 @@ export default function Appointments() {
   );
 
   return (
-    <div className="space-y-12">
+    <div className="flex-1 flex flex-col min-h-0 gap-6 md:gap-10">
       {/* Header */}
       <AdminHeader 
         title="Appointment Bookings"
@@ -167,45 +167,45 @@ export default function Appointments() {
               formik.resetForm();
               setIsDrawerOpen(true);
             }}
-            className="flex items-center gap-4 px-10 py-5 bg-primary text-secondary rounded-2xl font-black uppercase text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group"
+            className="flex items-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group"
           >
-            <Plus size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
+            <Plus size={18} md:size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
             Secure Ritual Slot
           </button>
         }
       />
 
 
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-12">
-        {/* Calendar Column */}
-        <div className="xl:col-span-8 space-y-8">
-          <div className="bg-secondary/40 backdrop-blur-xl p-8 rounded-2xl border border-white/5 shadow-3xl relative overflow-hidden">
+      <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-12">
+        {/* Calendar Column - Refactored for High Density */}
+        <div className="lg:col-span-7 flex flex-col min-h-0">
+          <div className="bg-secondary/40 backdrop-blur-xl p-4 md:p-6 rounded-xl md:rounded-2xl border border-white/5 shadow-3xl relative overflow-hidden flex flex-col h-fit">
             <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/5 blur-[120px] rounded-full" />
 
-            <div className="flex flex-col sm:flex-row gap-6 sm:items-center justify-between mb-12 relative z-10">
+            <div className="flex flex-row gap-4 sm:items-center justify-between mb-6 md:mb-8 relative z-10">
               <div className="flex flex-col">
-                <span className="text-[9px] font-black text-primary uppercase tracking-[0.5em] leading-none mb-3 ">Temporal Matrix</span>
-                <h3 className="text-3xl font-black text-white uppercase tracking-tighter  font-luxury">{format(currentDate, 'MMMM yyyy')}</h3>
+                <span className="text-[8px] font-black text-primary uppercase tracking-[0.4em] leading-none mb-2 ">Temporal Matrix</span>
+                <h3 className="text-xl md:text-2xl font-black text-white uppercase tracking-tighter  font-luxury">{format(currentDate, 'MMMM yyyy')}</h3>
               </div>
-              <div className="flex gap-4">
+              <div className="flex gap-3">
                 <button
                   onClick={() => setCurrentDate(subMonths(currentDate, 1))}
-                  className="w-14 h-14 flex items-center justify-center bg-background border border-white/5 rounded-2xl hover:bg-primary hover:text-secondary transition-all shadow-xl active:scale-95 group"
+                  className="w-10 h-10 md:w-11 md:h-11 flex items-center justify-center bg-background border border-white/5 rounded-xl hover:bg-primary hover:text-secondary transition-all shadow-xl active:scale-95 group"
                 >
-                  <StepBack size={20} className="group-hover:-translate-x-0.5 transition-transform" />
+                  <StepBack size={16} md:size={18} className="group-hover:-translate-x-0.5 transition-transform" />
                 </button>
                 <button
                   onClick={() => setCurrentDate(addMonths(currentDate, 1))}
-                  className="w-14 h-14 flex items-center justify-center bg-background border border-white/5 rounded-2xl hover:bg-primary hover:text-secondary transition-all shadow-xl active:scale-95 group"
+                  className="w-10 h-10 md:w-11 md:h-11 flex items-center justify-center bg-background border border-white/5 rounded-xl hover:bg-primary hover:text-secondary transition-all shadow-xl active:scale-95 group"
                 >
-                  <StepForward size={20} className="group-hover:translate-x-0.5 transition-transform" />
+                  <StepForward size={16} md:size={18} className="group-hover:translate-x-0.5 transition-transform" />
                 </button>
               </div>
             </div>
 
-            <div className="grid grid-cols-7 gap-3 relative z-10">
+            <div className="grid grid-cols-7 gap-1 md:gap-2 relative z-10">
               {['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map(day => (
-                <div key={day} className="text-center text-[9px] font-black text-muted/40 py-4 uppercase tracking-[0.4em] ">{day}</div>
+                <div key={day} className="text-center text-[8px] font-black text-muted/40 py-2 uppercase tracking-[0.3em] ">{day}</div>
               ))}
               {days.map((day, i) => {
                 const isSelected = isSameDay(day, selectedDate);
@@ -219,15 +219,15 @@ export default function Appointments() {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: i * 0.005 }}
                     className={`
-                    aspect-square rounded-2xl flex flex-col items-center justify-center relative cursor-pointer group transition-all duration-500
-                    ${isSelected ? 'bg-primary text-secondary shadow-2xl scale-110 z-20' : 'bg-background/50 hover:bg-white/5 text-muted'}
-                    ${!isSameMonth(day, monthStart) ? 'opacity-10 hover:opacity-100' : ''}
-                    ${isToday(day) && !isSelected ? 'border-2 border-primary/20 shadow-inner shadow-primary/5' : 'border border-white/5'}
+                    aspect-square rounded-lg md:rounded-xl flex flex-col items-center justify-center relative cursor-pointer group transition-all duration-300
+                    ${isSelected ? 'bg-primary text-secondary shadow-lg scale-105 z-20' : 'bg-background/50 hover:bg-white/5 text-muted'}
+                    ${!isSameMonth(day, monthStart) ? 'opacity-5 hover:opacity-50' : ''}
+                    ${isToday(day) && !isSelected ? 'border-2 border-primary/20 shadow-inner' : 'border border-white/5'}
                   `}
                   >
-                    <span className={`text-lg font-black tracking-tighter ${isSelected ? 'text-secondary' : 'text-white'}`}>{format(day, 'd')}</span>
+                    <span className={`text-base md:text-lg font-black tracking-tighter ${isSelected ? 'text-secondary' : 'text-white'}`}>{format(day, 'd')}</span>
                     {hasApps && (
-                      <div className={`w-1.5 h-1.5 rounded-full absolute bottom-3 ${isSelected ? 'bg-secondary' : 'bg-primary shadow-lg shadow-primary/40'}`} />
+                      <div className={`w-1 h-1 md:w-1.5 md:h-1.5 rounded-full absolute bottom-0.5  sm:bottom-1.5 md:bottom-2 ${isSelected ? 'bg-secondary' : 'bg-primary shadow-lg shadow-primary/40'}`} />
                     )}
                   </motion.div>
                 );
@@ -237,50 +237,53 @@ export default function Appointments() {
         </div>
 
         {/* Sidebar Column: Appointments Feed */}
-        <div className="xl:col-span-4 space-y-10 lg:mt-0">
-          <div className="flex items-center justify-between px-4">
-            <div className="space-y-2">
-              <h3 className="text-2xl font-black text-white tracking-tighter uppercase leading-none font-luxury ">Selected Protocol</h3>
+        <div className="lg:col-span-5 flex flex-col min-h-0 gap-6">
+          <div className="flex items-center justify-between px-4 shrink-0">
+            <div className="space-y-1">
+              <h3 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase leading-none font-luxury ">Selected Protocol</h3>
               <p className="text-primary font-black text-[9px] uppercase tracking-[0.3em]">{format(selectedDate, 'MMMM do, yyyy')}</p>
             </div>
-            <div className="w-12 h-12 rounded-2xl bg-secondary border border-white/5 flex items-center justify-center text-primary font-black text-lg shadow-inner">
+            <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-secondary border border-white/5 flex items-center justify-center text-primary font-black text-lg shadow-inner">
               {filteredAppointments.length}
             </div>
           </div>
 
-          <div className="space-y-6 max-h-[900px] overflow-y-auto pr-3 custom-scrollbar">
+          <div className="flex-1 overflow-y-auto pr-3 custom-scrollbar space-y-4">
             {filteredAppointments.length > 0 ? filteredAppointments.map((app, index) => (
               <motion.div
                 key={app._id}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="group relative bg-secondary rounded-2xl p-4 border border-white/5 shadow-3xl transition-all duration-500 hover:border-primary/20 overflow-hidden"
+                className="group relative bg-secondary rounded-xl md:rounded-2xl p-4 border border-white/5 shadow-3xl transition-all duration-500 hover:border-primary/20 overflow-hidden"
               >
-                <div className="flex flex-col gap-5">
-                  <div className="flex items-center gap-4 min-w-0">
-                    <div className="w-14 h-14 rounded-xl bg-background border border-white/10 p-1 group-hover:rotate-6 transition-transform shadow-2xl relative overflow-hidden shrink-0">
-                      <img
-                        src={app.client?.profileImage ? (app.client.profileImage.startsWith('http') ? app.client.profileImage : `${IMAGE_URL}${app.client.profileImage}`) : `https://api.dicebear.com/9.x/adventurer/svg?seed=${app.client?.name}`}
-                        alt={app.client?.name}
-                        className="w-full h-full rounded-2xl object-cover grayscale transition-all duration-700 group-hover:grayscale-0"
-                      />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <h4 className="font-black text-white tracking-tighter uppercase text-sm truncate font-luxury  leading-none mb-2">{app.client?.name}</h4>
-                      <div className="flex flex-wrap items-center gap-2">
-                        <div className="flex items-center gap-1 text-[8px] font-black text-primary uppercase tracking-[0.1em] bg-primary/10 px-2 py-1 rounded-2xl border border-primary/20">
-                          <Clock size={10} strokeWidth={3} className="opacity-50" />
-                          {format(new Date(app.appointmentDate), "HH:mm")}
-                        </div>
-                        <div className={`text-[8px] font-black uppercase tracking-[0.1em] px-2 py-1 rounded-2xl border ${getStatusStyles(app.status)}`}>
-                          {app.status}
+                <div className="flex flex-col gap-4">
+                  <div className="flex flex-col  sm:flex-row items-center justify-between min-w-0">
+                    <div className="flex items-center gap-4 min-w-0">
+                      <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-background border border-white/10 p-1 group-hover:rotate-6 transition-transform shadow-2xl relative overflow-hidden shrink-0">
+                        <img
+                          src={app.client?.profileImage ? (app.client.profileImage.startsWith('http') ? app.client.profileImage : `${IMAGE_URL}${app.client.profileImage}`) : `https://api.dicebear.com/9.x/adventurer/svg?seed=${app.client?.name}`}
+                          alt={app.client?.name}
+                          className="w-full h-full rounded-xl md:rounded-2xl object-cover grayscale transition-all duration-700 group-hover:grayscale-0"
+                        />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <h4 className="font-black text-white tracking-tighter uppercase text-sm truncate font-luxury  leading-none mb-2">{app.client?.name}</h4>
+                        <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-1 text-[8px] font-black text-primary uppercase tracking-[0.1em] bg-primary/10 px-2 py-1 rounded-lg border border-primary/20">
+                            <Clock size={10} strokeWidth={3} className="opacity-50" />
+                            {format(new Date(app.appointmentDate), "HH:mm")}
+                          </div>
+                          <div className={`text-[8px] font-black uppercase tracking-[0.1em] px-2 py-1 rounded-lg border ${getStatusStyles(app.status)}`}>
+                            {app.status}
+                          </div>
                         </div>
                       </div>
                     </div>
+                    <span className="text-lg md:text-xl font-black text-white group-hover:text-primary flex self-end transition-all font-luxury ">${app.totalPrice}</span>
                   </div>
 
-                  <div className="space-y-1.5 py-3 border-t border-white/5">
+                  <div className="flex flex-col gap-1.5 py-3 border-t border-white/5">
                     {app.assignments?.map((asm, idx) => {
                       const s = asm.service;
                       if (!s) return null;
@@ -293,19 +296,16 @@ export default function Appointments() {
                     })}
                   </div>
 
-                  <div className="pt-3 border-t border-dashed border-white/10 group-hover:border-primary/20 transition-colors flex items-center justify-between">
-                    <div className="flex items-center gap-3 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-                      <button onClick={() => navigate(`/${userInfo.role.toLowerCase()}/invoices?id=${app._id}`)} className="p-2.5 bg-background/80 border border-white/5 text-muted hover:text-white rounded-2xl transition-all shadow-xl backdrop-blur-md">
-                        <FileText size={14} />
-                      </button>
-                      <button onClick={() => handleEdit(app)} className="p-2.5 bg-background/80 border border-white/5 text-muted hover:text-primary rounded-2xl transition-all shadow-xl backdrop-blur-md">
-                        <Edit3 size={14} />
-                      </button>
-                      <button onClick={() => openDeleteModal(app)} className="p-2.5 bg-background/80 border border-rose-500/10 text-muted hover:text-rose-500 rounded-2xl transition-all shadow-xl backdrop-blur-md">
-                        <Trash2 size={14} />
-                      </button>
-                    </div>
-                    <span className="text-xl font-black text-white group-hover:text-primary transition-all font-luxury ">${app.totalPrice}</span>
+                  <div className="flex items-center gap-3 translate-y-1 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 justify-end">
+                    <button onClick={() => navigate(`/${userInfo.role.toLowerCase()}/invoices?id=${app._id}`)} className="p-2 bg-background/80 border border-white/5 text-muted hover:text-white rounded-lg transition-all shadow-xl backdrop-blur-md">
+                      <FileText size={12} />
+                    </button>
+                    <button onClick={() => handleEdit(app)} className="p-2 bg-background/80 border border-white/5 text-muted hover:text-primary rounded-lg transition-all shadow-xl backdrop-blur-md">
+                      <Edit3 size={12} />
+                    </button>
+                    <button onClick={() => openDeleteModal(app)} className="p-2 bg-background/80 border border-rose-500/10 text-muted hover:text-rose-500 rounded-lg transition-all shadow-xl backdrop-blur-md">
+                      <Trash2 size={12} />
+                    </button>
                   </div>
                 </div>
 
@@ -316,9 +316,9 @@ export default function Appointments() {
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="py-32 text-center bg-secondary/20 rounded-2xl border border-dashed border-white/10"
+                  className="flex-1 flex flex-col items-center justify-center p-12 text-center bg-secondary/10 rounded-2xl border border-dashed border-white/5"
                 >
-                  <Clock className="mx-auto text-white/5 mb-6 rotate-12" size={64} strokeWidth={1} />
+                  <Clock className="text-white/5 mb-6 rotate-12" size={48} strokeWidth={1} />
                   <p className="text-muted/40 font-black uppercase tracking-[0.4em] text-[10px] ">No active protocols recorded</p>
                   <button
                     onClick={() => setIsDrawerOpen(true)}
@@ -343,7 +343,7 @@ export default function Appointments() {
         title={selectedAppointment ? 'Refine Ritual' : 'Initialize Protocol'}
         subtitle="Operational Schedule Management"
       >
-        <form onSubmit={formik.handleSubmit} className="space-y-10">
+        <form onSubmit={formik.handleSubmit} className="space-y-6 md:space-y-10">
           <div className="space-y-4">
             <CustomSelect
               label="Select Target Identity"
@@ -376,31 +376,31 @@ export default function Appointments() {
             {isNewClient && (
               <motion.div
                 initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
-                className="space-y-8 overflow-hidden bg-white/5 p-8 rounded-2xl border border-white/5"
+                className="space-y-6 md:space-y-8 overflow-hidden bg-white/5 p-4 md:p-8 rounded-xl md:rounded-2xl border border-white/5"
               >
-                <div className="space-y-3">
-                  <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-2 ">Legal Identifer</label>
+                <div className="space-y-2 md:space-y-3">
+                  <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-widest ml-2 ">Legal Identifer</label>
                   <input
                     name="clientName" onChange={formik.handleChange} value={formik.values.clientName}
-                    className="w-full bg-background border border-white/5 focus:border-primary/30 rounded-xl px-6 py-4 text-xs font-bold outline-none transition-all text-white shadow-inner placeholder:text-white/5"
+                    className="w-full bg-background border border-white/5 focus:border-primary/30 rounded-xl px-4 md:px-6 py-3 md:py-4 text-xs font-bold outline-none transition-all text-white shadow-inner placeholder:text-white/5"
                     placeholder="Enter Full Name"
                   />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-3">
-                    <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-2 ">Contact Tether</label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                  <div className="space-y-2 md:space-y-3">
+                    <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-widest ml-2 ">Contact Tether</label>
                     <input
                       name="clientPhone" onChange={formik.handleChange} value={formik.values.clientPhone}
-                      className="w-full bg-background border border-white/5 focus:border-primary/30 rounded-xl px-6 py-4 text-xs font-bold outline-none transition-all text-white shadow-inner placeholder:text-white/5"
+                      className="w-full bg-background border border-white/5 focus:border-primary/30 rounded-xl px-4 md:px-6 py-3 md:py-4 text-xs font-bold outline-none transition-all text-white shadow-inner placeholder:text-white/5"
                       placeholder="Phone Number"
                     />
                   </div>
-                  <div className="space-y-3">
-                    <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-2 ">Digital Signature</label>
+                  <div className="space-y-2 md:space-y-3">
+                    <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-widest ml-2 ">Digital Signature</label>
                     <input
                       name="clientEmail" onChange={formik.handleChange} value={formik.values.clientEmail}
-                      className="w-full bg-background border border-white/5 focus:border-primary/30 rounded-xl px-6 py-4 text-xs font-bold outline-none transition-all text-white shadow-inner placeholder:text-white/5"
+                      className="w-full bg-background border border-white/5 focus:border-primary/30 rounded-xl px-4 md:px-6 py-3 md:py-4 text-xs font-bold outline-none transition-all text-white shadow-inner placeholder:text-white/5"
                       placeholder="Email Coordinate"
                     />
                   </div>
@@ -421,15 +421,18 @@ export default function Appointments() {
             />
           </div>
 
-          <div className="space-y-4">
-            <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-2  underline decoration-primary/30 decoration-2 underline-offset-8">Temporal Coordinates</label>
-            <input
-              name="date" type="datetime-local" onChange={formik.handleChange} value={formik.values.date}
-              className="w-full bg-secondary border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.2em] outline-none text-white shadow-2xl transition-all"
-            />
+          <div className="space-y-3 md:space-y-4">
+            <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-widest ml-2 underline decoration-primary/30 decoration-2 underline-offset-4">Temporal Coordinates</label>
+            <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 gap-3 md:gap-4">
+              <input
+                name="date" type="datetime-local" onChange={formik.handleChange} value={formik.values.date}
+                className="w-full bg-secondary border border-white/10 focus:border-primary/50 rounded-xl md:rounded-2xl px-3 md:px-6 py-4 md:py-5 text-[10px] md:text-[11px] font-black uppercase tracking-[0.1em] md:tracking-[0.2em] outline-none text-white shadow-2xl transition-all appearance-none"
+              />
+            </div>
+            <p className="text-[7px] font-black text-primary/40 uppercase tracking-[0.2em] ml-2">* High-density temporal engagement selection</p>
           </div>
 
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2  gap-4 md:gap-6">
             <CustomSelect
               label="Operational Status" name="status" value={formik.values.status}
               onChange={formik.handleChange}
@@ -442,13 +445,13 @@ export default function Appointments() {
             />
           </div>
 
-          <div className="pt-8">
+          <div className="pt-4 md:pt-8">
             <button
               type="submit" disabled={formik.isSubmitting}
-              className="w-full py-6 bg-primary text-secondary rounded-2xl font-black uppercase text-xs tracking-[0.4em] shadow-2xl shadow-primary/20 hover:scale-[1.02] transition-all flex items-center justify-center gap-4 active:scale-[0.98] disabled:opacity-50 group font-luxury "
+              className="w-full py-5 md:py-6 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] md:tracking-[0.4em] shadow-2xl shadow-primary/20 hover:scale-[1.02] transition-all flex items-center justify-center gap-3 md:gap-4 active:scale-[0.98] disabled:opacity-50 group font-luxury "
             >
               {formik.isSubmitting ? 'Architecting Matrix...' : selectedAppointment ? 'COMMIT REFINEMENTS' : 'AUTHORIZE INITIATION'}
-              <Sparkles size={20} className="group-hover:rotate-12 transition-transform" />
+              <Sparkles size={18} md:size={20} className="group-hover:rotate-12 transition-transform" />
             </button>
           </div>
         </form>

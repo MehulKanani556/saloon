@@ -73,3 +73,65 @@
 .dark .text-slate-600, .dark .text-slate-500 { color: #A0A0A0; }
 .dark .text-slate-400 { color: #808080; }
 
+
+/* 
+  ADMIN & STAFF PANEL HIGH-DENSITY SCALING (Below 1024px)
+  Systematically reduce: Border Radius, Padding, Margin, Gap, and Font Sizes
+*/
+@media (max-width: 1024px) {
+  .staff-panel, .admin-panel {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    padding-top: 1rem !important;
+    padding-bottom: 2rem !important; 
+  }
+
+  /* Space/Margin Overrides */
+  .staff-panel .space-y-12 > :not([hidden]) ~ :not([hidden]),
+  .admin-panel .space-y-12 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 1.5rem !important;
+  }
+  .staff-panel .space-y-10 > :not([hidden]) ~ :not([hidden]),
+  .admin-panel .space-y-10 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 1.25rem !important;
+  }
+  .staff-panel .space-y-8 > :not([hidden]) ~ :not([hidden]),
+  .admin-panel .space-y-8 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 1rem !important;
+  }
+
+  /* .staff-panel .mb-16, .admin-panel .mb-16 { margin-bottom: 2rem !important; }
+  .staff-panel .mb-12, .admin-panel .mb-12 { margin-bottom: 1.5rem !important; }
+  .staff-panel .mb-10, .admin-panel .mb-10 { margin-bottom: 1.25rem !important; }
+  .staff-panel .mb-8, .admin-panel .mb-8 { margin-bottom: 1rem !important; } */
+
+  /* Gap Overrides */
+  /* .staff-panel .gap-12, .admin-panel .gap-12 { gap: 1.5rem !important; }
+  .staff-panel .gap-10, .admin-panel .gap-10 { gap: 1.25rem !important; }
+  .staff-panel .gap-8, .admin-panel .gap-8 { gap: 1rem !important; }
+  .staff-panel .gap-6, .admin-panel .gap-6 { gap: 0.75rem !important; } */
+
+  /* Font Size Scaling */
+  .staff-panel .text-6xl, .admin-panel .text-6xl { font-size: 2.25rem !important; }
+  .staff-panel .text-5xl, .admin-panel .text-5xl { font-size: 2rem !important; }
+  .staff-panel .text-4xl, .admin-panel .text-4xl { font-size: 1.75rem !important; }
+  .staff-panel .text-3xl, .admin-panel .text-3xl { font-size: 1.5rem !important; }
+  .staff-panel .text-2xl, .admin-panel .text-2xl { font-size: 1.25rem !important; }
+  .staff-panel .text-xl, .admin-panel .text-xl { font-size: 1.15rem !important; }
+  .staff-panel .text-lg, .admin-panel .text-lg { font-size: 1.05rem !important; }
+  .staff-panel .text-base, .admin-panel .text-base { font-size: 0.95rem !important; }
+
+  /* Padding Scaling */
+  .staff-panel .p-12, .admin-panel .p-12 { padding: 1.5rem !important; }
+  .staff-panel .p-10, .admin-panel .p-10 { padding: 1.25rem !important; }
+  .staff-panel .p-8, .admin-panel .p-8 { padding: 1rem !important; }
+  .staff-panel .p-6, .admin-panel .p-6 { padding: 0.75rem !important; }
+
+  /* Structural Scaling */
+  .staff-panel [class*="rounded-3xl"],
+  .admin-panel [class*="rounded-3xl"],
+  .staff-panel .rounded-2xl,
+  .admin-panel .rounded-2xl {
+    border-radius: 12px !important;
+  }
+}

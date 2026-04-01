@@ -39,113 +39,115 @@ const InvoiceDetailModal = ({ appointment, onClose }) => {
       subtitle={`Ref: ${appointment.appointmentId || appointment._id.substring(18).toUpperCase()}`}
       maxWidth="max-w-4xl"
     >
-      <div className="flex flex-col max-h-[70vh] -my-10">
-        <div className="p-8 md:p-12 bg-secondary/80 backdrop-blur-xl rounded-2xl border border-white/5 relative overflow-hidden">
+      <div className="flex flex-col -my-6 md:-my-10">
+        <div className="p-2 md:p-8 bg-secondary/80 backdrop-blur-xl rounded-xl md:rounded-2xl relative overflow-hidden flex flex-col">
           <div className="absolute top-0 left-0 w-full h-[1px] bg-luxury-gradient opacity-10" />
 
-          <div className="flex flex-col md:flex-row justify-between gap-10 mb-16">
-            <div className="space-y-6">
-              <div>
-                <h1 className="text-3xl font-black tracking-tighter  uppercase text-primary mb-1 font-luxury leading-none">Glow Saloon</h1>
-                <p className="text-[9px] font-black uppercase tracking-[0.4em] text-muted  opacity-60">Elite Aesthetics & Grooming</p>
+          <div className="flex-1">
+            <div className="flex flex-col md:flex-row justify-between gap-4 md:gap-8 mb-6 md:mb-10">
+              <div className="space-y-3 md:space-y-4">
+                <div>
+                  <h1 className="text-xl md:text-2xl font-black tracking-tighter uppercase text-primary mb-1 font-luxury leading-none">Glow Saloon</h1>
+                  <p className="text-[7px] md:text-[8px] font-black uppercase tracking-[0.3em] text-muted opacity-60">Elite Aesthetics & Grooming</p>
+                </div>
+                <div className="space-y-1 text-[8px] md:text-[9px] font-black text-muted uppercase tracking-widest opacity-80 leading-relaxed max-w-[200px] md:max-w-none">
+                  <p>123 Luxury Lane, Diamond District</p>
+                  <p>Mumbai, Maharashtra - 400001</p>
+                  <p>contact@glowsaloon.com</p>
+                </div>
               </div>
-              <div className="space-y-2 text-[10px] font-black text-muted uppercase tracking-widest  opacity-80 leading-relaxed">
-                <p>123 Luxury Lane, Diamond District</p>
-                <p>Mumbai, Maharashtra - 400001</p>
-                <p>contact@glowsaloon.com</p>
+              <div className="text-left md:text-right space-y-3 md:space-y-4 relative">
+                <h2 className="text-2xl md:text-4xl font-black tracking-tighter text-white/5 uppercase select-none leading-none absolute -top-2 md:relative md:top-0 md:-mb-4 right-0 md:right-auto">Fiscal Record</h2>
+                <div className="space-y-1">
+                  <p className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] text-primary ">Recipient Protocol</p>
+                  <p className="text-lg md:text-xl font-black tracking-tight uppercase text-white font-luxury">{appointment.client?.name}</p>
+                  <p className="text-[8px] md:text-[9px] font-black text-muted uppercase tracking-widest ">{appointment.client?.email}</p>
+                </div>
               </div>
             </div>
-            <div className="text-left md:text-right space-y-6">
-              <h2 className="text-5xl font-black tracking-tighter  text-white/5 uppercase select-none leading-none -mb-8">Fiscal Record</h2>
-              <div className="space-y-2">
-                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-primary ">Recipient Protocol</p>
-                <p className="text-2xl font-black tracking-tight uppercase  text-white font-luxury">{appointment.client?.name}</p>
-                <p className="text-[10px] font-black text-muted uppercase tracking-widest ">{appointment.client?.email}</p>
-              </div>
-            </div>
-          </div>
 
-          <div className="mb-12 grid grid-cols-1 sm:grid-cols-3 gap-8">
-            <div className="p-8 rounded-2xl bg-background/50 border border-white/5 shadow-inner group">
-              <p className="text-[9px] font-black uppercase tracking-[0.4em] text-primary mb-3 ">Creation Archive</p>
-              <p className="font-black  text-sm text-white tracking-widest">{format(new Date(appointment.createdAt), 'MMMM dd, yyyy')}</p>
-            </div>
-            <div className="p-8 rounded-2xl bg-background/50 border border-white/5 shadow-inner group">
-              <p className="text-[9px] font-black uppercase tracking-[0.4em] text-primary mb-3 ">Ritual Identity</p>
-              <p className="font-black  text-sm text-white tracking-widest">#{appointment.appointmentId || appointment._id.substring(18).toUpperCase()}</p>
-            </div>
-            <div className="p-8 rounded-2xl bg-background/50 border border-white/5 shadow-inner flex justify-between items-center sm:block sm:space-y-4">
-              <div>
-                <p className="text-[9px] font-black uppercase tracking-[0.4em] text-primary mb-3 ">Ritual State</p>
-                <p className={`font-black  text-[11px] uppercase tracking-[0.3em] ${appointment.status === 'Cancelled' ? 'text-rose-500' : appointment.status === 'Completed' ? 'text-emerald-500' : 'text-primary'}`}>
-                  {appointment.status || 'Pending'}
-                </p>
+            <div className="mb-4 md:mb-6 grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4">
+              <div className="p-3 md:p-4 rounded-lg md:rounded-xl bg-background/50 shadow-inner group">
+                <p className="text-[7px] md:text-[8px] font-black uppercase tracking-[0.2em] text-primary mb-1 md:mb-2 ">Creation Archive</p>
+                <p className="font-black text-[9px] md:text-xs text-white tracking-widest uppercase">{format(new Date(appointment.createdAt), 'MMM dd, yyyy')}</p>
               </div>
-              <div className="border-l border-white/10 pl-6 sm:border-l-0 sm:pl-0">
-                <p className="text-[9px] font-black uppercase tracking-[0.4em] text-primary mb-3 ">Settlement</p>
-                <p className={`font-black  text-[11px] uppercase tracking-[0.3em] ${appointment.paymentStatus === 'Paid' ? 'text-emerald-500' : 'text-amber-500'}`}>
-                  {appointment.paymentStatus || 'Pending'}
-                </p>
+              <div className="p-3 md:p-4 rounded-lg md:rounded-xl bg-background/50 shadow-inner group">
+                <p className="text-[7px] md:text-[8px] font-black uppercase tracking-[0.2em] text-primary mb-1 md:mb-2 ">Ritual Identity</p>
+                <p className="font-black text-[9px] md:text-xs text-white tracking-widest">#{appointment.appointmentId || appointment._id.substring(18).toUpperCase()}</p>
+              </div>
+              <div className="col-span-2 md:col-span-1 p-3 md:p-4 rounded-lg md:rounded-xl bg-background/50 shadow-inner flex justify-between items-center md:block md:space-y-2">
+                <div>
+                  <p className="text-[7px] md:text-[8px] font-black uppercase tracking-[0.2em] text-primary mb-1 md:mb-2 ">Ritual State</p>
+                  <p className={`font-black text-[8px] md:text-[10px] uppercase tracking-[0.1em] ${appointment.status === 'Cancelled' ? 'text-rose-500' : appointment.status === 'Completed' ? 'text-emerald-500' : 'text-primary'}`}>
+                    {appointment.status || 'Pending'}
+                  </p>
+                </div>
+                <div className="border-l border-white/10 pl-3 md:border-l-0 md:pl-0">
+                  <p className="text-[7px] md:text-[8px] font-black uppercase tracking-[0.2em] text-primary mb-1 md:mb-2 ">Settlement</p>
+                  <p className={`font-black text-[8px] md:text-[10px] uppercase tracking-[0.1em] ${appointment.paymentStatus === 'Paid' ? 'text-emerald-500' : 'text-amber-500'}`}>
+                    {appointment.paymentStatus || 'Pending'}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="overflow-x-auto mb-16">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-white/5 text-left">
-                  <th className="pb-6 text-[10px] font-black uppercase tracking-[0.4em] text-primary  px-2">Masterpiece Ritual</th>
-                  <th className="pb-6 text-right text-[10px] font-black uppercase tracking-[0.4em] text-primary  px-2">Timeline</th>
-                  <th className="pb-6 text-right text-[10px] font-black uppercase tracking-[0.4em] text-primary  px-2">Value</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/5">
-                {appointment.assignments?.map((asm, idx) => {
-                  const service = asm.service;
-                  if (!service) return null;
-                  return (
-                    <tr key={service._id || idx} className="group transition-all hover:bg-white/5">
-                      <td className="py-8 px-2">
-                        <p className="font-black text-base tracking-tighter uppercase  text-white font-luxury">{service.name}</p>
-                        <p className="text-[10px] font-black text-muted uppercase mt-2 tracking-[0.2em] ">{service.category?.name || 'General Ritual'}</p>
-                      </td>
-                      <td className="py-8 px-2 text-right">
-                        <p className="font-black text-xs  text-white tracking-widest">{format(new Date(appointment.appointmentDate), 'MMM dd, HH:mm')}</p>
-                      </td>
-                      <td className="py-8 px-2 text-right">
-                        <p className="font-black text-lg  text-primary tracking-tighter font-luxury leading-none">${service.price?.toLocaleString()}</p>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+            <div className="mb-6 md:mb-8">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-white/5 text-left">
+                    <th className="pb-1.5 md:pb-3 text-[7px] md:text-[8px] font-black uppercase tracking-[0.2em] text-primary px-1">Masterpiece</th>
+                    <th className="pb-1.5 md:pb-3 text-right text-[7px] md:text-[8px] font-black uppercase tracking-[0.2em] text-primary px-1">Timeline</th>
+                    <th className="pb-1.5 md:pb-3 text-right text-[7px] md:text-[8px] font-black uppercase tracking-[0.2em] text-primary px-1">Value</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/5">
+                  {appointment.assignments?.map((asm, idx) => {
+                    const service = asm.service;
+                    if (!service) return null;
+                    return (
+                      <tr key={service._id || idx} className="group transition-all hover:bg-white/5">
+                        <td className="py-2 md:py-3.5 px-1">
+                          <p className="font-black text-[10px] md:text-sm tracking-tighter uppercase text-white font-luxury leading-tight">{service.name}</p>
+                          <p className="text-[6px] md:text-[8px] font-black text-muted uppercase mt-0.5 tracking-widest">{service.category?.name || 'General'}</p>
+                        </td>
+                        <td className="py-2 md:py-3.5 px-1 text-right">
+                          <p className="font-black text-[8px] md:text-[10px] text-white tracking-widest">{format(new Date(appointment.appointmentDate), 'MMM dd, HH:mm')}</p>
+                        </td>
+                        <td className="py-2 md:py-3.5 px-1 text-right">
+                          <p className="font-black text-xs md:text-base text-primary tracking-tighter font-luxury leading-none">${service.price?.toLocaleString()}</p>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
 
-          <div className="flex justify-end pt-12 border-t border-white/10">
-            <div className="w-full sm:w-1/2 space-y-6">
-              <div className="flex justify-between items-center px-4">
-                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-muted ">Ritual Summation</span>
-                <span className="font-black  text-sm text-white tracking-widest">${appointment.totalPrice.toLocaleString()}</span>
-              </div>
-              <div className="flex justify-between items-center p-8 bg-primary rounded-2xl text-secondary shadow-2xl shadow-primary/20 relative overflow-hidden group">
-                <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
-                <span className="text-[11px] font-black uppercase tracking-[0.5em]  relative z-10">Eternal Value</span>
-                <span className="text-3xl font-black  tracking-tighter font-luxury relative z-10 leading-none">${appointment.totalPrice.toLocaleString()}</span>
+            <div className="flex justify-end pt-4 md:pt-6 border-t border-white/10">
+              <div className="w-full md:w-1/2 space-y-2 md:space-y-3">
+                <div className="flex justify-between items-center px-4">
+                  <span className="text-[7px] md:text-[8px] font-black uppercase tracking-[0.2em] text-muted ">Ritual Summation</span>
+                  <span className="font-black text-[10px] md:text-xs text-white tracking-widest">${appointment.totalPrice.toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between items-center p-3 md:p-4 bg-primary rounded-lg md:rounded-xl text-secondary shadow-2xl shadow-primary/20 relative overflow-hidden group">
+                  <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
+                  <span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em] relative z-10">Eternal Value</span>
+                  <span className="text-base md:text-xl font-black tracking-tighter font-luxury relative z-10 leading-none">${appointment.totalPrice.toLocaleString()}</span>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="mt-20 pt-12 border-t border-white/5 text-center space-y-6">
-            <p className="text-[9px] font-black uppercase tracking-[0.6em] text-white/10 ">Certified Financial Asset Authentication</p>
-            <div className="flex items-center justify-center gap-6">
-              <button
-                onClick={handleExportPDF}
-                className="flex items-center gap-4 px-10 py-5 bg-secondary text-primary rounded-2xl font-black text-[10px] uppercase tracking-[0.4em] hover:bg-primary hover:text-secondary transition-all active:scale-95 shadow-2xl border border-primary/20 font-luxury "
-              >
-                <Download size={16} />
-                AUTHORIZE PDF EXPORT
-              </button>
+            <div className="shrink-0 mt-4 md:mt-8 pt-4 md:pt-6 border-t border-white/5 text-center space-y-3">
+              <p className="text-[6px] md:text-[8px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] text-white/5 ">Certified Financial Asset Authentication</p>
+              <div className="flex items-center justify-center">
+                <button
+                  onClick={handleExportPDF}
+                  className="w-full md:w-auto flex items-center justify-center gap-2 md:gap-3 px-4 md:px-8 py-3 md:py-4 bg-secondary text-primary rounded-lg md:rounded-xl font-black text-[8px] md:text-[9px] uppercase tracking-[0.2em] md:tracking-[0.3em] hover:bg-primary hover:text-secondary transition-all active:scale-95 shadow-2xl border border-primary/20 font-luxury"
+                >
+                  <Download size={12} md:size={14} />
+                  AUTHORIZE PDF EXPORT
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -252,23 +254,23 @@ export default function Invoices() {
                     transition={{ delay: idx * 0.02, ease: "easeOut" }}
                     className="group border-b border-white/5 hover:bg-white/5 transition-all"
                   >
-                    <td className="px-10 py-8">
-                      <span className="text-[10px] font-black text-muted tracking-widest uppercase  bg-background/50 px-3 py-1.5 rounded-2xl border border-white/5 shadow-inner whitespace-nowrap">
+                    <td className="px-4 md:px-10 py-4 md:py-8">
+                      <span className="text-[8px] md:text-[10px] font-black text-muted tracking-widest uppercase bg-background/50 px-2 md:px-3 py-1 md:py-1.5 rounded-xl md:rounded-2xl border border-white/5 shadow-inner whitespace-nowrap">
                         #{invoice.appointmentId || invoice._id.substring(18).toUpperCase()}
                       </span>
                     </td>
-                    <td className="px-5 py-5">
-                      <div className="flex items-center gap-5">
-                        <div className="w-14 h-14 rounded-2xl bg-background p-1 border border-white/10 group-hover:rotate-6 transition-all duration-500 shadow-2xl">
+                    <td className="px-4 md:px-5 py-4 md:py-5">
+                      <div className="flex items-center gap-3 md:gap-5">
+                        <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-background p-1 border border-white/10 group-hover:rotate-6 transition-all duration-500 shadow-2xl shrink-0">
                           <img
                             src={invoice.client?.profileImage ? (invoice.client.profileImage.startsWith('http') ? invoice.client.profileImage : `${IMAGE_URL}${invoice.client.profileImage}`) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${invoice.client?.name || 'Client'}`}
                             alt={invoice.client?.name || 'Client'}
-                            className="w-full h-full rounded-2xl object-cover grayscale transition-all duration-700 group-hover:grayscale-0"
+                            className="w-full h-full rounded-xl md:rounded-2xl object-cover grayscale transition-all duration-700 group-hover:grayscale-0"
                           />
                         </div>
-                        <div>
-                          <p className="text-sm font-black text-white uppercase tracking-tighter font-luxury  leading-none mb-2 group-hover:text-primary transition-colors">{invoice.client?.name}</p>
-                          <p className="text-[9px] font-black text-muted uppercase tracking-[0.2em] whitespace-nowrap">{invoice.client?.phone}</p>
+                        <div className="min-w-0 pr-4">
+                          <p className="text-xs md:text-sm font-black text-white uppercase tracking-tighter font-luxury leading-none mb-1 md:mb-2 group-hover:text-primary transition-colors truncate md:whitespace-normal">{invoice.client?.name}</p>
+                          <p className="text-[8px] md:text-[9px] font-black text-muted uppercase tracking-[0.1em] md:tracking-[0.2em] whitespace-nowrap">{invoice.client?.phone}</p>
                         </div >
                       </div >
                     </td >
@@ -283,10 +285,10 @@ export default function Invoices() {
                         </span>
                       </div>
                     </td>
-                    <td className="px-10 py-8">
-                      <p className="text-xl font-black text-white tracking-tighter  font-luxury leading-none">${invoice.totalPrice.toLocaleString()}</p>
+                    <td className="px-4 md:px-10 py-4 md:py-8">
+                      <p className="text-lg md:text-xl font-black text-white tracking-tighter font-luxury leading-none">${invoice.totalPrice.toLocaleString()}</p>
                     </td>
-                    <td className="px-10 py-8">
+                    <td className="px-4 md:px-10 py-4 md:py-8">
                       <div className="flex flex-col gap-3 ">
                         <div className={`
                           inline-flex items-center gap-2 px-4 py-2 rounded-xl border text-[9px] font-black uppercase tracking-[0.3em] w-fit shadow-xl
@@ -308,21 +310,21 @@ export default function Invoices() {
                         )}
                       </div>
                     </td>
-                    <td className="px-5 py-5">
-                      <div className="flex items-center justify-center gap-4 transition-all translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100">
+                    <td className="px-4 md:px-5 py-4 md:py-5">
+                      <div className="flex items-center justify-center gap-2 md:gap-4 transition-all lg:translate-x-4 lg:opacity-0 lg:group-hover:translate-x-0 lg:group-hover:opacity-100">
                         {invoice.status !== 'Cancelled' && (
                           <>
                             <button
                               onClick={() => setSelectedInvoice(invoice)}
-                              className="p-4 bg-background border border-white/5 rounded-2xl text-muted hover:text-primary shadow-2xl transition-all hover:scale-110 active:scale-95"
+                              className="p-3 md:p-4 bg-background border border-white/5 rounded-xl md:rounded-2xl text-muted hover:text-primary shadow-2xl transition-all hover:scale-110 active:scale-95"
                             >
-                              <Eye size={18} />
+                              <Eye size={16} md:size={18} />
                             </button>
                             <button
                               onClick={() => handleQuickExport(invoice)}
-                              className="p-4 bg-background border border-white/5 rounded-2xl text-muted hover:text-primary shadow-2xl transition-all hover:scale-110 active:scale-95"
+                              className="p-3 md:p-4 bg-background border border-white/5 rounded-xl md:rounded-2xl text-muted hover:text-primary shadow-2xl transition-all hover:scale-110 active:scale-95"
                             >
-                              <Download size={18} />
+                              <Download size={16} md:size={18} />
                             </button>
                           </>
                         )}

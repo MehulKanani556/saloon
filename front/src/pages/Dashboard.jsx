@@ -42,9 +42,16 @@ export default function Dashboard() {
   const { data, loading, error } = useSelector((state) => state.dashboard);
   const navigate = useNavigate();
 
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
   useEffect(() => {
     dispatch(fetchDashboardInsights());
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, [dispatch]);
+
+  const mobileBarSize = windowWidth < 426 ? 6 : (windowWidth < 768 ? 12 : 28);
 
   if (loading) return (
     <div className="flex items-center justify-center h-[70vh]">
@@ -131,7 +138,7 @@ export default function Dashboard() {
               <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em]  opacity-60">Financial Velocity | Success Parameters</p>
             </div>
           </div>
-          <div className="h-[400px] w-full">
+          <div className="h-[200px] sm:h-[300px] md:h-[400px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={data.financialVelocity}>
                 <defs>
@@ -141,13 +148,22 @@ export default function Dashboard() {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="8 8" vertical={false} strokeOpacity={0.03} />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#A0A0A0', fontSize: 9, fontWeight: 900, letterSpacing: '4px' }} dy={20} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#A0A0A0', fontSize: 9, fontWeight: 900 }} />
+                <XAxis 
+                  dataKey="name" 
+                  axisLine={false} 
+                  tickLine={false} 
+                  interval={windowWidth < 768 ? 0 : 'preserveStartEnd'}
+                  angle={windowWidth < 768 ? -90 : 0}
+                  textAnchor={windowWidth < 768 ? 'end' : 'middle'}
+                  height={windowWidth < 768 ? 60 : 30}
+                  tick={{ fill: '#A0A0A0', fontSize: 7, fontWeight: 900, letterSpacing: '2px' }} 
+                />
+                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#A0A0A0', fontSize: 7, fontWeight: 900 }} width={30} />
                 <Tooltip
                   cursor={{ stroke: '#C9A227', strokeWidth: 2, strokeDasharray: '4 4' }}
-                  contentStyle={{ backgroundColor: '#1A1A1A', border: '1px solid rgba(201, 162, 39, 0.2)', borderRadius: '2rem', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)', padding: '24px' }}
-                  itemStyle={{ color: '#C9A227', fontWeight: 900, textTransform: 'uppercase', fontSize: '13px', fontStyle: '', letterSpacing: '2px' }}
-                  labelStyle={{ color: '#fff', fontWeight: 900, marginBottom: '12px', opacity: 0.5, fontSize: '10px', textTransform: 'uppercase', letterSpacing: '3px' }}
+                  contentStyle={{ backgroundColor: '#1A1A1A', border: '1px solid rgba(201, 162, 39, 0.2)', borderRadius: '1rem', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)', padding: '12px' }}
+                  itemStyle={{ color: '#C9A227', fontWeight: 900, textTransform: 'uppercase', fontSize: '10px', fontStyle: '', letterSpacing: '1px' }}
+                  labelStyle={{ color: '#fff', fontWeight: 900, marginBottom: '8px', opacity: 0.5, fontSize: '8px', textTransform: 'uppercase', letterSpacing: '2px' }}
                 />
                 <Area type="monotone" dataKey="revenue" stroke="#C9A227" strokeWidth={6} fillOpacity={1} fill="url(#colorRev)" />
               </AreaChart>
@@ -165,7 +181,7 @@ export default function Dashboard() {
               <div key={i} className="space-y-2 group">
                 <div className="flex justify-between items-end text-[10px] font-black uppercase tracking-[0.4em] text-muted ">
                   <span className="text-white truncate max-w-[160px] group-hover:text-primary transition-colors">{service.name}</span>
-                  <span className="text-primary opacity-60 group-hover:opacity-100">{service.value}% Intensity</span>
+                  <span className="text-primary opacity-60 group-hover:opacity-100">{service.value}%</span>
                 </div>
                 <div className="h-4 w-full bg-background rounded-full overflow-hidden p-1 shadow-inner border border-white/5">
                   <motion.div
@@ -202,7 +218,7 @@ export default function Dashboard() {
           </div>
           <div className="space-y-6 relative z-10">
             {data.recentBookings.map((app, i) => (
-              <div key={app._id} className="flex items-center justify-between p-6 rounded-2xl bg-background/50 border border-white/10 group/item hover:bg-white/5 transition-all">
+              <div key={app._id} className="flex flex-wrap items-center justify-between p-6 rounded-2xl bg-background/50 border border-white/10 group/item hover:bg-white/5 transition-all">
                 <div className="flex items-center gap-5">
                   <div className="w-12 h-12 rounded-2xl bg-secondary p-1 border border-white/5 flex items-center justify-center text-primary group-hover/item:rotate-12 transition-all duration-500">
                     <img
@@ -219,7 +235,7 @@ export default function Dashboard() {
                     </div>
                   </div>
                 </div>
-                <div className="text-right space-y-3">
+                <div className="text-right sm:space-y-3 mt-2 sm:mt-0 flex flex-row sm:flex-col items-center sm:justify-center justify-between w-full sm:w-auto">
                   <p className="text-lg font-black text-white  font-luxury leading-none">${app.totalPrice}</p>
                   <div className={`text-[8px] font-black uppercase tracking-[0.3em] px-3 py-1.5 rounded-2xl border 
                     ${app.status === 'Completed' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' :
@@ -246,29 +262,29 @@ export default function Dashboard() {
           </div>
           <div className="space-y-6 relative z-10">
             {data.upcomingRituals.length > 0 ? data.upcomingRituals.map((app, i) => (
-              <motion.div
-                key={app._id}
-                whileHover={{ scale: 1.02, x: 10 }}
-                className="flex items-center justify-between p-8 rounded-2xl bg-primary text-secondary shadow-2xl relative overflow-hidden group/ritual cursor-pointer"
-              >
-                <div className="absolute inset-0 bg-white/10 opacity-0 group-hover/ritual:opacity-100 transition-opacity duration-500" />
-                <div className="flex items-center gap-6 relative z-10">
-                  <div className="w-14 h-14 rounded-2xl bg-secondary/20 backdrop-blur-xl flex items-center justify-center border border-white/20">
-                    <Clock size={24} strokeWidth={2.5} />
+                <motion.div
+                  key={app._id}
+                  whileHover={{ scale: 1.02, x: 10 }}
+                  className="flex flex-wrap items-center justify-between p-4 md:p-8 rounded-2xl bg-primary text-secondary shadow-2xl relative overflow-hidden group/ritual cursor-pointer"
+                >
+                  <div className="absolute inset-0 bg-white/10 opacity-0 group-hover/ritual:opacity-100 transition-opacity duration-500" />
+                  <div className="flex items-center gap-4 md:gap-6 relative z-10 min-w-0">
+                    <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl bg-secondary/20 backdrop-blur-xl flex items-center justify-center border border-white/20 shrink-0">
+                      <Clock size={18} md:size={24} strokeWidth={2.5} />
+                    </div>
+                    <div className="min-w-0">
+                      <h4 className="font-black uppercase text-lg md:text-xl font-luxury tracking-tighter  leading-none mb-1 md:mb-2 truncate">{app.client?.name}</h4>
+                      <p className="text-[9px] md:text-[11px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] opacity-60 ">{format(new Date(app.appointmentDate), 'HH:mm')} PROTOCOL</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-black uppercase text-xl font-luxury tracking-tighter  leading-none mb-2">{app.client?.name}</h4>
-                    <p className="text-[11px] font-black uppercase tracking-[0.3em] opacity-60 ">{format(new Date(app.appointmentDate), 'HH:mm')} PROTOCOL</p>
+                  <div className="flex items-center gap-3 md:gap-6 relative z-10 shrink-0 mt-2 sm:mt-0 justify-between w-full sm:w-auto">
+                    <div className="text-right">
+                      <p className="text-[7px] md:text-[9px] font-black uppercase tracking-[0.4em] opacity-40  mb-1">Magnitude</p>
+                      <p className="text-lg md:text-2xl font-black  font-luxury tracking-tighter leading-none">${app.totalPrice}</p>
+                    </div>
+                    <ArrowRight size={18} md:size={24} strokeWidth={2.5} className="opacity-20 group-hover/ritual:opacity-100 transition-all -translate-x-4 group-hover/ritual:translate-x-0 hidden sm:block" />
                   </div>
-                </div>
-                <div className="flex items-center gap-6 relative z-10">
-                  <div className="text-right">
-                    <p className="text-[9px] font-black uppercase tracking-[0.4em] opacity-40  mb-1">Magnitude</p>
-                    <p className="text-2xl font-black  font-luxury tracking-tighter leading-none">${app.totalPrice}</p>
-                  </div>
-                  <ArrowRight size={24} strokeWidth={2.5} className="opacity-20 group-hover/ritual:opacity-100 transition-all -translate-x-4 group-hover/ritual:translate-x-0" />
-                </div>
-              </motion.div>
+                </motion.div>
             )) : (
               <div className="py-24 text-center border-2 border-dashed border-white/5 rounded-2xl bg-background/30">
                 <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -293,22 +309,31 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="h-[300px] w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data.occupancyTrends}>
-              <CartesianGrid strokeDasharray="8 8" vertical={false} strokeOpacity={0.03} />
-              <XAxis dataKey="hour" axisLine={false} tickLine={false} tick={{ fill: '#A0A0A0', fontSize: 9, fontStyle: '', fontWeight: 900, letterSpacing: '2px' }} />
-              <Tooltip
-                cursor={{ fill: 'rgba(201, 162, 39, 0.03)', radius: 12 }}
-                contentStyle={{ backgroundColor: '#1A1A1A', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '1.5rem', color: '#fff' }}
-                itemStyle={{ color: '#C9A227', fontWeight: 900, textTransform: 'uppercase', fontSize: '11px', letterSpacing: '2px' }}
-              />
-              <Bar dataKey="intensity" radius={[8, 8, 8, 8]} barSize={28}>
-                {data.occupancyTrends.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.intensity > 1 ? '#C9A227' : 'rgba(255,255,255,0.1)'} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
+         <ResponsiveContainer width="100%" height="100%">
+                     <BarChart data={data.occupancyTrends} margin={{ bottom: windowWidth < 768 ? 0 : 0 }}>
+                       <CartesianGrid strokeDasharray="8 8" vertical={false} strokeOpacity={0.03} />
+                       <XAxis 
+                         dataKey="hour" 
+                         axisLine={false} 
+                         tickLine={false} 
+                         interval={windowWidth < 768 ? 0 : 'preserveStartEnd'}
+                         angle={windowWidth < 768 ? -90 : 0}
+                         textAnchor={windowWidth < 768 ? 'end' : 'middle'}
+                         height={windowWidth < 768 ? 50 : 30}
+                         tick={{ fill: '#A0A0A0', fontSize: 7, fontStyle: '', fontWeight: 900, letterSpacing: '1px', dx: windowWidth < 768 ? -3 : 0 }} 
+                       />
+                       <Tooltip
+                         cursor={{ fill: 'rgba(201, 162, 39, 0.03)', radius: 8 }}
+                         contentStyle={{ backgroundColor: '#1A1A1A', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '1rem', color: '#fff', padding: '8px' }}
+                         itemStyle={{ color: '#C9A227', fontWeight: 900, textTransform: 'uppercase', fontSize: '9px', letterSpacing: '1px' }}
+                       />
+                       <Bar dataKey="intensity" radius={[4, 4, 4, 4]} barSize={mobileBarSize}>
+                         {data.occupancyTrends.map((entry, index) => (
+                           <Cell key={`cell-${index}`} fill={entry.intensity > 0 ? '#C9A227' : 'rgba(255,255,255,0.1)'} />
+                         ))}
+                       </Bar>
+                     </BarChart>
+                   </ResponsiveContainer>
         </div>
       </div>
     </div>

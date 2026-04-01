@@ -18,7 +18,8 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector } from 'react-redux';
-import Logo from '../assets/logo.png';
+import logo from '../assets/logo.png';
+import { IMAGE_URL } from '../utils/BASE_URL';
 
 const adminItems = [
   { icon: LayoutDashboard, label: 'Dashboard', path: '/admin/dashboard' },
@@ -40,6 +41,7 @@ const staffItems = [
   { icon: Scissors, label: 'Expertise', path: '/staff/specialization' },
   { icon: FileText, label: 'Bills', path: '/staff/invoices' },
   { icon: CalendarClock, label: 'My Leaves', path: '/staff/leaves' },
+  { icon: Settings, label: 'Settings', path: '/staff/settings' },
 ];
 
 const userItems = [
@@ -95,7 +97,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                 transition={{ duration: 0.3 }}
                 className="flex items-center gap-2"
               >
-                <img src={Logo} alt="Logo" className="h-8 w-auto object-contain brightness-0 invert drop-shadow-[0_0_8px_rgba(201,162,39,0.2)]" />
+                <img src={logo} alt="Logo" className="h-8 w-auto object-contain brightness-0 invert drop-shadow-[0_0_8px_rgba(201,162,39,0.2)]" />
               </motion.div>
             )}
           </AnimatePresence>

@@ -25,7 +25,7 @@ export default function Layout({ children }) {
   return (
     <div className="flex h-screen bg-background text-white selection:bg-primary/30 selection:text-white font-sans overflow-hidden">
       <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
-      
+
       {/* Mobile/Tablet/Laptop Overlay */}
       <AnimatePresence>
         {isSidebarOpen && (
@@ -46,13 +46,13 @@ export default function Layout({ children }) {
 
         {/* Header Container pinned at top */}
         <div className="shrink-0 z-[100] w-full">
-          <Navbar 
-            onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)} 
+          <Navbar
+            onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)}
           />
         </div>
 
         {/* Scrollable Content Area */}
-        <div 
+        <div
           ref={scrollRef}
           className="flex-1 overflow-y-auto custom-scrollbar relative z-10"
         >
@@ -62,7 +62,7 @@ export default function Layout({ children }) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3, ease: "easeOut" }}
-              className="py-6 md:py-10 px-4 md:px-10 w-full max-w-full"
+              className={`py-4 md:py-10 px-4 md:px-10 w-full max-w-full ${pathname.startsWith('/staff') ? 'staff-panel' : pathname.startsWith('/admin') ? 'admin-panel' : ''}`}
             >
               {children}
             </motion.main>

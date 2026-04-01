@@ -218,16 +218,16 @@ export default function Staff() {
         title={selectedExpert ? 'Refine Artisan' : 'INDuct ARTISAN'}
         subtitle="Specialist Matrix Onboarding"
       >
-        <div className="flex flex-col items-center mb-12">
+        <div className="flex flex-col items-center mb-8 md:mb-12">
           <div className="relative group">
-            <div className="w-40 h-40 rounded-2xl bg-background border-4 border-dashed border-white/5 flex items-center justify-center overflow-hidden transition-all duration-500 group-hover:border-primary/40 group-hover:scale-105 shadow-inner">
+            <div className="w-32 h-32 md:w-40 md:h-40 rounded-xl md:rounded-2xl bg-background border-4 border-dashed border-white/5 flex items-center justify-center overflow-hidden transition-all duration-500 group-hover:border-primary/40 group-hover:scale-105 shadow-inner">
               <img
                 src={imagePreview ? (imagePreview.startsWith('blob') || imagePreview.startsWith('http') ? imagePreview : `${IMAGE_URL}${imagePreview}`) : `https://api.dicebear.com/9.x/adventurer/svg?seed=${formik.values.name || 'Artisan'}`}
                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                 alt="Preview"
               />
               <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-                <Upload size={32} className="text-secondary" />
+                <Upload size={24} md:size={32} className="text-secondary" />
               </div>
             </div>
             <input
@@ -235,57 +235,57 @@ export default function Staff() {
               onChange={handleFileUpload}
               className="absolute inset-0 opacity-0 cursor-pointer z-20"
             />
-            <div className="absolute -bottom-4 -right-4 w-12 h-12 bg-primary rounded-2xl flex items-center justify-center text-secondary shadow-xl">
-              <Plus size={24} strokeWidth={3} />
+            <div className="absolute -bottom-2 -right-2 md:-bottom-4 md:-right-4 w-10 h-10 md:w-12 md:h-12 bg-primary rounded-xl md:rounded-2xl flex items-center justify-center text-secondary shadow-xl">
+              <Plus size={20} md:size={24} strokeWidth={3} />
             </div>
           </div>
         </div>
 
-        <form onSubmit={formik.handleSubmit} className="space-y-10">
-          <div className="space-y-4">
-            <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2  underline decoration-primary/30 decoration-2 underline-offset-8">Artisan Nomenclature</label>
+        <form onSubmit={formik.handleSubmit} className="space-y-6 md:space-y-10">
+          <div className="space-y-2 md:space-y-4">
+            <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2  underline decoration-primary/30 decoration-2 underline-offset-8">Artisan Nomenclature</label>
             <input
               name="name"
               onChange={formik.handleChange}
               value={formik.values.name}
-              className="w-full bg-secondary border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.2em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5 font-luxury "
+              className="w-full bg-secondary border border-white/10 focus:border-primary/50 rounded-xl md:rounded-2xl px-4 md:px-6 py-4 md:py-5 text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5 font-luxury "
               placeholder="ENTER LEGAL IDENTITY"
             />
-            {formik.touched.name && formik.errors.name && <p className="text-rose-500 text-[9px] font-black ml-4 uppercase  tracking-widest">{formik.errors.name}</p>}
+            {formik.touched.name && formik.errors.name && <p className="text-rose-500 text-[8px] font-black ml-4 uppercase  tracking-widest">{formik.errors.name}</p>}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="space-y-4">
-              <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 ">Digital Beacon</label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+            <div className="space-y-2 md:space-y-4">
+              <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 ">Digital Beacon</label>
               <input
                 name="email"
                 onChange={formik.handleChange}
                 value={formik.values.email}
-                className="w-full bg-secondary border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.2em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5"
+                className="w-full bg-secondary border border-white/10 focus:border-primary/50 rounded-xl md:rounded-2xl px-4 md:px-6 py-4 md:py-5 text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5"
                 placeholder="EMAIL@DOMAIN.COM"
               />
-              {formik.touched.email && formik.errors.email && <p className="text-rose-500 text-[9px] font-black ml-4 uppercase  tracking-widest">{formik.errors.email}</p>}
+              {formik.touched.email && formik.errors.email && <p className="text-rose-500 text-[8px] font-black ml-4 uppercase  tracking-widest">{formik.errors.email}</p>}
             </div>
 
-            <div className="space-y-4">
-              <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 ">Tether Signal</label>
+            <div className="space-y-2 md:space-y-4">
+              <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 ">Tether Signal</label>
               <input
                 name="phone"
                 onChange={formik.handleChange}
                 value={formik.values.phone}
-                className="w-full bg-secondary border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.2em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5"
+                className="w-full bg-secondary border border-white/10 focus:border-primary/50 rounded-xl md:rounded-2xl px-4 md:px-6 py-4 md:py-5 text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5"
                 placeholder="+XX XXXXX XXXXX"
               />
-              {formik.touched.phone && formik.errors.phone && <p className="text-rose-500 text-[9px] font-black ml-4 uppercase  tracking-widest">{formik.errors.phone}</p>}
+              {formik.touched.phone && formik.errors.phone && <p className="text-rose-500 text-[8px] font-black ml-4 uppercase  tracking-widest">{formik.errors.phone}</p>}
             </div>
           </div>
 
-          <div className="space-y-6">
-            <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 ">Ritual Specializations</label>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[350px] overflow-y-auto pr-4 custom-scrollbar">
+          <div className="space-y-4 md:space-y-6">
+            <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 ">Ritual Specializations</label>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 max-h-[250px] md:max-h-[350px] overflow-y-auto pr-2 md:pr-4 custom-scrollbar">
               {services.map(s => (
-                <label key={s._id} className={`flex items-center justify-between p-6 rounded-2xl cursor-pointer transition-all border border-white/5 group ${formik.values.services.includes(s._id) ? 'bg-primary text-secondary shadow-xl shadow-primary/20' : 'bg-background hover:bg-white/5 text-muted'}`}>
-                  <span className="text-[10px] font-black uppercase tracking-[0.2em] ">{s.name}</span>
+                <label key={s._id} className={`flex items-center justify-between p-4 md:p-6 rounded-xl md:rounded-2xl cursor-pointer transition-all border border-white/5 group ${formik.values.services.includes(s._id) ? 'bg-primary text-secondary shadow-xl shadow-primary/20' : 'bg-background hover:bg-white/5 text-muted'}`}>
+                  <span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] ">{s.name}</span>
                   <input
                     type="checkbox"
                     name="services"
@@ -301,7 +301,7 @@ export default function Staff() {
                     }}
                     className="hidden"
                   />
-                  {formik.values.services.includes(s._id) ? <UserCheck size={18} strokeWidth={3} /> : <div className="w-5 h-5 rounded-2xl border-2 border-white/10 group-hover:border-primary/30 transition-colors" />}
+                  {formik.values.services.includes(s._id) ? <UserCheck size={16} md:size={18} strokeWidth={3} /> : <div className="w-4 h-4 md:w-5 md:h-5 rounded-full border-2 border-white/10 group-hover:border-primary/30 transition-colors" />}
                 </label>
               ))}
             </div>
@@ -310,7 +310,7 @@ export default function Staff() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-6 px-2 bg-primary text-secondary rounded-2xl text-[10px] font-black uppercase tracking-[0.5em] hover:bg-primary/90 transition-all shadow-2xl active:scale-[0.98] disabled:opacity-50 font-luxury "
+            className="w-full py-5 md:py-6 px-2 bg-primary text-secondary rounded-xl md:rounded-2xl text-[10px] md:text-[11px] uppercase tracking-[0.5em] hover:bg-primary/90 transition-all shadow-2xl active:scale-[0.98] disabled:opacity-50 font-luxury "
           >
             {selectedExpert ? 'COMMIT PROTOCOL UPDATES' : 'AUTHORIZE ONBOARDING'}
           </button>

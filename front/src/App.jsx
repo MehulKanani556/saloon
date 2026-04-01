@@ -17,6 +17,7 @@ import Signup from './pages/Signup'
 import StaffDashboard from './pages/StaffDashboard'
 import Leaves from './pages/Leaves'
 import Specializations from './pages/Specializations'
+import StaffSettings from './pages/StaffSettings'
 import PrivateRoute from './components/PrivateRoute'
 import { Toaster } from 'react-hot-toast'
 import './index.css'
@@ -82,6 +83,7 @@ const AppContent = () => {
         <Route path="/staff/specialization" element={<PrivateRoute roles={['Staff']}><Specializations /></PrivateRoute>} />
         <Route path="/staff/invoices" element={<PrivateRoute roles={['Staff']}><Invoices /></PrivateRoute>} />
         <Route path="/staff/leaves" element={<PrivateRoute roles={['Staff']}><Leaves /></PrivateRoute>} />
+        <Route path="/staff/settings" element={<PrivateRoute roles={['Staff']}><StaffSettings /></PrivateRoute>} />
         
         {/* Client/General Auth Routes */}
         <Route path="/profile" element={<PrivateRoute roles={['User', 'Admin', 'Staff']}><Profile /></PrivateRoute>} />

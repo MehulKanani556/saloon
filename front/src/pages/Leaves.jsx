@@ -131,27 +131,27 @@ export default function Leaves() {
                 subtitle="Absence Request Authorization"
                 icon={CalendarClock}
                 rightContent={
-                    <>
+                    <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4 md:gap-6 w-full md:w-auto">
                         {!isAdmin && (
                             <button
                                 onClick={() => setIsModalOpen(true)}
-                                className="flex items-center gap-4 px-10 py-5 bg-primary text-secondary rounded-2xl font-black uppercase text-xs tracking-[0.3em] shadow-xl hover:scale-[1.05] transition-all"
+                                className="flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-4 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[9px] md:text-xs tracking-[0.2em] md:tracking-[0.3em] shadow-xl hover:scale-[1.05] transition-all whitespace-nowrap"
                             >
-                                <Plus size={20} />
+                                <Plus size={16} md:size={20} />
                                 Add Leave
                             </button>
                         )}
-                        <div className="relative group min-w-[300px]">
-                            <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-muted" size={20} />
+                        <div className="relative group min-w-0 md:min-w-[300px] w-full">
+                            <Search className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 text-muted" size={16} md:size={20} />
                             <input
                                 type="text"
                                 placeholder="Filter records..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full bg-secondary/40 backdrop-blur-md border border-white/5 rounded-2xl px-16 py-5 text-[11px] font-black uppercase tracking-[0.2em] outline-none text-white transition-all focus:border-primary/50"
+                                className="w-full bg-secondary/40 backdrop-blur-md border border-white/5 rounded-xl md:rounded-2xl px-12 md:px-16 py-4 md:py-5 text-[9px] md:text-[11px] font-black uppercase tracking-[0.1em] md:tracking-[0.2em] outline-none text-white transition-all focus:border-primary/50 placeholder:text-white/20"
                             />
                         </div>
-                    </>
+                    </div>
                 }
             />
 
@@ -161,39 +161,39 @@ export default function Leaves() {
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="bg-background/80">
-                                {isAdmin && <th className="px-10 py-6 text-[10px] font-black uppercase tracking-[0.4em] text-primary">Merchant</th>}
-                                <th className="px-10 py-6 text-[10px] font-black uppercase tracking-[0.4em] text-primary">Type</th>
-                                <th className="px-10 py-6 text-[10px] font-black uppercase tracking-[0.4em] text-primary">Dates</th>
-                                <th className="px-10 py-6 text-[10px] font-black uppercase tracking-[0.4em] text-primary">Hours</th>
-                                <th className="px-10 py-6 text-[10px] font-black uppercase tracking-[0.4em] text-primary">Status</th>
-                                <th className="px-10 py-6 text-center text-[10px] font-black uppercase tracking-[0.4em] text-primary">Action</th>
+                                {isAdmin && <th className="px-4 md:px-10 py-4 md:py-6 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Artisan</th>}
+                                <th className="px-4 md:px-10 py-4 md:py-6 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Type</th>
+                                <th className="px-4 md:px-10 py-4 md:py-6 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Timeline</th>
+                                <th className="px-4 md:px-10 py-4 md:py-6 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Hours</th>
+                                <th className="px-4 md:px-10 py-4 md:py-6 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Status</th>
+                                <th className="px-4 md:px-10 py-4 md:py-6 text-center text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Action</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-white/5">
-                            {filteredLeaves.map((leave, idx) => (
-                                <tr key={leave._id} className="group hover:bg-white/5 transition-all">
+                             {filteredLeaves.map((leave, idx) => (
+                                <tr key={leave._id} className="group hover:bg-white/5 transition-all outline-none border-b border-white/5 last:border-0 ">
                                     {isAdmin && (
-                                        <td className="px-10 py-8 text-white font-black uppercase tracking-widest text-[10px]">
+                                        <td className="px-4 md:px-10 py-4 md:py-8 text-white font-black uppercase tracking-[0.1em] md:tracking-widest text-[9px] md:text-[10px]">
                                             {leave.staff?.name}
                                         </td>
                                     )}
-                                    <td className="px-10 py-8">
-                                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary bg-primary/5 px-4 py-2 rounded-xl">{leave.type}</span>
+                                    <td className="px-4 md:px-10 py-4 md:py-8">
+                                        <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.1em] md:tracking-[0.2em] text-primary bg-primary/5 px-2.5 md:px-4 py-1.5 md:py-2 rounded-lg md:rounded-xl whitespace-nowrap">{leave.type}</span>
                                     </td>
-                                    <td className="px-10 py-8">
-                                        <p className="text-[11px] font-black text-white tracking-widest ">
+                                    <td className="px-4 md:px-10 py-4 md:py-8">
+                                        <p className="text-[9px] md:text-[11px] font-black text-white tracking-[0.1em] md:tracking-widest whitespace-nowrap ">
                                             {format(new Date(leave.startDate), 'MMM dd')} - {format(new Date(leave.endDate), 'MMM dd')}
                                         </p>
                                     </td>
-                                    <td className="px-10 py-8 text-[11px] font-black text-muted tracking-widest uppercase">
-                                        {leave.totalHours} Hours
+                                    <td className="px-4 md:px-10 py-4 md:py-8 text-[9px] md:text-[11px] font-black text-muted tracking-[0.1em] md:tracking-widest uppercase whitespace-nowrap">
+                                        {leave.totalHours}H
                                     </td>
-                                    <td className="px-10 py-8">
-                                        <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl border text-[9px] font-black uppercase tracking-[0.2em] ${getStatusStyles(leave.status)}`}>
+                                    <td className="px-4 md:px-10 py-4 md:py-8">
+                                        <div className={`inline-flex items-center gap-2 px-2.5 md:px-4 py-1.5 md:py-2 rounded-lg md:rounded-xl border text-[7px] md:text-[9px] font-black uppercase tracking-[0.1em] md:tracking-[0.2em] whitespace-nowrap ${getStatusStyles(leave.status)}`}>
                                             {leave.status}
                                         </div>
                                     </td>
-                                    <td className="px-10 py-8">
+                                    <td className="px-4 md:px-10 py-4 md:py-8">
                                         <div className="flex justify-center">
                                             {isAdmin && leave.status === 'Pending' ? (
                                                 <button
@@ -201,12 +201,12 @@ export default function Leaves() {
                                                         setSelectedLeave(leave);
                                                         setIsActionModalOpen(true);
                                                     }}
-                                                    className="p-4 bg-background border border-white/5 rounded-2xl text-primary hover:text-white transition-all shadow-2xl"
+                                                    className="p-3 md:p-4 bg-background border border-white/5 rounded-xl md:rounded-2xl text-primary hover:text-white transition-all shadow-2xl active:scale-90"
                                                 >
-                                                    <CheckCircle2 size={18} />
+                                                    <CheckCircle2 size={16} md:size={18} />
                                                 </button>
                                             ) : (
-                                                <AlertCircle size={18} className="text-white/5" />
+                                                <AlertCircle size={16} md:size={18} className="text-white/5" />
                                             )}
                                         </div>
                                     </td>
@@ -242,10 +242,10 @@ export default function Leaves() {
                     </div>
 
                     {/* Leave Type Radios */}
-                    <div className="bg-background border border-white/5 rounded-xl px-6 py-5 flex flex-wrap items-center gap-3">
+                    <div className="bg-background border border-white/5 rounded-xl px-4 md:px-6 py-4 md:py-5 flex flex-col md:flex-row flex-wrap items-stretch md:items-center gap-4 md:gap-3">
                         {['Sick Leave', 'Casual Leave', 'Emergency Leave'].map((type) => (
-                            <label key={type} className="flex items-center gap-3 cursor-pointer group">
-                                <div className="relative flex items-center justify-center">
+                            <label key={type} className="flex items-center gap-4 md:gap-3 cursor-pointer group">
+                                <div className="relative flex items-center justify-center shrink-0">
                                     <input
                                         type="radio"
                                         name="type"
@@ -256,13 +256,13 @@ export default function Leaves() {
                                     />
                                     {formik.values.type === type && <div className="absolute w-2.5 h-2.5 bg-primary rounded-full shadow-[0_0_8px_rgba(201,162,39,0.5)]" />}
                                 </div>
-                                <span className={`text-[10px] font-black uppercase tracking-widest transition-colors ${formik.values.type === type ? 'text-white' : 'text-muted/40 group-hover:text-white/60'}`}>{type}</span>
+                                <span className={`text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-colors ${formik.values.type === type ? 'text-white' : 'text-muted/40 group-hover:text-white/60'}`}>{type}</span>
                             </label>
                         ))}
                     </div>
 
                     {/* Dates - Side by Side */}
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="relative group">
                             <div 
                                 className="absolute left-5 top-1/2 -translate-y-1/2 text-muted/40 group-focus-within:text-primary transition-colors cursor-pointer z-10"
@@ -296,7 +296,7 @@ export default function Leaves() {
                     </div>
 
                     {/* Times - Side by Side */}
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="relative group">
                             <div 
                                 className="absolute left-5 top-1/2 -translate-y-1/2 text-muted/40 group-focus-within:text-primary transition-colors cursor-pointer z-10"
@@ -328,17 +328,17 @@ export default function Leaves() {
                     </div>
 
                     {/* Buttons */}
-                    <div className="pt-4 flex items-center gap-6">
+                    <div className="pt-4 flex flex-col md:flex-row items-stretch md:items-center gap-4 md:gap-6">
                         <button
                             type="submit"
-                            className="px-10 py-5 bg-primary text-secondary rounded-xl font-black uppercase text-[11px] tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all active:scale-95 font-luxury"
+                            className="flex-1 px-8 md:px-10 py-4 md:py-5 bg-primary text-secondary rounded-xl font-black uppercase text-[10px] md:text-[11px] tracking-[0.2em] md:tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.02] md:hover:scale-[1.05] transition-all active:scale-95 font-luxury"
                         >
                             Save Ritual
                         </button>
                         <button
                             type="button"
                             onClick={() => setIsModalOpen(false)}
-                            className="px-10 py-5 bg-white/5 hover:bg-white/10 text-white/60 hover:text-white rounded-xl font-black uppercase text-[11px] tracking-[0.3em] border border-white/5 transition-all font-luxury"
+                            className="flex-1 px-8 md:px-10 py-4 md:py-5 bg-white/5 hover:bg-white/10 text-white/60 hover:text-white rounded-xl font-black uppercase text-[10px] md:text-[11px] tracking-[0.2em] md:tracking-[0.3em] border border-white/5 transition-all font-luxury"
                         >
                             Discard
                         </button>

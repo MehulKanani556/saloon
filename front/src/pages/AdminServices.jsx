@@ -128,19 +128,19 @@ export default function AdminServices() {
         title={editingService ? 'Refine Ritual' : 'Induct Ritual'}
         subtitle="Operational Matrix Management"
       >
-        <form onSubmit={formik.handleSubmit} className="space-y-10 p-2">
-          <div className="space-y-4">
-            <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2 ">Visual Archive Signature</label>
-            <div className="relative aspect-video rounded-2xl bg-background border-2 border-dashed border-white/10 overflow-hidden group cursor-pointer shadow-3xl hover:border-primary/40 transition-all duration-500">
+        <form onSubmit={formik.handleSubmit} className="space-y-6 md:space-y-10 p-1 md:p-2">
+          <div className="space-y-2 md:space-y-4">
+            <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2 ">Visual Archive Signature</label>
+            <div className="relative aspect-video rounded-xl md:rounded-2xl bg-background border-2 border-dashed border-white/10 overflow-hidden group cursor-pointer shadow-3xl hover:border-primary/40 transition-all duration-500">
               {preview ? (
                 <img
                   src={preview.startsWith('blob') || !preview.startsWith('/uploads') ? preview : `${IMAGE_URL}${preview}`}
                   className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                 />
               ) : (
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-white/5">
-                  <ImageIcon size={48} strokeWidth={1} className="mb-4 opacity-50 group-hover:scale-110 transition-transform" />
-                  <span className="text-[10px] font-black uppercase tracking-[0.5em] ">Commit Visual Protocol</span>
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-white/5 p-4">
+                  <ImageIcon size={32} md:size={48} strokeWidth={1} className="mb-2 md:mb-4 opacity-50 group-hover:scale-110 transition-transform" />
+                  <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.5em] text-center ">Commit Visual Protocol</span>
                 </div>
               )}
               <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
@@ -150,12 +150,12 @@ export default function AdminServices() {
             </div>
           </div>
 
-          <div className="space-y-4">
-            <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2  underline decoration-primary/30 underline-offset-8">Ritual Nomenclature</label>
+          <div className="space-y-2 md:space-y-4">
+            <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2  underline decoration-primary/30 underline-offset-8">Ritual Nomenclature</label>
             <input
               {...formik.getFieldProps('name')}
               placeholder="e.g. MAGNUM OPUS CUT"
-              className="w-full bg-secondary/50 border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.3em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5  font-luxury"
+              className="w-full bg-secondary/50 border border-white/10 focus:border-primary/50 rounded-xl md:rounded-2xl px-4 md:px-6 py-4 md:py-5 text-[10px] md:text-[11px] font-black uppercase tracking-[0.3em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5  font-luxury"
             />
           </div>
 
@@ -210,40 +210,40 @@ export default function AdminServices() {
             )}
           </AnimatePresence>
 
-          <div className="grid grid-cols-2 gap-8">
-            <div className="space-y-4">
-              <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2 ">Temporal Span (MIN)</label>
+          <div className="grid grid-cols-2 gap-4 md:gap-8">
+            <div className="space-y-2 md:space-y-4">
+              <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2 ">Temporal Span (MIN)</label>
               <input
                 type="number"
                 {...formik.getFieldProps('duration')}
-                className="w-full bg-secondary/50 border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.3em] outline-none text-white shadow-2xl transition-all"
+                className="w-full bg-secondary/50 border border-white/10 focus:border-primary/50 rounded-xl md:rounded-2xl px-4 md:px-6 py-4 md:py-5 text-[10px] md:text-[11px] font-black uppercase tracking-[0.3em] outline-none text-white shadow-2xl transition-all"
               />
             </div>
-            <div className="space-y-4">
-              <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2 ">Magnitude ($)</label>
+            <div className="space-y-2 md:space-y-4">
+              <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2 ">Magnitude ($)</label>
               <input
                 type="number"
                 {...formik.getFieldProps('price')}
-                className="w-full bg-secondary/50 border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.3em] outline-none text-white shadow-2xl transition-all font-luxury"
+                className="w-full bg-secondary/50 border border-white/10 focus:border-primary/50 rounded-xl md:rounded-2xl px-4 md:px-6 py-4 md:py-5 text-[10px] md:text-[11px] font-black uppercase tracking-[0.3em] outline-none text-white shadow-2xl transition-all font-luxury"
               />
             </div>
           </div>
 
-          <div className="flex items-center justify-between p-6 bg-secondary/30 backdrop-blur-md rounded-2xl border border-white/5 shadow-inner">
-            <div className="flex items-center gap-4">
-              <Activity size={18} className="text-primary" />
-              <span className="text-[10px] font-black text-white/60 uppercase tracking-[0.4em] ">Availability Status</span>
+          <div className="flex items-center justify-between p-4 md:p-6 bg-secondary/30 backdrop-blur-md rounded-xl md:rounded-2xl border border-white/5 shadow-inner">
+            <div className="flex items-center gap-3 md:gap-4">
+              <Activity size={16} md:size={18} className="text-primary" />
+              <span className="text-[9px] md:text-[10px] font-black text-white/60 uppercase tracking-[0.4em] ">Availability Status</span>
             </div>
             <label className="relative inline-flex items-center cursor-pointer group">
               <input type="checkbox" checked={formik.values.isActive} onChange={(e) => formik.setFieldValue('isActive', e.target.checked)} className="sr-only peer" />
-              <div className="w-14 h-7 bg-white/10 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary shadow-inner"></div>
+              <div className="w-12 h-6 md:w-14 md:h-7 bg-white/10 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:rounded-full after:h-4 after:w-4 md:after:h-5 md:after:w-5 after:transition-all peer-checked:bg-primary shadow-inner"></div>
             </label>
           </div>
 
           <button
             type="submit"
             disabled={formik.isSubmitting}
-            className="w-full py-6 bg-primary text-secondary rounded-2xl font-black text-[11px] uppercase tracking-[0.5em] shadow-2xl hover:bg-primary/90 transition-all flex items-center justify-center gap-4 active:scale-[0.98] disabled:opacity-50 font-luxury "
+            className="w-full py-5 md:py-6 bg-primary text-secondary rounded-xl md:rounded-2xl font-black text-[10px] md:text-[11px] uppercase tracking-[0.5em] shadow-2xl hover:bg-primary/90 transition-all flex items-center justify-center gap-4 active:scale-[0.98] disabled:opacity-50 font-luxury "
           >
             {formik.isSubmitting ? 'SYNCING MATRIX...' : (editingService ? 'COMMIT REFINEMENT' : 'AUTHORIZE CREATION')}
           </button>
