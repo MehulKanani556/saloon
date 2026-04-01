@@ -395,6 +395,7 @@ const WhyChooseUs = () => {
 
 const TeamPreview = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { staff, loading } = useSelector(state => state.staff);
 
   useEffect(() => {

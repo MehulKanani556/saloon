@@ -142,16 +142,16 @@ const StorySection = () => {
 
 const PhilosophySection = () => {
   return (
-    <section className="relative py-40 overflow-hidden">
+    <section className="relative py-20 overflow-hidden">
       <div className="absolute inset-0 z-0">
-        <img 
-          src="https://images.unsplash.com/photo-1554521871-3375b48ec171?q=80&w=1974&auto=format&fit=crop" 
-          className="w-full h-full object-cover opacity-20 scale-110"
-          alt="Cinematic Background"
+        <img
+          src="https://images.unsplash.com/photo-1492106087820-71f1a00d2b11?q=80&w=2000&auto=format&fit=crop"
+          className="w-full h-full object-cover grayscale opacity-30"
+          alt="Philosophy Background"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background" />
+        {/* <div className="absolute inset-0 bg-background/80 bg-gradient-to-t from-background via-transparent to-background" /> */}
       </div>
-      
+
       <div className="container mx-auto px-6 relative z-10 text-center">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}

@@ -33,9 +33,9 @@ export default function Contact() {
             <img
               src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?q=80&w=2070&auto=format&fit=crop"
               alt="Luxury Sanctuary"
-              className="w-full h-full object-cover opacity-20 grayscale scale-105"
+              className="w-full h-full object-cover opacity-30 grayscale scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/60 to-background" />
+            {/* <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/60 to-background" /> */}
           </div>
 
           <div className="container mx-auto px-6 relative z-10 text-center pt-20">
