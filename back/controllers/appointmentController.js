@@ -4,115 +4,122 @@ const Service = require('../models/Service');
 const moment = require('moment');
 
 const createAppointment = async (req, res) => {
-    const { clientEmail, clientName, clientPhone, services, assignments, date, status, paymentStatus } = req.body;
+    try {
+        const { clientEmail, clientName, clientPhone, services, assignments, date, status, paymentStatus } = req.body;
 
-    // 1. Resolve Services and Assignments
-    let finalAssignments = assignments || [];
-    let serviceIds = services || finalAssignments.map(a => a.service);
+        // 1. Resolve Services and Assignments
+        let finalAssignments = assignments || [];
+        let serviceIds = services || finalAssignments.map(a => a.service);
 
-    // Robust parsing for serviceIds from form-data or mixed inputs
-    if (serviceIds && typeof serviceIds === 'string') {
-        if (serviceIds.includes(',')) {
-            serviceIds = serviceIds.split(',').map(s => s.replace(/[\[\]'"]/g, '').trim());
-        } else {
-            serviceIds = [serviceIds.replace(/[\[\]'"]/g, '').trim()];
+        // Robust parsing for serviceIds from form-data or mixed inputs
+        if (serviceIds && typeof serviceIds === 'string') {
+            if (serviceIds.includes(',')) {
+                serviceIds = serviceIds.split(',').map(s => s.replace(/[\[\]'"]/g, '').trim());
+            } else {
+                serviceIds = [serviceIds.replace(/[\[\]'"]/g, '').trim()];
+            }
         }
-    }
 
-    // Ensure it's an array and filter valid 24-char IDs
-    serviceIds = Array.isArray(serviceIds) ? serviceIds.filter(s => s && s.length === 24) : [];
+        // Ensure it's an array and filter valid 24-char IDs
+        serviceIds = Array.isArray(serviceIds) ? serviceIds.filter(s => s && s.length === 24) : [];
 
-    // 2. Validate Temple Coordinates (Date)
-    const normalizedDate = moment(date, ["DD/MM/YYYY", "YYYY-MM-DD", "MM/DD/YYYY", moment.ISO_8601], true);
-    if (!date || !normalizedDate.isValid()) {
-        return res.status(400).json({ message: 'Temporal coordinates are invalid or missing. Ensure format is DD/MM/YYYY or YYYY-MM-DD.' });
-    }
+        // 2. Validate Temple Coordinates (Date)
+        const normalizedDate = moment(date, ["DD/MM/YYYY", "YYYY-MM-DD", "MM/DD/YYYY", moment.ISO_8601], true);
+        if (!date || !normalizedDate.isValid()) {
+            return res.status(400).json({ message: 'Temporal coordinates are invalid or missing. Ensure format is DD/MM/YYYY or YYYY-MM-DD.' });
+        }
 
-    if (serviceIds.length === 0) {
-        return res.status(400).json({ message: 'At least one ritual component (service) is required' });
-    }
+        if (serviceIds.length === 0) {
+            return res.status(400).json({ message: 'At least one ritual component (service) is required' });
+        }
 
-    const servicesFound = await Service.find({ _id: { $in: serviceIds } });
-    if (!servicesFound.length) {
-        return res.status(404).json({ message: 'Ritual components not found' });
-    }
+        const servicesFound = await Service.find({ _id: { $in: serviceIds } });
+        if (!servicesFound.length) {
+            return res.status(404).json({ message: 'Ritual components not found' });
+        }
 
-    const totalPrice = servicesFound.reduce((acc, curr) => acc + curr.price, 0);
-    const requestedTime = normalizedDate.toDate();
+        const totalPrice = servicesFound.reduce((acc, curr) => acc + curr.price, 0);
+        const requestedTime = normalizedDate.toDate();
 
-    // 3. Handle Auto-Assignment if needed
-    if (finalAssignments.length === 0 || !finalAssignments[0].staff) {
-        // Find qualified staff who can do ALL rituals
-        const eligibleStaff = await User.find({
-            role: 'Staff',
-            isActive: true,
-            services: { $all: serviceIds }
+        // 3. Handle Auto-Assignment if needed
+        if (finalAssignments.length === 0 || !finalAssignments[0].staff) {
+            // Find qualified staff who can do ALL rituals
+            const eligibleStaff = await User.find({
+                role: 'Staff',
+                isActive: true,
+                services: { $all: serviceIds }
+            });
+
+            let assignedStaffId = null;
+            for (const stf of eligibleStaff) {
+                const conflict = await Appointment.findOne({
+                    'assignments.staff': stf._id,
+                    appointmentDate: requestedTime,
+                    status: { $ne: 'Cancelled' }
+                });
+                if (!conflict) {
+                    assignedStaffId = stf._id;
+                    break;
+                }
+            }
+
+            if (!assignedStaffId) {
+                return res.status(400).json({ message: 'All qualified masters are occupied during this temporal slot' });
+            }
+
+            finalAssignments = serviceIds.map(sid => ({ service: sid, staff: assignedStaffId }));
+        } else {
+            // Verify user-selected staff availability
+            for (const asm of finalAssignments) {
+                const conflict = await Appointment.findOne({
+                    'assignments.staff': asm.staff,
+                    appointmentDate: requestedTime,
+                    status: { $ne: 'Cancelled' }
+                });
+                if (conflict) {
+                    return res.status(400).json({ message: 'One of the selected masters has been reserved in the meantime' });
+                }
+            }
+        }
+
+        // 3. SECURE Client Profile (Relaxed role check to prevent duplicate key errors)
+        let client = await User.findOne({ 
+            $or: [
+                { phone: clientPhone },
+                { email: clientEmail && clientEmail.trim() !== "" ? clientEmail : "no-email@temporary.com" }
+            ]
         });
 
-        let assignedStaffId = null;
-        for (const stf of eligibleStaff) {
-            const conflict = await Appointment.findOne({
-                'assignments.staff': stf._id,
-                appointmentDate: requestedTime,
-                status: { $ne: 'Cancelled' }
-            });
-            if (!conflict) {
-                assignedStaffId = stf._id;
-                break;
-            }
+        if (!client) {
+            client = await User.create({ name: clientName, email: clientEmail, phone: clientPhone, role: 'User' });
+        } else {
+            // Update details if they've changed
+            if (clientPhone) client.phone = clientPhone;
+            if (clientEmail) client.email = clientEmail;
+            if (clientName) client.name = clientName;
+            await client.save();
         }
 
-        if (!assignedStaffId) {
-            return res.status(400).json({ message: 'All qualified masters are occupied during this temporal slot' });
-        }
+        const appointment = new Appointment({
+            client: client._id,
+            assignments: finalAssignments,
+            appointmentDate: requestedTime,
+            status: status || 'Pending',
+            paymentStatus: paymentStatus || 'Pending',
+            totalPrice
+        });
 
-        finalAssignments = serviceIds.map(sid => ({ service: sid, staff: assignedStaffId }));
-    } else {
-        // Verify user-selected staff availability
-        for (const asm of finalAssignments) {
-            const conflict = await Appointment.findOne({
-                'assignments.staff': asm.staff,
-                appointmentDate: requestedTime,
-                status: { $ne: 'Cancelled' }
-            });
-            if (conflict) {
-                return res.status(400).json({ message: 'One of the selected masters has been reserved in the meantime' });
-            }
-        }
-    }
-
-    // 3. SECURE Client Profile
-    let client = await User.findOne({ 
-        $or: [
-            { phone: clientPhone },
-            { email: clientEmail && clientEmail.trim() !== "" ? clientEmail : "" }
-        ], 
-        role: 'User' 
-    });
-
-    if (!client) {
-        client = await User.create({ name: clientName, email: clientEmail, phone: clientPhone, role: 'User' });
-    } else {
-        // Update details if they've changed
-        if (clientPhone) client.phone = clientPhone;
-        if (clientEmail) client.email = clientEmail;
-        if (clientName) client.name = clientName;
+        const createdAppointment = await (await appointment.save()).populate(['client', 'assignments.service', 'assignments.staff']);
+        
+        if (!client.bookingHistory) client.bookingHistory = [];
+        client.bookingHistory.push(createdAppointment._id);
         await client.save();
+        
+        res.status(201).json(createdAppointment);
+    } catch (error) {
+        console.error('CRITICAL_BACKEND_ERR:', error);
+        res.status(500).json({ message: 'System error during protocol deployment: ' + error.message });
     }
-
-    const appointment = new Appointment({
-        client: client._id,
-        assignments: finalAssignments,
-        appointmentDate: requestedTime,
-        status: status || 'Pending',
-        paymentStatus: paymentStatus || 'Pending',
-        totalPrice
-    });
-
-    const createdAppointment = await (await appointment.save()).populate(['client', 'assignments.service', 'assignments.staff']);
-    client.bookingHistory.push(createdAppointment._id);
-    await client.save();
-    res.status(201).json(createdAppointment);
 };
 
 const getAppointments = async (req, res) => {

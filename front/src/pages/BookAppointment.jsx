@@ -352,7 +352,7 @@ export default function BookAppointment() {
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ 
-                    width: step === 1 ? '0%' : step === 2 ? '50%' : '69%'
+                    width: step === 1 ? '0%' : step === 2 ? '50%' : '100%'
                   }}
                   transition={{ duration: 0.8, ease: "circOut" }}
                   className="absolute top-[28px] md:top-[32px] left-10 md:left-24 h-[2px] bg-primary z-0 shadow-[0_0_20px_rgba(201,162,39,0.4)]"
