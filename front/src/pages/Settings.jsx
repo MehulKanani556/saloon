@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchSettings, updateSettings } from '../redux/slices/settingSlice';
 import toast from 'react-hot-toast';
 import { motion } from 'framer-motion';
+import AdminHeader from '../components/ui/AdminHeader';
+
 
 const SettingsSchema = Yup.object().shape({
   salonName: Yup.string().required('Required'),
@@ -57,30 +59,22 @@ export default function Settings() {
 
   return (
     <div className="space-y-6 md:space-y-12">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 md:gap-8 mb-8 md:mb-12">
-        <div className="flex items-center gap-4 lg:gap-6 relative z-10 transition-all">
-          <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-secondary border border-white/10 flex items-center justify-center text-primary shadow-glass shrink-0 transition-transform hover:rotate-6">
-            <Building2 size={24} md:size={32} strokeWidth={2.5} />
-          </div>
-          <div className="min-w-0">
-            <h1 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">
-              Saloon Manifesto
-            </h1>
-            <p className="text-muted font-black text-[8px] sm:text-[9px] lg:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.25em] opacity-70">
-              Configure global business identity and operational protocols
-            </p>
-          </div>
-        </div>
+      <AdminHeader 
+        title="Saloon Manifesto"
+        subtitle="Configure global business identity and operational protocols"
+        icon={Building2}
+        rightContent={
+          <button
+            onClick={formik.handleSubmit}
+            className="flex items-center gap-3 px-6 py-3 lg:px-10 lg:py-5 bg-primary text-secondary lg:rounded-2xl rounded-xl font-black uppercase text-xs tracking-[0.2em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group"
+            disabled={formik.isSubmitting}
+          >
+            {formik.isSubmitting ? <Loader2 size={18} className="animate-spin" /> : <Save size={20} />}
+            Save Changes
+          </button>
+        }
+      />
 
-        <button
-          onClick={formik.handleSubmit}
-          className="flex items-center gap-3 px-6 py-3 lg:px-10 lg:py-5 bg-primary text-secondary lg:rounded-2xl rounded-xl font-black uppercase text-xs tracking-[0.2em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group"
-          disabled={formik.isSubmitting}
-        >
-          {formik.isSubmitting ? <Loader2 size={18} className="animate-spin" /> : <Save size={20} />}
-          Save Changes
-        </button>
-      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
         <div className="lg:col-span-2 space-y-10">

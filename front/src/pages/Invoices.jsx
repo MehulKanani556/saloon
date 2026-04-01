@@ -8,6 +8,8 @@ import { useSearchParams } from 'react-router-dom';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 import { IMAGE_URL } from '../utils/BASE_URL';
+import AdminHeader from '../components/ui/AdminHeader';
+
 
 const InvoiceDetailModal = ({ appointment, onClose }) => {
   const dispatch = useDispatch();
@@ -204,30 +206,26 @@ export default function Invoices() {
 
   return (
     <div className="space-y-12">
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-10">
-        <div className="flex items-center gap-6 group">
-          <div className="w-16 h-16 rounded-2xl bg-secondary border border-white/10 flex items-center justify-center text-primary shadow-premium shrink-0 transition-transform hover:rotate-6">
-            <FileText size={32} strokeWidth={2.5} />
+      <AdminHeader
+        title="Financial Archive"
+        subtitle="Audit trail of all financial ritual settlements"
+        icon={FileText}
+        rightContent={
+          <div className="relative group w-full lg:w-96">
+            <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none text-muted group-focus-within:text-primary transition-colors">
+              <Search size={22} />
+            </div>
+            <input
+              type="text"
+              placeholder="Query Masterpiece Archives..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full bg-secondary/40 backdrop-blur-md border border-white/5 rounded-2xl px-16 py-5 text-[11px] font-black uppercase tracking-[0.2em] outline-none focus:border-primary/50 shadow-3xl transition-all text-white placeholder:text-white/10"
+            />
           </div>
-          <div className="min-w-0">
-            <h1 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">Financial Archive</h1>
-            <p className="text-[10px] font-black text-muted uppercase tracking-[0.3em] opacity-60">Audit trail of all financial ritual settlements</p>
-          </div>
-        </div>
+        }
+      />
 
-        <div className="relative group w-full lg:w-96">
-          <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none text-muted group-focus-within:text-primary transition-colors">
-            <Search size={22} />
-          </div>
-          <input
-            type="text"
-            placeholder="Query Masterpiece Archives..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-secondary/40 backdrop-blur-md border border-white/5 rounded-2xl px-16 py-5 text-[11px] font-black uppercase tracking-[0.2em] outline-none focus:border-primary/50 shadow-3xl transition-all text-white placeholder:text-white/10"
-          />
-        </div>
-      </div>
 
       <div className="bg-secondary/30 backdrop-blur-sm rounded-2xl overflow-hidden shadow-3xl border border-white/5 relative">
         <div className="absolute top-0 left-0 w-full h-[1px] bg-luxury-gradient opacity-10" />
@@ -263,7 +261,7 @@ export default function Invoices() {
                       <div className="flex items-center gap-5">
                         <div className="w-14 h-14 rounded-2xl bg-background p-1 border border-white/10 group-hover:rotate-6 transition-all duration-500 shadow-2xl">
                           <img
-                            src={invoice.client?.profileImage ? `${invoice.client.profileImage}` : `https://api.dicebear.com/9.x/adventurer/svg?seed=${invoice.client?.name || 'Client'}`}
+                            src={invoice.client?.profileImage ? (invoice.client.profileImage.startsWith('http') ? invoice.client.profileImage : `${IMAGE_URL}${invoice.client.profileImage}`) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${invoice.client?.name || 'Client'}`}
                             alt={invoice.client?.name || 'Client'}
                             className="w-full h-full rounded-2xl object-cover grayscale transition-all duration-700 group-hover:grayscale-0"
                           />

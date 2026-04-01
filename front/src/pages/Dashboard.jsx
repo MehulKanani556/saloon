@@ -34,6 +34,8 @@ import { IMAGE_URL } from '../utils/BASE_URL';
 import { format, formatDistanceToNow, isToday } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 
+import AdminHeader from '../components/ui/AdminHeader';
+
 export default function Dashboard() {
   const dispatch = useDispatch();
   const { data, loading, error } = useSelector((state) => state.dashboard);
@@ -56,38 +58,22 @@ export default function Dashboard() {
   return (
     <div className="space-y-12">
       {/* Cinematic Header Section */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-10">
-        <div className="flex items-center gap-6 group">
-          <div className="w-16 h-16 rounded-2xl bg-secondary border border-white/10 flex items-center justify-center text-primary shadow-premium shrink-0 transition-transform hover:rotate-6">
-            <Activity size={32} strokeWidth={2.5} />
-          </div>
-          <div className="min-w-0">
-            <h1 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">Executive Summary</h1>
-            <div className="flex items-center gap-4">
-              <div className="flex gap-1.5">
-                {[1, 2, 3].map(i => (
-                  <motion.span
-                    key={i}
-                    animate={{ opacity: [0.2, 1, 0.2], height: [12, 20, 12] }}
-                    transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.2 }}
-                    className="w-1 bg-primary rounded-full"
-                  />
-                ))}
-              </div>
-              <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em]  opacity-60">Matrix Active | Connected</p>
+      <AdminHeader 
+        title="Executive Summary"
+        subtitle="Matrix Active | Connected"
+        icon={Activity}
+        rightContent={
+          <div className="flex items-center gap-8 bg-secondary/40 backdrop-blur-md px-10 py-6 rounded-2xl border border-white/5 shadow-3xl group hover:border-primary/20 transition-all duration-500">
+            <div className="text-left">
+              <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em] leading-none mb-3 ">Total Archive Value</p>
+              <p className="text-4xl font-black text-white tracking-tighter  font-luxury leading-none group-hover:scale-105 transition-transform duration-500">
+                $ {data.stats.totalRevenue.toLocaleString()}
+              </p>
             </div>
           </div>
-        </div>
+        }
+      />
 
-        <div className="flex items-center gap-8 bg-secondary/40 backdrop-blur-md px-10 py-6 rounded-2xl border border-white/5 shadow-3xl group hover:border-primary/20 transition-all duration-500">
-          <div className="text-left">
-            <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em] leading-none mb-3 ">Total Archive Value</p>
-            <p className="text-4xl font-black text-white tracking-tighter  font-luxury leading-none group-hover:scale-105 transition-transform duration-500">
-              $ {data.stats.totalRevenue.toLocaleString()}
-            </p>
-          </div>
-        </div>
-      </div>
 
       {/* Industrial Matrix Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -219,7 +205,7 @@ export default function Dashboard() {
                 <div className="flex items-center gap-5">
                   <div className="w-12 h-12 rounded-2xl bg-secondary p-1 border border-white/5 flex items-center justify-center text-primary group-hover/item:rotate-12 transition-all duration-500">
                     <img
-                      src={app.client?.profileImage ? `${IMAGE_URL}${app.client.profileImage}` : `https://api.dicebear.com/9.x/adventurer/svg?seed=${app.client?.name || 'Client'}`}
+                      src={app.client?.profileImage ? (app.client.profileImage.startsWith('http') ? app.client.profileImage : `${IMAGE_URL}${app.client.profileImage}`) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${app.client?.name || 'Client'}`}
                       className="w-full h-full rounded-xl object-cover grayscale group-hover/item:grayscale-0 transition-all"
                       alt=""
                     />

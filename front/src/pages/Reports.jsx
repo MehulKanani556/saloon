@@ -5,6 +5,8 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchReportIntel } from '../redux/slices/reportSlice';
 import { format } from 'date-fns';
+import AdminHeader from '../components/ui/AdminHeader';
+
 
 export default function Reports() {
   const dispatch = useDispatch();
@@ -34,13 +36,12 @@ export default function Reports() {
 
   return (
     <div className="space-y-12">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div className="space-y-1">
-          <h1 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">Business Intelligence</h1>
-          <p className="text-muted font-bold text-xs uppercase tracking-[0.2em]">Operational audit and growth analytics vault</p>
-        </div>
-      </div>
+      <AdminHeader 
+        title="Business Intelligence"
+        subtitle="Operational audit and growth analytics vault"
+        icon={TrendingUp}
+      />
+
 
       {/* Stat Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

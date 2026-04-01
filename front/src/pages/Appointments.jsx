@@ -14,6 +14,8 @@ import Modal from '../components/ui/Modal';
 import { IMAGE_URL } from '../utils/BASE_URL';
 import CustomSelect from '../components/CustomSelect';
 import toast from 'react-hot-toast';
+import AdminHeader from '../components/ui/AdminHeader';
+
 
 export default function Appointments() {
   const dispatch = useDispatch();
@@ -152,29 +154,26 @@ export default function Appointments() {
   return (
     <div className="space-y-12">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
-        <div className="flex items-center gap-6 group">
-          <div className="w-16 h-16 rounded-2xl bg-secondary border border-white/10 flex items-center justify-center text-primary shadow-premium shrink-0 transition-transform hover:rotate-6">
-            <CalendarIcon size={32} strokeWidth={2.5} />
-          </div>
-          <div className="min-w-0">
-            <h1 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">Appointment Bookings</h1>
-            <p className="text-[10px] font-black text-muted uppercase tracking-[0.3em] opacity-60">Architectural Management of the Temporal Record</p>
-          </div>
-        </div>
-        <button
-          onClick={() => {
-            setSelectedAppointment(null);
-            setIsNewClient(false);
-            formik.resetForm();
-            setIsDrawerOpen(true);
-          }}
-          className="flex items-center gap-4 px-10 py-5 bg-primary text-secondary rounded-2xl font-black uppercase text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group"
-        >
-          <Plus size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
-          Secure Ritual Slot
-        </button>
-      </div>
+      <AdminHeader 
+        title="Appointment Bookings"
+        subtitle="Architectural Management of the Temporal Record"
+        icon={CalendarIcon}
+        rightContent={
+          <button
+            onClick={() => {
+              setSelectedAppointment(null);
+              setIsNewClient(false);
+              formik.resetForm();
+              setIsDrawerOpen(true);
+            }}
+            className="flex items-center gap-4 px-10 py-5 bg-primary text-secondary rounded-2xl font-black uppercase text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group"
+          >
+            <Plus size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
+            Secure Ritual Slot
+          </button>
+        }
+      />
+
 
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-12">
         {/* Calendar Column */}

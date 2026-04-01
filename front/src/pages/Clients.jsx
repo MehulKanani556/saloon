@@ -9,6 +9,8 @@ import Modal from '../components/ui/Modal';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { IMAGE_URL } from '../utils/BASE_URL';
+import AdminHeader from '../components/ui/AdminHeader';
+
 
 export default function Clients() {
   const dispatch = useDispatch();
@@ -106,37 +108,33 @@ export default function Clients() {
 
   return (
     <div className="space-y-12">
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-10">
-        <div className="flex items-center gap-6 group">
-          <div className="w-16 h-16 rounded-2xl bg-secondary border border-white/10 flex items-center justify-center text-primary shadow-premium shrink-0 transition-transform hover:rotate-6">
-            <User2 size={32} strokeWidth={2.5} />
+      <AdminHeader 
+        title="Customer Archives"
+        subtitle="Cataloging Eternal Beauty Profiles"
+        icon={User2}
+        rightContent={
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="bg-secondary/40 backdrop-blur-md px-6 py-4 rounded-2xl border border-white/5 shadow-2xl flex items-center gap-4 w-full md:w-96 group focus-within:border-primary/40 transition-all">
+              <Search size={20} className="text-muted group-focus-within:text-primary transition-colors" />
+              <input
+                type="text"
+                placeholder="Query by name, signal, email..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="bg-transparent border-none outline-none text-[11px] w-full font-black uppercase tracking-widest text-white placeholder:text-white/10"
+              />
+            </div>
+            <button
+              onClick={() => setIsDrawerOpen(true)}
+              className="flex items-center gap-4 px-10 py-5 bg-primary text-secondary rounded-2xl font-black uppercase text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group"
+            >
+              <Plus size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
+              INDuct NEW PROTOCOL
+            </button>
           </div>
-          <div className="min-w-0">
-            <h1 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">Customer Archives</h1>
-            <p className="text-[10px] font-black text-muted uppercase tracking-[0.3em] opacity-60">Cataloging Eternal Beauty Profiles</p>
-          </div>
-        </div>
+        }
+      />
 
-        <div className="flex flex-col md:flex-row gap-6">
-          <div className="bg-secondary/40 backdrop-blur-md px-6 py-4 rounded-2xl border border-white/5 shadow-2xl flex items-center gap-4 w-full md:w-96 group focus-within:border-primary/40 transition-all">
-            <Search size={20} className="text-muted group-focus-within:text-primary transition-colors" />
-            <input
-              type="text"
-              placeholder="Query by name, signal, email..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="bg-transparent border-none outline-none text-[11px] w-full font-black uppercase tracking-widest text-white placeholder:text-white/10"
-            />
-          </div>
-          <button
-            onClick={() => setIsDrawerOpen(true)}
-            className="flex items-center gap-4 px-10 py-5 bg-primary text-secondary rounded-2xl font-black uppercase text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group"
-          >
-            <Plus size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
-            INDuct NEW PROTOCOL
-          </button>
-        </div>
-      </div>
 
       <div className="bg-secondary/30 backdrop-blur-sm rounded-2xl overflow-hidden shadow-3xl border border-white/5 relative">
         <div className="absolute top-0 left-0 w-full h-[1px] bg-luxury-gradient opacity-10" />
@@ -165,7 +163,7 @@ export default function Clients() {
               <div className="flex items-center gap-6">
                 <div className="w-16 h-16 rounded-2xl bg-background p-1 border border-white/10 group-hover:rotate-6 transition-all duration-500 shadow-2xl relative overflow-hidden">
                   <img
-                    src={client.profileImage ? (client.profileImage.startsWith('/uploads') ? `${IMAGE_URL}${client.profileImage}` : client.profileImage) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${client.name}`}
+                    src={client.profileImage ? (client.profileImage.startsWith('http') ? client.profileImage : `${IMAGE_URL}${client.profileImage}`) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${client.name}`}
                     alt={client.name}
                     className="w-full h-full rounded-2xl object-cover grayscale transition-all duration-700 group-hover:grayscale-0"
                   />
@@ -249,11 +247,11 @@ export default function Clients() {
         <div className="flex flex-col items-center mb-12">
           <div className="relative group">
             <div className="w-40 h-40 rounded-2xl bg-background border-4 border-white/5 flex items-center justify-center text-white/5 shadow-inner overflow-hidden transition-all duration-500 group-hover:border-primary/20 group-hover:scale-105">
-              {imagePreview ? (
-                <img src={imagePreview.startsWith('blob') || !imagePreview.startsWith('/uploads') ? imagePreview : `${IMAGE_URL}${imagePreview}`} className="w-full h-full object-cover grayscale transition-all duration-700 group-hover:grayscale-0" alt="Preview" />
-              ) : (
-                <User size={64} strokeWidth={1} />
-              )}
+                <img
+                  src={imagePreview ? (imagePreview.startsWith('blob') || imagePreview.startsWith('http') ? imagePreview : `${IMAGE_URL}${imagePreview}`) : `https://api.dicebear.com/9.x/adventurer/svg?seed=${formik.values.name || 'Client'}`}
+                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                  alt="Preview"
+                />
               <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
                 <CameraIcon size={32} className="text-secondary" />
               </div>

@@ -91,17 +91,11 @@ export default function Profile() {
               <div className="relative group cursor-pointer shrink-0" onClick={handleImageClick}>
                 <div className={`w-28 h-28 md:w-32 md:h-32 rounded-xl p-[1px] transition-all duration-700 ${isEditing ? 'bg-luxury-gradient shadow-[0_0_30px_rgba(201,162,39,0.2)] scale-[1.02]' : 'bg-white/10 group-hover:bg-white/20'}`}>
                   <div className="w-full h-full rounded-xl bg-background overflow-hidden relative border border-white/5 shadow-inner">
-                    {preview || user?.profileImage ? (
-                      <img
-                        src={preview || (user.profileImage?.startsWith('http') ? user.profileImage : `${IMAGE_URL}${user.profileImage}`)}
-                        alt="Profile"
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-4xl font-black  text-primary/10 font-luxury tracking-tighter">
-                        {user?.name?.split(" ").map(n => n[0]).join("")}
-                      </div>
-                    )}
+                    <img
+                      src={preview ? preview : (user?.profileImage ? (user.profileImage.startsWith('http') ? user.profileImage : `${IMAGE_URL}${user.profileImage}`) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.name || 'User'}`)}
+                      alt="Profile"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
                     {isEditing && (
                       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center transition-opacity opacity-0 group-hover:opacity-100">
                         <Camera className="text-white animate-bounce" size={24} />

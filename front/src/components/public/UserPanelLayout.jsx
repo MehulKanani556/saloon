@@ -36,7 +36,7 @@ export default function UserPanelLayout({ children, title }) {
         <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-primary/[0.02] rounded-full blur-[180px] -z-10" />
 
         <div className="container flex-1 overflow-y-auto custom-scrollbar">
-          <div className="max-w-[1440px] mx-auto px-4 md:px-10 lg:px-16 py-8 md:py-12 relative z-10">
+          <div className="px-4 md:px-8 py-8 md:py-12 relative z-10">
             {/* Breadcrumbs */}
             <div className="flex items-center gap-4 mb-10 text-[9px] font-black uppercase tracking-[0.5em] text-muted/60">
               <Link to="/" className="hover:text-primary flex items-center gap-2 transition-all hover:scale-105 active:scale-95">

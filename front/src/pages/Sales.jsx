@@ -7,6 +7,8 @@ import { fetchFinancialMatrix, processWithdrawal } from '../redux/slices/salesSl
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Modal from '../components/ui/Modal';
+import AdminHeader from '../components/ui/AdminHeader';
+
 
 export default function Sales() {
   const dispatch = useDispatch();
@@ -54,17 +56,11 @@ export default function Sales() {
 
   return (
     <div className="space-y-10">
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-        <div className="flex items-center gap-4 md:gap-6 relative z-10 transition-all">
-          <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-secondary border border-white/10 flex items-center justify-center text-primary shadow-glass shrink-0 transition-transform hover:rotate-6">
-            <Wallet size={24} md:size={32} strokeWidth={2.5} />
-          </div>
-          <div className="space-y-1">
-            <h1 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">Financial Matrix</h1>
-            <p className="text-muted font-bold text-[8px] md:text-[10px] uppercase tracking-[0.15em] md:tracking-[0.25em] opacity-70 group-hover:opacity-100 transition-opacity whitespace-normal">Real-time audit of saloon revenue ecosystems</p>
-          </div>
-        </div>
-        <div className="flex flex-col md:flex-row gap-4">
+      <AdminHeader 
+        title="Financial Matrix"
+        subtitle="Real-time audit of saloon revenue ecosystems"
+        icon={Wallet}
+        rightContent={
           <button
             onClick={() => setIsWithdrawModalOpen(true)}
             className="flex items-center gap-3 px-6 py-3 lg:px-10 lg:py-5 bg-primary text-secondary lg:rounded-2xl rounded-xl font-black uppercase text-xs tracking-[0.2em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group"
@@ -72,8 +68,9 @@ export default function Sales() {
             <Plus size={20} />
             Withdrawal Protocol
           </button>
-        </div>
-      </div>
+        }
+      />
+
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {[

@@ -48,6 +48,10 @@
   .premium-button-primary {
     @apply premium-button bg-primary text-secondary hover:shadow-premium;
   }
+
+  .underline-pink {
+    @apply underline decoration-[#FF3366] decoration-[3px] underline-offset-[12px];
+  }
 }
 
 /* Custom Scrollbar */

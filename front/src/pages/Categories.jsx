@@ -8,6 +8,8 @@ import Modal from '../components/ui/Modal';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import toast from 'react-hot-toast';
+import AdminHeader from '../components/ui/AdminHeader';
+
 
 export default function Categories() {
   const dispatch = useDispatch();
@@ -66,24 +68,21 @@ export default function Categories() {
 
   return (
     <div className="space-y-12">
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-10 relative z-10">
-        <div className="flex items-center gap-6 group">
-          <div className="w-16 h-16 rounded-2xl bg-secondary border border-white/10 flex items-center justify-center text-primary shadow-premium shrink-0 transition-transform hover:rotate-6">
-            <LayoutGrid size={32} strokeWidth={2.5} />
-          </div>
-          <div className="min-w-0">
-            <h1 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">Ritual Categories</h1>
-            <p className="text-[10px] font-black text-muted uppercase tracking-[0.3em] opacity-60">Architectural Classification & Service Taxonomy</p>
-          </div>
-        </div>
-        <button
-          onClick={() => { setEditingCategory(null); setShowForm(true); }}
-          className="flex items-center justify-center gap-4 px-10 py-5 bg-primary text-secondary rounded-2xl font-black uppercase text-[11px] tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury "
-        >
-          <Plus size={22} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
-          INDuct NEW CATEGORY
-        </button>
-      </div>
+      <AdminHeader 
+        title="Ritual Categories"
+        subtitle="Architectural Classification & Service Taxonomy"
+        icon={LayoutGrid}
+        rightContent={
+          <button
+            onClick={() => { setEditingCategory(null); setShowForm(true); }}
+            className="flex items-center justify-center gap-4 px-10 py-5 bg-primary text-secondary rounded-2xl font-black uppercase text-[11px] tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury "
+          >
+            <Plus size={22} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
+            INDuct NEW CATEGORY
+          </button>
+        }
+      />
+
 
       {/* Controls Bar */}
       <div className="flex flex-col md:flex-row gap-6 items-center justify-between bg-secondary/40 backdrop-blur-md p-4 rounded-2xl border border-white/5 shadow-3xl">

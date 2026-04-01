@@ -29,11 +29,11 @@ const Hero = () => {
       {/* Background Image with Dark Overlay */}
       <div className="absolute inset-0 z-0">
         <img
-          src="https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1974&auto=format&fit=crop"
+          src="/hero_bg.png"
           alt="Luxury Salon Background"
-          className="w-full h-full object-cover opacity-30 scale-105"
+          className="w-full h-full object-cover opacity-20 scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent" />
       </div>
 
       {/* Shimmer Effect */}
@@ -85,7 +85,7 @@ const Hero = () => {
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-                className="text-4xl md:text-7xl lg:text-9xl font-black text-white uppercase tracking-tighter"
+                className="text-5xl md:text-6xl lg:text-8xl font-black text-white uppercase tracking-wide leading-[1.1]"
               >
                 {word}
               </motion.h2>
@@ -123,7 +123,7 @@ const Hero = () => {
           >
             {userInfo ? 'Go to Dashboard' : 'Book Appointment'}
           </motion.button>
-          <a href="#services">
+          <Link to="/services">
             <motion.button
               whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.1)" }}
               whileTap={{ scale: 0.95 }}
@@ -131,7 +131,7 @@ const Hero = () => {
             >
               Explore Services
             </motion.button>
-          </a>
+          </Link>
         </motion.div>
       </div>
 
@@ -349,7 +349,7 @@ const WhyChooseUs = () => {
               <img
                 src="/salon_ambiance.png"
                 alt="Salon High-Fidelity Ambiance"
-                className="w-full h-full object-cover grayscale brightness-90 hover:grayscale-0 hover:brightness-100 transition-all duration-1000"
+                className="w-full h-full object-cover transition-all duration-1000"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent" />
             </motion.div>

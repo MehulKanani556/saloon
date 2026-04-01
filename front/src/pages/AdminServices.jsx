@@ -12,6 +12,7 @@ import toast from 'react-hot-toast';
 import { IMAGE_URL } from '../utils/BASE_URL';
 import CustomSelect from '../components/CustomSelect';
 import Pagination from '../components/Pagination';
+import AdminHeader from '../components/ui/AdminHeader';
 
 export default function AdminServices() {
   const dispatch = useDispatch();
@@ -211,7 +212,7 @@ export default function AdminServices() {
 
           <div className="grid grid-cols-2 gap-8">
             <div className="space-y-4">
-              <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 ">Temporal Span (MIN)</label>
+              <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2 ">Temporal Span (MIN)</label>
               <input
                 type="number"
                 {...formik.getFieldProps('duration')}
@@ -219,7 +220,7 @@ export default function AdminServices() {
               />
             </div>
             <div className="space-y-4">
-              <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 ">Magnitude ($)</label>
+              <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2 ">Magnitude ($)</label>
               <input
                 type="number"
                 {...formik.getFieldProps('price')}
@@ -276,42 +277,38 @@ export default function AdminServices() {
         </div>
       </Modal>
 
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-10 relative z-10">
-        <div className="flex items-center gap-6 group">
-          <div className="w-16 h-16 rounded-2xl bg-secondary border border-white/10 flex items-center justify-center text-primary shadow-premium shrink-0 transition-transform hover:rotate-6">
-            <Scissors size={32} strokeWidth={2.5} />
+      <AdminHeader 
+        title="Ritual Archives"
+        subtitle="Operational Directory & Inventory Management"
+        icon={Scissors}
+        rightContent={
+          <div className="flex flex-col sm:flex-row gap-6 w-full lg:w-auto items-center">
+            <div className="bg-secondary/40 backdrop-blur-md px-8 py-5 rounded-2xl border border-white/5 shadow-3xl flex items-center gap-5 w-full sm:w-96 group focus-within:border-primary/40 transition-all duration-500">
+              <Search size={20} className="text-primary/40 group-focus-within:text-primary transition-colors" />
+              <input
+                type="text"
+                placeholder="SEARCH NOMENCLATURE..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="bg-transparent border-none outline-none text-[11px] font-black text-white tracking-[0.2em] w-full placeholder:text-white/5 uppercase"
+              />
+            </div>
+            <button
+              onClick={() => {
+                setEditingService(null);
+                formik.resetForm();
+                setPreview('');
+                setImageFile(null);
+                setShowForm(true);
+              }}
+              className="w-full sm:w-auto flex items-center justify-center gap-4 px-10 py-5 bg-primary text-secondary rounded-2xl font-black text-[11px] uppercase tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury "
+            >
+              <Plus size={22} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
+              INDuct NEW RITUAL
+            </button>
           </div>
-          <div className="min-w-0">
-            <h1 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">Ritual Archives</h1>
-            <p className="text-[10px] font-black text-muted uppercase tracking-[0.3em] opacity-60">Operational Directory & Inventory Management</p>
-          </div>
-        </div>
-        <div className="flex flex-col sm:flex-row gap-6 w-full lg:w-auto items-center">
-          <div className="bg-secondary/40 backdrop-blur-md px-8 py-5 rounded-2xl border border-white/5 shadow-3xl flex items-center gap-5 w-full sm:w-96 group focus-within:border-primary/40 transition-all duration-500">
-            <Search size={20} className="text-primary/40 group-focus-within:text-primary transition-colors" />
-            <input
-              type="text"
-              placeholder="SEARCH NOMENCLATURE..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="bg-transparent border-none outline-none text-[11px] font-black text-white tracking-[0.2em] w-full placeholder:text-white/5 uppercase"
-            />
-          </div>
-          <button
-            onClick={() => {
-              setEditingService(null);
-              formik.resetForm();
-              setPreview('');
-              setImageFile(null);
-              setShowForm(true);
-            }}
-            className="w-full sm:w-auto flex items-center justify-center gap-4 px-10 py-5 bg-primary text-secondary rounded-2xl font-black text-[11px] uppercase tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury "
-          >
-            <Plus size={22} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
-            INDuct NEW RITUAL
-          </button>
-        </div>
-      </div>
+        }
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
         <AnimatePresence mode="popLayout">
@@ -406,5 +403,3 @@ export default function AdminServices() {
     </div>
   );
 }
-
-

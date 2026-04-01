@@ -9,6 +9,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import toast from 'react-hot-toast';
 import { IMAGE_URL } from '../utils/BASE_URL';
+import AdminHeader from '../components/ui/AdminHeader';
 
 export default function Staff() {
   const dispatch = useDispatch();
@@ -129,24 +130,20 @@ export default function Staff() {
 
   return (
     <div className="space-y-12">
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-10">
-        <div className="flex items-center gap-6 group">
-          <div className="w-16 h-16 rounded-2xl bg-secondary border border-white/10 flex items-center justify-center text-primary shadow-premium shrink-0 transition-transform hover:rotate-6">
-            <LayoutGrid size={32} strokeWidth={2.5} />
-          </div>
-          <div className="min-w-0">
-            <h1 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">Artisan Collective</h1>
-            <p className="text-[10px] font-black text-muted uppercase tracking-[0.3em] opacity-60">Cataloging Master Grooming Specialists</p>
-          </div>
-        </div>
-        <button
-          onClick={() => setIsDrawerOpen(true)}
-          className="flex items-center gap-4 px-10 py-5 bg-primary text-secondary rounded-2xl font-black uppercase text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury "
-        >
-          <Plus size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
-          INDuct NEW ARTISAN
-        </button>
-      </div>
+      <AdminHeader
+        title="Artisan Collective"
+        subtitle="Cataloging Master Grooming Specialists"
+        icon={LayoutGrid}
+        rightContent={
+          <button
+            onClick={() => setIsDrawerOpen(true)}
+            className="flex items-center gap-4 px-10 py-5 bg-primary text-secondary rounded-2xl font-black uppercase text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury "
+          >
+            <Plus size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
+            INDuct NEW ARTISAN
+          </button>
+        }
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-10">
         <AnimatePresence mode="popLayout">
@@ -161,7 +158,7 @@ export default function Staff() {
             >
               <div className="relative overflow-hidden rounded-2xl aspect-[4/3] mb-6 shadow-inner bg-background">
                 <img
-                  src={member.profileImage?.startsWith('/uploads') ? `${IMAGE_URL}${member.profileImage}` : member.profileImage}
+                  src={member.profileImage ? (member.profileImage.startsWith('http') ? member.profileImage : `${IMAGE_URL}${member.profileImage}`) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${member.name}`}
                   alt={member.name}
                   className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110"
                 />
@@ -224,17 +221,11 @@ export default function Staff() {
         <div className="flex flex-col items-center mb-12">
           <div className="relative group">
             <div className="w-40 h-40 rounded-2xl bg-background border-4 border-dashed border-white/5 flex items-center justify-center overflow-hidden transition-all duration-500 group-hover:border-primary/40 group-hover:scale-105 shadow-inner">
-              {imagePreview ? (
-                <img
-                  src={imagePreview.startsWith('blob') || !imagePreview.startsWith('/uploads') ? imagePreview : `${IMAGE_URL}${imagePreview}`}
-                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
-                />
-              ) : (
-                <div className="flex flex-col items-center text-white/5">
-                  <Camera size={48} strokeWidth={1} />
-                  <span className="text-[10px] font-black uppercase tracking-[0.4em] mt-4 ">Visionary Signature</span>
-                </div>
-              )}
+              <img
+                src={imagePreview ? (imagePreview.startsWith('blob') || imagePreview.startsWith('http') ? imagePreview : `${IMAGE_URL}${imagePreview}`) : `https://api.dicebear.com/9.x/adventurer/svg?seed=${formik.values.name || 'Artisan'}`}
+                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                alt="Preview"
+              />
               <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
                 <Upload size={32} className="text-secondary" />
               </div>
@@ -277,7 +268,7 @@ export default function Staff() {
             </div>
 
             <div className="space-y-4">
-              <label className="text-[10px) font-black text-muted uppercase tracking-[0.3em] ml-2 ">Tether Signal</label>
+              <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 ">Tether Signal</label>
               <input
                 name="phone"
                 onChange={formik.handleChange}
@@ -427,7 +418,3 @@ export default function Staff() {
     </div>
   );
 }
-
-
-
-

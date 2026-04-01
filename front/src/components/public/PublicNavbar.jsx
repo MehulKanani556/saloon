@@ -67,16 +67,22 @@ const PublicNavbar = () => {
 
         {/* Desktop Links */}
         <div className="hidden lg:flex items-center gap-8">
-          {['Home', 'Services', 'About', 'Contact', 'Book'].map((link) => (
-            <Link
-              key={link}
-              to={link === 'Home' ? '/' : link === 'Book' ? '/book' : `/${link.toLowerCase()}`}
-              className={`text-[10px] font-medium uppercase tracking-[0.2em] transition-all hover:text-primary ${showSolid ? 'text-white' : 'text-white/80'
-                }`}
-            >
-              {link === 'Book' ? 'Book Appointment' : link}
-            </Link>
-          ))}
+          {['Home', 'Services', 'About', 'Contact', 'Book'].map((link) => {
+            const targetPath = link === 'Home' ? '/' : link === 'Book' ? '/book' : `/${link.toLowerCase()}`;
+            const isActive = location.pathname === targetPath;
+            return (
+              <Link
+                key={link}
+                to={targetPath}
+                className={`text-[10px] font-medium uppercase tracking-[0.2em] transition-all hover:text-primary ${isActive
+                  ? 'text-primary scale-105 pointer-events-none'
+                  : showSolid ? 'text-white' : 'text-white/80'
+                  }`}
+              >
+                {link === 'Book' ? 'Book Appointment' : link}
+              </Link>
+            );
+          })}
 
           {userInfo ? (
             <div className="relative" ref={profileRef}>
@@ -87,8 +93,12 @@ const PublicNavbar = () => {
                   : 'border-white/20 bg-white/10 hover:bg-white/20 text-white'
                   }`}
               >
-                <div className="w-8 h-8 rounded-full bg-luxury-gradient flex items-center justify-center text-secondary font-black text-xs shadow-lg">
-                  {userInfo.name.charAt(0).toUpperCase()}
+                <div className="w-8 h-8 rounded-full bg-secondary overflow-hidden flex items-center justify-center p-[1px] shadow-lg border border-primary/20">
+                  <img
+                    src={userInfo?.profileImage ? (userInfo.profileImage.startsWith('http') ? userInfo.profileImage : `${IMAGE_URL}${userInfo.profileImage}`) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${userInfo?.name || 'User'}`}
+                    alt="Profile"
+                    className="w-full h-full object-cover rounded-full"
+                  />
                 </div>
                 <span className="text-[10px] font-black uppercase tracking-widest hidden xl:block">{userInfo.name}</span>
                 <ChevronDown size={14} className={`transition-transform duration-300 ${isProfileOpen ? 'rotate-180' : ''}`} />
@@ -183,16 +193,21 @@ const PublicNavbar = () => {
             className="lg:hidden bg-secondary border-b border-white/5 overflow-hidden"
           >
             <div className="container mx-auto px-6 py-8 flex flex-col gap-6">
-              {['Home', 'Services', 'About', 'Contact', 'Book Appointment'].map((link) => (
-                <Link
-                  key={link}
-                  to={link === 'Home' ? '/' : link === 'Book Appointment' ? '/book' : `/${link.toLowerCase()}`}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-sm font-black text-white uppercase tracking-widest hover:text-primary transition-colors"
-                >
-                  {link}
-                </Link>
-              ))}
+              {['Home', 'Services', 'About', 'Contact', 'Book Appointment'].map((link) => {
+                const targetPath = link === 'Home' ? '/' : link === 'Book Appointment' ? '/book' : `/${link.toLowerCase()}`;
+                const isActive = location.pathname === targetPath;
+                return (
+                  <Link
+                    key={link}
+                    to={targetPath}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`text-sm font-black uppercase tracking-widest transition-colors ${isActive ? 'text-primary' : 'text-white hover:text-primary'
+                      }`}
+                  >
+                    {link}
+                  </Link>
+                );
+              })}
               <hr className="border-slate-100 dark:border-white/5 my-2" />
               <button
                 onClick={() => {

@@ -128,7 +128,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                         animate={{ opacity: 1, width: 'auto' }}
                         exit={{ opacity: 0, width: 0 }}
                         transition={{ duration: 0.3, ease: 'easeOut' }}
-                        className="font-black text-[9px] uppercase tracking-[0.2em] whitespace-nowrap overflow-hidden"
+                        className="font-black text-[11px] uppercase tracking-wider whitespace-nowrap overflow-hidden"
                       >
                         {item.label}
                       </motion.span>
@@ -160,7 +160,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
             <div className="w-10 h-10 rounded-xl bg-luxury-gradient p-[1px] shadow-lg shrink-0">
               <div className="w-full h-full rounded-xl bg-secondary overflow-hidden flex items-center justify-center p-[1.5px]">
                 <img
-                  src={userInfo?.avatar || `https://api.dicebear.com/9.x/adventurer/svg?seed=${userInfo?.name || 'Artisan'}`}
+                  src={userInfo?.profileImage ? (userInfo.profileImage.startsWith('http') ? userInfo.profileImage : `${IMAGE_URL}${userInfo.profileImage}`) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${userInfo?.name || 'Artisan'}`}
                   alt="Admin Profile"
                   className="w-full h-full object-cover hover:scale-110 transition-transform duration-500 rounded-xl"
                 />
