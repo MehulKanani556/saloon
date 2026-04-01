@@ -14,7 +14,7 @@ import {
   ChevronRight,
   FileText,
   CalendarClock,
-  CheckCircle2
+  CheckCircle2,
   ShoppingBag,
   ChevronDown,
   Package
