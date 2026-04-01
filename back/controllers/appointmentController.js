@@ -82,11 +82,21 @@ const createAppointment = async (req, res) => {
     }
 
     // 3. SECURE Client Profile
-    let client = await User.findOne({ phone: clientPhone, role: 'User' });
+    let client = await User.findOne({ 
+        $or: [
+            { phone: clientPhone },
+            { email: clientEmail && clientEmail.trim() !== "" ? clientEmail : "" }
+        ], 
+        role: 'User' 
+    });
+
     if (!client) {
         client = await User.create({ name: clientName, email: clientEmail, phone: clientPhone, role: 'User' });
-    } else if (clientPhone) {
-        client.phone = clientPhone;
+    } else {
+        // Update details if they've changed
+        if (clientPhone) client.phone = clientPhone;
+        if (clientEmail) client.email = clientEmail;
+        if (clientName) client.name = clientName;
         await client.save();
     }
 
@@ -152,11 +162,20 @@ const updateAppointment = async (req, res) => {
         }
 
         if (clientEmail && clientName) {
-            let client = await User.findOne({ email: clientEmail, role: 'User' });
+            let client = await User.findOne({ 
+                $or: [
+                    { phone: clientPhone },
+                    { email: clientEmail.trim() !== "" ? clientEmail : "no-email@provided.com" }
+                ], 
+                role: 'User' 
+            });
+
             if (!client) {
                 client = await User.create({ name: clientName, email: clientEmail, phone: clientPhone, role: 'User' });
-            } else if (clientPhone) {
-                client.phone = clientPhone;
+            } else {
+                if (clientPhone) client.phone = clientPhone;
+                if (clientEmail) client.email = clientEmail;
+                if (clientName) client.name = clientName;
                 await client.save();
             }
             appointment.client = client._id;
