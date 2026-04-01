@@ -66,7 +66,7 @@ export default function Dashboard() {
   return (
     <div className="space-y-12">
       {/* Cinematic Header Section */}
-      <AdminHeader 
+      <AdminHeader
         title="Executive Summary"
         subtitle="Matrix Active | Connected"
         icon={Activity}

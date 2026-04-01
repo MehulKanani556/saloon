@@ -45,25 +45,25 @@ export default function AdminServices() {
       isActive: editingService?.isActive !== undefined ? editingService.isActive : true
     },
     validationSchema: Yup.object({
-      name: Yup.string().required('Ritual nomenclature required').min(3, 'At least 3 characters'),
-      category: Yup.string().required('Classification required'),
-      price: Yup.number().positive('Magnitude must be positive').required('Required'),
-      duration: Yup.number().positive('Temporal duration must be positive').required('Required'),
+      name: Yup.string().required('Service name is required').min(3, 'At least 3 characters'),
+      category: Yup.string().required('Category is required'),
+      price: Yup.number().positive('Price must be positive').required('Required'),
+      duration: Yup.number().positive('Duration must be positive').required('Required'),
     }),
     onSubmit: async (values) => {
       const formData = new FormData();
       Object.keys(values).forEach(key => formData.append(key, values[key]));
       if (imageFile) formData.append('image', imageFile);
 
-      if (!editingService?._id && !imageFile) return toast.error('Visual signature required');
+      if (!editingService?._id && !imageFile) return toast.error('Service image is required');
 
       try {
         if (editingService?._id) {
           await dispatch(updateService({ id: editingService._id, serviceData: formData })).unwrap();
-          toast.success('Ritual archive refined');
+          toast.success('Service updated successfully');
         } else {
           await dispatch(addService(formData)).unwrap();
-          toast.success('New ritual cataloged');
+          toast.success('New service added successfully');
         }
         setShowForm(false);
         setEditingService(null);
@@ -71,7 +71,7 @@ export default function AdminServices() {
         setPreview('');
         formik.resetForm();
       } catch (err) {
-        toast.error('Matrix operation failed');
+        toast.error('Operation failed');
       }
     },
   });
@@ -125,22 +125,22 @@ export default function AdminServices() {
       <Modal
         isOpen={showForm}
         onClose={() => { setShowForm(false); setEditingService(null); setImageFile(null); setPreview(''); formik.resetForm(); }}
-        title={editingService ? 'Refine Ritual' : 'Induct Ritual'}
-        subtitle="Operational Matrix Management"
+        title={editingService ? 'Edit Service' : 'Add Service'}
+        subtitle="Manage available salon services"
       >
-        <form onSubmit={formik.handleSubmit} className="space-y-6 md:space-y-10 p-1 md:p-2">
-          <div className="space-y-2 md:space-y-4">
-            <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2 ">Visual Archive Signature</label>
-            <div className="relative aspect-video rounded-xl md:rounded-2xl bg-background border-2 border-dashed border-white/10 overflow-hidden group cursor-pointer shadow-3xl hover:border-primary/40 transition-all duration-500">
+        <form onSubmit={formik.handleSubmit} className="space-y-10 p-2">
+          <div className="space-y-4">
+            <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2 ">Service Image</label>
+            <div className="relative aspect-video rounded-2xl bg-background border-2 border-dashed border-white/10 overflow-hidden group cursor-pointer shadow-3xl hover:border-primary/40 transition-all duration-500">
               {preview ? (
                 <img
                   src={preview.startsWith('blob') || !preview.startsWith('/uploads') ? preview : `${IMAGE_URL}${preview}`}
                   className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                 />
               ) : (
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-white/5 p-4">
-                  <ImageIcon size={32} md:size={48} strokeWidth={1} className="mb-2 md:mb-4 opacity-50 group-hover:scale-110 transition-transform" />
-                  <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.5em] text-center ">Commit Visual Protocol</span>
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-white/5">
+                  <ImageIcon size={48} strokeWidth={1} className="mb-4 opacity-50 group-hover:scale-110 transition-transform" />
+                  <span className="text-[10px] font-black uppercase tracking-[0.5em] ">Upload Service Image</span>
                 </div>
               )}
               <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
@@ -150,18 +150,18 @@ export default function AdminServices() {
             </div>
           </div>
 
-          <div className="space-y-2 md:space-y-4">
-            <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2  underline decoration-primary/30 underline-offset-8">Ritual Nomenclature</label>
+          <div className="space-y-4">
+            <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2  underline decoration-primary/30 underline-offset-8">Service Name</label>
             <input
               {...formik.getFieldProps('name')}
-              placeholder="e.g. MAGNUM OPUS CUT"
-              className="w-full bg-secondary/50 border border-white/10 focus:border-primary/50 rounded-xl md:rounded-2xl px-4 md:px-6 py-4 md:py-5 text-[10px] md:text-[11px] font-black uppercase tracking-[0.3em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5  font-luxury"
+              placeholder="e.g. LUXURY HAIR CUT"
+              className="w-full bg-secondary/50 border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.3em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5  font-luxury"
             />
           </div>
 
           <div className="relative">
             <CustomSelect
-              label="Taxonomic Classification"
+              label="Service Category"
               name="category"
               value={formik.values.category}
               onChange={(e) => {
@@ -169,8 +169,8 @@ export default function AdminServices() {
                 else formik.handleChange(e);
               }}
               options={[
-                { label: 'Select Classification...', value: '' },
-                { label: '+ INDuct NEW CLASSIFICATION', value: 'new_category' },
+                { label: 'Select Category...', value: '' },
+                { label: '+ Add New Category', value: 'new_category' },
                 ...categories.map(cat => ({ label: cat.name, value: cat._id })),
               ]}
               icon={Layers}
@@ -185,10 +185,10 @@ export default function AdminServices() {
               >
                 <div className="flex items-center gap-3 mb-2">
                   <Zap size={14} className="text-primary animate-pulse" />
-                  <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white/50 ">Quick Classification Forge</span>
+                  <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white/50 ">Quick Category Creator</span>
                 </div>
                 <input
-                  placeholder="NEW NOMENCLATURE..." value={newCategoryName}
+                  placeholder="NEW CATEGORY NAME..." value={newCategoryName}
                   onChange={(e) => setNewCategoryName(e.target.value)}
                   className="w-full bg-secondary/80 border border-white/5 px-6 py-4 rounded-xl outline-none font-black text-[10px] uppercase tracking-[0.2em] text-white placeholder:text-white/5"
                 />
@@ -196,31 +196,31 @@ export default function AdminServices() {
                   <button
                     type="button"
                     onClick={async () => {
-                      if (!newCategoryName) return toast.error('Taxonomy required');
+                      if (!newCategoryName) return toast.error('Category name required');
                       const created = await dispatch(addCategory({ name: newCategoryName })).unwrap();
                       formik.setFieldValue('category', created._id);
                       setNewCategoryName('');
                       setIsAddingCategory(false);
                     }}
                     className="flex-1 py-4 bg-primary text-secondary rounded-xl font-black text-[9px] uppercase tracking-[0.3em] hover:bg-primary/90 transition-all font-luxury "
-                  >COMMIT TAXONOMY</button>
-                  <button type="button" onClick={() => setIsAddingCategory(false)} className="px-6 text-[9px] font-black uppercase tracking-widest text-muted hover:text-white transition-colors">ABORT</button>
+                  >SAVE CATEGORY</button>
+                  <button type="button" onClick={() => setIsAddingCategory(false)} className="px-6 text-[9px] font-black uppercase tracking-widest text-muted hover:text-white transition-colors">CANCEL</button>
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
 
-          <div className="grid grid-cols-2 gap-4 md:gap-8">
-            <div className="space-y-2 md:space-y-4">
-              <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2 ">Temporal Span (MIN)</label>
+          <div className="grid grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2 ">Duration (Min)</label>
               <input
                 type="number"
                 {...formik.getFieldProps('duration')}
                 className="w-full bg-secondary/50 border border-white/10 focus:border-primary/50 rounded-xl md:rounded-2xl px-4 md:px-6 py-4 md:py-5 text-[10px] md:text-[11px] font-black uppercase tracking-[0.3em] outline-none text-white shadow-2xl transition-all"
               />
             </div>
-            <div className="space-y-2 md:space-y-4">
-              <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2 ">Magnitude ($)</label>
+            <div className="space-y-4">
+              <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2 ">Price ($)</label>
               <input
                 type="number"
                 {...formik.getFieldProps('price')}
@@ -245,7 +245,7 @@ export default function AdminServices() {
             disabled={formik.isSubmitting}
             className="w-full py-5 md:py-6 bg-primary text-secondary rounded-xl md:rounded-2xl font-black text-[10px] md:text-[11px] uppercase tracking-[0.5em] shadow-2xl hover:bg-primary/90 transition-all flex items-center justify-center gap-4 active:scale-[0.98] disabled:opacity-50 font-luxury "
           >
-            {formik.isSubmitting ? 'SYNCING MATRIX...' : (editingService ? 'COMMIT REFINEMENT' : 'AUTHORIZE CREATION')}
+            {formik.isSubmitting ? 'SAVING...' : (editingService ? 'SAVE CHANGES' : 'ADD SERVICE')}
           </button>
         </form>
       </Modal>
@@ -253,8 +253,8 @@ export default function AdminServices() {
       <Modal
         isOpen={!!deletingId}
         onClose={() => setDeletingId(null)}
-        title="PURGE PROTOCOL?"
-        subtitle="Permanent Forensic Erasure"
+        title="DELETE SERVICE?"
+        subtitle="This action cannot be undone."
         maxWidth="max-w-sm"
       >
         <div className="text-center p-4">
@@ -262,7 +262,7 @@ export default function AdminServices() {
             <Trash2 size={40} strokeWidth={1} />
           </div>
           <p className="text-muted font-black text-[10px] uppercase tracking-[0.3em] leading-relaxed mb-10 px-2 ">
-            Dissolving <br /><span className="text-rose-500 text-lg font-luxury font-black  underline decoration-rose-500/30 decoration-2 underline-offset-8">"{services.find(s => s._id === deletingId)?.name}"</span> <br /> from active archives.
+            Are you sure you want to delete <br /><span className="text-rose-500 text-lg font-luxury font-black  underline decoration-rose-500/30 decoration-2 underline-offset-8">"{services.find(s => s._id === deletingId)?.name}"</span> <br /> from your portfolio?
           </p>
           <div className="flex flex-col gap-4">
             <button
@@ -271,15 +271,15 @@ export default function AdminServices() {
                 setDeletingId(null);
               }}
               className="w-full py-5 bg-rose-500 text-white rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] shadow-xl active:scale-95 transition-all font-luxury "
-            >CONFIRM PURGE</button>
-            <button onClick={() => setDeletingId(null)} className="w-full py-5 bg-secondary text-muted rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] border border-white/10 hover:text-white transition-all font-luxury ">ABORT PROTOCOL</button>
+            >CONFIRM DELETE</button>
+            <button onClick={() => setDeletingId(null)} className="w-full py-5 bg-secondary text-muted rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] border border-white/10 hover:text-white transition-all font-luxury ">CANCEL</button>
           </div>
         </div>
       </Modal>
 
-      <AdminHeader 
-        title="Ritual Archives"
-        subtitle="Operational Directory & Inventory Management"
+      <AdminHeader
+        title="Service Portfolio"
+        subtitle="Manage available salon services"
         icon={Scissors}
         rightContent={
           <div className="flex flex-col sm:flex-row gap-6 w-full lg:w-auto items-center">
@@ -287,7 +287,7 @@ export default function AdminServices() {
               <Search size={20} className="text-primary/40 group-focus-within:text-primary transition-colors" />
               <input
                 type="text"
-                placeholder="SEARCH NOMENCLATURE..."
+                placeholder="SEARCH SERVICES..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="bg-transparent border-none outline-none text-[11px] font-black text-white tracking-[0.2em] w-full placeholder:text-white/5 uppercase"
@@ -304,7 +304,7 @@ export default function AdminServices() {
               className="w-full sm:w-auto flex items-center justify-center gap-4 px-10 py-5 bg-primary text-secondary rounded-2xl font-black text-[11px] uppercase tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury "
             >
               <Plus size={22} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
-              INDuct NEW RITUAL
+              ADD NEW SERVICE
             </button>
           </div>
         }
@@ -336,14 +336,14 @@ export default function AdminServices() {
                   <button
                     onClick={() => handleEdit(service)}
                     className="p-3 bg-background/80 border border-white/5 rounded-xl text-muted hover:text-primary transition-all shadow-xl backdrop-blur-md"
-                    title="Refine Ritual"
+                    title="Edit Service"
                   >
                     <Pencil size={14} />
                   </button>
                   <button
                     onClick={() => setDeletingId(service._id)}
                     className="p-3 bg-background/80 border border-rose-500/10 rounded-xl text-muted hover:text-rose-500 transition-all shadow-xl backdrop-blur-md"
-                    title="Purge Ritual"
+                    title="Delete Service"
                   >
                     <Trash2 size={14} />
                   </button>
@@ -352,7 +352,7 @@ export default function AdminServices() {
                 {!service.isActive && (
                   <div className="absolute bottom-4 left-4">
                     <div className="bg-rose-500/20 backdrop-blur-md text-rose-500 border border-rose-500/30 px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-[0.2em] animate-pulse ">
-                      DECATALOGUED
+                      INACTIVE
                     </div>
                   </div>
                 )}
@@ -375,7 +375,7 @@ export default function AdminServices() {
                 </div>
 
                 <div className="pt-2 border-t border-white/5 mt-auto">
-                  <p className="text-[8px] font-black text-muted/30 uppercase tracking-[0.4em]  truncate">Protocol X-{service._id.slice(-8).toUpperCase()}</p>
+                  <p className="text-[8px] font-black text-muted/30 uppercase tracking-[0.4em]  truncate">PROD-{service._id.slice(-8).toUpperCase()}</p>
                 </div>
               </div>
             </motion.div>

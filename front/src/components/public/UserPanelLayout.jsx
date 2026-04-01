@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import {
-  User, Calendar, ShieldCheck, Trash2, LogOut, ChevronRight, Home
+  User, Calendar, ShieldCheck, Trash2, LogOut, ChevronRight, Home, ShoppingBag, Heart
 } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import { logoutUser } from '../../redux/slices/authSlice';
@@ -11,13 +11,15 @@ import PublicFooter from './PublicFooter';
 
 const menuItems = [
   { icon: User, label: 'My Profile', path: '/profile' },
+  { icon: Heart, label: 'Wishlist', path: '/wishlist' },
+  { icon: ShoppingBag, label: 'My Cart', path: '/cart' },
   { icon: Calendar, label: 'Order History', path: '/my-appointments' },
   { icon: ShieldCheck, label: 'Change Password', path: '/change-password' },
   { icon: Trash2, label: 'Delete Account', path: '/delete-account' },
   { icon: LogOut, label: 'Logout', path: 'logout' },
 ];
 
-export default function UserPanelLayout({ children, title }) {
+export default function UserPanelLayout({ children, title, hideSidebar = false }) {
   const location = useLocation();
   const dispatch = useDispatch();
 
@@ -46,50 +48,52 @@ export default function UserPanelLayout({ children, title }) {
               <span className="text-white  tracking-[0.2em] font-luxury">{title}</span>
             </div>
 
-            <div className="flex flex-col lg:flex-row gap-8 md:gap-12">
+            <div className={`flex flex-col lg:flex-row gap-8 md:gap-12 ${hideSidebar ? 'justify-center' : ''}`}>
               {/* Sidebar Linkage */}
-              <aside className="lg:w-80 shrink-0">
-                <div className="bg-dark-card backdrop-blur-3xl border border-white/10 rounded-xl p-4 sticky top-0 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)] ring-1 ring-white/5">
-                  <nav className="flex flex-col gap-2">
-                    {menuItems.map((item) => {
-                      const isActive = location.pathname === item.path;
-                      if (item.path === 'logout') {
+              {!hideSidebar && (
+                <aside className="lg:w-80 shrink-0">
+                  <div className="bg-dark-card backdrop-blur-3xl border border-white/10 rounded-xl p-4 sticky top-0 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)] ring-1 ring-white/5">
+                    <nav className="flex flex-col gap-2">
+                      {menuItems.map((item) => {
+                        const isActive = location.pathname === item.path;
+                        if (item.path === 'logout') {
+                          return (
+                            <button
+                              key={item.label}
+                              onClick={handleLogout}
+                              className="flex items-center gap-4 px-6 py-4 rounded-xl text-muted/30 hover:bg-red-500/10 hover:text-red-400 transition-all text-[10px] font-black uppercase tracking-[0.3em] text-left mt-4 border-t border-white/5 pt-6 group"
+                            >
+                              <item.icon size={18} className="opacity-30 group-hover:opacity-100 group-hover:rotate-12 transition-all duration-500" />
+                              <span className="font-luxury ">{item.label}</span>
+                            </button>
+                          );
+                        }
                         return (
-                          <button
+                          <Link
                             key={item.label}
-                            onClick={handleLogout}
-                            className="flex items-center gap-4 px-6 py-4 rounded-xl text-muted/30 hover:bg-red-500/10 hover:text-red-400 transition-all text-[10px] font-black uppercase tracking-[0.3em] text-left mt-4 border-t border-white/5 pt-6 group"
+                            to={item.path}
+                            className={`flex items-center justify-between px-6 py-4 rounded-xl transition-all duration-500 text-[10px] font-black uppercase tracking-[0.3em] relative group ${isActive
+                                ? 'bg-luxury-gradient text-secondary shadow-lg scale-[1.02] ring-1 ring-white/10'
+                                : 'text-muted/50 hover:bg-white/[0.03] hover:text-white'
+                              }`}
                           >
-                            <item.icon size={18} className="opacity-30 group-hover:opacity-100 group-hover:rotate-12 transition-all duration-500" />
-                            <span className="font-luxury ">{item.label}</span>
-                          </button>
-                        );
-                      }
-                      return (
-                        <Link
-                          key={item.label}
-                          to={item.path}
-                          className={`flex items-center justify-between px-6 py-4 rounded-xl transition-all duration-500 text-[10px] font-black uppercase tracking-[0.3em] relative group ${isActive
-                              ? 'bg-luxury-gradient text-secondary shadow-lg scale-[1.02] ring-1 ring-white/10'
-                              : 'text-muted/50 hover:bg-white/[0.03] hover:text-white'
-                            }`}
-                        >
-                          <div className="flex items-center gap-4">
-                            <item.icon size={18} className={`${isActive ? 'opacity-100' : 'opacity-30 group-hover:opacity-100 group-hover:scale-110 transition-all'} duration-500`} />
-                            <span className={`${isActive ? 'font-luxury' : ''}`}>{item.label}</span>
-                          </div>
-                          {isActive && (
-                            <motion.div
-                              layoutId="active-nav"
-                              className="w-1 h-1 rounded-full bg-secondary shadow-[0_0_10px_white]"
-                            />
-                          )}
-                        </Link>
-                      )
-                    })}
-                  </nav>
-                </div>
-              </aside>
+                            <div className="flex items-center gap-4">
+                              <item.icon size={18} className={`${isActive ? 'opacity-100' : 'opacity-30 group-hover:opacity-100 group-hover:scale-110 transition-all'} duration-500`} />
+                              <span className={`${isActive ? 'font-luxury' : ''}`}>{item.label}</span>
+                            </div>
+                            {isActive && (
+                              <motion.div
+                                layoutId="active-nav"
+                                className="w-1 h-1 rounded-full bg-secondary shadow-[0_0_10px_white]"
+                              />
+                            )}
+                          </Link>
+                        )
+                      })}
+                    </nav>
+                  </div>
+                </aside>
+              )}
 
               {/* Content */}
               <div className="flex-1 min-w-0">

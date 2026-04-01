@@ -24,14 +24,21 @@ import './index.css'
 
 import Home from './pages/Home'
 import PublicServices from './pages/PublicServices'
+import Shop from './pages/Shop'
 import About from './pages/About'
 import BookAppointment from './pages/BookAppointment'
 import Contact from './pages/Contact'
 import AdminServices from './pages/AdminServices'
+import AdminProducts from './pages/AdminProducts'
+import AdminOrders from './pages/AdminOrders'
+import Cart from './pages/Cart'
+import Wishlist from './pages/Wishlist'
+import Checkout from './pages/Checkout'
 import Profile from './pages/Profile'
 import MyAppointments from './pages/MyAppointments'
 import ChangePassword from './pages/ChangePassword'
 import DeleteAccount from './pages/DeleteAccount'
+import ProductDetail from './pages/ProductDetail'
 
 const WrappedLayout = ({ children, isAuthPage, isLandingPage }) => {
   if (isAuthPage || isLandingPage) return <>{children}</>;
@@ -44,7 +51,7 @@ const AppContent = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const isAuthPage = ['/login', '/signup'].includes(location.pathname);
-  const isLandingPage = ['/', '/services', '/about', '/book', '/contact', '/profile', '/my-appointments', '/change-password', '/delete-account'].includes(location.pathname);
+  const isLandingPage = ['/', '/services', '/shop', '/about', '/book', '/contact', '/profile', '/my-appointments', '/change-password', '/delete-account', '/cart', '/wishlist', '/checkout'].some(path => location.pathname === path || location.pathname.startsWith('/product/'));
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
@@ -57,16 +64,20 @@ const AppContent = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/services" element={<PublicServices />} />
+        <Route path="/shop" element={<Shop />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/about" element={<About />} />
         <Route path="/book" element={<BookAppointment />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        
+
         {/* Admin Routes */}
         <Route path="/admin/dashboard" element={<PrivateRoute roles={['Admin']}><Dashboard /></PrivateRoute>} />
         <Route path="/admin/appointments" element={<PrivateRoute roles={['Admin']}><Appointments /></PrivateRoute>} />
         <Route path="/admin/services" element={<PrivateRoute roles={['Admin']}><AdminServices /></PrivateRoute>} />
+        <Route path="/admin/products" element={<PrivateRoute roles={['Admin']}><AdminProducts /></PrivateRoute>} />
+        <Route path="/admin/orders" element={<PrivateRoute roles={['Admin']}><AdminOrders /></PrivateRoute>} />
         <Route path="/admin/staff" element={<PrivateRoute roles={['Admin']}><Staff /></PrivateRoute>} />
         <Route path="/admin/clients" element={<PrivateRoute roles={['Admin']}><Clients /></PrivateRoute>} />
         <Route path="/admin/categories" element={<PrivateRoute roles={['Admin']}><Categories /></PrivateRoute>} />
@@ -85,8 +96,12 @@ const AppContent = () => {
         <Route path="/staff/leaves" element={<PrivateRoute roles={['Staff']}><Leaves /></PrivateRoute>} />
         <Route path="/staff/settings" element={<PrivateRoute roles={['Staff']}><StaffSettings /></PrivateRoute>} />
         
+
         {/* Client/General Auth Routes */}
         <Route path="/profile" element={<PrivateRoute roles={['User', 'Admin', 'Staff']}><Profile /></PrivateRoute>} />
+        <Route path="/cart" element={<PrivateRoute roles={['User', 'Admin', 'Staff']}><Cart /></PrivateRoute>} />
+        <Route path="/wishlist" element={<PrivateRoute roles={['User', 'Admin', 'Staff']}><Wishlist /></PrivateRoute>} />
+        <Route path="/checkout" element={<PrivateRoute roles={['User', 'Admin', 'Staff']}><Checkout /></PrivateRoute>} />
         <Route path="/my-appointments" element={<PrivateRoute roles={['User', 'Admin', 'Staff']}><MyAppointments /></PrivateRoute>} />
         <Route path="/change-password" element={<PrivateRoute roles={['User', 'Admin', 'Staff']}><ChangePassword /></PrivateRoute>} />
         <Route path="/delete-account" element={<PrivateRoute roles={['User', 'Admin', 'Staff']}><DeleteAccount /></PrivateRoute>} />
@@ -100,8 +115,8 @@ const AppContent = () => {
 function App() {
   return (
     <Router>
-      <Toaster 
-        position="top-right" 
+      <Toaster
+        position="top-right"
         reverseOrder={false}
         toastOptions={{
           style: {

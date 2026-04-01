@@ -2,12 +2,15 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { Menu, X, LogIn, User, Calendar, Shield, LogOut, ChevronDown } from 'lucide-react';
+import { Menu, X, LogIn, User, Calendar, Shield, LogOut, ChevronDown, ShoppingBag, Heart, ShoppingCart } from 'lucide-react';
 import { logoutUser } from '../../redux/slices/authSlice';
+import { IMAGE_URL } from '../../utils/BASE_URL';
 import Logo from '../../assets/logo.png';
 
 const PublicNavbar = () => {
   const { userInfo } = useSelector((state) => state.auth);
+  const { cartItems } = useSelector((state) => state.cart);
+  const { wishlistItems } = useSelector((state) => state.wishlist);
   const location = useLocation();
   const dispatch = useDispatch();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -66,9 +69,9 @@ const PublicNavbar = () => {
         </Link>
 
         {/* Desktop Links */}
-        <div className="hidden md:flex items-center gap-8">
-          {['Home', 'Services', 'About', 'Contact', 'Book'].map((link) => {
-            const targetPath = link === 'Home' ? '/' : link === 'Book' ? '/book' : `/${link.toLowerCase()}`;
+        <div className="hidden lg:flex items-center gap-8">
+          {['Home', 'Services', 'Shop', 'About', 'Contact', 'Book'].map((link) => {
+            const targetPath = link === 'Home' ? '/' : link === 'Book' ? '/book' : link === 'Shop' ? '/shop' : `/${link.toLowerCase()}`;
             const isActive = location.pathname === targetPath;
             return (
               <Link
@@ -83,6 +86,39 @@ const PublicNavbar = () => {
               </Link>
             );
           })}
+
+          <div className="flex items-center gap-4 border-l border-white/10 pl-6 h-6 my-auto">
+            <Link to="/wishlist" className="relative group p-2 rounded-full hover:bg-white/5 transition-all">
+              <Heart size={18} className={`group-hover:text-primary transition-colors ${wishlistItems.length > 0 ? 'text-primary fill-primary/20' : 'text-white'}`} />
+              <AnimatePresence>
+                {wishlistItems.length > 0 && (
+                  <motion.span
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0 }}
+                    className="absolute top-0 right-0 w-4 h-4 bg-primary text-secondary text-[9px] font-black flex items-center justify-center rounded-full shadow-lg"
+                  >
+                    {wishlistItems.length}
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </Link>
+            <Link to="/cart" className="relative group p-2 rounded-full hover:bg-white/5 transition-all">
+              <ShoppingCart size={18} className={`group-hover:text-primary transition-colors ${cartItems.length > 0 ? 'text-primary' : 'text-white'}`} />
+              <AnimatePresence>
+                {cartItems.length > 0 && (
+                  <motion.span
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0 }}
+                    className="absolute top-0 right-0 w-4 h-4 bg-primary text-secondary text-[9px] font-black flex items-center justify-center rounded-full shadow-lg"
+                  >
+                    {cartItems.length}
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </Link>
+          </div>
 
           {userInfo ? (
             <div className="relative" ref={profileRef}>
@@ -193,8 +229,8 @@ const PublicNavbar = () => {
             className="md:hidden overflow-hidden"
           >
             <div className="container mx-auto px-6 py-4 flex flex-col gap-4">
-              {['Home', 'Services', 'About', 'Contact', 'Book Appointment'].map((link) => {
-                const targetPath = link === 'Home' ? '/' : link === 'Book Appointment' ? '/book' : `/${link.toLowerCase()}`;
+              {['Home', 'Services', 'Shop', 'About', 'Contact', 'Book Appointment'].map((link) => {
+                const targetPath = link === 'Home' ? '/' : link === 'Book Appointment' ? '/book' : link === 'Shop' ? '/shop' : `/${link.toLowerCase()}`;
                 const isActive = location.pathname === targetPath;
                 return (
                   <Link

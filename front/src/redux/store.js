@@ -8,6 +8,9 @@ import salesReducer from './slices/salesSlice';
 import settingReducer from './slices/settingSlice';
 import dashboardReducer from './slices/dashboardSlice';
 import categoryReducer from './slices/categorySlice';
+import productReducer from './slices/productSlice';
+import cartReducer from './slices/cartSlice';
+import wishlistReducer from './slices/wishlistSlice';
 
 export const store = configureStore({
     reducer: {
@@ -19,7 +22,10 @@ export const store = configureStore({
         sales: salesReducer,
         settings: settingReducer,
         dashboard: dashboardReducer,
-        categories: categoryReducer
+        categories: categoryReducer,
+        products: productReducer,
+        cart: cartReducer,
+        wishlist: wishlistReducer
     },
 });
 

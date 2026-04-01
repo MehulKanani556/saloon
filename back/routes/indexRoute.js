@@ -14,6 +14,8 @@ const categoryController = require('../controllers/categoryController');
 const invoiceController = require('../controllers/invoiceController');
 const reportsController = require('../controllers/reportsController');
 const leaveController = require('../controllers/leaveController');
+const productController = require('../controllers/productController');
+const orderController = require('../controllers/orderController');
 
 // Middleware
 const { protect, authorize } = require('../middleware/authMiddleware');
@@ -119,5 +121,20 @@ router.post('/specializations/requests', protect, authorize('Staff'), specializa
 router.get('/specializations/my-requests', protect, authorize('Staff'), specializationController.getMySpecializationRequests);
 router.get('/specializations/all-requests', protect, authorize('Admin'), specializationController.getAllSpecializationRequests);
 router.put('/specializations/requests/:id', protect, authorize('Admin'), specializationController.updateSpecializationRequestStatus);
+// PRODUCT ROUTES
+// ==========================================
+router.get('/products', productController.getProducts);
+router.get('/products/:id', productController.getProductById);
+router.post('/products', protect, authorize('Admin'), upload.single('image'), processAndStoreImage('products'), productController.createProduct);
+router.put('/products/:id', protect, authorize('Admin'), upload.single('image'), processAndStoreImage('products'), productController.updateProduct);
+router.delete('/products/:id', protect, authorize('Admin'), productController.deleteProduct);
+
+// ==========================================
+// ORDER ROUTES
+// ==========================================
+router.post('/orders', protect, orderController.createOrder);
+router.get('/orders/my', protect, orderController.getMyOrders);
+router.get('/orders', protect, authorize('Admin'), orderController.getOrders);
+router.put('/orders/:id/status', protect, authorize('Admin'), orderController.updateOrderStatus);
 
 module.exports = router;

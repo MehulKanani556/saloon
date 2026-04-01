@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard,
   CalendarCheck2,
@@ -15,6 +15,9 @@ import {
   FileText,
   CalendarClock,
   CheckCircle2
+  ShoppingBag,
+  ChevronDown,
+  Package
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector } from 'react-redux';
@@ -26,6 +29,15 @@ const adminItems = [
   { icon: CalendarCheck2, label: 'Bookings', path: '/admin/appointments' },
   { icon: Scissors, label: 'Service List', path: '/admin/services' },
   { icon: LayoutGrid, label: 'Category', path: '/admin/categories' },
+  { 
+    icon: ShoppingBag, 
+    label: 'Inventory', 
+    path: '/admin/inventory',
+    children: [
+      { label: 'Products', path: '/admin/products' },
+      { label: 'Orders', path: '/admin/orders' },
+    ]
+  },
   { icon: Users, label: 'Staff Members', path: '/admin/staff' },
   { icon: UserSquare2, label: 'Customers', path: '/admin/clients' },
   { icon: TrendingUp, label: 'Business Report', path: '/admin/sales' },
@@ -48,6 +60,89 @@ const userItems = [
   { icon: LayoutDashboard, label: 'Dashboard', path: '/profile' },
   { icon: CalendarCheck2, label: 'Appointments', path: '/my-appointments' },
 ];
+
+function SidebarItem({ item, isCollapsed, isDrawerMode, setIsOpen }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const location = useLocation();
+  const hasChildren = item.children && item.children.length > 0;
+  const isActive = location.pathname.startsWith(item.path);
+
+  return (
+    <>
+      <div className="relative group">
+        <NavLink
+          to={hasChildren ? '#' : item.path}
+          onClick={(e) => {
+            if (hasChildren) {
+              e.preventDefault();
+              setIsExpanded(!isExpanded);
+            } else if (isDrawerMode) {
+              setIsOpen(false);
+            }
+          }}
+        >
+          <div className={`
+            flex items-center ${(isCollapsed && !isDrawerMode) ? 'justify-center' : 'gap-3'} px-3.5 py-3.5 rounded-xl transition-all duration-300 relative
+            ${isActive && !hasChildren
+              ? 'bg-primary text-secondary shadow-lg shadow-primary/10'
+              : isActive && hasChildren
+                ? 'bg-white/5 text-white'
+                : 'text-muted hover:bg-white/5 hover:text-white'
+            }
+          `}>
+            <item.icon size={18} strokeWidth={2.5} className="shrink-0" />
+
+            <AnimatePresence mode="wait">
+              {(!isCollapsed || isDrawerMode) && (
+                <motion.span
+                  key="label"
+                  initial={{ opacity: 0, width: 0 }}
+                  animate={{ opacity: 1, width: 'auto' }}
+                  exit={{ opacity: 0, width: 0 }}
+                  className="font-black text-[11px] uppercase tracking-wider whitespace-nowrap overflow-hidden"
+                >
+                  {item.label}
+                </motion.span>
+              )}
+            </AnimatePresence>
+
+            {hasChildren && (!isCollapsed || isDrawerMode) && (
+              <ChevronDown
+                size={14}
+                className={`ml-auto transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
+              />
+            )}
+          </div>
+        </NavLink>
+      </div>
+
+      <AnimatePresence>
+        {isExpanded && hasChildren && (!isCollapsed || isDrawerMode) && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="overflow-hidden pl-10 space-y-1 mt-1"
+          >
+            {item.children.map((child) => (
+              <NavLink
+                key={child.path}
+                to={child.path}
+                onClick={() => isDrawerMode && setIsOpen(false)}
+                className={({ isActive }) => `
+                  block py-2.5 px-4 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all
+                  ${isActive ? 'text-primary bg-primary/10' : 'text-muted/60 hover:text-white hover:bg-white/5'}
+                `}
+              >
+                {child.label}
+              </NavLink>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
 
 export default function Sidebar({ isOpen, setIsOpen }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -114,46 +209,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
         {/* Navigation Links */}
         <nav className="flex-1 space-y-1.5 px-0.5 overflow-y-auto custom-scrollbar">
           {sidebarItems.map((item) => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              onClick={() => isDrawerMode && setIsOpen(false)}
-            >
-              {({ isActive }) => (
-                <div className={`
-                  flex items-center ${(isCollapsed && !isDrawerMode) ? 'justify-center' : 'gap-3'} px-3.5 py-3.5 rounded-xl transition-all duration-300 group relative
-                  ${isActive
-                    ? 'bg-primary text-secondary shadow-lg shadow-primary/10'
-                    : 'text-muted hover:bg-white/5 hover:text-white'
-                  }
-                `}>
-                  <item.icon size={18} strokeWidth={2.5} className="shrink-0" />
-
-                  <AnimatePresence mode="wait">
-                    {(!isCollapsed || isDrawerMode) && (
-                      <motion.span
-                        key="label"
-                        initial={{ opacity: 0, width: 0 }}
-                        animate={{ opacity: 1, width: 'auto' }}
-                        exit={{ opacity: 0, width: 0 }}
-                        transition={{ duration: 0.3, ease: 'easeOut' }}
-                        className="font-black text-[11px] uppercase tracking-wider whitespace-nowrap overflow-hidden"
-                      >
-                        {item.label}
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
-
-                  {(!isCollapsed || isDrawerMode) && (
-                    <ChevronRight
-                      size={12}
-                      strokeWidth={3}
-                      className="ml-auto opacity-0 group-hover:opacity-40 transition-opacity"
-                    />
-                  )}
-                </div>
-              )}
-            </NavLink>
+            <SidebarItem key={item.label} item={item} isCollapsed={isCollapsed} isDrawerMode={isDrawerMode} setIsOpen={setIsOpen} />
           ))}
         </nav>
 
