@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Scissors, Clock, CheckCircle2, ChevronRight, ChevronLeft,
-  Sparkles, Calendar, User, Phone, Mail, Loader2, Star, Check, AlertCircle, ShoppingBag
+  Sparkles, Calendar, User, Phone, Mail, Loader2, Star, Check, AlertCircle, ShoppingBag,
+  Trash
 } from 'lucide-react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -13,7 +14,7 @@ import { IMAGE_URL } from '../utils/BASE_URL';
 import { fetchServices } from '../redux/slices/serviceSlice';
 import { fetchStaff } from '../redux/slices/staffSlice';
 import { addAppointment, fetchOccupiedSlots } from '../redux/slices/appointmentSlice';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import confetti from 'canvas-confetti';
 
 // --- Validation Schema ---
@@ -32,7 +33,7 @@ const appointmentSchema = Yup.object().shape({
 const SuccessModal = ({ data, onClose }) => {
   useEffect(() => {
     // Professional Confetti Burst
-    const duration = 3 * 1000;
+    const duration = 5 * 1000;
     const animationEnd = Date.now() + duration;
     const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 2000 };
 
@@ -62,16 +63,17 @@ const SuccessModal = ({ data, onClose }) => {
       <motion.div
         initial={{ scale: 0.9, y: 20 }}
         animate={{ scale: 1, y: 0 }}
-        className="w-full max-w-lg bg-secondary rounded-2xl p-12 text-center shadow-2xl relative border border-white/5 overflow-hidden"
+        className="w-full max-w-lg bg-secondary rounded-2xl p-5 md:p-12 text-center shadow-2xl relative border border-white/5 overflow-hidden"
       >
         <div className="w-24 h-24 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-8 border border-primary/20 shadow-inner">
           <CheckCircle2 size={56} strokeWidth={1.5} />
         </div>
 
-        <h2 className="text-4xl font-black text-white uppercase tracking-tighter mb-4  font-luxury">Ritual Confirmed!</h2>
-        <p className="text-muted font-bold text-[10px] uppercase tracking-widest leading-relaxed mb-10">
+        <h2 className="text-2xl md:text-4xl font-black text-white uppercase tracking-tighter mb-4 font-luxury">Ritual Confirmed!</h2>
+        <p className="text-muted font-bold text-[10px] uppercase tracking-widest leading-relaxed mb-6 md:mb-10 px-2">
           Your transformation at Glow & Elegance is officially in the chronicles. We've sent a detailed confirmation to your email.
         </p>
+
 
         <div className="bg-background rounded-2xl p-6 mb-10 text-left space-y-4 border border-white/5">
           <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
@@ -86,7 +88,7 @@ const SuccessModal = ({ data, onClose }) => {
 
         <button
           onClick={onClose}
-          className="w-full py-5 bg-primary text-secondary rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl hover:bg-primary/90 transition-all active:scale-95"
+          className="w-full py-5 bg-primary text-secondary rounded-2xl font-black text-xs uppercase shadow-xl hover:bg-primary/90 transition-all active:scale-95"
         >
           Return to Sanctuary
         </button>
@@ -283,25 +285,65 @@ export default function BookAppointment() {
     <div className="relative selection:bg-primary selection:text-secondary bg-background font-sans min-h-screen">
       <PublicNavbar />
 
-      <main className="pt-32 pb-24">
-        <div className="container mx-auto px-6 mb-16 text-center">
-          <div className="flex justify-center mb-6">
-            <div className="w-16 h-16 rounded-2xl bg-secondary text-primary flex items-center justify-center shadow-xl border border-white/10">
-              <Scissors size={28} />
-            </div>
-          </div>
-          <h1 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">Book Your Ritual</h1>
-          <p className="text-muted font-black text-[10px] uppercase tracking-[0.3em]">Secure your spot in our sanctuary of elegance.</p>
-        </div>
+      <main>
+        {/* Page Hero */}
+        <section className="relative h-[35vh] md:h-[45vh] flex items-center justify-center overflow-hidden bg-background">
 
-        <div className="container px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 max-w-7xl mx-auto">
+          <div className="absolute inset-0 z-0">
+            <img
+              src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?q=80&w=2070&auto=format&fit=crop"
+              alt="Luxury Sanctuary"
+              className="w-full h-full object-cover opacity-30 scale-105"
+            />
+          </div>
+
+          <div className="container mx-auto px-6 relative z-10 text-center">
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="inline-flex items-center gap-3 px-4 py-1.5 bg-primary/10 border border-primary/20 rounded-full mb-3 md:mb-6"
+            >
+              <Sparkles size={12} className="text-primary" />
+              <span className="text-[9px] font-black text-primary uppercase tracking-[0.3em]">Temporal Slot</span>
+            </motion.div>
+
+            <h1 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-4 md:mb-8 flex justify-center gap-[2px] font-luxury ">
+              {"SECURE A RITUAL".split("").map((char, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.04, duration: 0.6, ease: "easeOut" }}
+                >
+                  {char === " " ? "\u00A0" : char}
+                </motion.span>
+              ))}
+            </h1>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1 }}
+              className="mt-4 md:mt-8 flex items-center justify-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-muted"
+            >
+              <Link to="/" className="hover:text-primary transition-colors">Home Base</Link>
+              <span className="w-1.5 h-px bg-white/20" />
+              <span className="text-primary ">Book Appointment</span>
+            </motion.div>
+          </div>
+        </section>
+
+        <section className="py-12 md:py-24 bg-background">
+          <div className="container px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 max-w-7xl mx-auto">
+
 
           {/* Main Form Area */}
           <div className="lg:col-span-8">
-            <div className="bg-secondary rounded-2xl p-8 md:p-12 shadow-2xl border border-white/5 overflow-hidden">
+            <div className="bg-secondary rounded-2xl p-4  md:p-12 shadow-2xl border border-white/5 overflow-hidden">
 
               {/* Step Indicator */}
-              <div className="flex items-center justify-between mb-20 relative px-4 md:px-10">
+            <div className="flex items-center justify-between mb-12 md:mb-20 relative px-2 md:px-10">
+
                 {/* Connection Pipe */}
                 <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-white/5 -translate-y-1/2 z-0 mx-10 md:mx-20" />
 
@@ -333,7 +375,7 @@ export default function BookAppointment() {
                         </div>
                       </motion.div>
 
-                      <div className="absolute -bottom-10 whitespace-nowrap text-center">
+                      <div className="hidden sm:block md:absolute -bottom-10 whitespace-nowrap text-center">
                         <span className={`text-[8px] font-black uppercase tracking-[0.2em] transition-colors duration-500 ${isActive ? 'text-primary' : 'text-muted'}`}>
                           {s.title}
                         </span>
@@ -353,7 +395,8 @@ export default function BookAppointment() {
                     exit={{ opacity: 0, x: -50 }}
                     className="space-y-10"
                   >
-                    <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
+
                       {(servicesLoading || staffLoading) ? (
                         [...Array(6)].map((_, i) => (
                           <div key={i} className="aspect-square bg-background rounded-2xl animate-pulse" />
@@ -407,7 +450,7 @@ export default function BookAppointment() {
                       })}
                     </div>
 
-                    <div className="pt-8 border-t border-white/5 flex items-center justify-between">
+                    <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-6">
                       <div className="hidden md:flex items-center gap-4">
                         <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-primary">
                           <Sparkles size={18} />
@@ -419,12 +462,13 @@ export default function BookAppointment() {
                       <button
                         onClick={nextStep}
                         disabled={selectedServices.length === 0}
-                        className="px-10 py-4 bg-primary text-secondary rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-all flex items-center gap-3"
+                        className="w-full sm:w-auto px-10 py-4 bg-primary text-secondary rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-all flex items-center justify-center gap-3"
                       >
                         Next Chapter
                         <ChevronRight size={18} />
                       </button>
                     </div>
+
                   </motion.div>
                 )}
 
@@ -436,15 +480,15 @@ export default function BookAppointment() {
                     exit={{ opacity: 0, x: -50 }}
                     className="space-y-10"
                   >
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                      <div className="space-y-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+                      <div className="space-y-1 md:space-y-3">
                         <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Full Master Name</label>
                         <div className="relative">
                           <User size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-primary" />
                           <input
                             {...formik.getFieldProps('clientName')}
                             placeholder="e.g. Alexander Pierce"
-                            className={`w-full bg-background border-2 rounded-2xl px-14 py-4 text-sm font-bold outline-none transition-all text-white ${formik.touched.clientName && formik.errors.clientName ? 'border-red-500/30' : 'border-transparent focus:border-primary/20'
+                            className={`w-full bg-background border-2 rounded-2xl pl-14 pr-6 py-4 text-sm font-bold outline-none transition-all text-white ${formik.touched.clientName && formik.errors.clientName ? 'border-red-500/30' : 'border-transparent focus:border-primary/20'
                               }`}
                           />
                         </div>
@@ -453,26 +497,26 @@ export default function BookAppointment() {
                         )}
                       </div>
 
-                      <div className="space-y-3">
+                      <div className="space-y-1 md:space-y-3">
                         <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Email Transmission</label>
                         <div className="relative">
                           <Mail size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-primary" />
                           <input
                             {...formik.getFieldProps('clientEmail')}
                             placeholder="ritual@glow.com"
-                            className="w-full bg-background border-2 border-transparent focus:border-primary/20 rounded-2xl px-14 py-4 text-sm font-bold outline-none transition-all text-white"
+                            className="w-full bg-background border-2 border-transparent focus:border-primary/20 rounded-2xl pl-14 pr-6 py-4 text-sm font-bold outline-none transition-all text-white"
                           />
                         </div>
                         {formik.touched.clientEmail && formik.errors.clientEmail && (
                           <p className="text-[9px] text-red-500 font-bold uppercase ml-4">{formik.errors.clientEmail}</p>
                         )}
                       </div>
-
-                      <div className="space-y-3">
+ 
+                      <div className="space-y-1 md:space-y-3">
                         <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Contact Signal</label>
                         <div className="flex bg-background border-2 border-transparent focus-within:border-primary/20 rounded-2xl transition-all overflow-hidden shadow-inner">
-                          <div className="flex items-center pl-6 pr-4 border-r border-white/5 bg-white/5">
-                            <span className="text-sm font-black text-muted leading-none">+1</span>
+                          <div className="flex items-center pl-4 md:pl-6 pr-4 border-r border-white/5 bg-white/5">
+                            <span className="text-xs md:text-sm font-black text-muted leading-none">+1</span>
                           </div>
                           <div className="relative flex-1">
                             <input
@@ -481,7 +525,7 @@ export default function BookAppointment() {
                               onChange={handlePhoneChange}
                               onBlur={formik.handleBlur}
                               placeholder="416-123-4567"
-                              className="w-full bg-transparent px-6 py-4 text-sm font-bold outline-none dark:text-white"
+                              className="w-full bg-transparent px-4 md:px-6 py-4 text-sm font-bold outline-none dark:text-white"
                             />
                           </div>
                         </div>
@@ -489,8 +533,8 @@ export default function BookAppointment() {
                           <p className="text-[9px] text-red-500 font-bold uppercase ml-4">{formik.errors.clientPhone}</p>
                         )}
                       </div>
-
-                      <div className="space-y-3">
+ 
+                      <div className="space-y-1 md:space-y-3">
                         <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Appointed Date</label>
                         <div className="relative">
                           <Calendar size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-primary" />
@@ -498,10 +542,11 @@ export default function BookAppointment() {
                             type="date"
                             {...formik.getFieldProps('date')}
                             min={new Date().toISOString().split('T')[0]}
-                            className="w-full bg-background border-2 border-transparent focus:border-primary/20 rounded-2xl px-14 py-4 text-sm font-bold outline-none transition-all text-white [color-scheme:dark]"
+                            className="w-full bg-background border-2 border-transparent focus:border-primary/20 rounded-2xl pl-14 pr-6 py-4 text-sm font-bold outline-none transition-all text-white [color-scheme:dark]"
                           />
                         </div>
                       </div>
+
 
                       {/* Staff Selection Section */}
                       <div className="md:col-span-2 space-y-4 pt-6 border-t border-white/5">
@@ -531,9 +576,9 @@ export default function BookAppointment() {
                         </div>
                       </div>
 
-                      <div className="space-y-3 md:col-span-2">
+                      <div className="space-y-1 md:space-y-3 md:col-span-2">
                         <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Preferred Time Slot</label>
-                        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 relative min-h-[100px]">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 md:gap-3 relative min-h-[100px]">
                           {slotsLoading && (
                             <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/60 backdrop-blur-[1px] rounded-2xl">
                               <Loader2 className="animate-spin text-primary" strokeWidth={3} />
@@ -588,13 +633,49 @@ export default function BookAppointment() {
                             );
                           })}
                         </div>
+
+                        {/* All Slots Occupied Message */}
+                        {(() => {
+                          if (!formik.values.date || slotsLoading) return null;
+                          const allOccupied = timeSlots.every(time => {
+                            const [timePart, ampm] = time.split(' ');
+                            let [hours, minutes] = timePart.split(':');
+                            hours = parseInt(hours);
+                            if (ampm === 'PM' && hours < 12) hours += 12;
+                            if (ampm === 'AM' && hours === 12) hours = 0;
+                            const timeIso = new Date(`${formik.values.date}T${hours.toString().padStart(2, '0')}:${minutes}:00`).toISOString();
+                            let isOccupied = occupiedSlots.includes(timeIso);
+                            const now = new Date();
+                            const slotDateTime = new Date(`${formik.values.date}T${hours.toString().padStart(2, '0')}:${minutes}:00`);
+                            if (slotDateTime < now) isOccupied = true;
+                            return isOccupied;
+                          });
+
+                          if (allOccupied) {
+                            return (
+                              <motion.div
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="flex items-center gap-3 p-4 bg-primary/5 border border-primary/20 rounded-2xl md:col-span-2"
+                              >
+                                <AlertCircle size={16} className="text-primary" />
+                                <p className="text-[10px] font-black text-primary uppercase tracking-widest leading-relaxed">
+                                  All qualified masters are occupied during this temporal slot
+                                </p>
+                              </motion.div>
+                            );
+                          }
+                          return null;
+                        })()}
+
                         {formik.touched.time && formik.errors.time && (
+
                           <p className="text-[9px] text-red-500 font-bold uppercase ml-4">{formik.errors.time}</p>
                         )}
                       </div>
                     </div>
 
-                    <div className="pt-8 border-t border-white/5 flex items-center justify-between">
+                    <div className="pt-8 border-t border-white/5 flex flex-col-reverse sm:flex-row items-center justify-between gap-6">
                       <button
                         onClick={prevStep}
                         className="flex items-center gap-2 text-[10px] font-black text-muted uppercase tracking-widest hover:text-primary transition-colors"
@@ -605,12 +686,13 @@ export default function BookAppointment() {
                       <button
                         onClick={nextStep}
                         disabled={!formik.isValid || !formik.values.clientName || !formik.values.time}
-                        className="px-10 py-4 bg-primary text-secondary rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl disabled:opacity-50 hover:bg-primary/90 transition-all flex items-center gap-3"
+                        className="w-full sm:w-auto px-10 py-4 bg-primary text-secondary rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl disabled:opacity-50 hover:bg-primary/90 transition-all flex items-center justify-center gap-3"
                       >
                         Confirm Details
                         <ChevronRight size={18} />
                       </button>
                     </div>
+
                   </motion.div>
                 )}
 
@@ -622,7 +704,7 @@ export default function BookAppointment() {
                     exit={{ opacity: 0, x: -50 }}
                     className="space-y-10"
                   >
-                    <div className="bg-background rounded-2xl p-10 text-white shadow-2xl relative overflow-hidden border border-white/5">
+                    <div className="bg-background rounded-2xl p-5 md:p-10 text-white shadow-2xl relative overflow-hidden border border-white/5">
                       <div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none text-primary">
                         <CheckCircle2 size={150} strokeWidth={1} />
                       </div>
@@ -640,16 +722,17 @@ export default function BookAppointment() {
                           </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-12">
-                          <div>
-                            <span className="text-[9px] font-black text-white/40 uppercase tracking-widest block mb-2">Champion</span>
-                            <p className="text-xs font-black uppercase tracking-widest">{formik.values.clientName}</p>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
+                          <div className="space-y-2">
+                            <span className="text-[9px] font-black text-white/40 uppercase tracking-widest block mb-1 md:mb-2">Champion</span>
+                            <p className="text-xs md:text-sm font-black uppercase tracking-widest">{formik.values.clientName}</p>
                           </div>
-                          <div>
-                            <span className="text-[9px] font-black text-white/40 uppercase tracking-widest block mb-2">Schedule</span>
-                            <p className="text-xs font-black uppercase tracking-widest">{formik.values.date} • {formik.values.time}</p>
+                          <div className="space-y-2">
+                            <span className="text-[9px] font-black text-white/40 uppercase tracking-widest block mb-1 md:mb-2">Schedule</span>
+                            <p className="text-xs md:text-sm font-black uppercase tracking-widest">{formik.values.date} • {formik.values.time}</p>
                           </div>
                         </div>
+
 
                         <div className="pt-10 border-t border-white/10 flex items-center justify-between">
                           <div className="flex flex-col">
@@ -675,7 +758,7 @@ export default function BookAppointment() {
                       <button
                         onClick={formik.handleSubmit}
                         disabled={isSubmitting}
-                        className="w-full py-6 bg-primary text-secondary rounded-2xl font-black text-sm uppercase tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-4"
+                        className="w-full py-6 bg-primary text-secondary rounded-2xl font-black text-xs uppercase shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-4"
                       >
                         {isSubmitting ? (
                           <Loader2 size={24} className="animate-spin" />
@@ -693,8 +776,34 @@ export default function BookAppointment() {
             </div>
           </div>
 
+          {/* Mobile Summary (Visible when rituals are selected) */}
+          <div className="lg:hidden">
+            <AnimatePresence>
+              {selectedServices.length > 0 && step < 3 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 50 }}
+                  className="bg-secondary rounded-2xl p-6 border border-white/5 shadow-2xl mb-8"
+                >
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="text-[8px] font-black text-muted uppercase tracking-widest mb-1">Selections</p>
+                      <h4 className="text-xl font-black text-primary font-luxury">${totalPrice}</h4>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-[8px] font-black text-muted uppercase tracking-widest mb-1">Total Rituals</p>
+                      <p className="text-sm font-black text-white">{selectedServices.length}</p>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
           {/* Sticky Selection Sidebar (Desktop) */}
           <div className="lg:col-span-4 hidden lg:block">
+
             <div className="sticky top-32 space-y-8">
               <div className="bg-secondary rounded-2xl p-10 border border-white/5 shadow-xl">
                 <div className="flex items-center gap-4 mb-10 pb-6 border-b border-white/5">
@@ -719,9 +828,9 @@ export default function BookAppointment() {
                           </div>
                           <button
                             onClick={() => toggleService(s)}
-                            className="text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                            className="text-red-400 opacity-100 group-hover:opacity-100 transition-opacity"
                           >
-                            <AlertCircle size={14} />
+                            <Trash size={14} />
                           </button>
                         </motion.div>
                       ))}
@@ -758,7 +867,9 @@ export default function BookAppointment() {
             </div>
           </div>
         </div>
-      </main>
+      </section>
+    </main>
+
 
       <PublicFooter />
 
