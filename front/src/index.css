@@ -11,6 +11,8 @@
   --background: #0F0F0F;  /* Dark */
   --text: #FFFFFF;
   --muted: #A0A0A0;
+  --luxury-gold: linear-gradient(135deg, #C9A227 0%, #F5E6C8 50%, #C9A227 100%);
+  --luxury-gradient: linear-gradient(135deg, #C9A227 0%, #F5E6C8 50%, #C9A227 100%);
 }
 
 @layer base {
@@ -30,7 +32,7 @@
 
 @layer components {
   .glass-card {
-    @apply bg-secondary/40 backdrop-blur-md border border-white/10 shadow-glass rounded-2xl transition-all;
+    @apply bg-secondary/40 backdrop-blur-md border border-white/10 shadow-xl rounded-2xl transition-all;
   }
   
   .glass-sidebar {
@@ -38,7 +40,7 @@
   }
   
   .premium-gradient-text {
-    @apply bg-clip-text text-transparent bg-luxury-gradient;
+    @apply bg-clip-text text-transparent bg-luxury-gold;
   }
 
   .premium-button {

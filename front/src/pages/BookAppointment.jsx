@@ -342,41 +342,53 @@ export default function BookAppointment() {
             <div className="bg-secondary rounded-2xl p-4  md:p-12 shadow-2xl border border-white/5 overflow-hidden">
 
               {/* Step Indicator */}
-            <div className="flex items-center justify-between mb-12 md:mb-20 relative px-2 md:px-10">
-
-                {/* Connection Pipe */}
-                <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-white/5 -translate-y-1/2 z-0 mx-10 md:mx-20" />
-
-                {/* Progress Pipe */}
+            {/* Luxury Segmented Progress Indicator */}
+            <div className="flex items-center justify-between mb-16 md:mb-24 relative px-4 md:px-16 max-w-4xl mx-auto">
+                
+                {/* Precision Connection System */}
+                <div className="absolute top-[28px] md:top-[32px] left-10 md:left-24 right-10 md:right-24 h-[1px] bg-white/5 z-0" />
+                
+                {/* Ritual Progress Pipe */}
                 <motion.div
                   initial={{ width: 0 }}
-                  animate={{ width: `calc(${((step - 1) / (steps.length - 1)) * 100}% - ${step === steps.length ? '0px' : '40px'})` }}
-                  className="absolute top-1/2 left-10 md:left-20 h-[2px] bg-primary -translate-y-1/2 z-0 transition-all duration-700 ease-in-out"
+                  animate={{ 
+                    width: step === 1 ? '0%' : step === 2 ? '50%' : '69%'
+                  }}
+                  transition={{ duration: 0.8, ease: "circOut" }}
+                  className="absolute top-[28px] md:top-[32px] left-10 md:left-24 h-[2px] bg-primary z-0 shadow-[0_0_20px_rgba(201,162,39,0.4)]"
                 />
 
                 {steps.map((s, i) => {
-                  const isActive = step === i + 1;
-                  const isCompleted = step > i + 1;
+                  const isActive = !showSuccess && step === i + 1;
+                  const isCompleted = showSuccess || step > i + 1;
 
                   return (
-                    <div key={i} className="relative z-10 flex flex-col items-center group">
+                    <div key={i} className="relative z-10 flex flex-col items-center">
                       <motion.div
                         initial={false}
                         animate={{
-                          scale: isActive ? 1.2 : 1,
-                          backgroundColor: isCompleted ? "#10b981" : isActive ? "#C9A227" : "rgba(255,255,255,0.05)",
-                          borderColor: isCompleted ? "#10b981" : isActive ? "#C9A227" : "rgba(255,255,255,0.1)"
+                          scale: isActive ? 1.05 : 1,
+                          backgroundColor: isCompleted ? "#10b981" : isActive ? "#C9A227" : "#121212",
+                          borderColor: isCompleted ? "#10b981" : isActive ? "transparent" : "rgba(245, 230, 200, 0.1)"
                         }}
-                        className={`w-10 h-10 md:w-14 md:h-14 rounded-2xl border-2 flex items-center justify-center transition-all duration-500 shadow-xl ${isActive ? 'rotate-12' : ''
-                          }`}
+                        className={`w-14 h-14 md:w-16 md:h-16 rounded-[22px] border flex items-center justify-center transition-all duration-500 shadow-2xl relative overflow-hidden`}
                       >
-                        <div className={`transition-transform duration-500 ${isActive ? '-rotate-12' : ''} ${isActive || isCompleted ? 'text-white' : 'text-slate-300'}`}>
-                          {isCompleted ? <CheckCircle2 size={24} /> : s.icon}
+                        {/* Internal Glow for Active */}
+                        {isActive && (
+                          <motion.div 
+                            animate={{ opacity: [0.3, 0.6, 0.3] }}
+                            transition={{ repeat: Infinity, duration: 2 }}
+                            className="absolute inset-0 bg-white/20 blur-xl"
+                          />
+                        )}
+                        
+                        <div className={`relative z-10 transition-colors duration-500 ${isActive || isCompleted ? 'text-secondary' : 'text-muted'}`}>
+                          {isCompleted ? <Check size={28} strokeWidth={3} /> : React.cloneElement(s.icon, { size: 24, strokeWidth: 2.5 })}
                         </div>
                       </motion.div>
 
-                      <div className="hidden sm:block md:absolute -bottom-10 whitespace-nowrap text-center">
-                        <span className={`text-[8px] font-black uppercase tracking-[0.2em] transition-colors duration-500 ${isActive ? 'text-primary' : 'text-muted'}`}>
+                      <div className="hidden sm:block absolute -bottom-10 whitespace-nowrap text-center">
+                        <span className={`text-[9px] font-black uppercase tracking-[0.25em] transition-all duration-500 ${isActive ? 'text-primary' : 'text-muted/40'}`}>
                           {s.title}
                         </span>
                       </div>
@@ -873,14 +885,14 @@ export default function BookAppointment() {
 
       <PublicFooter />
 
-      {/* Success Modal */}
+      {/* Primary Success Modal Context */}
       <AnimatePresence>
         {showSuccess && (
           <SuccessModal
             data={{
               ...formik.values,
               date: new Date(formik.values.date),
-              id: bookingResponse?.appointmentId
+              id: bookingResponse?._id || bookingResponse?.appointmentId
             }}
             onClose={() => {
               setShowSuccess(false);
