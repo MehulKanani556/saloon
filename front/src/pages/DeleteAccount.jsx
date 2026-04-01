@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDispatch } from 'react-redux';
-import { Trash2, AlertTriangle, ShieldAlert, LogOut, ChevronRight, X, AlertCircle } from 'lucide-react';
+import { Trash2, AlertTriangle, ShieldAlert, LogOut, ChevronRight, X, AlertCircle, Loader2, ShieldX } from 'lucide-react';
 import { logoutUser } from '../redux/slices/authSlice';
 import api from '../utils/api';
 import toast from 'react-hot-toast';
 import UserPanelLayout from '../components/public/UserPanelLayout';
-
 import { deleteAccount } from '../redux/slices/authSlice';
 
 export default function DeleteAccount() {
@@ -25,121 +24,118 @@ export default function DeleteAccount() {
   };
 
   return (
-    <UserPanelLayout title="Delete ID">
-      <div className="w-full">
+    <UserPanelLayout title="Account Closure">
+      <div className="w-full max-w-4xl">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-dark-card backdrop-blur-3xl border border-red-500/20 rounded-2xl p-8 lg:p-12 relative overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,1)] ring-1 ring-white/5"
+          className="bg-secondary/40 backdrop-blur-3xl border border-red-500/20 rounded-3xl p-8 md:p-10 relative overflow-hidden shadow-2xl shadow-red-500/5"
         >
-          {/* Accent Glow */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/10 rounded-full blur-[100px] pointer-events-none animate-pulse" />
+          {/* Subtle Warning Glow */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/5 rounded-full blur-[100px] pointer-events-none" />
 
-          <div className="flex items-center gap-8 mb-8 pb-8 border-b border-white/5 relative z-10">
-            <div className="w-16 h-16 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-500 border border-red-500/20 shadow-[0_15px_40px_rgba(239,68,68,0.2)]">
-              <Trash2 size={22} strokeWidth={2.5} />
+          <div className="flex flex-col sm:flex-row sm:items-center gap-6 mb-6 pb-6 border-b border-white/5 relative z-10">
+            <div className="w-16 h-16 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-500 border border-red-500/20 shadow-lg shadow-red-500/10 shrink-0">
+              <ShieldX size={32} strokeWidth={1.5} />
             </div>
-            <div>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-black text-white uppercase tracking-wide leading-[1.1] font-luxury">Identity <span className="text-red-500/50">Dissolution</span></h2>
-              <p className="text-muted/40 text-[12px] font-black tracking-[0.2em] flex items-center gap-3 pt-4">
-                <AlertCircle size={14} className="text-red-500/40" /> Irreversible Digital Detachment
-              </p>
+            <div className="space-y-1">
+              <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight uppercase leading-none">Account <span className="text-red-500 italic">Closure</span></h2>
+              <p className="text-muted/40 text-[11px] font-medium tracking-widest uppercase">Permanent removal of your atelier profile and history</p>
             </div>
           </div>
 
-          <div className="space-y-10 relative z-10">
-            <div className="bg-background/40 border border-red-500/10 rounded-2xl p-10 md:p-8 flex flex-col md:flex-row items-center md:items-start gap-12 backdrop-blur-md shadow-inner">
-              {/* <div className="w-20 h-20 rounded-2xl bg-red-500/10 flex items-center justify-center shrink-0 border border-red-500/20 animate-pulse">
-                <ShieldAlert className="text-red-500" size={36} />
-              </div> */}
-              <div className="text-center md:text-left space-y-8">
-                <p className="text-[16px] font-black text-red-500 uppercase tracking-[0.4em]  mb-6 font-luxury leading-none shadow-sm">Critical Protocol Warning</p>
-                <div className="space-y-6 text-[12px] text-muted/60 font-black leading-relaxed tracking-[0.3em] ">
-                  <p className="flex items-center gap-5 justify-center md:justify-start group cursor-default hover:text-white transition-colors duration-500">
-                    <span className="w-2 h-2 rounded-full bg-red-500/50 group-hover:scale-150 transition-transform" />
-                    Immediate detachment from the public matrix.
-                  </p>
-                  <p className="flex items-center gap-5 justify-center md:justify-start group cursor-default hover:text-white transition-colors duration-500">
-                    <span className="w-2 h-2 rounded-full bg-red-500/50 group-hover:scale-150 transition-transform" />
-                    Archival of all ritual history and aesthetic metadata.
-                  </p>
-                  <p className="flex items-center gap-5 justify-center md:justify-start group cursor-default hover:text-white transition-colors duration-500">
-                    <span className="w-2 h-2 rounded-full bg-red-500/50 group-hover:scale-150 transition-transform" />
-                    Permanent revocation of all synchronization access.
-                  </p>
+          <div className="space-y-8 relative z-10">
+            <div className="bg-red-500/[0.03] border border-red-500/10 rounded-2xl p-6 md:p-8 space-y-6 backdrop-blur-md">
+              <div className="flex items-center gap-3">
+                <AlertCircle className="text-red-500" size={18} />
+                <p className="text-[12px] font-bold text-red-500 uppercase tracking-widest leading-none">Irreversible Action Warning</p>
+              </div>
+              
+              <div className="space-y-4 text-[13px] text-muted/60 font-medium leading-relaxed">
+                <div className="flex items-start gap-4">
+                  <div className="w-1.5 h-1.5 rounded-full bg-red-500/40 mt-1.5 shrink-0" />
+                  <p>Removal of your digital footprint from the Salon atelier matrix.</p>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-1.5 h-1.5 rounded-full bg-red-500/40 mt-1.5 shrink-0" />
+                  <p>Permanent archival of all reservation history and aesthetic records.</p>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-1.5 h-1.5 rounded-full bg-red-500/40 mt-1.5 shrink-0" />
+                  <p>Revocation of all membership privileges and synchronization access.</p>
                 </div>
               </div>
             </div>
 
-            <div className="text-center space-y-8">
-              <p className="text-muted/30 text-[11px] font-black uppercase tracking-[0.6em]  animate-pulse">Confirm final authorization sequence?</p>
-
+            <div className="pt-2">
               <button
                 onClick={() => setShowConfirm(true)}
-                className="w-full bg-red-500/10 hover:bg-red-500 border border-red-500/20 hover:border-transparent py-6 rounded-2xl text-[12px] font-black uppercase tracking-[0.5em] text-red-500 hover:text-white transition-all duration-700 shadow-2xl hover:shadow-[0_25px_60px_rgba(239,68,68,0.3)] group flex items-center justify-center gap-8 active:scale-[0.98] font-luxury "
+                className="w-full bg-red-500/10 hover:bg-red-600 border border-red-500/20 hover:border-transparent py-5 rounded-2xl text-[11px] font-bold uppercase tracking-[0.3em] text-red-500 hover:text-white transition-all shadow-xl hover:shadow-red-500/20 group flex items-center justify-center gap-4 active:scale-[0.99]"
               >
-                Initalize Final Dissolution Protocol
-                <ChevronRight size={24} className="group-hover:translate-x-4 transition-transform duration-700" />
+                Begin Account Closure
+                <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
           </div>
         </motion.div>
 
-        {/* Modal Overlay */}
+        {/* Confirmation Modal */}
         <AnimatePresence>
           {showConfirm && (
-            <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-background/95 backdrop-blur-2xl">
+            <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-background/90 backdrop-blur-xl">
               <motion.div
-                initial={{ opacity: 0, scale: 0.9, y: 40 }}
+                initial={{ opacity: 0, scale: 0.98, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.9, y: 40 }}
-                className="bg-dark-card border border-red-500/30 p-12 md:p-20 rounded-2xl w-full max-w-2xl relative shadow-[0_100px_200px_-50px_rgba(0,0,0,1)] overflow-hidden ring-1 ring-white/10"
+                exit={{ opacity: 0, scale: 0.98, y: 20 }}
+                className="bg-secondary p-8 md:p-12 border border-red-500/20 rounded-3xl w-full max-w-xl relative shadow-3xl overflow-hidden"
               >
-                {/* Decorative Elements */}
-                <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/20 rounded-full blur-[100px] pointer-events-none animate-pulse" />
-                <div className="absolute bottom-0 left-0 w-48 h-48 bg-red-500/10 rounded-full blur-[80px] pointer-events-none" />
+                <div className="absolute -top-24 -right-24 w-64 h-64 bg-red-500/10 rounded-full blur-[100px] pointer-events-none" />
 
                 <button
                   onClick={() => setShowConfirm(false)}
-                  className="absolute right-12 top-12 text-muted/30 hover:text-white transition-all duration-500 hover:rotate-90 scale-125"
+                  className="absolute right-6 top-6 p-2 bg-white/5 border border-white/10 rounded-xl text-muted hover:text-white transition-all hover:rotate-90"
                 >
-                  <X size={32} />
+                  <X size={18} />
                 </button>
 
-                <div className="text-center">
-                  <div className="w-28 h-28 bg-red-500/10 rounded-2xl flex items-center justify-center mx-auto mb-12 animate-bounce shadow-[0_20px_50px_rgba(239,68,68,0.2)] border border-red-500/30 text-red-500">
-                    <ShieldAlert size={56} strokeWidth={1.5} />
+                <div className="text-center space-y-10">
+                  <div className="w-16 h-16 bg-red-500/10 rounded-2xl flex items-center justify-center mx-auto border border-red-500/20 shadow-lg text-red-500">
+                    <ShieldAlert size={32} strokeWidth={1.5} />
                   </div>
 
-                  <h3 className="text-4xl md:text-5xl font-black text-white uppercase tracking-[-0.05em]  mb-6 font-luxury leading-none">Authorization <span className="text-red-500/50">Core</span></h3>
-                  <p className="text-muted/40 text-[11px] font-black uppercase tracking-[0.4em] mb-16 max-w-sm mx-auto  leading-relaxed">Provide synchronization key to finalize matrix removal.</p>
+                  <div className="space-y-3">
+                    <h3 className="text-2xl md:text-3xl font-extrabold text-white uppercase tracking-tight leading-none">Security <span className="text-red-500 italic">Auth</span></h3>
+                    <p className="text-muted/40 text-[11px] font-bold uppercase tracking-[0.25em] max-w-xs mx-auto leading-relaxed">
+                      Confirm your identity to finalize the removal process.
+                    </p>
+                  </div>
 
-                  <div className="space-y-12 text-left">
-                    <div className="space-y-6">
-                      <label className="text-[11px] font-black text-muted/30 uppercase tracking-[0.6em] pl-4 ">Security Key (Password)</label>
+                  <div className="space-y-8 text-left">
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-bold text-muted/30 uppercase tracking-[0.2em] ml-2">Verification Key</label>
                       <input
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        placeholder="••••••••••••"
-                        className="w-full bg-background/40 border border-white/5 p-8 rounded-2xl outline-none focus:border-red-500 focus:ring-4 focus:ring-red-500/5 transition-all duration-1000 font-black text-xl tracking-[0.8em] text-red-500 text-center uppercase"
+                        placeholder="Enter your password"
+                        className="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-red-500/40 focus:ring-4 focus:ring-red-500/5 transition-all font-bold text-lg text-red-500 text-center tracking-widest uppercase"
                       />
                     </div>
 
-                    <div className="flex flex-col sm:flex-row gap-6 pt-10">
+                    <div className="flex flex-col sm:flex-row gap-4 pt-6">
                       <button
                         onClick={() => setShowConfirm(false)}
-                        className="flex-1 px-12 py-7 border border-white/5 rounded-2xl text-[11px] font-black uppercase tracking-[0.5em] hover:bg-white/5 text-muted/40 hover:text-white transition-all duration-700  font-luxury"
+                        className="flex-1 px-8 py-4 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-white/10 text-muted hover:text-white transition-all"
                       >
-                        Abort Sequence
+                        Abort Closure
                       </button>
                       <button
                         onClick={handleDissolve}
                         disabled={loading || !password}
-                        className="flex-1 px-12 py-7 bg-red-600 text-white rounded-2xl text-[11px] font-black uppercase tracking-[0.5em] shadow-[0_25px_60px_rgba(220,38,38,0.4)] disabled:opacity-10 flex items-center justify-center gap-5 transition-all duration-700 hover:scale-[1.05] active:translate-y-1  font-luxury"
+                        className="flex-1 px-8 py-4 bg-red-600 text-white rounded-2xl text-[10px] font-bold uppercase tracking-[0.2em] shadow-xl shadow-red-600/20 disabled:opacity-30 flex items-center justify-center gap-3 transition-all hover:scale-[1.02] active:scale-[0.98]"
                       >
-                        {loading ? <Loader2 className="animate-spin" size={24} /> : <Trash2 size={24} />}
-                        Final Dissolve
+                        {loading ? <Loader2 className="animate-spin" size={18} /> : <Trash2 size={18} />}
+                        Final Closure
                       </button>
                     </div>
                   </div>
@@ -152,4 +148,3 @@ export default function DeleteAccount() {
     </UserPanelLayout>
   );
 }
-

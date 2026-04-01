@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { Lock, Shield, Save, KeyRound, AlertCircle, Loader2 } from 'lucide-react';
+import { Lock, Shield, Save, KeyRound, AlertCircle, Loader2, ShieldCheck, Fingerprint } from 'lucide-react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import UserPanelLayout from '../components/public/UserPanelLayout';
@@ -32,15 +32,15 @@ export default function ChangePassword() {
     validationSchema: Yup.object({
       currentPassword: Yup.string().when([], {
         is: () => hasPassword,
-        then: () => Yup.string().required('Current matrix key required'),
+        then: () => Yup.string().required('Current password is required'),
         otherwise: () => Yup.string().notRequired(),
       }),
       newPassword: Yup.string()
-        .min(6, 'Minimum 6 characters for security entropy')
-        .required('New matrix key required'),
+        .min(6, 'Minimum 6 characters required')
+        .required('New password is required'),
       confirmPassword: Yup.string()
-        .oneOf([Yup.ref('newPassword'), null], 'Matrix keys do not match')
-        .required('Verification required'),
+        .oneOf([Yup.ref('newPassword'), null], 'Passwords do not match')
+        .required('Please confirm your new password'),
     }),
     onSubmit: async (values) => {
       setLoading(true);
@@ -55,121 +55,132 @@ export default function ChangePassword() {
 
   if (syncing || (!user && rtkLoading)) {
     return (
-      <UserPanelLayout title="Change Password">
-        <div className="flex flex-col items-center justify-center py-32 gap-6">
-          <Loader2 className="w-16 h-16 text-primary animate-spin" />
-          <p className="text-[10px] font-black uppercase tracking-[0.4em] text-muted animate-pulse ">Synchronizing Security Matrix...</p>
+      <UserPanelLayout title="Security">
+        <div className="flex flex-col items-center justify-center py-24 gap-6">
+          <div className="relative">
+            <Loader2 className="w-12 h-12 text-primary animate-spin" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <ShieldCheck size={16} className="text-primary/40" />
+            </div>
+          </div>
+          <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-muted/60 animate-pulse">Authenticating Vault...</p>
         </div>
       </UserPanelLayout>
     )
   }
 
   return (
-    <UserPanelLayout title="Change Password">
-      <div className="w-full">
+    <UserPanelLayout title="Security">
+      <div className="w-full max-w-4xl">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-dark-card backdrop-blur-3xl border border-white/10 rounded-2xl p-8 lg:p-16 relative overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,1)] ring-1 ring-white/5"
+          className="bg-secondary/40 backdrop-blur-3xl border border-white/5 rounded-3xl p-8 md:p-12 relative overflow-hidden shadow-2xl"
         >
-          {/* Dynamic Ethereal Background */}
-          <div className="absolute -top-32 -right-32 w-80 h-80 bg-primary/10 rounded-full blur-[120px] pointer-events-none animate-pulse" />
-          <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-primary/5 rounded-full blur-[150px] pointer-events-none" />
-
-          <div className="flex items-center gap-8 mb-4 pb-8 border-b border-white/5 relative z-10">
-            <div className="w-20 h-20 rounded-2xl bg-luxury-gradient flex items-center justify-center text-secondary shadow-[0_15px_40px_rgba(201,162,39,0.3)] border border-white/20">
-              <KeyRound size={32} strokeWidth={2.5} />
+          {/* Subtle Atmosphere */}
+          <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
+          
+          <div className="flex flex-col sm:flex-row sm:items-center gap-6 mb-8 pb-8 border-b border-white/5 relative z-10">
+            <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center text-primary border border-white/10 shrink-0">
+              <Fingerprint size={32} strokeWidth={1.5} />
             </div>
-            <div>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-black text-white uppercase tracking-wide leading-[1.1] font-luxury">Security <span className="text-primary/50">Matrix</span></h2>
-              <p className="text-muted/40 text-[12px] font-black tracking-[0.2em] flex items-center gap-4 pt-3">Synchronize Access Credentials</p>
+            <div className="space-y-1">
+              <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight uppercase leading-none">Access <span className="text-primary italic">Security</span></h2>
+              <p className="text-muted/40 text-[11px] font-medium tracking-widest uppercase">Secure your digital profile and atelier credentials</p>
             </div>
           </div>
 
           {!hasPassword && (
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
-              className="mb-12 p-8 bg-primary/5 border border-primary/20 rounded-2xl flex items-start gap-6 backdrop-blur-md relative z-10"
+              initial={{ opacity: 0, scale: 0.98 }} 
+              animate={{ opacity: 1, scale: 1 }}
+              className="mb-8 p-6 bg-primary/5 border border-primary/20 rounded-2xl flex items-start gap-4 relative z-10"
             >
-              <AlertCircle className="text-primary shrink-0 mt-1" size={24} />
-              <div>
-                <p className="text-[11px] font-black text-primary uppercase tracking-[0.4em] mb-2 leading-none font-luxury ">Initialization Required</p>
-                <p className="text-[12px] text-muted/80 font-bold leading-relaxed uppercase  tracking-widest">Construct your security matrix for password-based authentication.</p>
+              <AlertCircle className="text-primary shrink-0 mt-0.5" size={20} />
+              <div className="space-y-1">
+                <p className="text-[10px] font-bold text-primary uppercase tracking-[0.2em]">Password Required</p>
+                <p className="text-[12px] text-muted/80 font-medium">Please establish a secure password to protect your session history and preferences.</p>
               </div>
             </motion.div>
           )}
 
-          <form onSubmit={formik.handleSubmit} className="space-y-12 relative z-10">
-            {/* Current Password - Only show if they have one */}
+          <form onSubmit={formik.handleSubmit} className="space-y-8 relative z-10">
+            {/* Current Password */}
             {hasPassword && (
-              <div className="space-y-6">
-                <label className="text-[11px] font-black text-muted/40 uppercase tracking-[0.5em] pl-4 ">Current Secret Protocol</label>
+              <div className="space-y-3">
+                <label className="text-[10px] font-bold text-muted/40 uppercase tracking-[0.3em] ml-2">Current Password</label>
                 <div className="relative group/field">
-                  <div className="absolute left-6 top-1/2 -translate-y-1/2 text-muted/20 group-focus-within/field:text-primary group-focus-within/field:scale-110 transition-all duration-700">
-                    <Lock size={20} />
+                  <div className="absolute left-5 top-1/2 -translate-y-1/2 text-muted/30 group-focus-within/field:text-primary transition-colors">
+                    <Lock size={18} />
                   </div>
                   <input
                     type="password"
                     {...formik.getFieldProps('currentPassword')}
-                    placeholder="••••••••••••"
-                    className="w-full bg-background/30 border border-white/30 p-4 pl-14 rounded-xl outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/5 transition-all duration-1000 font-black text-sm tracking-[0.4em] text-white"
+                    placeholder="Enter current password"
+                    className="w-full bg-white/5 border border-white/10 p-4 pl-12 rounded-2xl outline-none focus:border-primary/30 transition-all font-medium text-sm text-white"
                   />
                 </div>
-                {formik.touched.currentPassword && formik.errors.currentPassword && <p className="text-primary/80 text-[10px] uppercase font-black tracking-widest pl-4  animate-pulse">{formik.errors.currentPassword}</p>}
+                {formik.touched.currentPassword && formik.errors.currentPassword && (
+                  <p className="text-red-500/80 text-[9px] uppercase font-bold tracking-widest ml-4">{formik.errors.currentPassword}</p>
+                )}
               </div>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* New Password */}
-              <div className="space-y-6">
-                <label className="text-[11px] font-black text-muted/40 uppercase tracking-[0.5em] pl-4 ">New Security Entropy</label>
+              <div className="space-y-3">
+                <label className="text-[10px] font-bold text-muted/40 uppercase tracking-[0.3em] ml-2">New Password</label>
                 <div className="relative group/field">
-                  <div className="absolute left-6 top-1/2 -translate-y-1/2 text-muted/20 group-focus-within/field:text-primary group-focus-within/field:scale-110 transition-all duration-700">
-                    <Shield size={20} />
+                  <div className="absolute left-5 top-1/2 -translate-y-1/2 text-muted/30 group-focus-within/field:text-primary transition-colors">
+                    <Shield size={18} />
                   </div>
                   <input
                     type="password"
                     {...formik.getFieldProps('newPassword')}
-                    placeholder="ENTROPY-X"
-                    className="w-full bg-background/30 border border-white/[0.03] p-4 pl-14 rounded-xl outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/5 transition-all duration-1000 font-black text-sm tracking-[0.4em] text-white"
+                    placeholder="New secure password"
+                    className="w-full bg-white/5 border border-white/10 p-4 pl-12 rounded-2xl outline-none focus:border-primary/30 transition-all font-medium text-sm text-white"
                   />
                 </div>
-                {formik.touched.newPassword && formik.errors.newPassword && <p className="text-primary/80 text-[10px] uppercase font-black tracking-widest pl-4  animate-pulse">{formik.errors.newPassword}</p>}
+                {formik.touched.newPassword && formik.errors.newPassword && (
+                  <p className="text-red-500/80 text-[9px] uppercase font-bold tracking-widest ml-4">{formik.errors.newPassword}</p>
+                )}
               </div>
 
               {/* Confirm Password */}
-              <div className="space-y-6">
-                <label className="text-[11px] font-black text-muted/40 uppercase tracking-[0.5em] pl-4 ">Verify Synchronization</label>
+              <div className="space-y-3">
+                <label className="text-[10px] font-bold text-muted/40 uppercase tracking-[0.3em] ml-2">Confirm Password</label>
                 <div className="relative group/field">
-                  <div className="absolute left-6 top-1/2 -translate-y-1/2 text-muted/20 group-focus-within/field:text-primary group-focus-within/field:scale-110 transition-all duration-700">
-                    <KeyRound size={20} />
+                  <div className="absolute left-5 top-1/2 -translate-y-1/2 text-muted/30 group-focus-within/field:text-primary transition-colors">
+                    <ShieldCheck size={18} />
                   </div>
                   <input
                     type="password"
                     {...formik.getFieldProps('confirmPassword')}
-                    placeholder="REPEAT-SEC"
-                    className="w-full bg-background/30 border border-white/[0.03] p-4 pl-14 rounded-xl outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/5 transition-all duration-1000 font-black text-sm tracking-[0.4em] text-white"
+                    placeholder="Repeat new password"
+                    className="w-full bg-white/5 border border-white/10 p-4 pl-12 rounded-2xl outline-none focus:border-primary/30 transition-all font-medium text-sm text-white"
                   />
                 </div>
-                {formik.touched.confirmPassword && formik.errors.confirmPassword && <p className="text-primary/80 text-[10px] uppercase font-black tracking-widest pl-4  animate-pulse">{formik.errors.confirmPassword}</p>}
+                {formik.touched.confirmPassword && formik.errors.confirmPassword && (
+                  <p className="text-red-500/80 text-[9px] uppercase font-bold tracking-widest ml-4">{formik.errors.confirmPassword}</p>
+                )}
               </div>
             </div>
 
-            <div className="pt-12 border-t border-white/5">
+            <div className="pt-6 border-t border-white/5">
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-6 bg-luxury-gradient text-secondary rounded-2xl flex items-center justify-center gap-6 shadow-[0_25px_60px_rgba(201,162,39,0.25)] hover:scale-[1.02] active:scale-[0.98] transition-all font-black text-[12px] uppercase tracking-[0.6em] font-luxury  group"
+                className="w-full py-5 bg-primary text-secondary rounded-2xl flex items-center justify-center gap-4 shadow-xl hover:scale-[1.01] active:scale-[0.99] transition-all font-bold text-[11px] uppercase tracking-[0.3em] group"
               >
                 {loading ? (
                   <>
-                    <Loader2 className="animate-spin" size={24} />
-                    Processing Cryptography...
+                    <Loader2 className="animate-spin" size={20} />
+                    Securing Data...
                   </>
                 ) : (
                   <>
-                    <Save size={24} className="group-hover:rotate-12 transition-transform" />
-                    Commit Protocol Update
+                    <Save size={20} className="group-hover:rotate-12 transition-transform" />
+                    Update Access Security
                   </>
                 )}
               </button>
@@ -180,4 +191,3 @@ export default function ChangePassword() {
     </UserPanelLayout>
   );
 }
-

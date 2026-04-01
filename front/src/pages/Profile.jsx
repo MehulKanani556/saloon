@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
-import { User, Mail, Phone, Shield, Save, Fingerprint, Edit3, Camera, Loader2 } from 'lucide-react';
+import { User, Mail, Phone, Shield, Save, Fingerprint, Edit3, Camera, Loader2, Sparkles, UserCircle } from 'lucide-react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import UserPanelLayout from '../components/public/UserPanelLayout';
@@ -63,41 +63,44 @@ export default function Profile() {
 
   if (loading || (!user && rtkLoading)) {
     return (
-      <UserPanelLayout title="My Profile">
-        <div className="flex flex-col items-center justify-center py-32 gap-6">
-          <Loader2 className="w-16 h-16 text-primary animate-spin" />
-          <p className="text-[10px] font-black uppercase tracking-[0.4em] text-muted animate-pulse ">Synchronizing Identity Matrix...</p>
+      <UserPanelLayout title="Profile">
+        <div className="flex flex-col items-center justify-center py-24 gap-6">
+          <div className="relative">
+            <Loader2 className="w-12 h-12 text-primary animate-spin" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <UserCircle size={16} className="text-primary/40" />
+            </div>
+          </div>
+          <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-muted/60 animate-pulse">Authenticating Profile...</p>
         </div>
       </UserPanelLayout>
     )
   }
 
   return (
-    <UserPanelLayout title="Identity">
-      <div className="flex flex-col gap-6">
+    <UserPanelLayout title="Profile">
+      <div className="w-full max-w-5xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-dark-card backdrop-blur-3xl border border-white/10 rounded-xl p-6 lg:p-10 relative overflow-hidden shadow-[0_30px_60px_-12px_rgba(0,0,0,0.8)] ring-1 ring-white/5"
+          className="bg-secondary/40 backdrop-blur-3xl border border-white/5 rounded-3xl p-6 md:p-10 relative overflow-hidden shadow-2xl"
         >
-          {/* Decorative Ethereal Blobs */}
-          <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/5 rounded-full blur-[100px] pointer-events-none animate-pulse" />
-          <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
-
-          {/* Header Profile Section */}
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-10 pb-8 border-b border-white/5 relative z-10 w-full">
-            <div className="flex flex-col md:flex-row items-center gap-8 text-center md:text-left">
+          {/* Subtle Atmosphere */}
+          <div className="absolute -top-32 -right-32 w-64 h-64 bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
+          
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 mb-8 pb-8 border-b border-white/5 relative z-10 w-full">
+            <div className="flex flex-col sm:flex-row items-center gap-6 md:gap-8 w-full">
               <div className="relative group cursor-pointer shrink-0" onClick={handleImageClick}>
-                <div className={`w-28 h-28 md:w-32 md:h-32 rounded-xl p-[1px] transition-all duration-700 ${isEditing ? 'bg-luxury-gradient shadow-[0_0_30px_rgba(201,162,39,0.2)] scale-[1.02]' : 'bg-white/10 group-hover:bg-white/20'}`}>
-                  <div className="w-full h-full rounded-xl bg-background overflow-hidden relative border border-white/5 shadow-inner">
+                <div className={`w-28 h-28 md:w-32 md:h-32 rounded-3xl p-[1.5px] transition-all duration-700 ${isEditing ? 'bg-primary shadow-[0_0_30px_rgba(201,162,39,0.1)] scale-105' : 'bg-white/10 group-hover:bg-white/20'}`}>
+                  <div className="w-full h-full rounded-[20px] bg-background overflow-hidden relative border border-white/5">
                     <img
                       src={preview ? preview : (user?.profileImage ? (user.profileImage.startsWith('http') ? user.profileImage : `${IMAGE_URL}${user.profileImage}`) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.name || 'User'}`)}
                       alt="Profile"
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      className="w-full h-full object-cover"
                     />
                     {isEditing && (
-                      <div className="absolute inset-0 rounded-xl bg-black/40 backdrop-blur-sm flex items-center justify-center transition-opacity opacity-0 group-hover:opacity-100">
-                        <Camera className="text-white animate-bounce" size={24} />
+                      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center transition-opacity opacity-0 group-hover:opacity-100">
+                        <Camera className="text-white" size={24} />
                       </div>
                     )}
                   </div>
@@ -105,112 +108,114 @@ export default function Profile() {
                 <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileChange} />
               </div>
 
-              <div className="space-y-4 max-w-lg">
-                <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
-                  <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-black text-white uppercase tracking-wide leading-[1.1] font-luxury">Identity <span className="text-primary/50">Core</span></h2>
-                  <div className="px-4 py-1.5 bg-primary/10 text-primary border border-primary/20 rounded-full text-[9px] font-black uppercase tracking-[0.3em] shadow-inner backdrop-blur-md">
+              <div className="space-y-3 flex-1 text-center sm:text-left">
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4">
+                  <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight uppercase leading-none">Client <span className="text-primary italic">Profile</span></h2>
+                  <div className="px-4 py-1 bg-primary/10 text-primary border border-primary/20 rounded-full text-[9px] font-bold uppercase tracking-widest">
                     {user?.role || 'CLIENT'}
                   </div>
                 </div>
-                <div className="flex flex-col gap-2">
-                  <p className="text-muted/60 text-[12px] font-black uppercase tracking-[0.4em] flex items-center justify-center md:justify-start gap-4">
-                    <Fingerprint size={16} className="text-primary/30" /> ID: <span className="text-primary font-luxury tracking-wider">{user?.customId || 'CLI-IDENTITY-INIT'}</span>
+                <div className="space-y-2">
+                  <p className="text-muted/40 text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] flex items-center justify-center sm:justify-start gap-3">
+                    <Fingerprint size={14} className="text-primary/30" /> REF: <span className="text-primary/80 font-mono">#{user?.customId || user?._id?.slice(-8).toUpperCase()}</span>
                   </p>
-                  <p className="text-muted/40 text-[12px] font-black tracking-[0.2em] max-w-sm leading-relaxed">
-                    High-fidelity verification established within the collective aesthetic matrix.
+                  <p className="text-muted/40 text-[12px] font-medium max-w-md leading-relaxed mx-auto sm:mx-0">
+                    Your bespoke credentials and history within the Salon atelier ecosystem.
                   </p>
                 </div>
               </div>
-            </div>
 
-            <button
-              onClick={() => setIsEditing(!isEditing)}
-              className={`flex items-center gap-3 px-10 py-5 rounded-xl font-black uppercase text-[11px] tracking-[0.3em] transition-all duration-300 border group shrink-0 ${isEditing ? 'bg-background border-white/10 text-muted/40 hover:text-white' : 'bg-luxury-gradient text-secondary border-transparent shadow-[0_20px_40px_rgba(201,162,39,0.2)] hover:scale-105 active:scale-95'}`}
-            >
-              <Edit3 size={18} className={`${!isEditing && 'group-hover:rotate-12 transition-transform'}`} />
-              <span className="font-luxury ">{isEditing ? 'Abort Record' : 'Modify Record'}</span>
-            </button>
+              <button
+                onClick={() => setIsEditing(!isEditing)}
+                className={`w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-bold uppercase text-[10px] tracking-[0.2em] transition-all border group ${isEditing ? 'bg-background border-white/10 text-muted/60 hover:text-white' : 'bg-primary text-secondary border-transparent shadow-xl hover:scale-105 active:scale-95'}`}
+              >
+                <Edit3 size={16} className={`${!isEditing && 'group-hover:rotate-12 transition-transform'}`} />
+                {isEditing ? 'Cancel Edit' : 'Edit Profile'}
+              </button>
+            </div>
           </div>
 
-          <form onSubmit={formik.handleSubmit} className="relative z-10 space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
-              {/* Name - Editable */}
+          <form onSubmit={formik.handleSubmit} className="relative z-10 space-y-6 md:space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-10">
+              {/* Name */}
               <div className="space-y-3">
-                <label className="text-[10px] font-black text-muted/40 uppercase tracking-[0.4em] pl-2 ">Identity Ledger</label>
+                <label className="text-[10px] font-bold text-muted/40 uppercase tracking-[0.3em] ml-2">Display Name</label>
                 <div className="relative group/field">
-                  <div className={`absolute left-6 top-1/2 -translate-y-1/2 transition-all duration-500 ${isEditing ? 'text-primary scale-110' : 'text-muted/20'}`}>
-                    <User size={20} />
+                  <div className={`absolute left-5 top-1/2 -translate-y-1/2 transition-colors ${isEditing ? 'text-primary' : 'text-muted/20'}`}>
+                    <User size={18} />
                   </div>
                   <input
                     {...formik.getFieldProps('name')}
                     disabled={!isEditing}
-                    placeholder="Enter Identity Name"
-                    className={`w-full bg-background/20 border px-6 py-5 pl-14 rounded-xl outline-none transition-all duration-500 font-black text-[11px] uppercase tracking-[0.2em] ${isEditing ? 'border-primary/40 shadow-inner text-white' : 'border-white/60 cursor-not-allowed opacity-40 text-muted/60'}`}
+                    placeholder="Enter full name"
+                    className={`w-full bg-white/[0.03] border px-6 py-4 pl-12 rounded-2xl outline-none transition-all font-bold text-sm ${isEditing ? 'border-primary/30 text-white' : 'border-transparent text-muted/40 cursor-not-allowed'}`}
                   />
                 </div>
-                {formik.touched.name && formik.errors.name && <p className="text-primary/80 text-[9px] uppercase font-black tracking-widest pl-2  animate-pulse">! Error: {formik.errors.name}</p>}
+                {formik.touched.name && formik.errors.name && (
+                  <p className="text-red-500/80 text-[9px] uppercase font-bold tracking-widest ml-4">{formik.errors.name}</p>
+                )}
               </div>
 
-              {/* Email - Constant */}
+              {/* Email */}
               <div className="space-y-3">
-                <label className="text-[10px] font-black text-muted/30 uppercase tracking-[0.4em] pl-2 ">Encryption (Email)</label>
+                <label className="text-[10px] font-bold text-muted/40 uppercase tracking-[0.3em] ml-2">Email Address</label>
                 <div className="relative">
-                  <div className="absolute left-6 top-1/2 -translate-y-1/2 text-white/30 opacity-40">
-                    <Mail size={20} />
+                  <div className="absolute left-5 top-1/2 -translate-y-1/2 text-muted/20">
+                    <Mail size={18} />
                   </div>
                   <input
                     value={user?.email || ''}
                     disabled
-                    className="w-full bg-background/10 border border-white/30 px-6 py-5 pl-14 rounded-xl outline-none font-black text-[11px] uppercase tracking-[0.2em] text-muted/40 cursor-not-allowed  shadow-inner"
+                    className="w-full bg-white/[0.01] border border-transparent px-6 py-4 pl-12 rounded-2xl font-bold text-sm text-muted/40 cursor-not-allowed"
                   />
                 </div>
               </div>
 
-              {/* Phone - Constant */}
+              {/* Phone */}
               <div className="space-y-3">
-                <label className="text-[10px] font-black text-muted/30 uppercase tracking-[0.4em] pl-2 ">Signal Protocol (Phone)</label>
+                <label className="text-[10px] font-bold text-muted/40 uppercase tracking-[0.3em] ml-2">Phone Number</label>
                 <div className="relative">
-                  <div className="absolute left-6 top-1/2 -translate-y-1/2 text-white/30 opacity-40">
-                    <Phone size={20} />
+                  <div className="absolute left-5 top-1/2 -translate-y-1/2 text-muted/20">
+                    <Phone size={18} />
                   </div>
                   <input
                     value={user?.phone || ''}
                     disabled
-                    className="w-full bg-background/10 border border-white/30 px-6 py-5 pl-14 rounded-xl outline-none font-black text-[11px] uppercase tracking-[0.2em] text-muted/40 cursor-not-allowed  shadow-inner"
+                    className="w-full bg-white/[0.01] border border-transparent px-6 py-4 pl-12 rounded-2xl font-bold text-sm text-muted/40 cursor-not-allowed"
                   />
                 </div>
               </div>
             </div>
 
-            <AnimatePresence mode="wait">
+            <AnimatePresence>
               {isEditing && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
-                  className="flex flex-col sm:flex-row justify-end gap-6 pt-8 border-t border-white/5"
+                  className="flex flex-col sm:flex-row justify-end gap-4 pt-6 border-t border-white/5"
                 >
                   <button
                     type="button"
                     onClick={() => { setIsEditing(false); setPreview(null); }}
-                    className="px-10 py-5 border border-white/5 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] hover:bg-white/5 transition-all text-muted/40 hover:text-white"
+                    className="px-10 py-4 bg-background border border-white/10 rounded-2xl text-[10px] font-bold uppercase tracking-[0.2em] transition-all text-muted/60 hover:text-white"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={updating}
-                    className="px-14 py-5 bg-luxury-gradient text-secondary rounded-xl flex items-center justify-center gap-4 shadow-lg hover:scale-105 active:scale-95 transition-all font-black text-[10px] uppercase tracking-[0.4em] font-luxury "
+                    className="px-12 py-4 bg-primary text-secondary rounded-2xl flex items-center justify-center gap-3 shadow-xl hover:scale-105 active:scale-95 transition-all font-bold text-[10px] uppercase tracking-[0.2em]"
                   >
                     {updating ? (
                       <>
-                        <Loader2 className="animate-spin" size={18} />
+                        <Loader2 className="animate-spin" size={16} />
                         Syncing...
                       </>
                     ) : (
                       <>
-                        <Save size={18} />
-                        Commit Changes
+                        <Save size={16} />
+                        Save Changes
                       </>
                     )}
                   </button>
@@ -221,6 +226,5 @@ export default function Profile() {
         </motion.div>
       </div>
     </UserPanelLayout>
-
   );
 }
