@@ -397,7 +397,7 @@ const SalonDetails = () => {
                 <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Coordinates</p>
                 <div className="w-12 h-[2px] bg-primary/30" />
               </div>
-              <h3 className="text-lg md:text-2xl lg:text-4xl xl:text-5xl font-black text-white uppercase tracking-wide leading-[1.1] text-left font-luxury">Find The <br /> Sanctuary</h3>
+              <h3 className="text-lg md:text-2xl lg:text-4xl xl:text-5xl font-black text-white uppercase tracking-wide leading-[1.1] text-left font-luxury">Find The Sanctuary</h3>
             </div>
 
             <div className="space-y-8">
