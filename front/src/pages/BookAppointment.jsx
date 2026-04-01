@@ -13,7 +13,7 @@ import { IMAGE_URL } from '../utils/BASE_URL';
 import { fetchServices } from '../redux/slices/serviceSlice';
 import { fetchStaff } from '../redux/slices/staffSlice';
 import { addAppointment, fetchOccupiedSlots } from '../redux/slices/appointmentSlice';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 // --- Validation Schema ---
 const appointmentSchema = Yup.object().shape({
@@ -96,9 +96,20 @@ export default function BookAppointment() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const { services, loading: servicesLoading } = useSelector(state => state.services);
   const { staff: allStaff, loading: staffLoading } = useSelector(state => state.staff);
   const { occupiedSlots, loading: slotsLoading } = useSelector(state => state.appointments);
+
+  // Pre-select service from navigation state
+  useEffect(() => {
+    if (location.state?.serviceId && services.length > 0) {
+      const service = services.find(s => s._id === location.state.serviceId);
+      if (service && !selectedServices.find(s => s._id === service._id)) {
+        setSelectedServices([service]);
+      }
+    }
+  }, [location.state, services]);
 
   useEffect(() => {
     dispatch(fetchServices());
@@ -107,9 +118,9 @@ export default function BookAppointment() {
 
   const formik = useFormik({
     initialValues: {
-      clientName: userInfo?.name || '',
-      clientEmail: userInfo?.email || '',
-      clientPhone: userInfo?.phone ? userInfo.phone.replace('+1 ', '') : '',
+      clientName: userInfo?.name || localStorage.getItem('guest_name') || '',
+      clientEmail: userInfo?.email || localStorage.getItem('guest_email') || '',
+      clientPhone: (userInfo?.phone ? userInfo.phone.replace('+1 ', '') : '') || localStorage.getItem('guest_phone') || '',
       date: '',
       time: '',
     },
@@ -135,6 +146,12 @@ export default function BookAppointment() {
           date: new Date(`${values.date}T${time24}:00`).toISOString(),
         };
         const res = await dispatch(addAppointment(body)).unwrap();
+        
+        // Store guest data for next ritual
+        localStorage.setItem('guest_name', values.clientName);
+        localStorage.setItem('guest_email', values.clientEmail);
+        localStorage.setItem('guest_phone', values.clientPhone);
+
         setBookingResponse(res);
         setShowSuccess(true);
       } catch (err) {

@@ -217,10 +217,7 @@ export default function PublicServices() {
                         </div>
                         <button
                           onClick={() => {
-                            if (!userInfo) navigate('/login');
-                            else if (userInfo.role === 'Admin') navigate('/admin/dashboard');
-                            else if (userInfo.role === 'Staff') navigate('/staff/dashboard');
-                            else navigate('/book');
+                            navigate('/book', { state: { serviceId: service._id } });
                           }}
                           className="w-full py-3.5 rounded-xl bg-background text-[10px] font-black uppercase tracking-[0.2em] text-white hover:bg-primary hover:text-secondary transition-all shadow-sm group-hover:shadow-primary/20"
                         >

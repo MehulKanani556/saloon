@@ -113,15 +113,10 @@ const Hero = () => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => {
-              if (!userInfo) navigate('/login');
-              else if (userInfo.role === 'Admin') navigate('/admin/dashboard');
-              else if (userInfo.role === 'Staff') navigate('/staff/dashboard');
-              else navigate('/book');
-            }}
+            onClick={() => navigate('/book')}
             className="premium-button-primary !px-8 !py-4 text-xs font-black uppercase tracking-[0.2em] shadow-2xl shadow-primary/20"
           >
-            {userInfo ? 'Go to Dashboard' : 'Book Appointment'}
+            Book Appointment
           </motion.button>
           <Link to="/services">
             <motion.button
@@ -229,7 +224,7 @@ const ServicesPreview = () => {
                     </span>
                   </div>
                   <button
-                    onClick={() => navigate('/book')}
+                    onClick={() => navigate('/book', { state: { serviceId: service._id } })}
                     className="w-full py-3.5 rounded-xl bg-background text-[10px] font-black uppercase tracking-[0.2em] text-white hover:bg-primary hover:text-secondary transition-all shadow-sm group-hover:shadow-primary/20"
                   >
                     Book Ritual Now
@@ -617,7 +612,8 @@ const RitualMenu = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: i * 0.05 }}
-                  className="group flex items-center justify-between py-6 border-b border-white/5 hover:border-primary/20 transition-all duration-300"
+                  onClick={() => navigate('/book', { state: { serviceId: service._id } })}
+                  className="group flex items-center justify-between py-6 border-b border-white/5 hover:border-primary/20 transition-all duration-300 cursor-pointer"
                 >
                   <div className="flex-1 pr-6">
                     <div className="flex items-center justify-between mb-1">
@@ -734,15 +730,10 @@ const BookingCTA = () => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => {
-                if (!userInfo) navigate('/login');
-                else if (userInfo.role === 'Admin') navigate('/admin/dashboard');
-                else if (userInfo.role === 'Staff') navigate('/staff/dashboard');
-                else navigate('/book');
-              }}
+              onClick={() => navigate('/book')}
               className="bg-secondary text-primary px-10 py-4 rounded-xl text-xs font-black uppercase tracking-[0.2em] flex items-center gap-3 mx-auto group shadow-lg"
             >
-              {userInfo ? 'Go to Dashboard' : 'Book Now'}
+              Book Now
               <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </motion.button>
           </div>
