@@ -33,7 +33,7 @@ const PublicFooter = () => {
                 <a
                   key={i}
                   href="#"
-                  className="w-10 h-10 rounded-2xl bg-secondary border border-white/5 flex items-center justify-center text-muted hover:text-primary hover:border-primary/30 hover:scale-110 transition-all duration-300 shadow-xl"
+                  className="w-10 h-10 rounded-lg bg-secondary border border-white/5 flex items-center justify-center text-muted hover:text-primary hover:border-primary/30 hover:scale-110 transition-all duration-300 shadow-xl"
                 >
                   <Icon size={18} />
                 </a>

@@ -97,7 +97,7 @@ export default function Profile() {
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
                     {isEditing && (
-                      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center transition-opacity opacity-0 group-hover:opacity-100">
+                      <div className="absolute inset-0 rounded-xl bg-black/40 backdrop-blur-sm flex items-center justify-center transition-opacity opacity-0 group-hover:opacity-100">
                         <Camera className="text-white animate-bounce" size={24} />
                       </div>
                     )}

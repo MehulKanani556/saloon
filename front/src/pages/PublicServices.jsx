@@ -24,9 +24,9 @@ const PageHero = () => {
         <img
           src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?q=80&w=2070&auto=format&fit=crop"
           alt="Luxury Salon"
-          className="w-full h-full object-cover opacity-15 scale-105"
+          className="w-full h-full object-cover opacity-30 scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/60 to-background" />
+        {/* <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/60 to-background" /> */}
       </div>
 
       <div className="container mx-auto px-6 relative z-10 text-center">
@@ -61,53 +61,6 @@ const PageHero = () => {
           <Link to="/" className="hover:text-primary transition-colors">Home Base</Link>
           <span className="w-1.5 h-px bg-white/20" />
           <span className="text-primary ">The Menu</span>
-        </motion.div>
-      </div>
-    </section>
-  );
-};
-
-const BookingCTA = () => {
-  const { userInfo } = useSelector((state) => state.auth);
-  const navigate = useNavigate();
-
-  return (
-    <section className="py-24 bg-background">
-      <div className="container mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="relative overflow-hidden bg-secondary rounded-2xl py-20 px-8 text-center text-white border border-white/5 shadow-3xl"
-        >
-          <div className="absolute inset-0 opacity-5 pointer-events-none"
-            style={{ backgroundImage: 'radial-gradient(circle at 1.5px 1.5px, #C9A227 1px, transparent 0)', backgroundSize: '32px 32px' }} />
-
-          <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/5 blur-[120px] rounded-full" />
-          <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-primary/5 blur-[120px] rounded-full" />
-
-          <div className="relative z-10 max-w-2xl mx-auto">
-            <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter mb-8 leading-none whitespace-pre-line font-luxury">
-              READY FOR YOUR {"\n"} <span className="text-primary  font-luxury">TRANSFORMATION?</span>
-            </h2>
-            <p className="text-muted text-[11px] md:text-xs font-black uppercase tracking-[0.3em] mb-12 max-w-sm mx-auto leading-relaxed">
-              Ascend to a new standard of personal care. Secure your ritual coordinates today.
-            </p>
-            <button
-              onClick={() => {
-                if (!userInfo) navigate('/login');
-                else if (userInfo.role === 'Admin') navigate('/admin/dashboard');
-                else if (userInfo.role === 'Staff') navigate('/staff/dashboard');
-                else navigate('/book');
-              }}
-              className="bg-primary text-secondary px-12 py-5 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] flex items-center gap-4 mx-auto group shadow-2xl hover:scale-105 transition-all active:scale-95"
-            >
-              <div className="w-5 h-5 rounded-full bg-secondary/10 flex items-center justify-center">
-                <ChevronRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
-              </div>
-              {userInfo ? 'Access Command Center' : 'Secure Booking'}
-            </button>
-          </div>
         </motion.div>
       </div>
     </section>
@@ -155,7 +108,7 @@ export default function PublicServices() {
   return (
     <div className="relative selection:bg-primary/30 selection:text-white bg-background font-sans min-h-screen no-scrollbar">
       <PublicNavbar />
-      <main className="pt-16 md:pt-20">
+      <main>
         <PageHero />
 
         {/* Filter Bar */}
@@ -188,7 +141,7 @@ export default function PublicServices() {
         </section>
 
         {/* Services Grid */}
-        <section className="py-24 lg:py-40 bg-background min-h-[800px]">
+        <section className="py-12 bg-background min-h-[800px]">
           <div className="container mx-auto px-6">
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
               <div className="space-y-4">

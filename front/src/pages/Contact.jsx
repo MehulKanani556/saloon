@@ -59,8 +59,8 @@ export default function Contact() {
             {/* Contact Info Sidebar */}
             <div className="lg:col-span-5 space-y-12">
               <div>
-                <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-8 ">The HQ Sanctuary</h3>
-                <p className="text-muted text-sm font-medium uppercase tracking-widest leading-relaxed mb-10">
+                <h3 className="text-3xl font-black text-white uppercase tracking-wide mb-2">The HQ Sanctuary</h3>
+                <p className="text-muted text-sm font-medium tracking-widest leading-relaxed mb-10">
                   Visit us for a consultation or simply to experience the ambiance of true luxury. Our artisans are waiting to listen.
                 </p>
 
@@ -84,7 +84,7 @@ export default function Contact() {
                       </div>
                       <div>
                         <h4 className="text-[10px] font-black text-muted uppercase tracking-widest mb-1">{item.title}</h4>
-                        <p className="text-sm font-black text-white uppercase tracking-tight">{item.details}</p>
+                        <p className="text-sm text-white tracking-wide">{item.details}</p>
                       </div>
                     </motion.div>
                   ))}
@@ -94,8 +94,8 @@ export default function Contact() {
               <div className="pt-12 border-t border-white/5">
                 <h4 className="text-[10px] font-black text-white uppercase tracking-widest mb-8">Digital Connections</h4>
                 <div className="flex items-center gap-4">
-                  {[Instagram, Facebook, Twitter, Linkedin].map((Icon, i) => (
-                    <a key={i} href="#" className="w-12 h-12 rounded-xl bg-secondary text-primary flex items-center justify-center hover:bg-primary hover:text-secondary transition-all active:scale-90 border border-white/5">
+                  {[Instagram, Facebook, Twitter].map((Icon, i) => (
+                    <a key={i} href="#" className="w-10 h-10 rounded-lg bg-secondary border border-white/5 flex items-center justify-center text-muted hover:text-primary hover:border-primary/30 hover:scale-110 transition-all duration-300 shadow-xl">
                       <Icon size={20} />
                     </a>
                   ))}
@@ -116,7 +116,7 @@ export default function Contact() {
                 </div>
 
                 <div className="relative z-10">
-                  <h3 className="text-2xl font-black text-white uppercase tracking-tighter mb-4 ">Send an Inquiry</h3>
+                  <h3 className="text-2xl font-black text-white uppercase tracking-wide mb-2">Send an Inquiry</h3>
                   <p className="text-muted font-bold text-[10px] uppercase tracking-widest mb-12">We respond to all transmissions within 2 hours.</p>
 
                   <form onSubmit={handleSubmit} className="space-y-8">
