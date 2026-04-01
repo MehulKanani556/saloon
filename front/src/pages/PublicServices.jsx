@@ -33,13 +33,13 @@ const PageHero = () => {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="inline-flex items-center gap-3 px-4 py-1.5 bg-primary/10 border border-primary/20 rounded-full mb-6"
+          className="inline-flex items-center gap-3 px-4 py-1.5 bg-primary/10 border border-primary/20 rounded-full mb-3 md:mb-6"
         >
           <Sparkles size={12} className="text-primary" />
           <span className="text-[9px] font-black text-primary uppercase tracking-[0.3em]">Pure Elegance</span>
         </motion.div>
 
-        <h1 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 flex justify-center gap-[2px] font-luxury ">
+        <h1 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-4 md:mb-8 flex justify-center gap-[2px] font-luxury ">
           {title.map((char, i) => (
             <motion.span
               key={i}
@@ -56,7 +56,7 @@ const PageHero = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
-          className="mt-8 flex items-center justify-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-muted"
+          className="mt-4 md:mt-8 flex items-center justify-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-muted"
         >
           <Link to="/" className="hover:text-primary transition-colors">Home Base</Link>
           <span className="w-1.5 h-px bg-white/20" />
@@ -112,7 +112,7 @@ export default function PublicServices() {
         <PageHero />
 
         {/* Filter Bar */}
-        <section className="sticky top-[68px] md:top-[60px] z-[50] bg-background/80 backdrop-blur-xl border-b border-white/5 py-6">
+        <section className="sticky top-[55px] md:top-[60px] z-[50] bg-background/80 backdrop-blur-xl border-b border-white/5 py-6">
           <div className="container mx-auto px-6">
             <div className="flex items-center gap-4 overflow-x-auto pb-2 no-scrollbar">
               <button
@@ -143,13 +143,13 @@ export default function PublicServices() {
         {/* Services Grid */}
         <section className="py-12 bg-background min-h-[800px]">
           <div className="container mx-auto px-6">
-            <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+            <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 md:mb-16 gap-6">
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-[2px] bg-primary/30" />
                   <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Available Experiences</p>
                 </div>
-                <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter font-luxury">
+                <h2 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white uppercase tracking-wide font-luxury">
                   {activeCategory === 'All' ? 'The Collection' : categories.find(c => c._id === activeCategory)?.name}
                 </h2>
               </div>
@@ -165,7 +165,7 @@ export default function PublicServices() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -30 }}
                 transition={{ duration: 0.5, ease: "circOut" }}
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 md:gap-12"
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
               >
                 {(servicesLoading || categoriesLoading) ? (
                   [...Array(6)].map((_, i) => (
@@ -240,7 +240,7 @@ export default function PublicServices() {
 
             {/* Pagination UI */}
             {!(servicesLoading || categoriesLoading) && totalPages > 1 && (
-              <div className="mt-24 flex flex-col items-center gap-8">
+              <div className="mt-12 lg:mt-24 flex flex-col items-center gap-8">
                 <div className="flex items-center gap-3">
                   <button
                     disabled={currentPage === 1}
