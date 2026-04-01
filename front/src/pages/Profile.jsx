@@ -5,7 +5,7 @@ import { User, Mail, Phone, Shield, Save, Fingerprint, Edit3, Camera, Loader2 } 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import UserPanelLayout from '../components/public/UserPanelLayout';
-import { fetchCurrentUser, updateUserProfile } from '../redux/slices/authSlice';
+import { fetchCurrentUser, updateProfile } from '../redux/slices/authSlice';
 import { IMAGE_URL } from '../utils/BASE_URL';
 
 export default function Profile() {
@@ -18,9 +18,8 @@ export default function Profile() {
   const fileInputRef = useRef(null);
 
   useEffect(() => {
-    dispatch(fetchCurrentUser());
     setLoading(false);
-  }, [dispatch]);
+  }, []);
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -40,7 +39,7 @@ export default function Profile() {
         formData.append('image', fileInputRef.current.files[0]);
       }
 
-      const result = await dispatch(updateUserProfile(formData));
+      const result = await dispatch(updateProfile(formData));
       setUpdating(false);
       if (!result.error) {
         setIsEditing(false);

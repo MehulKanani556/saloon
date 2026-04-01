@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate, useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { fetchCurrentUser } from './redux/slices/authSlice'
 import Layout from './components/Layout'
 import Dashboard from './pages/Dashboard'
 import Appointments from './pages/Appointments'
@@ -13,6 +14,9 @@ import Invoices from './pages/Invoices'
 import Reports from './pages/Reports'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
+import StaffDashboard from './pages/StaffDashboard'
+import Leaves from './pages/Leaves'
+import Specializations from './pages/Specializations'
 import PrivateRoute from './components/PrivateRoute'
 import { Toaster } from 'react-hot-toast'
 import './index.css'
@@ -35,17 +39,17 @@ const WrappedLayout = ({ children, isAuthPage, isLandingPage }) => {
 
 const AppContent = () => {
   const { userInfo } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
   const isAuthPage = ['/login', '/signup'].includes(location.pathname);
   const isLandingPage = ['/', '/services', '/about', '/book', '/contact', '/profile', '/my-appointments', '/change-password', '/delete-account'].includes(location.pathname);
 
   useEffect(() => {
-    // If we're not logged in and not on an auth or landing page, redirect to login
-    if (!userInfo && !isAuthPage && !isLandingPage) {
-      navigate('/login');
+    if (localStorage.getItem('token')) {
+      dispatch(fetchCurrentUser());
     }
-  }, [userInfo, isAuthPage, isLandingPage, navigate]);
+  }, [dispatch]);
 
   return (
     <WrappedLayout isAuthPage={isAuthPage} isLandingPage={isLandingPage}>
@@ -68,11 +72,16 @@ const AppContent = () => {
         <Route path="/admin/sales" element={<PrivateRoute roles={['Admin']}><Sales /></PrivateRoute>} />
         <Route path="/admin/invoices" element={<PrivateRoute roles={['Admin']}><Invoices /></PrivateRoute>} />
         <Route path="/admin/reports" element={<PrivateRoute roles={['Admin']}><Reports /></PrivateRoute>} />
+        <Route path="/admin/leaves" element={<PrivateRoute roles={['Admin']}><Leaves /></PrivateRoute>} />
+        <Route path="/admin/expertise-approvals" element={<PrivateRoute roles={['Admin']}><Specializations /></PrivateRoute>} />
         <Route path="/admin/settings" element={<PrivateRoute roles={['Admin']}><Settings /></PrivateRoute>} />
-
+        
         {/* Staff Routes */}
-        <Route path="/staff/dashboard" element={<PrivateRoute roles={['Staff']}><div className="p-10"><h1 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">STAFF DASHBOARD</h1><p className="text-muted/60 text-[10px] font-black uppercase tracking-[0.4em]">Welcome back to your workspace.</p></div></PrivateRoute>} />
+        <Route path="/staff/dashboard" element={<PrivateRoute roles={['Staff']}><StaffDashboard /></PrivateRoute>} />
         <Route path="/staff/appointments" element={<PrivateRoute roles={['Staff']}><Appointments /></PrivateRoute>} />
+        <Route path="/staff/specialization" element={<PrivateRoute roles={['Staff']}><Specializations /></PrivateRoute>} />
+        <Route path="/staff/invoices" element={<PrivateRoute roles={['Staff']}><Invoices /></PrivateRoute>} />
+        <Route path="/staff/leaves" element={<PrivateRoute roles={['Staff']}><Leaves /></PrivateRoute>} />
         
         {/* Client/General Auth Routes */}
         <Route path="/profile" element={<PrivateRoute roles={['User', 'Admin', 'Staff']}><Profile /></PrivateRoute>} />

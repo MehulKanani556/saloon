@@ -12,7 +12,9 @@ import {
   Menu,
   X,
   ChevronRight,
-  FileText
+  FileText,
+  CalendarClock,
+  CheckCircle2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector } from 'react-redux';
@@ -27,12 +29,17 @@ const adminItems = [
   { icon: UserSquare2, label: 'Customers', path: '/admin/clients' },
   { icon: TrendingUp, label: 'Business Report', path: '/admin/sales' },
   { icon: FileText, label: 'Bills', path: '/admin/invoices' },
+  { icon: CalendarClock, label: 'Leaves', path: '/admin/leaves' },
+  { icon: CheckCircle2, label: 'Expertise Approvals', path: '/admin/expertise-approvals' },
   { icon: Settings, label: 'Settings', path: '/admin/settings' },
 ];
 
 const staffItems = [
   { icon: LayoutDashboard, label: 'Dashboard', path: '/staff/dashboard' },
   { icon: CalendarCheck2, label: 'Appointments', path: '/staff/appointments' },
+  { icon: Scissors, label: 'Expertise', path: '/staff/specialization' },
+  { icon: FileText, label: 'Bills', path: '/staff/invoices' },
+  { icon: CalendarClock, label: 'My Leaves', path: '/staff/leaves' },
 ];
 
 const userItems = [

@@ -37,7 +37,7 @@ import { useNavigate } from 'react-router-dom';
 
 import AdminHeader from '../components/ui/AdminHeader';
 
-export default function Dashboard() {
+export default function StaffDashboard() {
   const dispatch = useDispatch();
   const { data, loading, error } = useSelector((state) => state.dashboard);
   const navigate = useNavigate();
@@ -58,15 +58,15 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-12">
-      {/* Cinematic Header Section */}
+      {/* Standardized Header */}
       <AdminHeader 
-        title="Executive Summary"
-        subtitle="Matrix Active | Connected"
+        title="Staff Dashboard"
+        subtitle="Personal Workspace Active"
         icon={Activity}
         rightContent={
           <div className="flex items-center gap-8 bg-secondary/40 backdrop-blur-md px-10 py-6 rounded-2xl border border-white/5 shadow-3xl group hover:border-primary/20 transition-all duration-500">
             <div className="text-left">
-              <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em] leading-none mb-3 ">Total Archive Value</p>
+              <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em] leading-none mb-3 ">My Total Earnings</p>
               <p className="text-4xl font-black text-white tracking-tighter  font-luxury leading-none group-hover:scale-105 transition-transform duration-500">
                 $ {data.stats.totalRevenue.toLocaleString()}
               </p>
@@ -75,13 +75,12 @@ export default function Dashboard() {
         }
       />
 
-
       {/* Industrial Matrix Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {[
-          { label: 'Eternal Customers', value: data.stats.totalClients, icon: Users, trend: '12.5%' },
-          { label: 'Ritual Records', value: data.stats.totalAppointments, icon: CalendarCheck2, trend: '4.2%' },
-          { label: 'Diurnal Value', value: `$${data.stats.todayRevenue.toLocaleString()}`, icon: DollarSign, trend: '18.1%' },
+          { label: 'My Unique Clients', value: data.stats.totalClients, icon: Users, trend: 'Managed' },
+          { label: 'Total Rituals', value: data.stats.totalAppointments, icon: CalendarCheck2, trend: 'Historical' },
+          { label: 'Today\'s Value', value: `$${data.stats.todayRevenue.toLocaleString()}`, icon: DollarSign, trend: 'Active' },
           { label: 'Pending Excursions', value: data.stats.pendingLeaves || 0, icon: CalendarClock, trend: 'Absence' },
         ].map((stat, i) => (
           <motion.div
@@ -126,9 +125,9 @@ export default function Dashboard() {
                 <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                   <TrendingUp size={24} />
                 </div>
-                Earnings Report
+                My Weekly Growth
               </h3>
-              <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em]  opacity-60">Financial Velocity | Success Parameters</p>
+              <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em]  opacity-60">Revenue Contributions | 7 Day Flow</p>
             </div>
           </div>
           <div className="h-[400px] w-full">
@@ -158,7 +157,7 @@ export default function Dashboard() {
         <div className="bg-secondary/30 backdrop-blur-sm p-10 rounded-2xl border border-white/5 shadow-3xl relative flex flex-col">
           <h3 className="text-2xl font-black text-white tracking-tighter uppercase mb-12  font-luxury flex items-center gap-4">
             <Star className="text-primary" size={24} />
-            Ritual Hierarchy
+            My Specializations
           </h3>
           <div className="space-y-6 flex-1 max-h-[300px] overflow-y-auto custom-scrollbar pr-2">
             {data.serviceHierarchy.map((service, i) => (
@@ -181,9 +180,9 @@ export default function Dashboard() {
               </div>
             ))}
           </div>
-          <div onClick={() => navigate('/admin/categories')} className="mt-10 pt-10 border-t border-white/5">
-            <button className="w-full py-5 bg-background border border-white/5 rounded-2xl text-[10px] font-black uppercase tracking-[0.4em] text-muted hover:text-white transition-all  font-luxury">
-              VIEW ALL ANALYTICS
+          <div className="mt-10 pt-10 border-t border-white/5">
+            <button onClick={() => navigate('/staff/appointments')} className="w-full py-5 bg-background border border-white/5 rounded-2xl text-[10px] font-black uppercase tracking-[0.4em] text-muted hover:text-white transition-all  font-luxury">
+              VIEW MY SCHEDULE
             </button>
           </div>
         </div>
@@ -193,8 +192,8 @@ export default function Dashboard() {
         <div className="bg-secondary/30 backdrop-blur-md p-10 rounded-2xl border border-white/5 shadow-3xl relative overflow-hidden group">
           <div className="flex items-center justify-between gap-6 mb-12 relative z-10 leading-none">
             <div>
-              <h3 className="text-2xl font-black text-white tracking-tighter uppercase mb-3  font-luxury">Previous Rituals</h3>
-              <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em]  opacity-60">Archived customer engagements</p>
+              <h3 className="text-2xl font-black text-white tracking-tighter uppercase mb-3  font-luxury">My Recent Clients</h3>
+              <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em]  opacity-60">Archived service records</p>
             </div>
             <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
               <CalendarCheck2 size={24} />
@@ -206,7 +205,7 @@ export default function Dashboard() {
                 <div className="flex items-center gap-5">
                   <div className="w-12 h-12 rounded-2xl bg-secondary p-1 border border-white/5 flex items-center justify-center text-primary group-hover/item:rotate-12 transition-all duration-500">
                     <img
-                      src={app.client?.profileImage ? (app.client.profileImage.startsWith('http') ? app.client.profileImage : `${IMAGE_URL}${app.client.profileImage}`) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${app.client?.name || 'Client'}`}
+                      src={app.client?.profileImage ? `${app.client.profileImage}` : `https://api.dicebear.com/9.x/adventurer/svg?seed=${app.client?.name || 'Client'}`}
                       className="w-full h-full rounded-xl object-cover grayscale group-hover/item:grayscale-0 transition-all"
                       alt=""
                     />
@@ -237,8 +236,8 @@ export default function Dashboard() {
         <div className="bg-secondary/30 backdrop-blur-md p-10 rounded-2xl border border-white/5 shadow-3xl relative overflow-hidden group">
           <div className="flex items-center justify-between gap-6 mb-12 relative z-10 leading-none">
             <div>
-              <h3 className="text-2xl font-black text-white tracking-tighter uppercase mb-3  font-luxury">Diurnal Pipeline</h3>
-              <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em]  opacity-60">Pending masterpieces today</p>
+              <h3 className="text-2xl font-black text-white tracking-tighter uppercase mb-3  font-luxury">Next Assignments</h3>
+              <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em]  opacity-60">Pending sessions for today</p>
             </div>
             <div className="w-14 h-14 rounded-2xl bg-primary text-secondary flex items-center justify-center font-black text-xl border-4 border-white/10 shadow-2xl font-luxury ">
               {data.upcomingRituals.length.toString().padStart(2, '0')}
@@ -249,6 +248,7 @@ export default function Dashboard() {
               <motion.div
                 key={app._id}
                 whileHover={{ scale: 1.02, x: 10 }}
+                onClick={() => navigate('/staff/appointments')}
                 className="flex items-center justify-between p-8 rounded-2xl bg-primary text-secondary shadow-2xl relative overflow-hidden group/ritual cursor-pointer"
               >
                 <div className="absolute inset-0 bg-white/10 opacity-0 group-hover/ritual:opacity-100 transition-opacity duration-500" />
@@ -258,7 +258,7 @@ export default function Dashboard() {
                   </div>
                   <div>
                     <h4 className="font-black uppercase text-xl font-luxury tracking-tighter  leading-none mb-2">{app.client?.name}</h4>
-                    <p className="text-[11px] font-black uppercase tracking-[0.3em] opacity-60 ">{format(new Date(app.appointmentDate), 'HH:mm')} PROTOCOL</p>
+                    <p className="text-[11px] font-black uppercase tracking-[0.3em] opacity-60 ">{format(new Date(app.appointmentDate), 'HH:mm')} SESSION</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-6 relative z-10">
@@ -274,7 +274,7 @@ export default function Dashboard() {
                 <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
                   <CheckCircle2 size={32} className="text-white/10" strokeWidth={1} />
                 </div>
-                <p className="text-[10px] font-black text-muted uppercase tracking-[0.5em] ">No pending masterpieces today</p>
+                <p className="text-[10px] font-black text-muted uppercase tracking-[0.5em] ">No pending sessions today</p>
               </div>
             )}
           </div>
@@ -287,9 +287,9 @@ export default function Dashboard() {
           <div>
             <h3 className="text-2xl font-black text-white tracking-tighter uppercase mb-3  flex items-center gap-4 font-luxury">
               <Activity className="text-primary" />
-              Occupancy Intensity
+              My Daily Intensity
             </h3>
-            <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em]  opacity-60">Peak temporal footfall analysis</p>
+            <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em]  opacity-60">Temporal engagement analysis</p>
           </div>
         </div>
         <div className="h-[300px] w-full">
@@ -304,7 +304,7 @@ export default function Dashboard() {
               />
               <Bar dataKey="intensity" radius={[8, 8, 8, 8]} barSize={28}>
                 {data.occupancyTrends.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.intensity > 1 ? '#C9A227' : 'rgba(255,255,255,0.1)'} />
+                  <Cell key={`cell-${index}`} fill={entry.intensity > 0 ? '#C9A227' : 'rgba(255,255,255,0.1)'} />
                 ))}
               </Bar>
             </BarChart>
@@ -314,5 +314,3 @@ export default function Dashboard() {
     </div>
   );
 }
-
-

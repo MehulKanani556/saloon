@@ -116,7 +116,9 @@ const createAppointment = async (req, res) => {
 };
 
 const getAppointments = async (req, res) => {
-    const appointments = await Appointment.find({}).populate('client').populate('assignments.service').populate('assignments.staff');
+    const isStaff = req.user.role === 'Staff';
+    const filter = isStaff ? { 'assignments.staff': req.user._id } : {};
+    const appointments = await Appointment.find(filter).populate('client').populate('assignments.service').populate('assignments.staff');
     res.json(appointments);
 };
 

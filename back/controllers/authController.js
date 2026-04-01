@@ -135,6 +135,7 @@ const loginUser = async (req, res) => {
                 salonInfo: user.salonInfo,
                 customId: user.customId,
                 profileImage: user.profileImage,
+                leaveBalance: user.leaveBalance,
                 accessToken
             });
         } else {
@@ -196,17 +197,47 @@ const updateUserProfile = async (req, res) => {
             if (req.body.profileImage) {
                 user.profileImage = req.body.profileImage;
             }
+
+            // Allow staff to update their own specialization/services
+            if (user.role === 'Staff') {
+                if (req.body.services) {
+                    let services = req.body.services;
+                    if (typeof services === 'string') {
+                        if (services.includes(',')) {
+                            services = services.split(',').map(s => s.replace(/[\[\]'"]/g, '').trim());
+                        } else {
+                            services = [services.replace(/[\[\]'"]/g, '').trim()];
+                        }
+                    }
+                    user.services = Array.isArray(services) ? services.filter(s => s && s.length === 24) : user.services;
+                }
+
+                if (req.body.specialization) {
+                    let spec = req.body.specialization;
+                    if (typeof spec === 'string') spec = spec.split(',').map(s => s.trim());
+                    user.specialization = Array.isArray(spec) ? spec : user.specialization;
+                }
+
+                if (req.body.bio !== undefined) {
+                    user.bio = req.body.bio;
+                }
+            }
             
             const updatedUser = await user.save();
+            const populatedUser = await User.findById(updatedUser._id).populate('services');
             res.json({
-                _id: updatedUser._id,
-                name: updatedUser.name,
-                email: updatedUser.email,
-                role: updatedUser.role,
-                phone: updatedUser.phone,
-                customId: updatedUser.customId,
-                profileImage: updatedUser.profileImage,
-                accessToken: generateAccessToken(updatedUser._id)
+                _id: populatedUser._id,
+                name: populatedUser.name,
+                email: populatedUser.email,
+                role: populatedUser.role,
+                phone: populatedUser.phone,
+                customId: populatedUser.customId,
+                profileImage: populatedUser.profileImage,
+                services: populatedUser.services,
+                specialization: populatedUser.specialization,
+                bio: populatedUser.bio,
+                leaveBalance: populatedUser.leaveBalance,
+                accessToken: generateAccessToken(populatedUser._id)
             });
         } else {
             res.status(404).json({ message: 'Identity not found' });
@@ -268,7 +299,7 @@ const softDeleteUser = async (req, res) => {
 // @access Private
 const getMe = async (req, res) => {
     try {
-        const user = await User.findById(req.user._id);
+        const user = await User.findById(req.user._id).populate('services');
         if (!user) return res.status(404).json({ message: 'Identity not found' });
         res.json(user);
     } catch (error) {

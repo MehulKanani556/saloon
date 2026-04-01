@@ -16,6 +16,9 @@ const userSchema = new mongoose.Schema({
 
     // Staff specific fields
     services: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Service' }],
+    specialization: [{ type: String }],
+    bio: { type: String },
+    leaveBalance: { type: Number, default: 24 },
     isActive: { type: Boolean, default: true },
 
     // Client/User specific fields

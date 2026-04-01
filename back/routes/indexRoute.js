@@ -13,6 +13,7 @@ const dashboardController = require('../controllers/dashboardController');
 const categoryController = require('../controllers/categoryController');
 const invoiceController = require('../controllers/invoiceController');
 const reportsController = require('../controllers/reportsController');
+const leaveController = require('../controllers/leaveController');
 
 // Middleware
 const { protect, authorize } = require('../middleware/authMiddleware');
@@ -35,12 +36,12 @@ router.delete('/auth/profile', protect, authController.softDeleteUser);
 // APPOINTMENT ROUTES
 // ==========================================
 router.get('/appointments/my', protect, appointmentController.getMyAppointments);
-router.get('/appointments', protect, authorize('Admin'), appointmentController.getAppointments);
+router.get('/appointments', protect, authorize('Admin', 'Staff'), appointmentController.getAppointments);
 router.get('/appointments/occupied-slots', appointmentController.getOccupiedSlots);
 router.post('/appointments', appointmentController.createAppointment);
-router.put('/appointments/:id', protect, authorize('Admin'), appointmentController.updateAppointment);
-router.delete('/appointments/:id', protect, authorize('Admin'), appointmentController.deleteAppointment);
-router.put('/appointments/:id/status', protect, authorize('Admin'), appointmentController.updateAppointmentStatus);
+router.put('/appointments/:id', protect, authorize('Admin', 'Staff'), appointmentController.updateAppointment);
+router.delete('/appointments/:id', protect, authorize('Admin', 'Staff'), appointmentController.deleteAppointment);
+router.put('/appointments/:id/status', protect, authorize('Admin', 'Staff'), appointmentController.updateAppointmentStatus);
 
 // ==========================================
 // SERVICE ROUTES
@@ -61,10 +62,10 @@ router.delete('/staff/:id', protect, authorize('Admin'), staffController.deleteS
 // ==========================================
 // CLIENT ROUTES
 // ==========================================
-router.get('/clients', protect, authorize('Admin'), clientController.getClients);
-router.post('/clients', protect, authorize('Admin'), upload.single('image'), processAndStoreImage('clients'), clientController.createClient);
-router.get('/clients/:id', protect, authorize('Admin'), clientController.getClientById);
-router.put('/clients/:id', protect, authorize('Admin'), upload.single('image'), processAndStoreImage('clients'), clientController.updateClient);
+router.get('/clients', protect, authorize('Admin', 'Staff'), clientController.getClients);
+router.post('/clients', protect, authorize('Admin', 'Staff'), upload.single('image'), processAndStoreImage('clients'), clientController.createClient);
+router.get('/clients/:id', protect, authorize('Admin', 'Staff'), clientController.getClientById);
+router.put('/clients/:id', protect, authorize('Admin', 'Staff'), upload.single('image'), processAndStoreImage('clients'), clientController.updateClient);
 router.delete('/clients/:id', protect, authorize('Admin'), clientController.deleteClient);
 
 // ==========================================
@@ -82,7 +83,7 @@ router.put('/settings', protect, authorize('Admin'), settingController.updateSet
 // ==========================================
 // DASHBOARD ROUTES
 // ==========================================
-router.get('/dashboard', protect, authorize('Admin'), dashboardController.getDashboardInsights);
+router.get('/dashboard', protect, authorize('Admin', 'Staff'), dashboardController.getDashboardInsights);
 
 // ==========================================
 // CATEGORY ROUTES
@@ -95,11 +96,28 @@ router.delete('/categories/:id', protect, authorize('Admin'), categoryController
 // ==========================================
 // INVOICE ROUTES
 // ==========================================
-router.get('/invoices/export-pdf/:id', protect, authorize('Admin'), invoiceController.generateInvoicePDF);
+router.get('/invoices/export-pdf/:id', protect, authorize('Admin', 'Staff'), invoiceController.generateInvoicePDF);
 
 // ==========================================
 // REPORTS ROUTES
 // ==========================================
 router.get('/reports/intel', protect, authorize('Admin'), reportsController.getReportIntel);
+
+// ==========================================
+// LEAVE ROUTES
+// ==========================================
+router.post('/leaves', protect, authorize('Staff'), leaveController.applyLeave);
+router.get('/leaves/my', protect, authorize('Staff'), leaveController.getMyLeaves);
+router.get('/leaves', protect, authorize('Admin'), leaveController.getAllLeaves);
+router.put('/leaves/:id', protect, authorize('Admin'), leaveController.updateLeaveStatus);
+
+// ==========================================
+// SPECIALIZATION REQUEST ROUTES
+// ==========================================
+const specializationController = require('../controllers/specializationController');
+router.post('/specializations/requests', protect, authorize('Staff'), specializationController.createSpecializationRequest);
+router.get('/specializations/my-requests', protect, authorize('Staff'), specializationController.getMySpecializationRequests);
+router.get('/specializations/all-requests', protect, authorize('Admin'), specializationController.getAllSpecializationRequests);
+router.put('/specializations/requests/:id', protect, authorize('Admin'), specializationController.updateSpecializationRequestStatus);
 
 module.exports = router;

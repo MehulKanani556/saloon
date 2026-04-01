@@ -20,6 +20,7 @@ import AdminHeader from '../components/ui/AdminHeader';
 export default function Appointments() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { userInfo } = useSelector(state => state.auth);
   const { appointments, loading: appointmentsLoading } = useSelector(state => state.appointments);
   const { services } = useSelector(state => state.services);
   const { clients } = useSelector(state => state.clients);
@@ -294,7 +295,7 @@ export default function Appointments() {
 
                   <div className="pt-3 border-t border-dashed border-white/10 group-hover:border-primary/20 transition-colors flex items-center justify-between">
                     <div className="flex items-center gap-3 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-                      <button onClick={() => navigate(`/admin/invoices?id=${app._id}`)} className="p-2.5 bg-background/80 border border-white/5 text-muted hover:text-white rounded-2xl transition-all shadow-xl backdrop-blur-md">
+                      <button onClick={() => navigate(`/${userInfo.role.toLowerCase()}/invoices?id=${app._id}`)} className="p-2.5 bg-background/80 border border-white/5 text-muted hover:text-white rounded-2xl transition-all shadow-xl backdrop-blur-md">
                         <FileText size={14} />
                       </button>
                       <button onClick={() => handleEdit(app)} className="p-2.5 bg-background/80 border border-white/5 text-muted hover:text-primary rounded-2xl transition-all shadow-xl backdrop-blur-md">

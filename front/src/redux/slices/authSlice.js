@@ -63,7 +63,7 @@ export const fetchCurrentUser = createAsyncThunk('auth/fetchMe', async (_, { rej
     }
 });
 
-export const updateUserProfile = createAsyncThunk('auth/updateProfile', async (userData, { rejectWithValue }) => {
+export const updateProfile = createAsyncThunk('auth/updateProfile', async (userData, { rejectWithValue }) => {
     try {
         const { data } = await api.put('/auth/profile', userData);
         localStorage.setItem('userInfo', JSON.stringify(data));
@@ -136,12 +136,12 @@ const authSlice = createSlice({
             .addCase(fetchCurrentUser.fulfilled, (state, action) => {
                 state.userInfo = action.payload;
             })
-            .addCase(updateUserProfile.pending, (state) => { state.loading = true; })
-            .addCase(updateUserProfile.fulfilled, (state, action) => {
+            .addCase(updateProfile.pending, (state) => { state.loading = true; })
+            .addCase(updateProfile.fulfilled, (state, action) => {
                 state.loading = false;
                 state.userInfo = action.payload;
             })
-            .addCase(updateUserProfile.rejected, (state) => { state.loading = false; });
+            .addCase(updateProfile.rejected, (state) => { state.loading = false; });
     }
 });
 

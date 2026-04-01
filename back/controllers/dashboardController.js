@@ -1,16 +1,21 @@
 const Appointment = require('../models/Appointment');
 const Service = require('../models/Service');
 const User = require('../models/User');
+const Leave = require('../models/Leave');
 const moment = require('moment');
 
 // @desc Get Dashboard Collective Intelligence
 const getDashboardInsights = async (req, res) => {
     try {
-        const [appointments, clients, services, staff] = await Promise.all([
-            Appointment.find().populate('client assignments.service assignments.staff'),
+        const isStaff = req.user.role === 'Staff';
+        const staffId = req.user._id;
+
+        const [appointments, clients, services, staff, pendingLeaves] = await Promise.all([
+            Appointment.find(isStaff ? { 'assignments.staff': staffId } : {}).populate('client assignments.service assignments.staff'),
             User.countDocuments({ role: 'User' }),
             Service.find().populate('category'),
-            User.find({ role: 'Staff' }).limit(2)
+            User.find({ role: 'Staff' }).limit(2),
+            Leave.countDocuments(isStaff ? { staff: staffId, status: 'Pending' } : { status: 'Pending' })
         ]);
 
         // 1. Core Matrix Stats
@@ -38,12 +43,27 @@ const getDashboardInsights = async (req, res) => {
 
         // 3. Service Hierarchy (Niche Distribution)
         const categories = {};
-        services.forEach(s => {
-            const catName = s.category?.name || 'Uncategorized';
-            categories[catName] = (categories[catName] || 0) + 1;
-        });
+        if (isStaff) {
+            // For staff, show distribution of services THEY have performed
+            appointments.forEach(app => {
+                app.assignments.forEach(as => {
+                    if (as.staff._id.toString() === staffId.toString()) {
+                        const catName = as.service?.category?.name || 'Uncategorized';
+                        categories[catName] = (categories[catName] || 0) + 1;
+                    }
+                });
+            });
+        } else {
+            services.forEach(s => {
+                const catName = s.category?.name || 'Uncategorized';
+                categories[catName] = (categories[catName] || 0) + 1;
+            });
+        }
 
-        const totalCategoriesCount = services.length;
+        const totalCategoriesCount = isStaff 
+            ? appointments.reduce((acc, app) => acc + app.assignments.filter(as => as.staff._id.toString() === staffId.toString()).length, 0)
+            : services.length;
+            
         const serviceData = Object.keys(categories).map((cat, i) => ({
             name: cat,
             value: totalCategoriesCount > 0 ? Math.round((categories[cat] / totalCategoriesCount) * 100) : 0,
@@ -76,18 +96,19 @@ const getDashboardInsights = async (req, res) => {
 
         res.json({
             stats: {
-                totalClients: clients,
+                totalClients: isStaff ? [...new Set(appointments.map(a => a.client?._id.toString()))].length : clients,
                 totalAppointments: totalValidAppointments,
                 totalRevenue,
                 todayRevenue,
-                activeServices
+                activeServices,
+                pendingLeaves
             },
             financialVelocity: last7Days,
             serviceHierarchy: serviceData,
             recentBookings: appointments.sort((a, b) => new Date(b.appointmentDate) - new Date(a.appointmentDate)).slice(0, 5),
             occupancyTrends,
             upcomingRituals,
-            eliteTalent: staff,
+            eliteTalent: isStaff ? [] : staff,
         });
     } catch (err) {
         res.status(500).json({ message: 'Insight retrieval failed', error: err.message });
