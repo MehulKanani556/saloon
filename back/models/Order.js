@@ -23,6 +23,7 @@ const orderSchema = new mongoose.Schema({
     shippingAddress: {
         fullName: String,
         email: String,
+        phone: String,
         address: String,
         city: String,
         zipCode: String,
@@ -41,6 +42,9 @@ const orderSchema = new mongoose.Schema({
     orderId: {
         type: String,
         unique: true
+    },
+    paymentIntentId: {
+        type: String
     }
 }, { timestamps: true });
 

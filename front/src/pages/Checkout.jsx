@@ -21,6 +21,192 @@ import UserPanelLayout from '../components/public/UserPanelLayout';
 import { clearCart } from '../redux/slices/cartSlice';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
+import { loadStripe } from '@stripe/stripe-js';
+import { 
+    Elements, 
+    CardNumberElement, 
+    CardExpiryElement, 
+    CardCvcElement, 
+    useStripe, 
+    useElements 
+} from '@stripe/react-stripe-js';
+
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY);
+
+const CARD_ELEMENT_OPTIONS = {
+    style: {
+        base: {
+            color: "#ffffff",
+            fontFamily: 'Inter, sans-serif',
+            fontSmoothing: "antialiased",
+            fontSize: "11px",   
+            "::placeholder": {
+                color: "#6b7280",
+                textTransform: "uppercase",
+                fontWeight: "900",
+                letterSpacing: "0.1em"
+            },
+            fontWeight: "900",
+            letterSpacing: "0.1em"
+        },
+        invalid: {
+            color: "#ef4444",
+            iconColor: "#ef4444"
+        }
+    }
+};
+
+const PaymentForm = ({ formik, total, cartItems, setStep, dispatch, isProcessing, setIsProcessing }) => {
+    const stripe = useStripe();
+    const elements = useElements();
+    const navigate = useNavigate();
+
+    const handlePayment = async (e) => {
+        e.preventDefault();
+
+        if (!stripe || !elements) return;
+
+        try {
+            setIsProcessing(true);
+
+            // 1. Create Payment Intent on backend
+            const { data: { clientSecret } } = await api.post('/payment/create-payment-intent', {
+                amount: total
+            });
+
+            // 2. Confirm payment on frontend
+            const result = await stripe.confirmCardPayment(clientSecret, {
+                payment_method: {
+                    card: elements.getElement(CardNumberElement),
+                    billing_details: {
+                        name: formik.values.fullName,
+                        email: formik.values.email,
+                        phone: formik.values.phone,
+                        address: {
+                            line1: formik.values.address,
+                            city: formik.values.city,
+                            postal_code: formik.values.zipCode,
+                            country: 'IN' // Or formik.values.country if you have it
+                        }
+                    },
+                },
+            });
+
+            if (result.error) {
+                toast.error(result.error.message);
+                setIsProcessing(false);
+            } else {
+                if (result.paymentIntent.status === 'succeeded') {
+                    // 3. Create order on backend
+                    const orderData = {
+                        items: cartItems.map(item => ({
+                            _id: item._id,
+                            name: item.name,
+                            price: item.price,
+                            qty: item.qty
+                        })),
+                        totalAmount: total,
+                        shippingAddress: {
+                            fullName: formik.values.fullName,
+                            email: formik.values.email,
+                            phone: formik.values.phone,
+                            address: formik.values.address,
+                            city: formik.values.city,
+                            zipCode: formik.values.zipCode,
+                            country: formik.values.country
+                        },
+                        paymentIntentId: result.paymentIntent.id
+                    };
+
+                    await api.post('/orders', orderData);
+                    
+                    setIsProcessing(false);
+                    setStep(3);
+                    dispatch(clearCart());
+                    toast.success('Acquisition Successful');
+                }
+            }
+        } catch (err) {
+            setIsProcessing(false);
+            toast.error(err.response?.data?.message || 'Acquisition protocol failed');
+        }
+    };
+
+    return (
+        <motion.div 
+            key="step2"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            className="max-w-2xl mx-auto space-y-12"
+        >
+            <div className="flex flex-col items-center text-center gap-4">
+                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center border border-primary/20 mb-4">
+                    <CreditCard size={28} className="text-primary animate-pulse" />
+                </div>
+                <h2 className="text-3xl font-black uppercase font-luxury tracking-wider">Payment Details</h2>
+                <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em] max-w-sm">Secure payment authorization via encrypted gateway.</p>
+            </div>
+
+            <form onSubmit={handlePayment} className="space-y-8">
+                <div className="space-y-4">
+                    <label className="text-[9px] font-black text-muted/60 uppercase tracking-[0.4em] ml-2">Name on Card</label>
+                    <input 
+                        {...formik.getFieldProps('cardName')}
+                        className="w-full bg-dark-card border border-white/10 focus:border-primary/40 px-8 py-5 rounded-xl outline-none text-[11px] font-black uppercase tracking-widest text-white transition-all shadow-xl"
+                        placeholder="JOHN SMITH"
+                    />
+                </div>
+                
+                <div className="space-y-4">
+                    <label className="text-[9px] font-black text-muted/60 uppercase tracking-[0.4em] ml-2">Card Number</label>
+                    <div className="w-full bg-dark-card border border-white/10 focus-within:border-primary/40 px-8 py-5 rounded-xl transition-all shadow-xl">
+                        <CardNumberElement options={CARD_ELEMENT_OPTIONS} />
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-8">
+                    <div className="space-y-4">
+                        <label className="text-[9px] font-black text-muted/60 uppercase tracking-[0.4em] ml-2">Expiry Date</label>
+                        <div className="w-full bg-dark-card border border-white/10 focus-within:border-primary/40 px-8 py-5 rounded-xl transition-all shadow-xl">
+                            <CardExpiryElement options={CARD_ELEMENT_OPTIONS} />
+                        </div>
+                    </div>
+                    <div className="space-y-4">
+                        <label className="text-[9px] font-black text-muted/60 uppercase tracking-[0.4em] ml-2">Security Code (CVV)</label>
+                        <div className="w-full bg-dark-card border border-white/10 focus-within:border-primary/40 px-8 py-5 rounded-xl transition-all shadow-xl">
+                            <CardCvcElement options={CARD_ELEMENT_OPTIONS} />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="flex flex-col gap-6 pt-8">
+                    <button 
+                        type="submit"
+                        disabled={isProcessing || !stripe}
+                        className="premium-button-primary w-full py-6 text-[11px] font-black uppercase tracking-[0.6em] flex items-center justify-center gap-4 group relative overflow-hidden"
+                    >
+                        {isProcessing ? (
+                            <span className="flex items-center gap-4">
+                                <ShieldCheck size={18} className="animate-spin" /> PROCESSING...
+                            </span>
+                        ) : (
+                            <>PLACE ORDER <ShieldCheck size={18} /></>
+                        )}
+                        {isProcessing && <motion.div className="absolute inset-0 bg-primary/20" initial={{ x: '-100%' }} animate={{ x: '100%' }} transition={{ duration: 2, repeat: Infinity, ease: 'linear' }} />}
+                    </button>
+                    <button 
+                        type="button" 
+                        onClick={() => setStep(1)} 
+                        className="text-[10px] font-black text-muted uppercase tracking-widest hover:text-white transition-colors flex items-center justify-center gap-3"
+                    >
+                        <ArrowLeft size={14} /> Back to Shipping
+                    </button>
+                </div>
+            </form>
+        </motion.div>
+    );
+};
 
 export default function Checkout() {
     const navigate = useNavigate();
@@ -48,46 +234,34 @@ export default function Checkout() {
             cvv: ''
         },
         validationSchema: Yup.object({
-            fullName: Yup.string().required('Required'),
-            email: Yup.string().email('Invalid email').required('Required'),
-            address: Yup.string().required('Required'),
-            city: Yup.string().required('Required'),
-            zipCode: Yup.string().required('Required'),
+            fullName: Yup.string().required('Full Name is required'),
+            email: Yup.string().email('Invalid email format').required('Email is required'),
+            phone: Yup.string().matches(/^[0-9]{10,15}$/, 'Invalid phone number format').required('Phone Number is required'),
+            address: Yup.string().required('Address is required'),
+            city: Yup.string().required('City is required'),
+            zipCode: Yup.string().required('ZIP Code is required'),
         }),
         onSubmit: async (values) => {
-            try {
-                setIsProcessing(true);
-                
-                const orderData = {
-                    items: cartItems.map(item => ({
-                        _id: item._id,
-                        name: item.name,
-                        price: item.price,
-                        qty: item.qty
-                    })),
-                    totalAmount: total,
-                    shippingAddress: {
-                        fullName: values.fullName,
-                        email: values.email,
-                        address: values.address,
-                        city: values.city,
-                        zipCode: values.zipCode,
-                        country: values.country
-                    }
-                };
-
-                await api.post('/orders', orderData);
-                
-                setIsProcessing(false);
-                setStep(3);
-                dispatch(clearCart());
-                toast.success('Acquisition Successful');
-            } catch (err) {
-                setIsProcessing(false);
-                toast.error(err.response?.data?.message || 'Acquisition protocol failed');
-            }
+            // This is actually handled by the handlePayment function now
         }
     });
+
+    const handleStep1Submit = async (e) => {
+        e.preventDefault();
+        const errors = await formik.validateForm();
+        
+        // Only check Step 1 fields
+        const step1Fields = ['fullName', 'email', 'phone', 'address', 'city', 'zipCode'];
+        const step1Errors = Object.keys(errors).filter(key => step1Fields.includes(key));
+
+        if (step1Errors.length === 0) {
+            setStep(2);
+        } else {
+            // Touch fields to show errors
+            step1Fields.forEach(field => formik.setFieldTouched(field, true));
+            toast.error('Please complete the shipping protocol requirements.');
+        }
+    };
 
     if (cartItems.length === 0 && step !== 3) {
         return (
@@ -130,10 +304,11 @@ export default function Checkout() {
                                             <User size={16} className="absolute left-6 top-1/2 -translate-y-1/2 text-primary/40 group-focus-within:text-primary transition-colors" />
                                             <input 
                                                 {...formik.getFieldProps('fullName')}
-                                                className="w-full bg-dark-card border border-white/10 focus:border-primary/40 px-14 py-5 rounded-xl outline-none text-[11px] font-black uppercase tracking-widest text-white transition-all shadow-xl"
+                                                className={`w-full bg-dark-card border ${formik.touched.fullName && formik.errors.fullName ? 'border-red-500/50' : 'border-white/10'} focus:border-primary/40 px-14 py-5 rounded-xl outline-none text-[11px] font-black uppercase tracking-widest text-white transition-all shadow-xl`}
                                                 placeholder="e.g. JOHN SMITH"
                                             />
                                         </div>
+                                        {formik.touched.fullName && formik.errors.fullName && <p className="text-[8px] text-red-500 font-black uppercase tracking-widest ml-2">{formik.errors.fullName}</p>}
                                     </div>
                                     <div className="space-y-4">
                                         <label className="text-[9px] font-black text-muted/60 uppercase tracking-[0.4em] ml-2">Email Address</label>
@@ -141,10 +316,23 @@ export default function Checkout() {
                                             <Mail size={16} className="absolute left-6 top-1/2 -translate-y-1/2 text-primary/40 group-focus-within:text-primary transition-colors" />
                                             <input 
                                                 {...formik.getFieldProps('email')}
-                                                className="w-full bg-dark-card border border-white/10 focus:border-primary/40 px-14 py-5 rounded-xl outline-none text-[11px] font-black uppercase tracking-widest text-white transition-all shadow-xl"
+                                                className={`w-full bg-dark-card border ${formik.touched.email && formik.errors.email ? 'border-red-500/50' : 'border-white/10'} focus:border-primary/40 px-14 py-5 rounded-xl outline-none text-[11px] font-black uppercase tracking-widest text-white transition-all shadow-xl`}
                                                 placeholder="EMAIL@EXAMPLE.COM"
                                             />
                                         </div>
+                                        {formik.touched.email && formik.errors.email && <p className="text-[8px] text-red-500 font-black uppercase tracking-widest ml-2">{formik.errors.email}</p>}
+                                    </div>
+                                    <div className="space-y-4">
+                                        <label className="text-[9px] font-black text-muted/60 uppercase tracking-[0.4em] ml-2">Phone Number</label>
+                                        <div className="relative group">
+                                            <Phone size={16} className="absolute left-6 top-1/2 -translate-y-1/2 text-primary/40 group-focus-within:text-primary transition-colors" />
+                                            <input 
+                                                {...formik.getFieldProps('phone')}
+                                                className={`w-full bg-dark-card border ${formik.touched.phone && formik.errors.phone ? 'border-red-500/50' : 'border-white/10'} focus:border-primary/40 px-14 py-5 rounded-xl outline-none text-[11px] font-black uppercase tracking-widest text-white transition-all shadow-xl`}
+                                                placeholder="+1 (555) 000-0000"
+                                            />
+                                        </div>
+                                        {formik.touched.phone && formik.errors.phone && <p className="text-[8px] text-red-500 font-black uppercase tracking-widest ml-2">{formik.errors.phone}</p>}
                                     </div>
                                     <div className="md:col-span-2 space-y-4">
                                         <label className="text-[9px] font-black text-muted/60 uppercase tracking-[0.4em] ml-2">Delivery Address</label>
@@ -152,31 +340,34 @@ export default function Checkout() {
                                             <MapPin size={16} className="absolute left-6 top-1/2 -translate-y-1/2 text-primary/40 group-focus-within:text-primary transition-colors" />
                                             <input 
                                                 {...formik.getFieldProps('address')}
-                                                className="w-full bg-dark-card border border-white/10 focus:border-primary/40 px-14 py-5 rounded-xl outline-none text-[11px] font-black uppercase tracking-widest text-white transition-all shadow-xl"
+                                                className={`w-full bg-dark-card border ${formik.touched.address && formik.errors.address ? 'border-red-500/50' : 'border-white/10'} focus:border-primary/40 px-14 py-5 rounded-xl outline-none text-[11px] font-black uppercase tracking-widest text-white transition-all shadow-xl`}
                                                 placeholder="STREET NAME, HOUSE NUMBER"
                                             />
                                         </div>
+                                        {formik.touched.address && formik.errors.address && <p className="text-[8px] text-red-500 font-black uppercase tracking-widest ml-2">{formik.errors.address}</p>}
                                     </div>
                                     <div className="space-y-4">
                                         <label className="text-[9px] font-black text-muted/60 uppercase tracking-[0.4em] ml-2">City</label>
                                         <input 
                                             {...formik.getFieldProps('city')}
-                                            className="w-full bg-dark-card border border-white/10 focus:border-primary/40 px-8 py-5 rounded-xl outline-none text-[11px] font-black uppercase tracking-widest text-white transition-all shadow-xl"
+                                            className={`w-full bg-dark-card border ${formik.touched.city && formik.errors.city ? 'border-red-500/50' : 'border-white/10'} focus:border-primary/40 px-8 py-5 rounded-xl outline-none text-[11px] font-black uppercase tracking-widest text-white transition-all shadow-xl`}
                                             placeholder="LONDON"
                                         />
+                                        {formik.touched.city && formik.errors.city && <p className="text-[8px] text-red-500 font-black uppercase tracking-widest ml-2">{formik.errors.city}</p>}
                                     </div>
                                     <div className="space-y-4">
                                         <label className="text-[9px] font-black text-muted/60 uppercase tracking-[0.4em] ml-2">ZIP / Postal Code</label>
                                         <input 
                                             {...formik.getFieldProps('zipCode')}
-                                            className="w-full bg-dark-card border border-white/10 focus:border-primary/40 px-8 py-5 rounded-xl outline-none text-[11px] font-black uppercase tracking-widest text-white transition-all shadow-xl"
+                                            className={`w-full bg-dark-card border ${formik.touched.zipCode && formik.errors.zipCode ? 'border-red-500/50' : 'border-white/10'} focus:border-primary/40 px-8 py-5 rounded-xl outline-none text-[11px] font-black uppercase tracking-widest text-white transition-all shadow-xl`}
                                             placeholder="E1 6AN"
                                         />
+                                        {formik.touched.zipCode && formik.errors.zipCode && <p className="text-[8px] text-red-500 font-black uppercase tracking-widest ml-2">{formik.errors.zipCode}</p>}
                                     </div>
                                 </div>
 
                                 <button 
-                                    onClick={() => setStep(2)}
+                                    onClick={handleStep1Submit}
                                     className="premium-button-primary !px-12 py-6 text-[10px] font-black uppercase tracking-[0.4em] flex items-center justify-center gap-4 group shadow-2xl"
                                 >
                                     Continue to Payment <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
@@ -212,82 +403,17 @@ export default function Checkout() {
                     )}
 
                     {step === 2 && (
-                        <motion.div 
-                            key="step2"
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
-                            className="max-w-2xl mx-auto space-y-12"
-                        >
-                            <div className="flex flex-col items-center text-center gap-4">
-                                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center border border-primary/20 mb-4">
-                                    <CreditCard size={28} className="text-primary animate-pulse" />
-                                </div>
-                                <h2 className="text-3xl font-black uppercase font-luxury tracking-wider">Payment Details</h2>
-                                <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em] max-w-sm">Secure payment authorization via encrypted gateway.</p>
-                            </div>
-
-                            <form onSubmit={formik.handleSubmit} className="space-y-8">
-                                <div className="space-y-4">
-                                    <label className="text-[9px] font-black text-muted/60 uppercase tracking-[0.4em] ml-2">Name on Card</label>
-                                    <input 
-                                        {...formik.getFieldProps('cardName')}
-                                        className="w-full bg-dark-card border border-white/10 focus:border-primary/40 px-8 py-5 rounded-xl outline-none text-[11px] font-black uppercase tracking-widest text-white transition-all"
-                                        placeholder="JOHN SMITH"
-                                    />
-                                </div>
-                                <div className="space-y-4">
-                                    <label className="text-[9px] font-black text-muted/60 uppercase tracking-[0.4em] ml-2">Card Number</label>
-                                    <input 
-                                        {...formik.getFieldProps('cardNumber')}
-                                        className="w-full bg-dark-card border border-white/10 focus:border-primary/40 px-8 py-5 rounded-xl outline-none text-[11px] font-black uppercase tracking-widest text-white transition-all"
-                                        placeholder="0000 0000 0000 0000"
-                                    />
-                                </div>
-                                <div className="grid grid-cols-2 gap-8">
-                                    <div className="space-y-4">
-                                        <label className="text-[9px] font-black text-muted/60 uppercase tracking-[0.4em] ml-2">Expiry Date</label>
-                                        <input 
-                                            {...formik.getFieldProps('expiry')}
-                                            className="w-full bg-dark-card border border-white/10 focus:border-primary/40 px-8 py-5 rounded-xl outline-none text-[11px] font-black uppercase tracking-widest text-white transition-all"
-                                            placeholder="MM / YY"
-                                        />
-                                    </div>
-                                    <div className="space-y-4">
-                                        <label className="text-[9px] font-black text-muted/60 uppercase tracking-[0.4em] ml-2">Security Code (CVV)</label>
-                                        <input 
-                                            {...formik.getFieldProps('cvv')}
-                                            className="w-full bg-dark-card border border-white/10 focus:border-primary/40 px-8 py-5 rounded-xl outline-none text-[11px] font-black uppercase tracking-widest text-white transition-all"
-                                            placeholder="000"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="flex flex-col gap-6 pt-8">
-                                    <button 
-                                        type="submit"
-                                        disabled={isProcessing}
-                                        className="premium-button-primary w-full py-6 text-[11px] font-black uppercase tracking-[0.6em] flex items-center justify-center gap-4 group relative overflow-hidden"
-                                    >
-                                        {isProcessing ? (
-                                            <span className="flex items-center gap-4">
-                                                <ShieldCheck size={18} className="animate-spin" /> PROCESSING...
-                                            </span>
-                                        ) : (
-                                            <>PLACE ORDER <ShieldCheck size={18} /></>
-                                        )}
-                                        {isProcessing && <motion.div className="absolute inset-0 bg-primary/20" initial={{ x: '-100%' }} animate={{ x: '100%' }} transition={{ duration: 2, repeat: Infinity, ease: 'linear' }} />}
-                                    </button>
-                                    <button 
-                                        type="button" 
-                                        onClick={() => setStep(1)} 
-                                        className="text-[10px] font-black text-muted uppercase tracking-widest hover:text-white transition-colors flex items-center justify-center gap-3"
-                                    >
-                                        <ArrowLeft size={14} /> Back to Shipping
-                                    </button>
-                                </div>
-                            </form>
-                        </motion.div>
+                        <Elements stripe={stripePromise}>
+                            <PaymentForm 
+                                formik={formik} 
+                                total={total} 
+                                cartItems={cartItems} 
+                                setStep={setStep} 
+                                dispatch={dispatch}
+                                isProcessing={isProcessing}
+                                setIsProcessing={setIsProcessing}
+                            />
+                        </Elements>
                     )}
 
                     {step === 3 && (

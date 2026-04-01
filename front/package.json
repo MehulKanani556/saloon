@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.11.2",
+    "@stripe/react-stripe-js": "^6.1.0",
+    "@stripe/stripe-js": "^9.0.1",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.9",
     "canvas-confetti": "^1.9.4",

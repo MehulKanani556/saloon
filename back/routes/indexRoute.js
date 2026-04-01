@@ -16,6 +16,7 @@ const reportsController = require('../controllers/reportsController');
 const leaveController = require('../controllers/leaveController');
 const productController = require('../controllers/productController');
 const orderController = require('../controllers/orderController');
+const paymentController = require('../controllers/paymentController');
 
 // Middleware
 const { protect, authorize } = require('../middleware/authMiddleware');
@@ -136,5 +137,10 @@ router.post('/orders', protect, orderController.createOrder);
 router.get('/orders/my', protect, orderController.getMyOrders);
 router.get('/orders', protect, authorize('Admin'), orderController.getOrders);
 router.put('/orders/:id/status', protect, authorize('Admin'), orderController.updateOrderStatus);
+
+// ==========================================
+// PAYMENT ROUTES
+// ==========================================
+router.post('/payment/create-payment-intent', protect, paymentController.createPaymentIntent);
 
 module.exports = router;
