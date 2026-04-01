@@ -145,7 +145,7 @@ export default function Staff() {
         }
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-6">
         <AnimatePresence mode="popLayout">
           {staff.map((member, index) => (
             <motion.div
