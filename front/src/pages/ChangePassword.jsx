@@ -76,13 +76,13 @@ export default function ChangePassword() {
           <div className="absolute -top-32 -right-32 w-80 h-80 bg-primary/10 rounded-full blur-[120px] pointer-events-none animate-pulse" />
           <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-primary/5 rounded-full blur-[150px] pointer-events-none" />
 
-          <div className="flex items-center gap-8 mb-16 pb-12 border-b border-white/5 relative z-10">
+          <div className="flex items-center gap-8 mb-4 pb-8 border-b border-white/5 relative z-10">
             <div className="w-20 h-20 rounded-2xl bg-luxury-gradient flex items-center justify-center text-secondary shadow-[0_15px_40px_rgba(201,162,39,0.3)] border border-white/20">
               <KeyRound size={32} strokeWidth={2.5} />
             </div>
             <div>
-              <h2 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">Security <span className="text-primary/50">Matrix</span></h2>
-              <p className="text-muted/60 text-[10px] font-black uppercase tracking-[0.5em]">Synchronize Access Credentials</p>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-black text-white uppercase tracking-wide leading-[1.1] font-luxury">Security <span className="text-primary/50">Matrix</span></h2>
+              <p className="text-muted/40 text-[12px] font-black tracking-[0.2em] flex items-center gap-4 pt-3">Synchronize Access Credentials</p>
             </div>
           </div>
 
@@ -105,14 +105,14 @@ export default function ChangePassword() {
               <div className="space-y-6">
                 <label className="text-[11px] font-black text-muted/40 uppercase tracking-[0.5em] pl-4 ">Current Secret Protocol</label>
                 <div className="relative group/field">
-                  <div className="absolute left-8 top-1/2 -translate-y-1/2 text-muted/20 group-focus-within/field:text-primary group-focus-within/field:scale-110 transition-all duration-700">
-                    <Lock size={26} />
+                  <div className="absolute left-6 top-1/2 -translate-y-1/2 text-muted/20 group-focus-within/field:text-primary group-focus-within/field:scale-110 transition-all duration-700">
+                    <Lock size={20} />
                   </div>
                   <input
                     type="password"
                     {...formik.getFieldProps('currentPassword')}
                     placeholder="••••••••••••"
-                    className="w-full bg-background/30 border border-white/[0.03] p-8 pl-20 rounded-2xl outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/5 transition-all duration-1000 font-black text-base tracking-[0.6em] text-white"
+                    className="w-full bg-background/30 border border-white/30 p-4 pl-14 rounded-xl outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/5 transition-all duration-1000 font-black text-sm tracking-[0.4em] text-white"
                   />
                 </div>
                 {formik.touched.currentPassword && formik.errors.currentPassword && <p className="text-primary/80 text-[10px] uppercase font-black tracking-widest pl-4  animate-pulse">{formik.errors.currentPassword}</p>}
@@ -124,14 +124,14 @@ export default function ChangePassword() {
               <div className="space-y-6">
                 <label className="text-[11px] font-black text-muted/40 uppercase tracking-[0.5em] pl-4 ">New Security Entropy</label>
                 <div className="relative group/field">
-                  <div className="absolute left-8 top-1/2 -translate-y-1/2 text-muted/20 group-focus-within/field:text-primary transition-all duration-700">
-                    <Shield size={26} />
+                  <div className="absolute left-6 top-1/2 -translate-y-1/2 text-muted/20 group-focus-within/field:text-primary group-focus-within/field:scale-110 transition-all duration-700">
+                    <Shield size={20} />
                   </div>
                   <input
                     type="password"
                     {...formik.getFieldProps('newPassword')}
                     placeholder="ENTROPY-X"
-                    className="w-full bg-background/30 border border-white/[0.03] p-8 pl-20 rounded-2xl outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/5 transition-all duration-1000 font-black text-base tracking-[0.6em] text-white"
+                    className="w-full bg-background/30 border border-white/[0.03] p-4 pl-14 rounded-xl outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/5 transition-all duration-1000 font-black text-sm tracking-[0.4em] text-white"
                   />
                 </div>
                 {formik.touched.newPassword && formik.errors.newPassword && <p className="text-primary/80 text-[10px] uppercase font-black tracking-widest pl-4  animate-pulse">{formik.errors.newPassword}</p>}
@@ -141,14 +141,14 @@ export default function ChangePassword() {
               <div className="space-y-6">
                 <label className="text-[11px] font-black text-muted/40 uppercase tracking-[0.5em] pl-4 ">Verify Synchronization</label>
                 <div className="relative group/field">
-                  <div className="absolute left-8 top-1/2 -translate-y-1/2 text-muted/20 group-focus-within/field:text-primary transition-all duration-700">
-                    <KeyRound size={26} />
+                  <div className="absolute left-6 top-1/2 -translate-y-1/2 text-muted/20 group-focus-within/field:text-primary group-focus-within/field:scale-110 transition-all duration-700">
+                    <KeyRound size={20} />
                   </div>
                   <input
                     type="password"
                     {...formik.getFieldProps('confirmPassword')}
                     placeholder="REPEAT-SEC"
-                    className="w-full bg-background/30 border border-white/[0.03] p-8 pl-20 rounded-2xl outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/5 transition-all duration-1000 font-black text-base tracking-[0.6em] text-white"
+                    className="w-full bg-background/30 border border-white/[0.03] p-4 pl-14 rounded-xl outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/5 transition-all duration-1000 font-black text-sm tracking-[0.4em] text-white"
                   />
                 </div>
                 {formik.touched.confirmPassword && formik.errors.confirmPassword && <p className="text-primary/80 text-[10px] uppercase font-black tracking-widest pl-4  animate-pulse">{formik.errors.confirmPassword}</p>}
@@ -159,7 +159,7 @@ export default function ChangePassword() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-8 bg-luxury-gradient text-secondary rounded-2xl flex items-center justify-center gap-6 shadow-[0_25px_60px_rgba(201,162,39,0.25)] hover:scale-[1.02] active:scale-[0.98] transition-all font-black text-[12px] uppercase tracking-[0.6em] font-luxury  group"
+                className="w-full py-6 bg-luxury-gradient text-secondary rounded-2xl flex items-center justify-center gap-6 shadow-[0_25px_60px_rgba(201,162,39,0.25)] hover:scale-[1.02] active:scale-[0.98] transition-all font-black text-[12px] uppercase tracking-[0.6em] font-luxury  group"
               >
                 {loading ? (
                   <>

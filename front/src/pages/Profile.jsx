@@ -108,16 +108,16 @@ export default function Profile() {
 
               <div className="space-y-4 max-w-lg">
                 <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
-                  <h2 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">Identity <span className="text-primary/50">Core</span></h2>
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-black text-white uppercase tracking-wide leading-[1.1] font-luxury">Identity <span className="text-primary/50">Core</span></h2>
                   <div className="px-4 py-1.5 bg-primary/10 text-primary border border-primary/20 rounded-full text-[9px] font-black uppercase tracking-[0.3em] shadow-inner backdrop-blur-md">
                     {user?.role || 'CLIENT'}
                   </div>
                 </div>
                 <div className="flex flex-col gap-2">
-                  <p className="text-muted/60 text-[10px] font-black uppercase tracking-[0.4em] flex items-center justify-center md:justify-start gap-4">
-                    <Fingerprint size={14} className="text-primary/30" /> ID: <span className="text-primary font-luxury  tracking-wider">{user?.customId || 'CLI-IDENTITY-INIT'}</span>
+                  <p className="text-muted/60 text-[12px] font-black uppercase tracking-[0.4em] flex items-center justify-center md:justify-start gap-4">
+                    <Fingerprint size={16} className="text-primary/30" /> ID: <span className="text-primary font-luxury tracking-wider">{user?.customId || 'CLI-IDENTITY-INIT'}</span>
                   </p>
-                  <p className="text-muted/40 text-[9px] font-black uppercase tracking-[0.2em]  max-w-sm leading-relaxed">
+                  <p className="text-muted/40 text-[12px] font-black tracking-[0.2em] max-w-sm leading-relaxed">
                     High-fidelity verification established within the collective aesthetic matrix.
                   </p>
                 </div>
@@ -146,7 +146,7 @@ export default function Profile() {
                     {...formik.getFieldProps('name')}
                     disabled={!isEditing}
                     placeholder="Enter Identity Name"
-                    className={`w-full bg-background/20 border px-6 py-5 pl-14 rounded-xl outline-none transition-all duration-500 font-black text-[11px] uppercase tracking-[0.2em] ${isEditing ? 'border-primary/40 shadow-inner text-white' : 'border-white/[0.05] cursor-not-allowed opacity-40 text-muted/60'}`}
+                    className={`w-full bg-background/20 border px-6 py-5 pl-14 rounded-xl outline-none transition-all duration-500 font-black text-[11px] uppercase tracking-[0.2em] ${isEditing ? 'border-primary/40 shadow-inner text-white' : 'border-white/60 cursor-not-allowed opacity-40 text-muted/60'}`}
                   />
                 </div>
                 {formik.touched.name && formik.errors.name && <p className="text-primary/80 text-[9px] uppercase font-black tracking-widest pl-2  animate-pulse">! Error: {formik.errors.name}</p>}
@@ -156,13 +156,13 @@ export default function Profile() {
               <div className="space-y-3">
                 <label className="text-[10px] font-black text-muted/30 uppercase tracking-[0.4em] pl-2 ">Encryption (Email)</label>
                 <div className="relative">
-                  <div className="absolute left-6 top-1/2 -translate-y-1/2 text-white/5 opacity-40">
+                  <div className="absolute left-6 top-1/2 -translate-y-1/2 text-white/30 opacity-40">
                     <Mail size={20} />
                   </div>
                   <input
                     value={user?.email || ''}
                     disabled
-                    className="w-full bg-background/10 border border-white/[0.02] px-6 py-5 pl-14 rounded-xl outline-none font-black text-[11px] uppercase tracking-[0.2em] text-muted/40 cursor-not-allowed  shadow-inner"
+                    className="w-full bg-background/10 border border-white/30 px-6 py-5 pl-14 rounded-xl outline-none font-black text-[11px] uppercase tracking-[0.2em] text-muted/40 cursor-not-allowed  shadow-inner"
                   />
                 </div>
               </div>
@@ -171,13 +171,13 @@ export default function Profile() {
               <div className="space-y-3">
                 <label className="text-[10px] font-black text-muted/30 uppercase tracking-[0.4em] pl-2 ">Signal Protocol (Phone)</label>
                 <div className="relative">
-                  <div className="absolute left-6 top-1/2 -translate-y-1/2 text-white/5 opacity-40">
+                  <div className="absolute left-6 top-1/2 -translate-y-1/2 text-white/30 opacity-40">
                     <Phone size={20} />
                   </div>
                   <input
                     value={user?.phone || ''}
                     disabled
-                    className="w-full bg-background/10 border border-white/[0.02] px-6 py-5 pl-14 rounded-xl outline-none font-black text-[11px] uppercase tracking-[0.2em] text-muted/40 cursor-not-allowed  shadow-inner"
+                    className="w-full bg-background/10 border border-white/30 px-6 py-5 pl-14 rounded-xl outline-none font-black text-[11px] uppercase tracking-[0.2em] text-muted/40 cursor-not-allowed  shadow-inner"
                   />
                 </div>
               </div>

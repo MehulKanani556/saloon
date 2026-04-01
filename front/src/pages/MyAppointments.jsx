@@ -27,20 +27,20 @@ export default function MyAppointments() {
 
   return (
     <UserPanelLayout title="Archive">
-      <div className="flex flex-col gap-16">
+      <div className="flex flex-col gap-12">
         {/* Cinematic Header Area */}
-        <div className="flex flex-col md:flex-row items-end justify-between gap-12 pb-16 border-b border-white/5 relative">
+        <div className="flex flex-col md:flex-row items-end justify-between gap-12 pb-8 border-b border-white/5 relative">
           <div className="space-y-6 flex-1">
             <div className="flex items-center gap-4">
               <div className="w-16 h-[2px] bg-luxury-gradient" />
               <p className="text-[10px] font-black text-primary uppercase tracking-[0.6em] animate-pulse">Temporal Logistics</p>
             </div>
-            <h1 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">The Ritual <span className="text-primary/50">Archive</span></h1>
-            <p className="text-muted/40 text-[11px] uppercase font-black tracking-[0.5em] flex items-center gap-4 ">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-black text-white uppercase tracking-wide leading-[1.1] font-luxury">The Ritual <span className="text-primary/50">Archive</span></h1>
+            <p className="text-muted/40 text-[12px] font-black tracking-[0.2em] flex items-center gap-4 ">
               Chronological ledger of your aesthetic evolution within the matrix
             </p>
           </div>
-          <motion.button
+          {/* <motion.button
             whileHover={{ scale: 1.05, rotate: 180 }}
             whileTap={{ scale: 0.95 }}
             onClick={fetchAppointments}
@@ -48,7 +48,7 @@ export default function MyAppointments() {
           >
             <div className="absolute inset-0 bg-luxury-gradient opacity-0 group-hover:opacity-10 transition-opacity duration-700" />
             <RefreshCw size={28} className={`text-primary transition-transform duration-1000 ${loading ? 'animate-spin' : 'group-hover:rotate-180'}`} />
-          </motion.button>
+          </motion.button> */}
         </div>
 
         {loading ? (
@@ -66,16 +66,16 @@ export default function MyAppointments() {
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-dark-card backdrop-blur-3xl p-24 text-center rounded-2xl border border-dashed border-white/10 shadow-[0_50px_100px_-20px_rgba(0,0,0,1)] ring-1 ring-white/5 relative overflow-hidden"
+            className="bg-dark-card backdrop-blur-3xl p-10 md:p-16 text-center rounded-2xl border border-dashed border-white/10 shadow-[0_50px_100px_-20px_rgba(0,0,0,1)] ring-1 ring-white/5 relative overflow-hidden"
           >
             <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
-            <div className="w-28 h-28 bg-background/50 rounded-2xl flex items-center justify-center mx-auto mb-12 shadow-inner border border-white/5 text-primary/20">
-              <AlertTriangle size={56} strokeWidth={1} />
+            <div className="w-20 h-20 md:w-28 md:h-28 bg-background/50 rounded-2xl flex items-center justify-center mx-auto mb-8 md:mb-12 shadow-inner border border-white/5 text-primary/20">
+              <AlertTriangle className="w-10 h-10 md:w-14 md:h-14" strokeWidth={1} />
             </div>
-            <h3 className="text-4xl font-black text-white uppercase tracking-[-0.05em] mb-6 font-luxury  leading-none">Archive <span className="text-muted/20">Null</span></h3>
-            <p className="text-muted/40 text-[12px] font-black uppercase tracking-[0.4em] max-w-sm mx-auto mb-16 leading-relaxed ">Your chronological records contain zero active ritual coordinates in the current branch.</p>
-            <button className="px-16 py-7 bg-luxury-gradient text-secondary rounded-2xl flex items-center gap-5 mx-auto font-black text-[11px] uppercase tracking-[0.5em] shadow-3xl hover:scale-105 active:scale-95 transition-all font-luxury ">
-              <Sparkles size={20} /> Register New Ritual
+            <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-white uppercase tracking-[-0.05em] mb-4 md:mb-6 font-luxury leading-none">Archive <span className="text-muted/20">Null</span></h3>
+            <p className="text-muted/40 text-[10px] md:text-[12px] font-black tracking-[0.2em] max-w-xs md:max-w-sm mx-auto mb-10 md:mb-16 leading-relaxed">Your chronological records contain zero active ritual coordinates in the current branch.</p>
+            <button className="px-8 py-5 md:px-12 md:py-7 bg-luxury-gradient text-secondary rounded-2xl flex items-center gap-4 md:gap-5 mx-auto font-black text-[10px] md:text-[12px] uppercase tracking-[0.2em] shadow-3xl hover:scale-105 active:scale-95 transition-all font-luxury">
+              <Sparkles className="w-4 h-4 md:w-5 md:h-5" /> Register New Ritual
             </button>
           </motion.div>
         ) : (

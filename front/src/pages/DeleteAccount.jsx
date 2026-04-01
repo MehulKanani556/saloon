@@ -30,31 +30,31 @@ export default function DeleteAccount() {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-dark-card backdrop-blur-3xl border border-red-500/20 rounded-2xl p-8 lg:p-16 relative overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,1)] ring-1 ring-white/5"
+          className="bg-dark-card backdrop-blur-3xl border border-red-500/20 rounded-2xl p-8 lg:p-12 relative overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,1)] ring-1 ring-white/5"
         >
           {/* Accent Glow */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/10 rounded-full blur-[100px] pointer-events-none animate-pulse" />
 
-          <div className="flex items-center gap-8 mb-16 pb-12 border-b border-white/5 relative z-10">
-            <div className="w-24 h-24 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-500 border border-red-500/20 shadow-[0_15px_40px_rgba(239,68,68,0.2)]">
-              <Trash2 size={40} strokeWidth={2.5} />
+          <div className="flex items-center gap-8 mb-8 pb-8 border-b border-white/5 relative z-10">
+            <div className="w-16 h-16 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-500 border border-red-500/20 shadow-[0_15px_40px_rgba(239,68,68,0.2)]">
+              <Trash2 size={22} strokeWidth={2.5} />
             </div>
             <div>
-              <h2 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">Identity <span className="text-red-500/50">Dissolution</span></h2>
-              <p className="text-muted/40 text-[10px] font-black uppercase tracking-[0.5em] flex items-center gap-3">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-black text-white uppercase tracking-wide leading-[1.1] font-luxury">Identity <span className="text-red-500/50">Dissolution</span></h2>
+              <p className="text-muted/40 text-[12px] font-black tracking-[0.2em] flex items-center gap-3 pt-4">
                 <AlertCircle size={14} className="text-red-500/40" /> Irreversible Digital Detachment
               </p>
             </div>
           </div>
 
-          <div className="space-y-16 relative z-10">
-            <div className="bg-background/40 border border-red-500/10 rounded-2xl p-10 md:p-14 flex flex-col md:flex-row items-center md:items-start gap-12 backdrop-blur-md shadow-inner">
-              <div className="w-20 h-20 rounded-2xl bg-red-500/10 flex items-center justify-center shrink-0 border border-red-500/20 animate-pulse">
+          <div className="space-y-10 relative z-10">
+            <div className="bg-background/40 border border-red-500/10 rounded-2xl p-10 md:p-8 flex flex-col md:flex-row items-center md:items-start gap-12 backdrop-blur-md shadow-inner">
+              {/* <div className="w-20 h-20 rounded-2xl bg-red-500/10 flex items-center justify-center shrink-0 border border-red-500/20 animate-pulse">
                 <ShieldAlert className="text-red-500" size={36} />
-              </div>
+              </div> */}
               <div className="text-center md:text-left space-y-8">
                 <p className="text-[16px] font-black text-red-500 uppercase tracking-[0.4em]  mb-6 font-luxury leading-none shadow-sm">Critical Protocol Warning</p>
-                <div className="space-y-6 text-[12px] text-muted/60 font-black uppercase leading-relaxed tracking-[0.3em] ">
+                <div className="space-y-6 text-[12px] text-muted/60 font-black leading-relaxed tracking-[0.3em] ">
                   <p className="flex items-center gap-5 justify-center md:justify-start group cursor-default hover:text-white transition-colors duration-500">
                     <span className="w-2 h-2 rounded-full bg-red-500/50 group-hover:scale-150 transition-transform" />
                     Immediate detachment from the public matrix.
@@ -71,12 +71,12 @@ export default function DeleteAccount() {
               </div>
             </div>
 
-            <div className="pt-8 text-center space-y-12">
+            <div className="text-center space-y-8">
               <p className="text-muted/30 text-[11px] font-black uppercase tracking-[0.6em]  animate-pulse">Confirm final authorization sequence?</p>
 
               <button
                 onClick={() => setShowConfirm(true)}
-                className="w-full bg-red-500/10 hover:bg-red-500 border border-red-500/20 hover:border-transparent py-8 rounded-2xl text-[12px] font-black uppercase tracking-[0.5em] text-red-500 hover:text-white transition-all duration-700 shadow-2xl hover:shadow-[0_25px_60px_rgba(239,68,68,0.3)] group flex items-center justify-center gap-8 active:scale-[0.98] font-luxury "
+                className="w-full bg-red-500/10 hover:bg-red-500 border border-red-500/20 hover:border-transparent py-6 rounded-2xl text-[12px] font-black uppercase tracking-[0.5em] text-red-500 hover:text-white transition-all duration-700 shadow-2xl hover:shadow-[0_25px_60px_rgba(239,68,68,0.3)] group flex items-center justify-center gap-8 active:scale-[0.98] font-luxury "
               >
                 Initalize Final Dissolution Protocol
                 <ChevronRight size={24} className="group-hover:translate-x-4 transition-transform duration-700" />
