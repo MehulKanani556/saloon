@@ -39,7 +39,7 @@ const PageHero = () => {
           <span className="text-[9px] font-black text-primary uppercase tracking-[0.3em]">Pure Elegance</span>
         </motion.div>
 
-        <h1 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 flex justify-center gap-[2px] font-luxury ">
+        <h1 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 flex justify-center gap-[2px] font-luxury ">
           {title.map((char, i) => (
             <motion.span
               key={i}

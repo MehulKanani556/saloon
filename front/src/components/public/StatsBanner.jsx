@@ -47,9 +47,9 @@ const StatsCounter = ({ target, label, duration = 3000 }) => {
 
 const StatsBanner = () => {
   return (
-    <div className="bg-secondary py-16 border-y border-white/5">
+    <div className="bg-secondary py-8 md:py-16 border-y border-white/5">
       <div className="container mx-auto px-6">
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-12 md:gap-4 divide-x divide-white/10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:divide-x md:divide-white/10">
           <StatsCounter target="500+" label="Happy Clients" />
           <StatsCounter target="20+" label="Premium Services" />
           <StatsCounter target="10+" label="Expert Artists" />

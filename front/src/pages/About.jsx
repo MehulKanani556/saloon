@@ -39,7 +39,7 @@ const PageHero = () => {
           <span className="text-[9px] font-black text-primary uppercase tracking-[0.3em]">Our Legacy</span>
         </motion.div>
 
-        <h1 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 flex justify-center gap-[2px] font-luxury ">
+        <h1 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 flex justify-center gap-[2px] font-luxury ">
           {title.map((char, i) => (
             <motion.span
               key={i}
@@ -84,7 +84,7 @@ const StorySection = () => {
                 <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">The Beginning</p>
                 <div className="w-12 h-[2px] bg-primary/30" />
               </div>
-              <h2 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 text-center font-luxury">
+              <h2 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 text-center font-luxury">
                 WHERE PASSION <br />
                 <span className="text-primary">MEETS ARTISTRY</span>
               </h2>
@@ -200,7 +200,7 @@ const ProtocolSection = () => {
       <div className="container mx-auto px-6">
         <div className="flex flex-col items-center mb-24 text-center">
           <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em] mb-4">Operational Standards</p>
-          <h2 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">
+          <h2 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 font-luxury">
             THE <span className="text-primary">SANCTITY</span> PROTOCOL
           </h2>
         </div>
@@ -294,7 +294,7 @@ const TeamSection = () => {
             <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">The Elite Collective</p>
             <div className="w-12 h-[2px] bg-primary/30" />
           </div>
-          <h2 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 text-center font-luxury">
+          <h2 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 text-center font-luxury">
             THE <span className="text-primary font-luxury">ARTISTS</span>
           </h2>
         </div>
@@ -376,7 +376,7 @@ const SalonDetails = () => {
               <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Access Terminal</p>
               <div className="w-12 h-[2px] bg-primary/30" />
             </div>
-            <h3 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 text-left font-luxury">Operational Window</h3>
+            <h3 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 text-left font-luxury">Operational Window</h3>
           </div>
 
           <div className="space-y-4">
@@ -397,7 +397,7 @@ const SalonDetails = () => {
                 <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Coordinates</p>
                 <div className="w-12 h-[2px] bg-primary/30" />
               </div>
-              <h3 className="text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 text-left font-luxury">Find The <br /> Sanctuary</h3>
+              <h3 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-8 text-left font-luxury">Find The <br /> Sanctuary</h3>
             </div>
 
             <div className="space-y-8">

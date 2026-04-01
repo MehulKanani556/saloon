@@ -53,8 +53,8 @@ const PublicNavbar = () => {
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${showSolid
-      ? 'bg-secondary/90 backdrop-blur-md shadow-2xl py-2'
-      : 'bg-transparent py-2'
+      ? 'bg-secondary/80 md:bg-secondary/90 backdrop-blur-md shadow-2xl py-2'
+      : 'md:bg-transparent bg-secondary/80 backdrop-blur-md md:backdrop-blur-0 shadow-2xl md:shadow-none py-2'
       }`}>
       <div className="container mx-auto px-6 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 group">
@@ -66,7 +66,7 @@ const PublicNavbar = () => {
         </Link>
 
         {/* Desktop Links */}
-        <div className="hidden lg:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-8">
           {['Home', 'Services', 'About', 'Contact', 'Book'].map((link) => {
             const targetPath = link === 'Home' ? '/' : link === 'Book' ? '/book' : `/${link.toLowerCase()}`;
             const isActive = location.pathname === targetPath;
@@ -100,7 +100,7 @@ const PublicNavbar = () => {
                     className="w-full h-full object-cover rounded-full"
                   />
                 </div>
-                <span className="text-[10px] font-black uppercase tracking-widest hidden xl:block">{userInfo.name}</span>
+                <span className="text-[10px] font-black uppercase tracking-widest hidden md:block">{userInfo.name}</span>
                 <ChevronDown size={14} className={`transition-transform duration-300 ${isProfileOpen ? 'rotate-180' : ''}`} />
               </button>
 
@@ -172,7 +172,7 @@ const PublicNavbar = () => {
 
         {/* Mobile Toggle */}
         <button
-          className="lg:hidden p-2 text-white"
+          className="md:hidden p-2 text-white"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           {isMobileMenuOpen ? (
@@ -190,9 +190,9 @@ const PublicNavbar = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-secondary border-b border-white/5 overflow-hidden"
+            className="md:hidden overflow-hidden"
           >
-            <div className="container mx-auto px-6 py-8 flex flex-col gap-6">
+            <div className="container mx-auto px-6 py-4 flex flex-col gap-4">
               {['Home', 'Services', 'About', 'Contact', 'Book Appointment'].map((link) => {
                 const targetPath = link === 'Home' ? '/' : link === 'Book Appointment' ? '/book' : `/${link.toLowerCase()}`;
                 const isActive = location.pathname === targetPath;
@@ -201,7 +201,7 @@ const PublicNavbar = () => {
                     key={link}
                     to={targetPath}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className={`text-sm font-black uppercase tracking-widest transition-colors ${isActive ? 'text-primary' : 'text-white hover:text-primary'
+                    className={`text-xs font-medium uppercase tracking-widest transition-colors ${isActive ? 'text-primary' : 'text-white hover:text-primary'
                       }`}
                   >
                     {link}
@@ -214,7 +214,7 @@ const PublicNavbar = () => {
                   setIsMobileMenuOpen(false);
                   handleAuthRedirect();
                 }}
-                className="w-full py-4 text-[10px] font-black uppercase tracking-widest text-muted text-left flex items-center gap-2"
+                className="w-full text-[10px] font-black uppercase tracking-widest text-muted text-left flex items-center gap-2"
               >
                 <LogIn size={14} className="text-primary" />
                 {userInfo ? (userInfo.role === 'Admin' ? 'Go to Admin Terminal' : 'Proceed to Portal') : 'Access Portal'}

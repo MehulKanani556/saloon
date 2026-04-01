@@ -5,11 +5,11 @@ import Logo from '../../assets/logo.png';
 
 const PublicFooter = () => {
   return (
-    <footer id="contact" className="bg-background pt-24 pb-12 border-t border-white/5">
+    <footer id="contact" className="bg-background py-6 md:py-12 border-t border-white/5">
       <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20 text-center md:text-left">
+        <div className="grid grid-cols-4 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 xl:gap-12 mb-10 xl:mb-20 text-center md:text-left">
           {/* Brand Column */}
-          <div className="flex flex-col items-center md:items-start space-y-8">
+          <div className="flex col-span-4 md:col-span-1 flex-col items-center md:items-start space-y-4 order-1">
             <Link to="/" className="flex flex-col items-center md:items-start gap-4 group">
               <img
                 src={Logo}
@@ -24,7 +24,7 @@ const PublicFooter = () => {
               </div>
             </Link>
 
-            <p className="text-muted text-[10px] font-bold leading-relaxed uppercase tracking-[0.15em] max-w-[280px]">
+            <p className="text-muted text-[10px] font-bold leading-relaxed tracking-[0.15em] max-w-[280px]">
               The ultimate destination for luxury beauty and lifestyle. Crafting your perfect aesthetic narrative since day one.
             </p>
 
@@ -42,8 +42,8 @@ const PublicFooter = () => {
           </div>
 
           {/* Navigation Column */}
-          <div className="flex flex-col items-center md:items-start">
-            <h4 className="text-[11px] font-black text-white uppercase tracking-[0.3em] mb-10 border-b-2 border-primary/20 pb-2">Navigation</h4>
+          <div className="flex col-span-2 md:col-span-1 flex-col items-center md:items-start order-3 lg:order-2">
+            <h4 className="text-[11px] font-black text-white uppercase tracking-[0.3em] mb-5 lg:mb-10 border-b-2 border-primary/20 pb-2">Navigation</h4>
             <div className="flex flex-col gap-4">
               {['Home', 'Services', 'About', 'Contact'].map((item) => (
                 <Link
@@ -59,8 +59,8 @@ const PublicFooter = () => {
           </div>
 
           {/* Focus Column */}
-          <div className="flex flex-col items-center md:items-start">
-            <h4 className="text-[11px] font-black text-white uppercase tracking-[0.3em] mb-10 border-b-2 border-primary/20 pb-2">Our Focus</h4>
+          <div className="flex col-span-2 md:col-span-1 flex-col items-center md:items-start order-4 lg:order-3">
+            <h4 className="text-[11px] font-black text-white uppercase tracking-[0.3em] mb-5 lg:mb-10 border-b-2 border-primary/20 pb-2">Our Focus</h4>
             <div className="flex flex-col gap-4">
               {['Architectural Hair', 'Advanced Skincare', 'Bridal Rituals', 'Visual Artistry'].map((item) => (
                 <span key={item} className="text-muted text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
@@ -72,16 +72,16 @@ const PublicFooter = () => {
           </div>
 
           {/* Contact Column */}
-          <div className="flex flex-col items-center md:items-start">
-            <h4 className="text-[11px] font-black text-white uppercase tracking-[0.3em] mb-10 border-b-2 border-primary/20 pb-2">Connect</h4>
+          <div className="flex col-span-4 md:col-span-1 flex-col items-center md:items-start order-2 lg:order-4">
+            <h4 className="text-[11px] font-black text-white uppercase tracking-[0.3em] mb-5 lg:mb-10 border-b-2 border-primary/20 pb-2">Connect</h4>
             <div className="flex flex-col gap-8">
               <div className="flex items-center gap-4 group">
                 <div className="p-2.5 bg-secondary rounded-xl text-primary border border-white/5">
                   <Phone size={14} />
                 </div>
                 <div>
-                  <p className="text-[8px] font-black text-muted uppercase tracking-widest mb-0.5">Direct Line</p>
-                  <p className="text-[10px] text-white font-black tracking-widest">+91 98765 43210</p>
+                  <p className="text-[8px] font-black text-muted uppercase tracking-widest mb-0.5 text-start">Direct Line</p>
+                  <p className="text-[10px] text-white font-medium tracking-widest">+91 98765 43210</p>
                 </div>
               </div>
               <div className="flex items-center gap-4 group">
@@ -89,8 +89,8 @@ const PublicFooter = () => {
                   <Mail size={14} />
                 </div>
                 <div>
-                  <p className="text-[8px] font-black text-muted uppercase tracking-widest mb-0.5">Electronic Link</p>
-                  <p className="text-[10px] text-white font-black tracking-widest lowercase">concierge@glowelegance.com</p>
+                  <p className="text-[8px] font-black text-muted uppercase tracking-widest mb-0.5 text-start">Electronic Link</p>
+                  <p className="text-[10px] text-white font-medium tracking-widest lowercase">concierge@glowelegance.com</p>
                 </div>
               </div>
               <div className="flex items-center gap-4 group">
@@ -98,8 +98,8 @@ const PublicFooter = () => {
                   <MapPin size={14} />
                 </div>
                 <div>
-                  <p className="text-[8px] font-black text-muted uppercase tracking-widest mb-0.5">Physical HQ</p>
-                  <p className="text-[10px] text-white font-black tracking-widest uppercase leading-tight ">
+                  <p className="text-[8px] font-black text-muted uppercase tracking-widest mb-0.5 text-start">Physical HQ</p>
+                  <p className="text-[10px] text-white font-medium tracking-widest leading-tight text-start ">
                     123, Luxury Lane, Bandra West, Mumbai
                   </p>
                 </div>
@@ -109,11 +109,11 @@ const PublicFooter = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-8">
-          <p className="text-[8px] font-black text-muted/50 uppercase tracking-[0.3em] text-center ">
-            © 2026 GLOW & ELEGANCE COLLECTIVE. SYSTEM ARCHITECTURE BY ARCHITECTS OF BEAUTY.
+        <div className="pt-6 lg:pt-12 border-t border-white/5 flex flex-col lg:flex-row items-center justify-between gap-2 lg:gap-8">
+          <p className="text-[9px] font-black text-muted/50 tracking-[0.3em] text-center ">
+            &copy; 2026 GLOW & ELEGANCE COLLECTIVE. SYSTEM ARCHITECTURE BY ARCHITECTS OF BEAUTY.
           </p>
-          <div className="flex items-center gap-3 text-[9px] font-black text-muted uppercase tracking-[0.2em]">
+          <div className="hidden md:flex items-center gap-3 text-[9px] font-black text-muted tracking-[0.2em]">
             <span className="opacity-50">Crafted with</span>
             <Heart size={12} className="text-red-500 fill-red-500 animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.4)]" />
             <span className="opacity-50">by Premium Aesthetic Artisans</span>

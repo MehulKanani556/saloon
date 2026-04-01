@@ -14,11 +14,11 @@ const app = express();
 
 app.use(cors({
     origin: [
-        'http://localhost:5173',
+        'http://localhost:3000',
         process.env.CLIENT_URL,
         'http://localhost:5174',
     ],
-    credentials: true   
+    credentials: true
 }));
 
 // Augmented payload capacity for high-fidelity data transfers
