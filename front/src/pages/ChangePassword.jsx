@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { Lock, Shield, Save, KeyRound, AlertCircle, Loader2, ShieldCheck, Fingerprint } from 'lucide-react';
+import { Lock, Shield, Save, KeyRound, AlertCircle, Loader2, ShieldCheck, Fingerprint, Eye, EyeOff } from 'lucide-react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import UserPanelLayout from '../components/public/UserPanelLayout';
@@ -12,6 +12,9 @@ export default function ChangePassword() {
   const { userInfo: user, loading: rtkLoading } = useSelector((state) => state.auth);
   const [syncing, setSyncing] = useState(!user);
   const [loading, setLoading] = useState(false);
+  const [showCurrent, setShowCurrent] = useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   useEffect(() => {
     const syncSecurity = async () => {
@@ -21,7 +24,7 @@ export default function ChangePassword() {
     syncSecurity();
   }, [dispatch]);
 
-  const hasPassword = !!user?.password;
+  const hasPassword = !!user?.hasPassword;
 
   const formik = useFormik({
     initialValues: {
@@ -114,11 +117,18 @@ export default function ChangePassword() {
                     <Lock size={18} />
                   </div>
                   <input
-                    type="password"
+                    type={showCurrent ? "text" : "password"}
                     {...formik.getFieldProps('currentPassword')}
                     placeholder="Enter current password"
-                    className="w-full bg-white/5 border border-white/10 p-4 pl-12 rounded-2xl outline-none focus:border-primary/30 transition-all font-medium text-sm text-white"
+                    className="w-full bg-white/5 border border-white/10 p-4 pl-12 pr-12 rounded-2xl outline-none focus:border-primary/30 transition-all font-medium text-sm text-white"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowCurrent(!showCurrent)}
+                    className="absolute right-5 top-1/2 -translate-y-1/2 text-muted/30 hover:text-primary transition-colors"
+                  >
+                    {showCurrent ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
                 </div>
                 {formik.touched.currentPassword && formik.errors.currentPassword && (
                   <p className="text-red-500/80 text-[9px] uppercase font-bold tracking-widest ml-4">{formik.errors.currentPassword}</p>
@@ -135,11 +145,18 @@ export default function ChangePassword() {
                     <Shield size={18} />
                   </div>
                   <input
-                    type="password"
+                    type={showNew ? "text" : "password"}
                     {...formik.getFieldProps('newPassword')}
                     placeholder="New secure password"
-                    className="w-full bg-white/5 border border-white/10 p-4 pl-12 rounded-2xl outline-none focus:border-primary/30 transition-all font-medium text-sm text-white"
+                    className="w-full bg-white/5 border border-white/10 p-4 pl-12 pr-12 rounded-2xl outline-none focus:border-primary/30 transition-all font-medium text-sm text-white"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowNew(!showNew)}
+                    className="absolute right-5 top-1/2 -translate-y-1/2 text-muted/30 hover:text-primary transition-colors"
+                  >
+                    {showNew ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
                 </div>
                 {formik.touched.newPassword && formik.errors.newPassword && (
                   <p className="text-red-500/80 text-[9px] uppercase font-bold tracking-widest ml-4">{formik.errors.newPassword}</p>
@@ -154,11 +171,18 @@ export default function ChangePassword() {
                     <ShieldCheck size={18} />
                   </div>
                   <input
-                    type="password"
+                    type={showConfirm ? "text" : "password"}
                     {...formik.getFieldProps('confirmPassword')}
                     placeholder="Repeat new password"
-                    className="w-full bg-white/5 border border-white/10 p-4 pl-12 rounded-2xl outline-none focus:border-primary/30 transition-all font-medium text-sm text-white"
+                    className="w-full bg-white/5 border border-white/10 p-4 pl-12 pr-12 rounded-2xl outline-none focus:border-primary/30 transition-all font-medium text-sm text-white"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirm(!showConfirm)}
+                    className="absolute right-5 top-1/2 -translate-y-1/2 text-muted/30 hover:text-primary transition-colors"
+                  >
+                    {showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
                 </div>
                 {formik.touched.confirmPassword && formik.errors.confirmPassword && (
                   <p className="text-red-500/80 text-[9px] uppercase font-bold tracking-widest ml-4">{formik.errors.confirmPassword}</p>
