@@ -108,7 +108,7 @@ export default function Cart() {
                                     </motion.div>
                                 ))}
                             </AnimatePresence>
-                            
+
                             <div className="flex items-center justify-between px-2 pt-2">
                                 <button
                                     onClick={() => dispatch(clearCart())}
@@ -117,7 +117,7 @@ export default function Cart() {
                                     <Trash2 size={14} className="group-hover:scale-110 transition-transform" />
                                     Clear Shopping Bag
                                 </button>
-                                <p className="text-[10px] font-bold text-muted/20 uppercase tracking-[0.1em]">Free shipping on orders over $500</p>
+                                {/* <p className="text-[10px] font-bold text-muted/20 uppercase tracking-[0.1em]">Free shipping on orders over $500</p> */}
                             </div>
                         </div>
 
@@ -129,7 +129,7 @@ export default function Cart() {
                                 </div>
 
                                 <h3 className="text-sm font-black uppercase tracking-[0.3em] pb-4 border-b border-white/5 text-white">Summary</h3>
-                                
+
                                 <div className="space-y-4 relative z-10">
                                     <div className="flex justify-between text-[12px] font-bold uppercase tracking-widest text-muted/60">
                                         <span>Subtotal</span>
@@ -143,9 +143,9 @@ export default function Cart() {
                                         <span className="flex items-center gap-2">Estimated Shipping <span className="px-2 py-0.5 bg-primary/20 text-primary text-[8px] rounded">FREE</span></span>
                                         <span className="text-emerald-400">$0.00</span>
                                     </div>
-                                    
+
                                     <div className="h-[1px] bg-white/5 my-6" />
-                                    
+
                                     <div className="flex justify-between items-end">
                                         <div className="space-y-0.5">
                                             <span className="text-[9px] font-black uppercase tracking-[0.2em] text-muted/30">Total Investment</span>
@@ -161,7 +161,7 @@ export default function Cart() {
                                     Proceed to Checkout <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                                 </button>
                             </div>
-                            
+
                             <div className="px-4 py-3 bg-white/5 rounded-2xl border border-white/5 flex items-center gap-3">
                                 <div className="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500">
                                     <Receipt size={14} />

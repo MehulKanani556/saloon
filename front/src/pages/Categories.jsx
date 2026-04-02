@@ -67,8 +67,8 @@ export default function Categories() {
   return (
     <div className="space-y-12">
       <AdminHeader
-        title="Ritual Taxonomy"
-        subtitle="Architectural Classification & Service Archives"
+        title="Service Categories"
+        subtitle="Classification & Service Management"
         icon={LayoutGrid}
         rightContent={
           <div className="flex flex-col lg:flex-row gap-6 w-full lg:w-auto">
@@ -99,9 +99,9 @@ export default function Categories() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-background/80">
-                <th className="px-3 lg:px-5 py-3 lg:py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Taxonomy Protocol</th>
-                <th className="px-3 lg:px-5 py-3 lg:py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Institutional Context</th>
-                <th className="px-3 lg:px-5 py-3 lg:py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap text-center">Status Matrix</th>
+                <th className="px-3 lg:px-5 py-3 lg:py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Category Name</th>
+                <th className="px-3 lg:px-5 py-3 lg:py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Description</th>
+                <th className="px-3 lg:px-5 py-3 lg:py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap text-center">Status</th>
                 <th className="px-3 lg:px-5 py-3 lg:py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap text-right">Actions</th>
               </tr>
             </thead>
@@ -177,8 +177,8 @@ export default function Categories() {
       <Modal
         isOpen={showForm}
         onClose={() => { setShowForm(false); setEditingCategory(null); formik.resetForm(); }}
-        title={editingCategory ? 'Refine Classification' : 'Induct Category'}
-        subtitle="Operational Matrix Management"
+        title={editingCategory ? 'Edit Category' : 'Add New Category'}
+        subtitle="Category Management"
       >
         <form onSubmit={formik.handleSubmit} className="space-y-10 p-2">
           <div className="space-y-4">
@@ -210,7 +210,7 @@ export default function Categories() {
             disabled={formik.isSubmitting}
             className="w-full py-6 bg-primary text-secondary rounded-2xl font-black text-[11px] uppercase tracking-[0.5em] shadow-2xl hover:bg-primary/90 transition-all flex items-center justify-center gap-4 active:scale-[0.98] disabled:opacity-50 font-luxury "
           >
-            {formik.isSubmitting ? 'SYNCING MATRIX...' : (editingCategory ? 'COMMIT CLASSIFICATION' : 'AUTHORIZE TAXONOMY')}
+            {formik.isSubmitting ? 'SAVING...' : (editingCategory ? 'SAVE CHANGES' : 'ADD CATEGORY')}
           </button>
         </form>
       </Modal>
@@ -218,8 +218,8 @@ export default function Categories() {
       <Modal
         isOpen={!!deletingCategory}
         onClose={() => setDeletingCategory(null)}
-        title="PURGE TAXONOMY?"
-        subtitle="Final Forensic Dissolution"
+        title="DELETE CATEGORY?"
+        subtitle="Permanent Removal"
         maxWidth="max-w-sm"
       >
         <div className="text-center p-4">
@@ -234,7 +234,7 @@ export default function Categories() {
               onClick={handleDelete}
               className="w-full py-5 bg-rose-500 text-white rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] shadow-xl active:scale-95 transition-all font-luxury "
             >CONFIRM PURGE</button>
-            <button onClick={() => setDeletingCategory(null)} className="w-full py-5 bg-secondary text-muted rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] border border-white/10 hover:text-white transition-all font-luxury ">ABORT PROTOCOL</button>
+            <button onClick={() => setDeletingCategory(null)} className="w-full py-5 bg-secondary text-muted rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] border border-white/10 hover:text-white transition-all font-luxury ">CANCEL</button>
           </div>
         </div>
       </Modal>
