@@ -122,23 +122,23 @@ function App() {
         reverseOrder={false}
         toastOptions={{
           style: {
-            background: 'rgba(26, 26, 26, 0.9)',
-            backdropFilter: 'blur(16px)',
-            border: '1px solid rgba(201, 162, 39, 0.2)',
-            boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.5)',
+            // background: 'rgba(26, 26, 26, 0.9)',
+            // backdropFilter: 'blur(16px)',
+            // border: '1px solid rgba(201, 162, 39, 0.2)',
+            // boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.5)',
             borderRadius: '16px',
-            color: '#FFFFFF',
+            // color: '#FFFFFF',
             fontWeight: '900',
             fontSize: '10px',
             textTransform: 'uppercase',
             letterSpacing: '0.1em'
           },
-          success: {
-            iconTheme: {
-              primary: '#C9A227',
-              secondary: '#1A1A1A',
-            },
-          },
+          // success: {
+          //   iconTheme: {
+          //     primary: '#C9A227',
+          //     secondary: '#1A1A1A',
+          //   },
+          // },
         }}
       />
       <AppContent />
