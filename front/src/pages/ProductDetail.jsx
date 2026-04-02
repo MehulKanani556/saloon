@@ -61,7 +61,7 @@ export default function ProductDetail() {
 
     const handleAddToCart = () => {
         dispatch(addToCart({ ...product, qty: quantity }));
-        toast.success(`${product.name} induct into Cart Matrix`);
+        toast.success(`${product.name} added to Cart Matrix`);
     };
 
     const handleWishlist = () => {
@@ -189,7 +189,7 @@ export default function ProductDetail() {
                                         onClick={handleAddToCart}
                                         className="flex-1 min-w-[240px] h-16 bg-primary text-secondary rounded-2xl font-black text-[11px] uppercase tracking-[0.4em] flex items-center justify-center gap-4 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-3xl shadow-primary/20"
                                     >
-                                        <ShoppingBag size={20} /> Indyct to Cart
+                                        <ShoppingBag size={20} /> Add to Cart
                                     </button>
 
                                     <button
