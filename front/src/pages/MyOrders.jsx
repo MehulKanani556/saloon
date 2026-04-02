@@ -13,6 +13,7 @@ export default function MyOrders() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { orders = [], loading } = useSelector((state) => state.orders || {});
+  const { userInfo } = useSelector((state) => state.auth || {});
 
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [reviewModalProduct, setReviewModalProduct] = useState(null);
@@ -40,6 +41,13 @@ export default function MyOrders() {
     try {
       const res = await api.get(`/products/${productId}`);
       setProductData(res.data);
+      if (res.data.reviews && userInfo) {
+        const myReview = res.data.reviews.find(r => r.user?.toString() === userInfo._id?.toString());
+        if (myReview) {
+          setRating(myReview.rating);
+          setComment(myReview.comment);
+        }
+      }
     } catch (err) {
       toast.error('Failed to load product details');
     }
@@ -50,11 +58,10 @@ export default function MyOrders() {
     try {
       setReviewLoading(true);
       await api.post(`/products/${reviewModalProduct}/reviews`, { rating, comment });
-      toast.success('Review submitted successfully!');
+      toast.success('Review saved perfectly!');
       const res = await api.get(`/products/${reviewModalProduct}`);
       setProductData(res.data);
-      setRating(5);
-      setComment('');
+      dispatch(fetchMyOrders());
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to submit review');
     } finally {
@@ -183,11 +190,11 @@ export default function MyOrders() {
                                   {item.name || item.product?.name || 'Aesthetic Good'}
                                 </span>
                                 {item.product && (
-                                  <button 
+                                  <button
                                     onClick={(e) => { e.stopPropagation(); handleOpenReview(item.product._id || item.product); }}
                                     className="text-[12px] font-bold text-primary/60 hover:text-primary uppercase tracking-widest underline decoration-primary/30 transition-colors text-left mt-1"
                                   >
-                                    Add Review
+                                    {item.product?.reviews?.some(r => r.user?.toString() === userInfo?._id?.toString()) ? 'Edit Review' : 'Add Review'}
                                   </button>
                                 )}
                               </div>
@@ -214,7 +221,7 @@ export default function MyOrders() {
             </AnimatePresence>
           </div>
         )
-      }
+        }
       </div >
 
       {/* Order Details Modal - Pro Interface */}
@@ -228,7 +235,7 @@ export default function MyOrders() {
               onClick={() => setSelectedOrder(null)}
               className="absolute inset-0 bg-background/95 backdrop-blur-md"
             />
-            
+
             <motion.div
               layoutId={`order-card-${selectedOrder._id}`}
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -249,7 +256,7 @@ export default function MyOrders() {
                       ORDER ID: {selectedOrder._id}
                     </p>
                   </div>
-                  <button 
+                  <button
                     onClick={() => setSelectedOrder(null)}
                     className="p-2.5 bg-white/[0.02] border border-white/5 rounded-xl text-muted hover:text-white transition-all focus:outline-none"
                   >
@@ -259,7 +266,7 @@ export default function MyOrders() {
 
                 {/* Modal Body */}
                 <div className="space-y-8 md:space-y-10 max-h-[65vh] overflow-y-auto scrollbar-hide pr-1 md:pr-2">
-                  
+
                   {/* Status & Date */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-8 bg-white/[0.02] p-5 md:p-6 rounded-2xl md:rounded-3xl border border-white/[0.03]">
                     <div className="space-y-1.5">
@@ -302,12 +309,12 @@ export default function MyOrders() {
                               ${(item.price * item.qty).toFixed(2)}
                             </span>
                             {item.product && (
-                                <button 
-                                  onClick={(e) => { e.stopPropagation(); handleOpenReview(item.product._id || item.product); }}
-                                  className="text-[8px] font-bold text-primary/60 hover:text-primary uppercase tracking-widest underline decoration-primary/30 transition-colors"
-                                >
-                                  Leave Review
-                                </button>
+                              <button
+                                onClick={(e) => { e.stopPropagation(); handleOpenReview(item.product._id || item.product); }}
+                                className="text-[8px] font-bold text-primary/60 hover:text-primary uppercase tracking-widest underline decoration-primary/30 transition-colors"
+                              >
+                                {item.product?.reviews?.some(r => r.user?.toString() === userInfo?._id?.toString()) ? 'Edit Review' : 'Leave Review'}
+                              </button>
                             )}
                           </div>
                         </div>
@@ -369,7 +376,7 @@ export default function MyOrders() {
               onClick={() => setReviewModalProduct(null)}
               className="absolute inset-0 bg-background/95 backdrop-blur-md"
             />
-            
+
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -388,7 +395,7 @@ export default function MyOrders() {
                       {productData ? productData.name : 'Loading...'}
                     </h2>
                   </div>
-                  <button 
+                  <button
                     onClick={() => setReviewModalProduct(null)}
                     className="p-2.5 bg-white/[0.02] border border-white/5 rounded-xl text-muted hover:text-white transition-all focus:outline-none"
                   >
@@ -399,7 +406,7 @@ export default function MyOrders() {
 
               {/* Scrollable Content inside Modal */}
               <div className="px-5 sm:px-8 md:px-10 pb-5 sm:pb-8 md:pb-10 overflow-y-auto scrollbar-hide flex-1 space-y-8">
-                
+
                 {/* Write Review Form */}
                 <div className="space-y-5 bg-white/[0.02] p-6 lg:p-8 rounded-3xl border border-white/[0.03]">
                   <h4 className="text-[10px] font-black text-primary uppercase tracking-[0.3em] flex items-center gap-3">
@@ -407,33 +414,33 @@ export default function MyOrders() {
                   </h4>
                   <div className="space-y-4">
                     <div className="space-y-2">
-                       <label className="text-[9px] font-black text-white/20 uppercase tracking-widest">Aesthetic Rating</label>
-                       <div className="flex items-center gap-2">
-                         {[1, 2, 3, 4, 5].map((star) => (
-                           <button
-                             key={star}
-                             onClick={() => setRating(star)}
-                             className="focus:outline-none transition-transform hover:scale-110 active:scale-95"
-                           >
-                             <Star 
-                               size={24} 
-                               className={star <= rating ? "text-primary fill-primary drop-shadow-primary-sm" : "text-white/10"} 
-                             />
-                           </button>
-                         ))}
-                       </div>
+                      <label className="text-[9px] font-black text-white/20 uppercase tracking-widest">Aesthetic Rating</label>
+                      <div className="flex items-center gap-2">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <button
+                            key={star}
+                            onClick={() => setRating(star)}
+                            className="focus:outline-none transition-transform hover:scale-110 active:scale-95"
+                          >
+                            <Star
+                              size={24}
+                              className={star <= rating ? "text-primary fill-primary drop-shadow-primary-sm" : "text-white/10"}
+                            />
+                          </button>
+                        ))}
+                      </div>
                     </div>
                     <div className="space-y-2">
-                       <label className="text-[9px] font-black text-white/20 uppercase tracking-widest">Chronicle Details</label>
-                       <textarea
-                         value={comment}
-                         onChange={(e) => setComment(e.target.value)}
-                         rows={3}
-                         placeholder="Describe your acquisition experience..."
-                         className="w-full bg-[#111111] border border-white/10 focus:border-primary/40 p-4 rounded-xl outline-none text-[12px] font-bold text-white transition-all resize-none placeholder:text-white/10 uppercase tracking-wide"
-                       />
+                      <label className="text-[9px] font-black text-white/20 uppercase tracking-widest">Chronicle Details</label>
+                      <textarea
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                        rows={3}
+                        placeholder="Describe your acquisition experience..."
+                        className="w-full bg-[#111111] border border-white/10 focus:border-primary/40 p-4 rounded-xl outline-none text-[12px] font-bold text-white transition-all resize-none placeholder:text-white/10 uppercase tracking-wide"
+                      />
                     </div>
-                    <button 
+                    <button
                       onClick={submitReview}
                       disabled={reviewLoading || !productData}
                       className="w-full py-4 bg-primary text-secondary hover:bg-white hover:text-primary rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg active:scale-[0.98] disabled:opacity-50"
@@ -455,17 +462,17 @@ export default function MyOrders() {
                       {productData.reviews.map((rev, index) => (
                         <div key={index} className="bg-[#111111] p-5 rounded-2xl border border-white/[0.03] space-y-3">
                           <div className="flex justify-between items-start">
-                             <div className="space-y-1">
-                               <p className="text-[11px] font-black text-white uppercase tracking-wider">{rev.name}</p>
-                               <p className="text-[8px] font-bold text-white/20 uppercase tracking-widest">
-                                 {format(new Date(rev.createdAt), 'MMM dd, yyyy')}
-                               </p>
-                             </div>
-                             <div className="flex gap-1">
-                               {[...Array(5)].map((_, i) => (
-                                 <Star key={i} size={10} className={i < rev.rating ? "text-primary fill-primary" : "text-white/10"} />
-                               ))}
-                             </div>
+                            <div className="space-y-1">
+                              <p className="text-[11px] font-black text-white uppercase tracking-wider">{rev.name}</p>
+                              <p className="text-[8px] font-bold text-white/20 uppercase tracking-widest">
+                                {format(new Date(rev.createdAt), 'MMM dd, yyyy')}
+                              </p>
+                            </div>
+                            <div className="flex gap-1">
+                              {[...Array(5)].map((_, i) => (
+                                <Star key={i} size={10} className={i < rev.rating ? "text-primary fill-primary" : "text-white/10"} />
+                              ))}
+                            </div>
                           </div>
                           <p className="text-[10px] font-medium text-muted/60 leading-relaxed italic tracking-wide">
                             "{rev.comment}"

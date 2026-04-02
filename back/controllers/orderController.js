@@ -38,7 +38,7 @@ const createOrder = async (req, res) => {
             totalAmount,
             shippingAddress,
             paymentIntentId,
-            paymentStatus: paymentIntentId ? 'Paid' : 'Pending' 
+            paymentStatus: paymentIntentId ? 'Paid' : 'Pending'
         });
 
         const createdOrder = await order.save();
@@ -106,7 +106,9 @@ const updateOrderStatus = async (req, res) => {
 // @desc Get current user's orders
 const getMyOrders = async (req, res) => {
     try {
-        const orders = await Order.find({ user: req.user._id }).sort('-createdAt');
+        const orders = await Order.find({ user: req.user._id })
+            .populate('items.product', 'name price image reviews')
+            .sort('-createdAt');
         res.status(200).json(orders);
     } catch (err) {
         res.status(500).json({ message: 'My Orders retrieval failed', error: err.message });

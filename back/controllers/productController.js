@@ -97,24 +97,27 @@ const createProductReview = async (req, res) => {
             );
 
             if (alreadyReviewed) {
-                return res.status(400).json({ message: 'Product already reviewed' });
+                alreadyReviewed.rating = Number(rating);
+                alreadyReviewed.comment = comment;
+                
+                product.rating = product.reviews.reduce((acc, item) => item.rating + acc, 0) / product.reviews.length;
+                await product.save();
+                return res.status(200).json({ message: 'Review updated' });
+            } else {
+                const review = {
+                    name: req.user.name,
+                    rating: Number(rating),
+                    comment,
+                    user: req.user._id,
+                };
+
+                product.reviews.push(review);
+                product.numReviews = product.reviews.length;
+                product.rating = product.reviews.reduce((acc, item) => item.rating + acc, 0) / product.reviews.length;
+
+                await product.save();
+                return res.status(201).json({ message: 'Review added' });
             }
-
-            const review = {
-                name: req.user.name,
-                rating: Number(rating),
-                comment,
-                user: req.user._id,
-            };
-
-            product.reviews.push(review);
-            product.numReviews = product.reviews.length;
-            product.rating =
-                product.reviews.reduce((acc, item) => item.rating + acc, 0) /
-                product.reviews.length;
-
-            await product.save();
-            res.status(201).json({ message: 'Review added' });
         } else {
             res.status(404).json({ message: 'Product not found' });
         }

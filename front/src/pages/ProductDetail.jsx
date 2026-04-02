@@ -13,7 +13,9 @@ import {
     RefreshCcw,
     ChevronRight,
     Loader2,
-    Package
+    Package,
+    MessageSquare,
+    User
 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../redux/slices/cartSlice';
@@ -216,6 +218,67 @@ export default function ProductDetail() {
                                         <p className="text-[10px] font-black uppercase tracking-widest text-muted/40 ml-7">{item?.detail}</p>
                                     </div>
                                 ))}
+                            </div>
+
+                            {/* Customer Reviews */}
+                            <div className="space-y-8 pt-10 border-t border-white/5">
+                                <div className="flex items-center justify-between">
+                                    <h3 className="text-[11px] font-black text-primary uppercase tracking-[0.3em] flex items-center gap-3">
+                                        <MessageSquare size={16} /> Customer Reviews
+                                    </h3>
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex items-center gap-1">
+                                            {[...Array(5)].map((_, i) => (
+                                                <Star key={i} size={14} className={i < Math.round(product.rating || 0) ? "text-primary fill-primary" : "text-white/10"} />
+                                            ))}
+                                        </div>
+                                        <span className="text-[10px] font-black text-muted uppercase tracking-widest">
+                                            {product.rating?.toFixed(1) || '0.0'} ({product.numReviews || 0})
+                                        </span>
+                                    </div>
+                                </div>
+
+                                {product.reviews && product.reviews.length > 0 ? (
+                                    <div className="space-y-4">
+                                        {product.reviews.map((rev, index) => (
+                                            <motion.div
+                                                key={index}
+                                                initial={{ opacity: 0, y: 10 }}
+                                                whileInView={{ opacity: 1, y: 0 }}
+                                                viewport={{ once: true }}
+                                                transition={{ delay: index * 0.08 }}
+                                                className="bg-white/[0.02] p-6 rounded-2xl border border-white/[0.04] space-y-3"
+                                            >
+                                                <div className="flex justify-between items-start">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
+                                                            <User size={14} className="text-primary" />
+                                                        </div>
+                                                        <div className="space-y-0.5">
+                                                            <p className="text-[11px] font-black text-white uppercase tracking-wider">{rev.name}</p>
+                                                            <p className="text-[8px] font-bold text-muted/30 uppercase tracking-widest">
+                                                                {new Date(rev.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex items-center gap-0.5">
+                                                        {[...Array(5)].map((_, i) => (
+                                                            <Star key={i} size={10} className={i < rev.rating ? "text-primary fill-primary" : "text-white/10"} />
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                                <p className="text-[11px] font-medium text-muted/60 leading-relaxed pl-12">
+                                                    "{rev.comment}"
+                                                </p>
+                                            </motion.div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="py-12 text-center bg-white/[0.01] rounded-2xl border border-white/[0.03]">
+                                        <MessageSquare size={24} className="text-white/10 mx-auto mb-4" />
+                                        <p className="text-[10px] font-black text-muted/30 uppercase tracking-[0.3em]">No reviews yet. Be the first to review this product.</p>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
