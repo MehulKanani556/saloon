@@ -267,10 +267,11 @@ export default function BookAppointment() {
   const totalPrice = selectedServices.reduce((sum, s) => sum + s.price, 0);
   const totalDuration = selectedServices.reduce((sum, s) => sum + s.duration, 0);
 
-  const categories = ['All', ...new Set(services.map(s => s.category?.name).filter(Boolean))];
+  const availableServices = (services || []).filter(s => s.staffCount > 0);
+  const categories = ['All', ...new Set(availableServices.map(s => s.category?.name).filter(Boolean))];
   const filteredServices = selectedCategory === 'All'
-    ? services
-    : services.filter(s => s.category?.name === selectedCategory);
+    ? availableServices
+    : availableServices.filter(s => s.category?.name === selectedCategory);
 
   const nextStep = () => {
     if (step === 1 && selectedServices.length === 0) return;

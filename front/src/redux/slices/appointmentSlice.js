@@ -75,6 +75,7 @@ const appointmentSlice = createSlice({
     name: 'appointments',
     initialState: {
         appointments: [],
+        leaves: [],
         occupiedSlots: [],
         loading: false,
         error: null
@@ -86,7 +87,12 @@ const appointmentSlice = createSlice({
             .addCase(fetchAppointments.pending, (state) => { state.loading = true; })
             .addCase(fetchAppointments.fulfilled, (state, action) => {
                 state.loading = false;
-                state.appointments = action.payload;
+                if (action.payload.appointments) {
+                    state.appointments = action.payload.appointments;
+                    state.leaves = action.payload.leaves || [];
+                } else {
+                    state.appointments = action.payload;
+                }
             })
             .addCase(fetchAppointments.rejected, (state, action) => {
                 state.loading = false;

@@ -157,7 +157,7 @@ export default function StaffSettings() {
 
                             <button
                                 onClick={() => { setIsEditing(!isEditing); if(!isEditing) setPreview(null); }}
-                                className={`flex items-center gap-3 px-8 py-4 rounded-xl font-black uppercase text-[10px] tracking-[0.2em] transition-all border group shrink-0 ${isEditing ? 'bg-background border-white/10 text-muted/40 hover:text-white' : 'bg-luxury-gradient text-secondary border-transparent shadow-lg hover:scale-105'}`}
+                                className={`flex items-center gap-3 px-8 py-2 md:py-4 rounded-lg md:rounded-xl font-black uppercase text-[10px] tracking-[0.2em] transition-all border group shrink-0 ${isEditing ? 'bg-background border-white/10 text-muted/40 hover:text-white' : 'bg-luxury-gradient text-secondary border-transparent shadow-lg hover:scale-105'}`}
                             >
                                 <Edit3 size={16} />
                                 {isEditing ? 'Abort' : 'Modify'}

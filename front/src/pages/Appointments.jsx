@@ -21,7 +21,7 @@ export default function Appointments() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { userInfo } = useSelector(state => state.auth);
-  const { appointments, loading: appointmentsLoading } = useSelector(state => state.appointments);
+  const { appointments, leaves, loading: appointmentsLoading } = useSelector(state => state.appointments);
   const { services } = useSelector(state => state.services);
   const { clients } = useSelector(state => state.clients);
 
@@ -133,8 +133,14 @@ export default function Appointments() {
   const monthEnd = endOfMonth(currentDate);
   const days = eachDayOfInterval({ start: monthStart, end: monthEnd });
 
-  const filteredAppointments = appointments.filter(app =>
+  const filteredAppointments = (appointments || []).filter(app =>
     isSameDay(new Date(app.appointmentDate), selectedDate)
+  );
+
+  const filteredLeaves = (leaves || []).filter(lv => 
+    isSameDay(new Date(lv.startDate), selectedDate) || 
+    isSameDay(new Date(lv.endDate), selectedDate) ||
+    (new Date(lv.startDate) <= selectedDate && new Date(lv.endDate) >= selectedDate)
   );
 
   const getStatusStyles = (status) => {
@@ -209,7 +215,12 @@ export default function Appointments() {
               ))}
               {days.map((day, i) => {
                 const isSelected = isSameDay(day, selectedDate);
-                const hasApps = appointments.some(a => isSameDay(new Date(a.appointmentDate), day));
+                const hasApps = (appointments || []).some(a => isSameDay(new Date(a.appointmentDate), day));
+                const hasLeaves = (leaves || []).some(lv => 
+                  isSameDay(new Date(lv.startDate), day) || 
+                  isSameDay(new Date(lv.endDate), day) ||
+                  (new Date(lv.startDate) <= day && new Date(lv.endDate) >= day)
+                );
 
                 return (
                   <motion.div
@@ -226,9 +237,14 @@ export default function Appointments() {
                   `}
                   >
                     <span className={`text-base md:text-lg font-black tracking-tighter ${isSelected ? 'text-secondary' : 'text-white'}`}>{format(day, 'd')}</span>
-                    {hasApps && (
-                      <div className={`w-1 h-1 md:w-1.5 md:h-1.5 rounded-full absolute bottom-0.5  sm:bottom-1.5 md:bottom-2 ${isSelected ? 'bg-secondary' : 'bg-primary shadow-lg shadow-primary/40'}`} />
-                    )}
+                    <div className="flex gap-1 absolute bottom-1.5 md:bottom-2">
+                      {hasApps && (
+                        <div className={`w-1 h-1 md:w-1.5 md:h-1.5 rounded-full ${isSelected ? 'bg-secondary' : 'bg-primary shadow-lg shadow-primary/40'}`} />
+                      )}
+                      {hasLeaves && (
+                        <div className={`w-1 h-1 md:w-1.5 md:h-1.5 rounded-full ${isSelected ? 'bg-secondary/40' : 'bg-rose-500 shadow-lg shadow-rose-500/40 animate-pulse'}`} />
+                      )}
+                    </div>
                   </motion.div>
                 );
               })}
@@ -244,12 +260,39 @@ export default function Appointments() {
               <p className="text-primary font-black text-[9px] uppercase tracking-[0.3em]">{format(selectedDate, 'MMMM do, yyyy')}</p>
             </div>
             <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-secondary border border-white/5 flex items-center justify-center text-primary font-black text-lg shadow-inner">
-              {filteredAppointments.length}
+              {filteredAppointments.length + filteredLeaves.length}
             </div>
           </div>
 
           <div className="flex-1 overflow-y-auto pr-3 custom-scrollbar space-y-4">
-            {filteredAppointments.length > 0 ? filteredAppointments.map((app, index) => (
+            {/* Approved Leaves First */}
+            {filteredLeaves.map((lv, idx) => (
+              <motion.div
+                key={lv._id}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="group relative bg-rose-500/5 rounded-xl md:rounded-2xl p-4 border border-rose-500/10 shadow-3xl overflow-hidden"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-background border border-rose-500/20 p-1 shrink-0 relative">
+                    <img
+                      src={lv.staff?.profileImage ? (lv.staff.profileImage.startsWith('http') ? lv.staff.profileImage : `${IMAGE_URL}${lv.staff.profileImage}`) : `https://api.dicebear.com/9.x/adventurer/svg?seed=${lv.staff?.name}`}
+                      className="w-full h-full rounded-xl object-cover grayscale"
+                    />
+                    <div className="absolute inset-0 bg-rose-500/20" />
+                  </div>
+                  <div>
+                    <h4 className="font-black text-rose-500 tracking-tighter uppercase text-sm leading-none mb-2">{lv.staff?.name}</h4>
+                    <div className="flex items-center gap-2">
+                       <span className="text-[8px] font-black uppercase text-rose-500/60 bg-rose-500/10 px-2 py-1 rounded-lg border border-rose-500/20">STAFF UNAVAILABLE</span>
+                       <span className="text-[8px] font-black uppercase text-muted/60">{lv.type}</span>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+
+            {filteredAppointments.length > 0 || filteredLeaves.length > 0 ? filteredAppointments.map((app, index) => (
               <motion.div
                 key={app._id}
                 initial={{ opacity: 0, y: 30 }}

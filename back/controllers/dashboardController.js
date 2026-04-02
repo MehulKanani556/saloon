@@ -11,7 +11,8 @@ const getDashboardInsights = async (req, res) => {
         const staffId = req.user._id;
 
         const [appointments, clients, services, staff, pendingLeaves] = await Promise.all([
-            Appointment.find(isStaff ? { 'assignments.staff': staffId } : {}).populate('client assignments.service assignments.staff'),
+            Appointment.find(isStaff ? { 'assignments.staff': staffId } : {})
+                .populate(['client', 'assignments.staff', { path: 'assignments.service', populate: { path: 'category' } }]),
             User.countDocuments({ role: 'User' }),
             Service.find().populate('category'),
             User.find({ role: 'Staff' }).limit(2),

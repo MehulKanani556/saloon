@@ -222,7 +222,7 @@ export default function Invoices() {
               placeholder="Query Masterpiece Archives..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-secondary/40 backdrop-blur-md border border-white/5 rounded-2xl px-16 py-5 text-[11px] font-black uppercase tracking-[0.2em] outline-none focus:border-primary/50 shadow-3xl transition-all text-white placeholder:text-white/10"
+              className="w-full bg-secondary/40 backdrop-blur-md border border-white/5 rounded-2xl px-16 py-3 md:py-5 text-[11px] font-black uppercase tracking-[0.2em] outline-none focus:border-primary/50 shadow-3xl transition-all text-white placeholder:text-white/10"
             />
           </div>
         }

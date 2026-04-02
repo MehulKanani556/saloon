@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { Plus, Search, Scissors, Pencil, Trash2, Heart, Clock, MoreVertical, Filter, X, Image as ImageIcon, Sparkles, Layers, Target, Activity, Zap, Upload } from 'lucide-react';
+import { Plus, Search, Scissors, Pencil, Trash2, Heart, Clock, MoreVertical, Filter, X, Image as ImageIcon, Sparkles, Layers, Target, Activity, Zap, Upload, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchServices, addService, updateService, deleteService } from '../redux/slices/serviceSlice';
@@ -374,8 +374,14 @@ export default function AdminServices() {
                   </span>
                 </div>
 
-                <div className="pt-2 border-t border-white/5 mt-auto">
+                <div className="pt-4 border-t border-white/5 mt-auto flex items-center justify-between">
                   <p className="text-[8px] font-black text-muted/30 uppercase tracking-[0.4em]  truncate">PROD-{service._id.slice(-8).toUpperCase()}</p>
+                  {service.staffCount === 0 && (
+                    <div className="flex items-center gap-2 px-2 py-1 bg-red-500/10 border border-red-500/20 rounded-lg animate-pulse">
+                      <AlertCircle size={10} className="text-red-500" />
+                      <span className="text-[7px] font-black text-red-500 uppercase tracking-widest">NO STAFF</span>
+                    </div>
+                  )}
                 </div>
               </div>
             </motion.div>

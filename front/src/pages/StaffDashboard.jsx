@@ -52,6 +52,7 @@ export default function StaffDashboard() {
   }, [dispatch]);
 
   const mobileBarSize = windowWidth < 426 ? 6 : (windowWidth < 768 ? 12 : 28);
+  const areaStrokeWidth = windowWidth < 1024 ? 3 : 6;
 
   if (loading) return (
     <div className="flex items-center justify-center h-[70vh]">
@@ -155,7 +156,7 @@ export default function StaffDashboard() {
                   itemStyle={{ color: '#C9A227', fontWeight: 900, textTransform: 'uppercase', fontSize: '10px', fontStyle: '', letterSpacing: '1px' }}
                   labelStyle={{ color: '#fff', fontWeight: 900, marginBottom: '8px', opacity: 0.5, fontSize: '8px', textTransform: 'uppercase', letterSpacing: '2px' }}
                 />
-                <Area type="monotone" dataKey="revenue" stroke="#C9A227" strokeWidth={6} fillOpacity={1} fill="url(#colorRev)" />
+                <Area type="monotone" dataKey="revenue" stroke="#C9A227" strokeWidth={areaStrokeWidth} fillOpacity={1} fill="url(#colorRev)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>

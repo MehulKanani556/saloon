@@ -51,7 +51,19 @@ const createAppointment = async (req, res) => {
             });
 
             let assignedStaffId = null;
+            const Leave = require('../models/Leave');
+            
             for (const stf of eligibleStaff) {
+                // Check Leave Conflict
+                const onLeave = await Leave.findOne({
+                    staff: stf._id,
+                    status: 'Approved',
+                    startDate: { $lte: requestedTime },
+                    endDate: { $gte: requestedTime }
+                });
+
+                if (onLeave) continue;
+
                 const conflict = await Appointment.findOne({
                     'assignments.staff': stf._id,
                     appointmentDate: requestedTime,
@@ -70,7 +82,20 @@ const createAppointment = async (req, res) => {
             finalAssignments = serviceIds.map(sid => ({ service: sid, staff: assignedStaffId }));
         } else {
             // Verify user-selected staff availability
+            const Leave = require('../models/Leave');
             for (const asm of finalAssignments) {
+                // Check Leave Conflict
+                const onLeave = await Leave.findOne({
+                    staff: asm.staff,
+                    status: 'Approved',
+                    startDate: { $lte: requestedTime },
+                    endDate: { $gte: requestedTime }
+                });
+
+                if (onLeave) {
+                    return res.status(400).json({ message: 'The selected master is officially unavailable (Approved Leave) during this temporal slot' });
+                }
+
                 const conflict = await Appointment.findOne({
                     'assignments.staff': asm.staff,
                     appointmentDate: requestedTime,
@@ -125,8 +150,18 @@ const createAppointment = async (req, res) => {
 const getAppointments = async (req, res) => {
     const isStaff = req.user.role === 'Staff';
     const filter = isStaff ? { 'assignments.staff': req.user._id } : {};
-    const appointments = await Appointment.find(filter).populate('client').populate('assignments.service').populate('assignments.staff');
-    res.json(appointments);
+    
+    const [appointments, leaves] = await Promise.all([
+        Appointment.find(filter).populate('client assignments.service assignments.staff'),
+        require('../models/Leave').find({ 
+            status: 'Approved',
+            ...(isStaff ? { staff: req.user._id } : {})
+        }).populate('staff', 'name profileImage')
+    ]);
+
+    // Send both but format leaves to match calendar expectations if needed
+    // For now, we'll send a structured response or just return both
+    res.json({ appointments, leaves });
 };
 
 const deleteAppointment = async (req, res) => {
@@ -263,14 +298,36 @@ const getOccupiedSlots = async (req, res) => {
             return res.json({ allOccupied: true, message: 'No masters qualified for this ritual' });
         }
 
-        const appointments = await Appointment.find({
-            'assignments.staff': { $in: qualifiedStaff.map(s => s._id) },
-            appointmentDate: { $gte: targetDate, $lt: nextDate },
-            status: { $ne: 'Cancelled' }
-        }).populate('assignments.service');
+        const Leave = require('../models/Leave');
+        const [appointments, leaves] = await Promise.all([
+            Appointment.find({
+                'assignments.staff': { $in: qualifiedStaff.map(s => s._id) },
+                appointmentDate: { $gte: targetDate, $lt: nextDate },
+                status: { $ne: 'Cancelled' }
+            }).populate('assignments.service'),
+            Leave.find({
+                staff: { $in: qualifiedStaff.map(s => s._id) },
+                status: 'Approved',
+                startDate: { $lte: nextDate },
+                endDate: { $gte: targetDate }
+            })
+        ]);
 
         const staffBusyBlocks = {};
         qualifiedStaff.forEach(s => staffBusyBlocks[s._id] = []);
+
+        // Add Leave Blocks (Staff is busy entire day if on leave)
+        leaves.forEach(lv => {
+            if (staffBusyBlocks[lv.staff]) {
+                const lvStart = lv.startDate.getTime();
+                const lvEnd = lv.endDate.getTime();
+                // If the leave has specific times, use them, otherwise full day
+                staffBusyBlocks[lv.staff].push({ 
+                    start: lv.startTime ? moment(targetDate).set({ hour: lv.startTime.split(':')[0], minute: lv.startTime.split(':')[1] }).toDate().getTime() : targetDate.getTime(), 
+                    end: lv.endTime ? moment(targetDate).set({ hour: lv.endTime.split(':')[0], minute: lv.endTime.split(':')[1] }).toDate().getTime() : nextDate.getTime()
+                });
+            }
+        });
 
         appointments.forEach(app => {
             const start = new Date(app.appointmentDate).getTime();

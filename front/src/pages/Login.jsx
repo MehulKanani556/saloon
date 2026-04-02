@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Lock, Sparkles, ArrowRight, AlertCircle, Phone, Key, ShieldCheck } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -28,6 +28,13 @@ export default function Login() {
   const { userInfo, loading } = useSelector((state) => state.auth);
   const [otpSent, setOtpSent] = useState(false);
   const [timer, setTimer] = useState(0);
+  const otpInputRef = useRef(null);
+
+  useEffect(() => {
+    if (otpSent && otpInputRef.current) {
+      otpInputRef.current.focus();
+    }
+  }, [otpSent]);
 
   useEffect(() => {
     if (userInfo) {
@@ -93,6 +100,9 @@ export default function Login() {
     if (result.meta.requestStatus === 'fulfilled') {
       setOtpSent(true);
       setTimer(60);
+      // Reset OTP field state to prevent premature validation errors
+      formik.setFieldTouched('otp', false);
+      formik.setFieldError('otp', undefined);
     }
   };
 
@@ -254,6 +264,7 @@ export default function Login() {
                       <input
                         name="otp"
                         type="text"
+                        ref={otpInputRef}
                         maxLength={6}
                         {...formik.getFieldProps('otp')}
                         placeholder="000000"

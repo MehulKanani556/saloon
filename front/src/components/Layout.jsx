@@ -54,7 +54,7 @@ export default function Layout({ children }) {
         {/* Scrollable Content Area */}
         <div
           ref={scrollRef}
-          className="flex-1 overflow-y-auto custom-scrollbar relative z-10"
+          className={`flex-1 overflow-y-auto relative z-10 ${pathname.startsWith('/staff') || pathname.startsWith('/admin') ? 'scrollbar-hide' : 'custom-scrollbar'}`}
         >
           <AnimatePresence mode="wait">
             <motion.main

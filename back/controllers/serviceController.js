@@ -2,8 +2,18 @@ const Service = require('../models/Service');
 const { deleteFromS3 } = require('../utils/s3Utils');
 
 const getServices = async (req, res) => {
-    const services = await Service.find({}).populate('category').sort({ createdAt: -1 });
-    res.json(services);
+    const User = require('../models/User');
+    const services = await Service.find({}).populate('category').sort({ createdAt: -1 }).lean();
+    const staff = await User.find({ role: 'Staff', isActive: true });
+
+    const servicesWithStaffCount = services.map(service => {
+        return {
+            ...service,
+            staffCount: staff.filter(s => s.services.some(sid => sid.toString() === service._id.toString())).length
+        };
+    });
+    
+    res.json(servicesWithStaffCount);
 };
 
 const createService = async (req, res) => {
