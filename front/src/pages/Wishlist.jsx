@@ -17,7 +17,7 @@ export default function Wishlist() {
     const handleAddToCart = (item) => {
         dispatch(addToCart(item));
         dispatch(removeFromWishlist(item._id));
-        toast.success(`Success! ${item.name} moved to your Shopping Bag`);
+        toast.success(`Success! ${item.name} moved to your Shopping Cart`);
     };
 
     return (
@@ -40,7 +40,7 @@ export default function Wishlist() {
                         to="/shop"
                         className="flex items-center gap-3 px-6 py-3 bg-white/5 rounded-xl text-[10px] font-black text-muted hover:text-primary hover:bg-primary/5 uppercase tracking-[0.2em] transition-all border border-white/5"
                     >
-                        <ArrowLeft size={16} /> Continue Selection
+                        <ArrowLeft size={16} /> Continue Shopping
                     </Link>
                 </div>
 
@@ -57,9 +57,9 @@ export default function Wishlist() {
                             </div>
                         </div>
                         <div className="space-y-4">
-                            <h3 className="text-2xl md:text-4xl font-black text-white uppercase tracking-tight font-luxury">The Collection is Empty</h3>
+                            <h3 className="text-2xl md:text-4xl font-black text-white uppercase tracking-tight font-luxury">Your Wishlist is Empty</h3>
                             <p className="text-muted/40 text-[11px] md:text-[13px] font-bold max-w-sm mx-auto leading-relaxed uppercase tracking-widest px-4">
-                                Curate your collection of professional grooming services and favorites for future selection.
+                                Save your favorite groomed services and products here for future selection.
                             </p>
                         </div>
                         <Link
@@ -95,15 +95,15 @@ export default function Wishlist() {
                                             <button
                                                 onClick={() => {
                                                     dispatch(removeFromWishlist(item._id));
-                                                    toast.success('Service removed from collection');
+                                                    toast.success('Removed from wishlist');
                                                 }}
                                                 className="p-3 bg-background/80 hover:bg-rose-500/20 hover:text-rose-500 border border-white/10 rounded-xl text-muted transition-all backdrop-blur-md shadow-xl"
-                                                title="Remove from Collection"
+                                                title="Remove from Wishlist"
                                             >
                                                 <Trash2 size={16} />
                                             </button>
                                         </div>
-
+                                        
                                         {/* Category Tag */}
                                         <div className="absolute top-2 right-0 px-4 py-2 bg-background/90 backdrop-blur-md rounded-full text-[9px] font-black text-primary uppercase tracking-widest shadow-xl border border-white/10">
                                             {item.category?.name || item.category || "Service"}
@@ -134,7 +134,7 @@ export default function Wishlist() {
                                             onClick={() => handleAddToCart(item)}
                                             className="w-full mt-auto py-4 rounded-2xl bg-white/[0.03] border border-white/5 text-[10px] font-black uppercase tracking-[0.2em] text-white hover:bg-primary hover:text-secondary hover:border-primary transition-all duration-300 shadow-lg group-hover:shadow-primary/10 flex items-center justify-center gap-4 group/btn"
                                         >
-                                            <ShoppingBag size={16} className="group-hover/btn:rotate-12 transition-transform" /> Move to Bag
+                                            <ShoppingBag size={16} className="group-hover/btn:rotate-12 transition-transform" /> Move to Cart
                                         </button>
                                     </div>
                                 </motion.div>

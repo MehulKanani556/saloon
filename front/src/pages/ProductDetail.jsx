@@ -54,23 +54,23 @@ export default function ProductDetail() {
 
             setLoading(false);
         } catch (err) {
-            toast.error('Asset retrieval failed');
+            toast.error('Failed to load product');
             setLoading(false);
         }
     };
 
     const handleAddToCart = () => {
         dispatch(addToCart({ ...product, qty: quantity }));
-        toast.success(`${product.name} added to Cart Matrix`);
+        toast.success(`${product.name} added to cart`);
     };
 
     const handleWishlist = () => {
         if (isWishlisted) {
             dispatch(removeFromWishlist(id));
-            toast.success('Asset de-cataloged from vault');
+            toast.success('Removed from wishlist');
         } else {
             dispatch(addToWishlist(product));
-            toast.success('Asset cataloged in vault');
+            toast.success('Added to wishlist');
         }
     };
 
@@ -78,7 +78,7 @@ export default function ProductDetail() {
         return (
             <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-6">
                 <Loader2 className="w-12 h-12 text-primary animate-spin" strokeWidth={1} />
-                <p className="text-[10px] font-black text-muted uppercase tracking-[0.5em] animate-pulse">Initializing Asset Visualization...</p>
+                <p className="text-[10px] font-black text-muted uppercase tracking-[0.5em] animate-pulse">Loading Product Details...</p>
             </div>
         );
     }
@@ -90,11 +90,11 @@ export default function ProductDetail() {
                     <ShieldCheck size={40} className="text-muted/20" />
                 </div>
                 <div className="text-center space-y-4">
-                    <h2 className="text-2xl font-black text-white uppercase tracking-tighter font-luxury">Asset Not Found</h2>
-                    <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em]">The requested architectural data does not exist in our archives.</p>
+                    <h2 className="text-2xl font-black text-white uppercase tracking-tighter font-luxury">Product Not Found</h2>
+                    <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em]">The requested product does not exist.</p>
                 </div>
                 <button onClick={() => navigate('/shop')} className="premium-button p-6 !px-12 flex items-center gap-4 group">
-                    <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> Back to Archives
+                    <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> Back to Shop
                 </button>
             </div>
         );
@@ -110,7 +110,7 @@ export default function ProductDetail() {
                     <nav className="flex items-center gap-4 mb-16 overflow-x-auto no-scrollbar whitespace-nowrap">
                         <button onClick={() => navigate('/')} className="text-[9px] font-black text-muted uppercase tracking-[0.3em] hover:text-white transition-colors">Home</button>
                         <ChevronRight size={10} className="text-muted/40 shrink-0" />
-                        <button onClick={() => navigate('/shop')} className="text-[9px] font-black text-muted uppercase tracking-[0.3em] hover:text-white transition-colors">Archives</button>
+                        <button onClick={() => navigate('/shop')} className="text-[9px] font-black text-muted uppercase tracking-[0.3em] hover:text-white transition-colors">Shop</button>
                         <ChevronRight size={10} className="text-muted/40 shrink-0" />
                         <span className="text-[9px] font-black text-primary uppercase tracking-[0.3em]">{product.name}</span>
                     </nav>
@@ -132,7 +132,7 @@ export default function ProductDetail() {
                             </motion.div>
                         </div>
 
-                        {/* Intelligence Details */}
+                        {/* Product Details */}
                         <div className="space-y-12">
                             <div className="space-y-6">
                                 <div className="flex items-center gap-6">
@@ -143,7 +143,7 @@ export default function ProductDetail() {
                                         <div className="flex text-primary">
                                             {[...Array(5)].map((_, i) => <Star key={i} size={12} fill="currentColor" />)}
                                         </div>
-                                        <span className="text-[10px] font-black text-muted uppercase tracking-widest">(48 REVIEWS)</span>
+                                        <span className="text-[10px] font-black text-muted uppercase tracking-widest">(48 Reviews)</span>
                                     </div>
                                 </div>
 
@@ -154,7 +154,7 @@ export default function ProductDetail() {
                                 <div className="space-y-4">
                                     <div className="flex items-end gap-4">
                                         <div className="space-y-1">
-                                            <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em] opacity-40">Unit Magnitude</p>
+                                            <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em] opacity-40">Price</p>
                                             <p className="text-4xl font-black text-primary font-luxury">${product.price}</p>
                                         </div>
                                         <div className="pb-1">
@@ -164,11 +164,11 @@ export default function ProductDetail() {
                                             </div>
                                         </div>
                                     </div>
-                                    <p className="text-[9px] font-black text-muted/40 uppercase tracking-[0.3em] font-sans">Institutional tax included at source vector.</p>
+                                    <p className="text-[9px] font-black text-muted/40 uppercase tracking-[0.3em] font-sans">Tax included.</p>
                                 </div>
 
                                 <p className="text-sm font-medium text-muted/60 leading-relaxed max-w-xl">
-                                    {product.description || "Experimental architectural asset developed for individuals seeking high-tier aesthetic convergence and performance superiority."}
+                                    {product.description || "Premium quality product designed for professional results and exceptional experience."}
                                 </p>
                             </div>
 
@@ -201,12 +201,12 @@ export default function ProductDetail() {
                                 </div>
                             </div>
 
-                            {/* Logistics */}
+                            {/* Shipping Policy */}
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
                                 {[
-                                    { label: 'Global Deployment', icon: Truck, detail: '2-4 Lunar Days' },
-                                    { label: 'Secure Transaction', icon: ShieldCheck, detail: 'Encrypted Grid' },
-                                    { label: 'Asset Reversal', icon: RefreshCcw, detail: '14 Day Protocol' }
+                                    { label: 'Fast Shipping', icon: Truck, detail: '2-4 Business Days' },
+                                    { label: 'Secure Payment', icon: ShieldCheck, detail: 'Fully Encrypted' },
+                                    { label: 'Easy Returns', icon: RefreshCcw, detail: '14 Day Policy' }
                                 ].map((item, i) => (
                                     <div key={i} className="space-y-2">
                                         <div className="flex items-center gap-3 text-primary">
@@ -220,15 +220,15 @@ export default function ProductDetail() {
                         </div>
                     </div>
 
-                    {/* Related Assets */}
+                    {/* Related Products */}
                     {relatedProducts.length > 0 && (
                         <div className="mt-60 space-y-12">
                             <div className="flex items-end justify-between border-b border-white/5 pb-8">
                                 <div className="space-y-4">
-                                    <p className="text-[10px] font-black text-primary uppercase tracking-[0.5em]">Collective Discovery</p>
-                                    <h2 className="text-3xl xl:text-4xl font-black text-white uppercase tracking-tighter font-luxury">Related Artifacts</h2>
+                                    <p className="text-[10px] font-black text-primary uppercase tracking-[0.5em]">Collections</p>
+                                    <h2 className="text-3xl xl:text-4xl font-black text-white uppercase tracking-tighter font-luxury">Related Products</h2>
                                 </div>
-                                <button onClick={() => navigate('/shop')} className="text-[9px] font-black text-muted hover:text-primary uppercase tracking-widest transition-colors mb-2">View All Intelligence</button>
+                                <button onClick={() => navigate('/shop')} className="text-[9px] font-black text-muted hover:text-primary uppercase tracking-widest transition-colors mb-2">View All</button>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -250,7 +250,7 @@ export default function ProductDetail() {
                                             />
                                             <div className="absolute inset-0 bg-secondary/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
                                                 <div className="px-6 py-3 bg-white/10 border border-white/20 rounded-full">
-                                                    <span className="text-[9px] font-black text-white uppercase tracking-widest">View Intelligence</span>
+                                                    <span className="text-[9px] font-black text-white uppercase tracking-widest">View Product</span>
                                                 </div>
                                             </div>
                                         </div>

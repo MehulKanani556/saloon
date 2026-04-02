@@ -45,10 +45,10 @@ export default function MyOrders() {
           <div className="space-y-1 text-center md:text-left">
             <div className="flex items-center justify-center md:justify-start gap-2">
               <span className="w-8 h-px bg-primary/30" />
-              <p className="text-[9px] font-black text-primary uppercase tracking-[0.4em]">Chronicle Ledger</p>
+              <p className="text-[9px] font-black text-primary uppercase tracking-[0.4em]">Order History</p>
             </div>
             <h1 className="text-xl md:text-2xl font-black text-white uppercase tracking-wide font-luxury">
-              Order <span className="text-primary">Archive</span>
+              Your <span className="text-primary">Orders</span>
             </h1>
           </div>
           <button
@@ -62,7 +62,7 @@ export default function MyOrders() {
         {loading && orders.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-32 gap-6">
             <div className="w-16 h-16 border-2 border-white/5 border-t-primary rounded-full animate-spin" />
-            <p className="text-[9px] font-black uppercase tracking-[0.5em] text-muted/40">Syncing Data Matrix...</p>
+            <p className="text-[9px] font-black uppercase tracking-[0.5em] text-muted/40">Loading orders...</p>
           </div>
         ) : orders.length === 0 ? (
           <motion.div
@@ -73,10 +73,10 @@ export default function MyOrders() {
             <div className="w-16 h-16 bg-white/[0.02] rounded-2xl flex items-center justify-center text-white/5 mb-8">
               <Package size={32} />
             </div>
-            <h3 className="text-xl font-black text-white uppercase tracking-tight mb-3 font-luxury">Archive Empty</h3>
-            <p className="text-[10px] font-bold text-muted/40 uppercase tracking-[0.2em] mb-8">No order records were discovered in your profile.</p>
+            <h3 className="text-xl font-black text-white uppercase tracking-tight mb-3 font-luxury">No orders found</h3>
+            <p className="text-[10px] font-bold text-muted/40 uppercase tracking-[0.2em] mb-8">You haven't placed any orders yet.</p>
             <button onClick={() => navigate('/shop')} className="px-8 py-4 bg-primary text-secondary rounded-xl font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all">
-              Initiate Acquisition
+              Shop Now
             </button>
           </motion.div>
         ) : (
@@ -113,7 +113,7 @@ export default function MyOrders() {
 
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-6 pt-2">
                         <div className="space-y-0.5">
-                          <p className="text-[8px] font-black text-white/20 uppercase tracking-widest">Total Value</p>
+                          <p className="text-[8px] font-black text-white/20 uppercase tracking-widest">Total Price</p>
                           <p className="text-xl font-black text-primary font-luxury drop-shadow-primary-sm">${order.totalAmount?.toFixed(2)}</p>
                         </div>
                         <div className="space-y-0.5">
@@ -123,7 +123,7 @@ export default function MyOrders() {
                           </p>
                         </div>
                         <div className="space-y-0.5 col-span-2 md:col-span-1">
-                          <p className="text-[8px] font-black text-white/20 uppercase tracking-widest">Settlement</p>
+                          <p className="text-[8px] font-black text-white/20 uppercase tracking-widest">Payment</p>
                           <div className="flex items-center gap-2">
                             <span className={`w-1.5 h-1.5 rounded-full ${order.paymentStatus === 'Paid' ? 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]' : 'bg-primary/40'}`} />
                             <p className={`text-[10px] font-black uppercase tracking-widest ${order.paymentStatus === 'Paid' ? 'text-emerald-400' : 'text-primary/60'}`}>{order.paymentStatus || 'Awaiting'}</p>
@@ -132,11 +132,11 @@ export default function MyOrders() {
                       </div>
                     </div>
 
-                    {/* Ritual Breakdown (Right) */}
+                    {/* Order Summary (Right) */}
                     <div className="w-full lg:w-72 xl:w-80 p-5 md:p-8 bg-white/[0.01] flex flex-col justify-between gap-6">
                       <div className="space-y-3">
                         <h4 className="text-[9px] font-black text-white/20 uppercase tracking-widest flex items-center gap-2">
-                          <Package size={12} /> Manifested Items
+                          <Package size={12} /> Order Items
                         </h4>
                         <div className="space-y-2">
                           {order.items?.slice(0, 2).map((item, i) => (
@@ -148,7 +148,7 @@ export default function MyOrders() {
                             </div>
                           ))}
                           {order.items?.length > 2 && (
-                            <p className="text-[9px] font-black text-primary/40 italic tracking-widest">+{order.items.length - 2} Sequential Units</p>
+                            <p className="text-[9px] font-black text-primary/40 italic tracking-widest">+{order.items.length - 2} More Items</p>
                           )}
                         </div>
                       </div>
@@ -157,7 +157,7 @@ export default function MyOrders() {
                         onClick={() => setSelectedOrder(order)}
                         className="w-full py-3.5 bg-white/[0.03] border border-white/5 text-[9px] font-black uppercase tracking-widest text-white hover:bg-primary hover:text-secondary hover:border-primary transition-all duration-300 rounded-xl flex items-center justify-center gap-2 group/btn shadow-lg"
                       >
-                        View Ledger <ChevronRight size={12} className="group-hover/btn:translate-x-0.5 transition-transform" />
+                        View Details <ChevronRight size={12} className="group-hover/btn:translate-x-0.5 transition-transform" />
                       </button>
                     </div>
 
@@ -166,8 +166,9 @@ export default function MyOrders() {
               ))}
             </AnimatePresence>
           </div>
-        )}
-      </div>
+        )
+      }
+      </div >
 
       {/* Order Details Modal - Pro Interface */}
       <AnimatePresence>
@@ -194,11 +195,11 @@ export default function MyOrders() {
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
                       <span className="w-8 h-px bg-primary" />
-                      <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Log Retrieval</p>
+                      <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Order Summary</p>
                     </div>
                     <h2 className="text-xl sm:text-3xl font-black text-white uppercase tracking-tight font-luxury">Order Detail</h2>
                     <p className="text-[9px] font-black text-muted/40 uppercase tracking-widest truncate max-w-[200px] sm:max-w-none">
-                      ID REFERENCE: {selectedOrder._id}
+                      ORDER ID: {selectedOrder._id}
                     </p>
                   </div>
                   <button 
@@ -215,13 +216,13 @@ export default function MyOrders() {
                   {/* Status & Date */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-8 bg-white/[0.02] p-5 md:p-6 rounded-2xl md:rounded-3xl border border-white/[0.03]">
                     <div className="space-y-1.5">
-                      <p className="text-[9px] font-black text-white/20 uppercase tracking-widest">Chronicle Date</p>
+                      <p className="text-[9px] font-black text-white/20 uppercase tracking-widest">Order Date</p>
                       <p className="text-[10px] sm:text-[11px] font-black text-white uppercase tracking-widest flex items-center gap-2">
                         <Clock size={12} className="text-primary" /> {format(new Date(selectedOrder.createdAt), 'MMM dd, yyyy @ HH:mm')}
                       </p>
                     </div>
                     <div className="space-y-2">
-                      <p className="text-[9px] font-black text-white/20 uppercase tracking-widest">Acquisition Status</p>
+                      <p className="text-[9px] font-black text-white/20 uppercase tracking-widest">Status</p>
                       <div className="inline-block">
                         <span className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border transition-all ${statusColors[selectedOrder.status] || statusColors['Processing']}`}>
                           {selectedOrder.status}
@@ -233,7 +234,7 @@ export default function MyOrders() {
                   {/* Items Breakdown */}
                   <div className="space-y-5">
                     <h4 className="text-[10px] font-black text-primary uppercase tracking-[0.3em] flex items-center gap-3">
-                      <Package size={14} /> Acquisition Metrics
+                      <Package size={14} /> Item Details
                     </h4>
                     <div className="space-y-2">
                       {selectedOrder.items?.map((item, i) => (
@@ -245,7 +246,7 @@ export default function MyOrders() {
                                 {item.name || item.product?.name || 'Aesthetic Goods'}
                               </p>
                               <p className="text-[9px] font-bold text-muted/30 uppercase tracking-widest">
-                                UNIT QTY: 0{item.qty}
+                                QUANTITY: 0{item.qty}
                               </p>
                             </div>
                           </div>

@@ -3,7 +3,7 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { DollarSign, TrendingUp, TrendingDown, Target, Wallet, CreditCard, ChevronRight, X, AlertCircle, Plus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchFinancialMatrix, processWithdrawal } from '../redux/slices/salesSlice';
+import { fetchFinancials, processWithdrawal } from '../redux/slices/salesSlice';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Modal from '../components/ui/Modal';
@@ -12,11 +12,11 @@ import AdminHeader from '../components/ui/AdminHeader';
 
 export default function Sales() {
   const dispatch = useDispatch();
-  const { matrix, loading } = useSelector(state => state.sales);
+  const { salesData: matrix, loading } = useSelector(state => state.sales);
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchFinancialMatrix());
+    dispatch(fetchFinancials());
   }, [dispatch]);
 
   const withdrawalFormik = useFormik({

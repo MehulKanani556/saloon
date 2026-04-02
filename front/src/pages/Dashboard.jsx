@@ -83,7 +83,7 @@ export default function Dashboard() {
       />
 
 
-      {/* Industrial Matrix Stats Grid */}
+      {/* Statistics Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
         {[
           { label: 'Total Clients', value: data.stats.totalClients, icon: Users, trend: '12.5%' },
@@ -135,12 +135,12 @@ export default function Dashboard() {
                 </div>
                 Revenue Overview
               </h3>
-              <p className="text-[8px] md:text-[10px] font-black text-muted uppercase tracking-[0.4em] opacity-60">Business Performance</p>
+              <p className="text-[8px] md:text-[10px] font-black text-muted uppercase tracking-[0.4em] opacity-60">Overview</p>
             </div>
           </div>
           <div className="h-[200px] sm:h-[300px] md:h-[400px] w-full pr-2 md:pr-0">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={data.financialVelocity}>
+              <AreaChart data={data.revenueData}>
                 <defs>
                   <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#C9A227" stopOpacity={0.3} />
@@ -177,7 +177,7 @@ export default function Dashboard() {
             Popular Services
           </h3>
           <div className="space-y-5 md:space-y-6 flex-1 max-h-[250px] md:max-h-[350px] overflow-y-auto scrollbar-hide pr-1">
-            {data.serviceHierarchy.map((service, i) => (
+            {data.categoryData.map((service, i) => (
               <div key={i} className="space-y-2 group">
                 <div className="flex justify-between items-end text-[8px] md:text-[10px] font-black uppercase tracking-[0.4em] text-muted ">
                   <span className="text-white truncate max-w-[120px] md:max-w-[160px] group-hover:text-primary transition-colors">{service.name}</span>
@@ -211,14 +211,14 @@ export default function Dashboard() {
           <div className="flex items-center justify-between gap-6 mb-8 md:mb-12 relative z-10 leading-none">
             <div>
               <h3 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase mb-2 md:mb-3 font-luxury">Recent Appointments</h3>
-              <p className="text-[8px] md:text-[10px] font-black text-muted uppercase tracking-[0.4em] opacity-60">Past customer bookings</p>
+              <p className="text-[8px] md:text-[10px] font-black text-muted uppercase tracking-[0.4em] opacity-60">Customer bookings</p>
             </div>
             <div className="w-10 h-10 md:w-12 md:h-12 bg-primary/10 rounded-xl md:rounded-2xl flex items-center justify-center text-primary">
               <CalendarCheck2 size={20} md:size={24} />
             </div>
           </div>
           <div className="space-y-4 md:space-y-6 relative z-10">
-            {data.recentBookings.map((app, i) => (
+            {data.recentAppointments.map((app, i) => (
               <div key={app._id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 md:p-6 rounded-2xl bg-background/50 border border-white/10 group/item hover:bg-white/5 transition-all gap-4">
                 <div className="flex items-center gap-4 md:gap-5">
                   <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-secondary p-1 border border-white/5 flex items-center justify-center text-primary group-hover/item:rotate-12 transition-all duration-500">
@@ -258,11 +258,11 @@ export default function Dashboard() {
               <p className="text-[8px] md:text-[10px] font-black text-muted uppercase tracking-[0.4em] opacity-60">Your bookings for today</p>
             </div>
             <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-primary text-secondary flex items-center justify-center font-black text-lg md:text-xl border-4 border-white/10 shadow-2xl font-luxury ">
-              {data.upcomingRituals.length.toString().padStart(2, '0')}
+              {data.upcomingAppointments.length.toString().padStart(2, '0')}
             </div>
           </div>
           <div className="space-y-4 md:space-y-6 relative z-10">
-            {data.upcomingRituals.length > 0 ? data.upcomingRituals.map((app, i) => (
+            {data.upcomingAppointments.length > 0 ? data.upcomingAppointments.map((app, i) => (
                 <motion.div
                   key={app._id}
                   whileHover={{ scale: 1.02, x: 10 }}
@@ -311,7 +311,7 @@ export default function Dashboard() {
         </div>
         <div className="h-[250px] md:h-[350px] w-full pr-2 md:pr-0">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data.occupancyTrends} margin={{ bottom: windowWidth < 1024 ? 20 : 0 }}>
+            <BarChart data={data.occupancyData} margin={{ bottom: windowWidth < 1024 ? 20 : 0 }}>
               <CartesianGrid strokeDasharray="8 8" vertical={false} strokeOpacity={0.03} />
               <XAxis 
                 dataKey="hour" 
@@ -329,7 +329,7 @@ export default function Dashboard() {
                 itemStyle={{ color: '#C9A227', fontWeight: 900, textTransform: 'uppercase', fontSize: '9px', letterSpacing: '1px' }}
               />
               <Bar dataKey="intensity" radius={[4, 4, 4, 4]} barSize={mobileBarSize}>
-                {data.occupancyTrends.map((entry, index) => (
+                {data.occupancyData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.intensity > 0 ? '#C9A227' : 'rgba(255,255,255,0.1)'} />
                 ))}
               </Bar>

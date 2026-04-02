@@ -47,13 +47,13 @@ const InvoiceDetailModal = ({ appointment, onClose }) => {
             <div className="flex flex-col md:flex-row justify-between gap-4 md:gap-8 mb-6 md:mb-10">
               <div className="space-y-3 md:space-y-4">
                 <div>
-                  <h1 className="text-xl md:text-2xl font-black tracking-tighter uppercase text-primary mb-1 font-luxury leading-none">Glow Saloon</h1>
-                  <p className="text-[7px] md:text-[8px] font-black uppercase tracking-[0.3em] text-muted opacity-60">Elite Aesthetics & Grooming</p>
+                  <h1 className="text-xl md:text-2xl font-black tracking-tighter uppercase text-primary mb-1 font-luxury leading-none">Lux Studio</h1>
+                  <p className="text-[7px] md:text-[8px] font-black uppercase tracking-[0.3em] text-muted opacity-60">Professional Grooming Services</p>
                 </div>
                 <div className="space-y-1 text-[8px] md:text-[9px] font-black text-muted uppercase tracking-widest opacity-80 leading-relaxed max-w-[200px] md:max-w-none">
                   <p>123 Luxury Lane, Diamond District</p>
                   <p>Mumbai, Maharashtra - 400001</p>
-                  <p>contact@glowsaloon.com</p>
+                  <p>contact@luxstudio.com</p>
                 </div>
               </div>
               <div className="text-left md:text-right space-y-3 md:space-y-4 relative">

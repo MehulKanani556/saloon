@@ -157,8 +157,8 @@ export default function Specializations() {
     return (
         <div className="space-y-6 md:space-y-12 pb-20">
             <AdminHeader 
-                title="Staff Specialties"
-                subtitle="Manage staff services and skills"
+                title="Staff Skills"
+                subtitle="Manage staff services and expertise"
                 icon={Scissors}
                 rightContent={
                     <div className="flex flex-col lg:flex-row gap-4 md:gap-6 w-full lg:w-auto">
@@ -169,7 +169,7 @@ export default function Specializations() {
                                 className={`flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl transition-all group font-luxury ${hasPendingRequest ? 'bg-secondary text-muted cursor-not-allowed border border-white/5' : 'bg-primary text-secondary shadow-primary/20 hover:scale-[1.05]'}`}
                             >
                                 <Plus size={16} md:size={18} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
-                                <span className="whitespace-nowrap">{hasPendingRequest ? 'REQUEST PENDING' : 'UPDATE MY SPECIALTIES'}</span>
+                                <span className="whitespace-nowrap">{hasPendingRequest ? 'REQUEST PENDING' : 'UPDATE MY SKILLS'}</span>
                             </button>
                         )}
                         <div className="relative group w-full lg:min-w-[300px]">
@@ -190,8 +190,8 @@ export default function Specializations() {
                 <div className="space-y-4 md:space-y-8">
                     <div className="flex items-center justify-between">
                          <div>
-                            <h3 className="text-lg md:text-xl font-black text-white uppercase tracking-tighter font-luxury">My Current Services & Skills</h3>
-                            <p className="text-[8px] md:text-[10px] font-black text-primary uppercase tracking-[0.4em] mt-1">Approved by Administration</p>
+                            <h3 className="text-lg md:text-xl font-black text-white uppercase tracking-tighter font-luxury">My Services & Skills</h3>
+                            <p className="text-[8px] md:text-[10px] font-black text-primary uppercase tracking-[0.4em] mt-1">Approved for your profile</p>
                         </div>
                     </div>
                     
@@ -233,14 +233,14 @@ export default function Specializations() {
             <div className="bg-secondary/30 backdrop-blur-md rounded-2xl border border-white/5 shadow-3xl overflow-hidden">
                 <div className="p-8 border-b border-white/5">
                     <h3 className="text-xl font-black text-white uppercase tracking-tighter font-luxury">Request History</h3>
-                    <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em] mt-1">History of specialty updates</p>
+                    <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em] mt-1">History of skill updates</p>
                 </div>
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
                         <thead>
                             <tr className="bg-background/80">
                                 <th className="px-4 md:px-10 py-3.5 md:py-5 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Staff Member</th>
-                                <th className="px-4 md:px-10 py-3.5 md:py-5 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap md:table-cell hidden">Update Details</th>
+                                <th className="px-4 md:px-10 py-3.5 md:py-5 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap md:table-cell hidden">Update details</th>
                                 <th className="px-4 md:px-10 py-3.5 md:py-5 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Services</th>
                                 <th className="px-4 md:px-10 py-3.5 md:py-5 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Status</th>
                                 <th className="px-4 md:px-10 py-3.5 md:py-5 text-center text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Actions</th>
@@ -302,7 +302,7 @@ export default function Specializations() {
                 </div>
             </div>
 
-            {/* ARTISAN MODAL: PROPOSE NEW ALIGNMENT */}
+            {/* Modal: Request New Skills */}
             {isStaffAddModalOpen && (
                 <div className="fixed inset-0 z-[200] flex items-center justify-center p-2 sm:p-12">
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} onClick={() => setIsStaffAddModalOpen(false)} className="absolute inset-0 bg-background/80 backdrop-blur-xl" />

@@ -10,7 +10,7 @@ export const fetchAppointments = createAsyncThunk('appointments/fetchAll', async
 export const addAppointment = createAsyncThunk('appointments/add', async (appointment, { rejectWithValue }) => {
     try {
         const { data } = await api.post('/appointments', appointment);
-        toast.success('Appointment scheduled beautifully!');
+        toast.success('Appointment scheduled successfully!');
         return data;
     } catch (err) {
         toast.error('Scheduling failed');
@@ -21,10 +21,10 @@ export const addAppointment = createAsyncThunk('appointments/add', async (appoin
 export const updateAppointment = createAsyncThunk('appointments/update', async ({ id, appointment }, { rejectWithValue }) => {
     try {
         const { data } = await api.put(`/appointments/${id}`, appointment);
-        toast.success('Ritual refined successfully!');
+        toast.success('Appointment updated successfully!');
         return data;
     } catch (err) {
-        toast.error('Refinement failed');
+        toast.error('Update failed');
         return rejectWithValue(err.response.data);
     }
 });
@@ -32,10 +32,10 @@ export const updateAppointment = createAsyncThunk('appointments/update', async (
 export const deleteAppointment = createAsyncThunk('appointments/delete', async (id, { rejectWithValue }) => {
     try {
         await api.delete(`/appointments/${id}`);
-        toast.success('Ritual dissolved gracefully');
+        toast.success('Appointment cancelled successfully');
         return id;
     } catch (err) {
-        toast.error('Dissolution failed');
+        toast.error('Cancellation failed');
         return rejectWithValue(err.response.data);
     }
 });
@@ -67,7 +67,7 @@ export const fetchMyAppointments = createAsyncThunk('appointments/fetchMy', asyn
         const { data } = await api.get('/appointments/my');
         return data;
     } catch (err) {
-        return rejectWithValue(err.response?.data || 'Failed to fetch personal archive');
+        return rejectWithValue(err.response?.data || 'Failed to fetch appointments');
     }
 });
 

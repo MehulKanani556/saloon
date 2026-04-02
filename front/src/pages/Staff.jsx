@@ -16,11 +16,11 @@ export default function Staff() {
   const { staff, loading } = useSelector(state => state.staff);
   const { services } = useSelector(state => state.services);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [expertToDelete, setExpertToDelete] = useState(null);
+  const [staffMemberToDelete, setStaffMemberToDelete] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [selectedExpert, setSelectedExpert] = useState(null);
+  const [selectedStaffMember, setSelectedStaffMember] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
-  const [profileExpert, setProfileExpert] = useState(null);
+  const [profileStaffMember, setProfileStaffMember] = useState(null);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   useEffect(() => {
@@ -67,8 +67,8 @@ export default function Staff() {
       }
 
       try {
-        if (selectedExpert) {
-          await dispatch(updateStaffMember({ id: selectedExpert._id, staffMember: formData })).unwrap();
+        if (selectedStaffMember) {
+          await dispatch(updateStaffMember({ id: selectedStaffMember._id, staffMember: formData })).unwrap();
         } else {
           await dispatch(addStaff(formData)).unwrap();
         }
@@ -87,15 +87,15 @@ export default function Staff() {
     setImagePreview(URL.createObjectURL(file));
   };
 
-  const handleEdit = (expert) => {
-    setSelectedExpert(expert);
-    setImagePreview(expert.profileImage?.startsWith('/uploads') ? `${IMAGE_URL}${expert.profileImage}` : expert.profileImage);
+  const handleEdit = (member) => {
+    setSelectedStaffMember(member);
+    setImagePreview(member.profileImage?.startsWith('/uploads') ? `${IMAGE_URL}${member.profileImage}` : member.profileImage);
     formik.setValues({
-      name: expert.name,
-      email: expert.email,
-      phone: expert.phone || '',
-      services: expert.services.map(s => s._id),
-      profileImage: expert.profileImage,
+      name: member.name,
+      email: member.email,
+      phone: member.phone || '',
+      services: member.services.map(s => s._id),
+      profileImage: member.profileImage,
       imageFile: null
     });
     setIsDrawerOpen(true);
@@ -103,22 +103,22 @@ export default function Staff() {
 
   const handleCloseDrawer = () => {
     setIsDrawerOpen(false);
-    setSelectedExpert(null);
+    setSelectedStaffMember(null);
     setImagePreview(null);
     formik.resetForm();
   };
 
-  const handleDeleteClick = (expert) => {
-    setExpertToDelete(expert);
+  const handleDeleteClick = (member) => {
+    setStaffMemberToDelete(member);
     setIsDeleteModalOpen(true);
   };
 
   const confirmDelete = () => {
-    if (expertToDelete) {
-      dispatch(deleteStaffMember(expertToDelete._id));
+    if (staffMemberToDelete) {
+      dispatch(deleteStaffMember(staffMemberToDelete._id));
       setIsDeleteModalOpen(false);
-      setExpertToDelete(null);
-      toast.success('Artisan record dissolved');
+      setStaffMemberToDelete(null);
+      toast.success('Staff member removed');
     }
   };
 
@@ -145,7 +145,7 @@ export default function Staff() {
         }
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 md:gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
         <AnimatePresence mode="popLayout">
           {staff.map((member, index) => (
             <motion.div
@@ -201,7 +201,7 @@ export default function Staff() {
                 </div>
 
                 <button
-                  onClick={() => { setProfileExpert(member); setIsProfileOpen(true); }}
+                  onClick={() => { setProfileStaffMember(member); setIsProfileOpen(true); }}
                   className="w-full mt-auto py-4 rounded-xl bg-background border border-white/5 text-[9px] font-black uppercase tracking-[0.3em] text-muted hover:bg-primary hover:text-secondary hover:border-primary transition-all shadow-sm active:scale-95 group-hover:shadow-primary/10"
                 >
                   View Profile
@@ -215,7 +215,7 @@ export default function Staff() {
       <Modal
         isOpen={isDrawerOpen}
         onClose={handleCloseDrawer}
-        title={selectedExpert ? 'Edit Staff Member' : 'ADD STAFF MEMBER'}
+        title={selectedStaffMember ? 'Edit Staff Member' : 'ADD STAFF MEMBER'}
         subtitle="Set up a new professional profile"
       >
         <div className="flex flex-col items-center mb-8 md:mb-12">
@@ -312,27 +312,27 @@ export default function Staff() {
             disabled={loading}
             className="w-full py-5 md:py-6 px-2 bg-primary text-secondary rounded-xl md:rounded-2xl text-[10px] md:text-[11px] uppercase tracking-[0.5em] hover:bg-primary/90 transition-all shadow-2xl active:scale-[0.98] disabled:opacity-50 font-luxury "
           >
-            {selectedExpert ? 'SAVE CHANGES' : 'ADD STAFF MEMBER'}
+            {selectedStaffMember ? 'SAVE CHANGES' : 'ADD STAFF MEMBER'}
           </button>
         </form>
       </Modal>
 
       <Modal
         isOpen={isProfileOpen}
-        onClose={() => { setIsProfileOpen(false); setProfileExpert(null); }}
-        title={profileExpert?.name}
+        onClose={() => { setIsProfileOpen(false); setProfileStaffMember(null); }}
+        title={profileStaffMember?.name}
         subtitle="STAFF MEMBER"
-        headerImage={profileExpert?.profileImage?.startsWith('/uploads') ? `${IMAGE_URL}${profileExpert.profileImage}` : profileExpert?.profileImage}
+        headerImage={profileStaffMember?.profileImage?.startsWith('/uploads') ? `${IMAGE_URL}${profileStaffMember.profileImage}` : profileStaffMember?.profileImage}
         footer={(
           <>
             <button
-              onClick={() => { setIsProfileOpen(false); handleEdit(profileExpert); }}
+              onClick={() => { setIsProfileOpen(false); handleEdit(profileStaffMember); }}
               className="flex-1 py-5 bg-primary text-secondary rounded-2xl text-[10px] font-black uppercase tracking-[0.4em] hover:bg-primary/90 transition-all shadow-xl active:scale-95 font-luxury "
             >
               EDIT PROFILE
             </button>
             <button
-              onClick={() => { setIsProfileOpen(false); setProfileExpert(null); }}
+              onClick={() => { setIsProfileOpen(false); setProfileStaffMember(null); }}
               className="w-14 h-14 flex items-center justify-center bg-background rounded-2xl text-muted hover:text-rose-500 transition-all border border-white/5 active:scale-95 shadow-inner"
             >
               <X size={20} strokeWidth={3} />
@@ -340,7 +340,7 @@ export default function Staff() {
           </>
         )}
       >
-        {profileExpert && (
+        {profileStaffMember && (
           <div className="space-y-8 md:space-y-12 p-1 md:p-2">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
               <div className="p-5 md:p-6 bg-secondary/50 rounded-2xl border border-white/5 shadow-inner group">
@@ -348,14 +348,14 @@ export default function Staff() {
                   <Phone size={14} strokeWidth={2.5} />
                   <span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em]">Phone</span>
                 </div>
-                <div className="text-[11px] md:text-xs font-black text-white tracking-widest break-all group-hover:text-primary transition-colors">{profileExpert.phone || 'NO PHONE NUMBER'}</div>
+                <div className="text-[11px] md:text-xs font-black text-white tracking-widest break-all group-hover:text-primary transition-colors">{profileStaffMember.phone || 'NO PHONE NUMBER'}</div>
               </div>
               <div className="p-5 md:p-6 bg-secondary/50 rounded-2xl border border-white/5 shadow-inner group">
                 <div className="flex items-center gap-3 text-primary mb-3 md:mb-4">
                   <Mail size={14} strokeWidth={2.5} />
                   <span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em]">Email</span>
                 </div>
-                <div className="text-[11px] md:text-xs font-black text-white tracking-widest break-all group-hover:text-primary transition-colors">{profileExpert.email || 'NO EMAIL'}</div>
+                <div className="text-[11px] md:text-xs font-black text-white tracking-widest break-all group-hover:text-primary transition-colors">{profileStaffMember.email || 'NO EMAIL'}</div>
               </div>
             </div>
 
@@ -368,7 +368,7 @@ export default function Staff() {
                 <span className="h-[1px] flex-1 bg-white/5 mx-6 hidden sm:block" />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-[350px] overflow-y-auto custom-scrollbar pr-2 pb-4">
-                {profileExpert.services.map(s => (
+                {profileStaffMember.services.map(s => (
                   <div key={s._id} className="p-5 md:p-6 bg-background rounded-2xl border border-white/5 shadow-3xl hover:border-primary/20 transition-all group/skill">
                     <div className="text-[10px] md:text-[11px] font-black text-white uppercase tracking-tighter font-luxury leading-none transition-all group-hover/skill:text-primary">{s.name}</div>
                     <div className="flex items-center justify-between mt-4">
@@ -396,7 +396,7 @@ export default function Staff() {
           </div>
 
           <p className="text-muted text-[10px] font-black uppercase tracking-[0.3em] mb-10 leading-relaxed ">
-            Confirm permanent erasure of <br /><span className="text-rose-500 text-base font-luxury  underline decoration-rose-500/30 decoration-2 underline-offset-4">{expertToDelete?.name}</span> <br /> from active archives?
+            Confirm permanent erasure of <br /><span className="text-rose-500 text-base font-luxury  underline decoration-rose-500/30 decoration-2 underline-offset-4">{staffMemberToDelete?.name}</span> <br /> from active records?
           </p>
 
           <div className="flex flex-col gap-4">

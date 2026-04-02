@@ -679,7 +679,7 @@ const FAQ = () => {
           <div>
             <p className="text-primary font-black uppercase tracking-[0.3em] text-[10px] mb-2 md:mb-4 text-center lg:text-left">Need Help?</p>
             <h2 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white uppercase tracking-wide mb-4 md:mb-8 leading-tight md:leading-none text-center lg:text-left">Frequently <br /> <span className=" text-transparent bg-clip-text bg-luxury-gradient">Asked Questions</span></h2>
-            <p className="text-muted text-sm md:text-base max-w-lg mx-auto lg:max-w-md font-bold tracking-wide leading-relaxed text-center lg:text-left">
+            <p className="text-muted text-sm md:text-base max-w-lg mx-auto lg:mx-0 lg:max-w-md font-bold tracking-wide leading-relaxed text-center lg:text-left">
               Common questions about booking and our services at Glow Saloon.
             </p>
           </div>

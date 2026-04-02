@@ -67,10 +67,10 @@ export const updateProfile = createAsyncThunk('auth/updateProfile', async (userD
     try {
         const { data } = await api.put('/auth/profile', userData);
         localStorage.setItem('userInfo', JSON.stringify(data));
-        toast.success('Identity matrix synchronized');
+        toast.success('Profile updated successfully');
         return data;
     } catch (error) {
-        toast.error(error.response?.data?.message || 'Synchronization failed');
+        toast.error(error.response?.data?.message || 'Update failed');
         return rejectWithValue(error.response.data);
     }
 });
@@ -78,10 +78,10 @@ export const updateProfile = createAsyncThunk('auth/updateProfile', async (userD
 export const changePassword = createAsyncThunk('auth/changePassword', async (values, { rejectWithValue }) => {
     try {
         const { data } = await api.put('/auth/change-password', values);
-        toast.success('Security protocol updated');
+        toast.success('Password changed successfully');
         return data;
     } catch (error) {
-        toast.error(error.response?.data?.message || 'Protocol update failed');
+        toast.error(error.response?.data?.message || 'Failed to change password');
         return rejectWithValue(error.response.data);
     }
 });
@@ -89,11 +89,11 @@ export const changePassword = createAsyncThunk('auth/changePassword', async (val
 export const deleteAccount = createAsyncThunk('auth/deleteAccount', async (credentials, { dispatch, rejectWithValue }) => {
     try {
         await api.delete('/auth/profile', { data: credentials });
-        toast.success('Identity dissolved');
+        toast.success('Account deleted successfully');
         dispatch(logout());
         return true;
     } catch (error) {
-        toast.error(error.response?.data?.message || 'Dissolution failed');
+        toast.error(error.response?.data?.message || 'Failed to delete account');
         return rejectWithValue(error.response.data);
     }
 });

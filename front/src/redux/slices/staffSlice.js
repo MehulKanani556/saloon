@@ -10,10 +10,10 @@ export const fetchStaff = createAsyncThunk('staff/fetchAll', async () => {
 export const addStaff = createAsyncThunk('staff/add', async (staffMember, { rejectWithValue }) => {
     try {
         const { data } = await api.post('/staff', staffMember);
-        toast.success('Expert onboarded successfully!');
+        toast.success('Staff member added successfully!');
         return data;
     } catch (err) {
-        toast.error('Onboarding failed');
+        toast.error('Failed to add staff member');
         return rejectWithValue(err.response.data);
     }
 });
@@ -21,7 +21,7 @@ export const addStaff = createAsyncThunk('staff/add', async (staffMember, { reje
 export const updateStaffMember = createAsyncThunk('staff/update', async ({ id, staffMember }, { rejectWithValue }) => {
     try {
         const { data } = await api.put(`/staff/${id}`, staffMember);
-        toast.success('Expert profile refined!');
+        toast.success('Staff profile updated!');
         return data;
     } catch (err) {
         toast.error('Profile update failed');
@@ -32,10 +32,10 @@ export const updateStaffMember = createAsyncThunk('staff/update', async ({ id, s
 export const deleteStaffMember = createAsyncThunk('staff/delete', async (id, { rejectWithValue }) => {
     try {
         await api.delete(`/staff/${id}`);
-        toast.success('Expert record dissolved');
+        toast.success('Staff member removed');
         return id;
     } catch (err) {
-        toast.error('Dissolution failed');
+        toast.error('Failed to remove staff member');
         return rejectWithValue(err.response.data);
     }
 });

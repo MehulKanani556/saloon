@@ -17,13 +17,14 @@ const dashboardSlice = createSlice({
   name: 'dashboard',
   initialState: {
     data: {
-      stats: { totalClients: 0, totalAppointments: 0, totalRevenue: 0, todayRevenue: 0, activeServices: 0 },
-      financialVelocity: [],
-      serviceHierarchy: [],
-      eliteTalent: [],
-      recentBookings: [],
-      occupancyTrends: [],
-      upcomingRituals: []
+      stats: { totalClients: 0, totalAppointments: 0, totalRevenue: 0, todayRevenue: 0, activeServices: 0, pendingLeaves: 0 },
+      revenueData: [],
+      categoryData: [],
+      specializationData: [],
+      topStaff: [],
+      recentAppointments: [],
+      occupancyData: [],
+      upcomingAppointments: []
     },
     loading: false,
     error: null
@@ -36,7 +37,17 @@ const dashboardSlice = createSlice({
       })
       .addCase(fetchDashboardInsights.fulfilled, (state, action) => {
         state.loading = false;
-        state.data = action.payload;
+        const payload = action.payload;
+        state.data = {
+          stats: payload.stats || {},
+          revenueData: payload.financialVelocity || [],
+          categoryData: payload.serviceHierarchy || [],
+          specializationData: payload.serviceHierarchy || [],
+          topStaff: payload.eliteTalent || [],
+          recentAppointments: payload.recentBookings || [],
+          occupancyData: payload.occupancyTrends || [],
+          upcomingAppointments: payload.upcomingRituals || []
+        };
       })
       .addCase(fetchDashboardInsights.rejected, (state, action) => {
         state.loading = false;

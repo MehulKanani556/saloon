@@ -3,17 +3,17 @@ import { Download, FileText, Calendar, Database, Zap, Share2, ShieldCheck, Trend
 import { motion } from 'framer-motion';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchReportIntel } from '../redux/slices/reportSlice';
+import { fetchReports } from '../redux/slices/reportSlice';
 import { format } from 'date-fns';
 import AdminHeader from '../components/ui/AdminHeader';
 
 
 export default function Reports() {
   const dispatch = useDispatch();
-  const { intel, loading, error } = useSelector(state => state.reports);
+  const { reportData, loading, error } = useSelector(state => state.reports);
 
   useEffect(() => {
-    dispatch(fetchReportIntel());
+    dispatch(fetchReports());
   }, [dispatch]);
 
   if (loading) return (
@@ -46,10 +46,10 @@ export default function Reports() {
       {/* Stat Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {[
-          { label: 'Active Appointments', value: intel.stats.active, icon: Database },
-          { label: 'Completed Sessions', value: intel.stats.downloads, icon: Zap },
-          { label: 'Total Clients', value: intel.stats.shared, icon: Share2 },
-          { label: 'Total Revenue', value: `$${intel.stats.archiveSize}`, icon: ShieldCheck },
+          { label: 'Active Appointments', value: reportData.stats.active, icon: Database },
+          { label: 'Completed Sessions', value: reportData.stats.downloads, icon: Zap },
+          { label: 'Total Clients', value: reportData.stats.shared, icon: Share2 },
+          { label: 'Total Revenue', value: `$${reportData.stats.archiveSize}`, icon: ShieldCheck },
         ].map((stat, i) => (
           <motion.div
             key={i}
@@ -71,11 +71,11 @@ export default function Reports() {
       {/* Summary Row */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
         {[
-          { label: 'Total Revenue', value: `$${intel.summary.totalRevenue.toLocaleString()}`, icon: DollarSign },
-          { label: 'Appointments', value: intel.summary.totalAppointments, icon: Calendar },
-          { label: 'Clients', value: intel.summary.totalClients, icon: Users },
-          { label: 'Active Services', value: intel.summary.activeServices, icon: Scissors },
-          { label: 'Staff Members', value: intel.summary.totalStaff, icon: TrendingUp },
+          { label: 'Total Revenue', value: `$${reportData.summary.totalRevenue.toLocaleString()}`, icon: DollarSign },
+          { label: 'Appointments', value: reportData.summary.totalAppointments, icon: Calendar },
+          { label: 'Clients', value: reportData.summary.totalClients, icon: Users },
+          { label: 'Active Services', value: reportData.summary.activeServices, icon: Scissors },
+          { label: 'Staff Members', value: reportData.summary.totalStaff, icon: TrendingUp },
         ].map((item, i) => (
           <div key={i} className="bg-secondary p-6 rounded-2xl border border-white/5 shadow-xl text-center">
             <item.icon size={18} className="mx-auto text-primary mb-3" />
@@ -91,7 +91,7 @@ export default function Reports() {
           <h3 className="text-xl font-black text-white tracking-tighter uppercase  mb-10 font-luxury">Monthly Revenue</h3>
           <div className="h-[280px]">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={intel.monthlyData}>
+              <AreaChart data={reportData.monthlyData}>
                 <defs>
                   <linearGradient id="revGrad" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#C9A227" stopOpacity={0.2} />
@@ -116,7 +116,7 @@ export default function Reports() {
           <h3 className="text-xl font-black text-white tracking-tighter uppercase  mb-10 font-luxury">Monthly Appointments</h3>
           <div className="h-[280px]">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={intel.monthlyData}>
+              <BarChart data={reportData.monthlyData}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255, 255, 255, 0.05)" />
                 <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#A0A0A0', fontSize: 10, fontWeight: 900 }} />
                 <YAxis axisLine={false} tickLine={false} tick={{ fill: '#A0A0A0', fontSize: 10, fontWeight: 900 }} />
@@ -138,10 +138,10 @@ export default function Reports() {
           <h3 className="text-xl font-black text-white tracking-tighter uppercase  font-luxury">Recent Activity Log</h3>
         </div>
         <div className="divide-y divide-white/5">
-          {intel.recentLogs.length === 0 && (
+          {reportData.recentLogs.length === 0 && (
             <div className="p-16 text-center text-muted font-black uppercase tracking-widest text-[10px] ">No activity records found</div>
           )}
-          {intel.recentLogs.map((log, i) => (
+          {reportData.recentLogs.map((log, i) => (
             <motion.div
               key={log.id}
               initial={{ opacity: 0, x: -10 }}

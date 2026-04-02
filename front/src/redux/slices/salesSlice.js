@@ -2,14 +2,14 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../utils/api';
 import toast from 'react-hot-toast';
 
-export const fetchFinancialMatrix = createAsyncThunk(
-  'sales/fetchFinancialMatrix',
+export const fetchFinancials = createAsyncThunk(
+  'sales/fetchFinancials',
   async (_, { rejectWithValue }) => {
     try {
       const { data } = await api.get('/sales/matrix');
       return data;
     } catch (err) {
-      return rejectWithValue(err.response?.data?.message || 'Financial retrieval failed');
+      return rejectWithValue(err.response?.data?.message || 'Failed to fetch sales data');
     }
   }
 );
@@ -31,7 +31,7 @@ export const processWithdrawal = createAsyncThunk(
 const salesSlice = createSlice({
   name: 'sales',
   initialState: {
-    matrix: {
+    salesData: {
       totalRevenue: 0,
       dailyAvg: 0,
       growth: 0,
@@ -44,14 +44,14 @@ const salesSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchFinancialMatrix.pending, (state) => {
+      .addCase(fetchFinancials.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchFinancialMatrix.fulfilled, (state, action) => {
+      .addCase(fetchFinancials.fulfilled, (state, action) => {
         state.loading = false;
-        state.matrix = action.payload;
+        state.salesData = action.payload;
       })
-      .addCase(fetchFinancialMatrix.rejected, (state, action) => {
+      .addCase(fetchFinancials.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
