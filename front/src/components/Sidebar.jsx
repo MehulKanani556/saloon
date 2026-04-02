@@ -40,7 +40,7 @@ const adminItems = [
   },
   { icon: Users, label: 'Staff Members', path: '/admin/staff' },
   { icon: UserSquare2, label: 'Customers', path: '/admin/clients' },
-  { icon: TrendingUp, label: 'Business Report', path: '/admin/sales' },
+  // { icon: TrendingUp, label: 'Business Report', path: '/admin/sales' },
   { icon: FileText, label: 'Bills', path: '/admin/invoices' },
   { icon: CalendarClock, label: 'Leaves', path: '/admin/leaves' },
   { icon: CheckCircle2, label: 'Expertise Approvals', path: '/admin/expertise-approvals' },

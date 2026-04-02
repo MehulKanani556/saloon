@@ -56,8 +56,8 @@ const PublicNavbar = () => {
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${showSolid
-      ? 'bg-secondary/80 md:bg-secondary/90 backdrop-blur-md shadow-2xl py-2'
-      : 'md:bg-transparent bg-secondary/80 backdrop-blur-md md:backdrop-blur-0 shadow-2xl md:shadow-none py-2'
+      ? 'bg-secondary/80 lg:bg-secondary/90 backdrop-blur-md shadow-2xl py-2'
+      : 'lg:bg-transparent bg-secondary/80 backdrop-blur-md lg:backdrop-blur-0 shadow-2xl lg:shadow-none py-2'
       }`}>
       <div className="container mx-auto px-6 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 group">
@@ -208,7 +208,7 @@ const PublicNavbar = () => {
 
         {/* Mobile Toggle */}
         <button
-          className="md:hidden p-2 text-white"
+          className="lg:hidden p-2 text-white"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           {isMobileMenuOpen ? (
@@ -226,7 +226,7 @@ const PublicNavbar = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden overflow-hidden"
+            className="lg:hidden overflow-hidden"
           >
             <div className="container mx-auto px-6 py-4 flex flex-col gap-4">
               {['Home', 'Services', 'Shop', 'About', 'Contact', 'Book Appointment'].map((link) => {

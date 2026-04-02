@@ -145,7 +145,7 @@ export default function Staff() {
         }
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 2xl:grid-cols-4 gap-6 md:gap-8">
         <AnimatePresence mode="popLayout">
           {staff.map((member, index) => (
             <motion.div
@@ -156,7 +156,7 @@ export default function Staff() {
               transition={{ delay: index * 0.05, type: 'spring', damping: 20 }}
               className="group relative bg-secondary rounded-[2rem] p-5 border border-white/5 shadow-3xl transition-all duration-700 hover:border-primary/30 flex flex-col h-full"
             >
-              <div className="relative overflow-hidden rounded-2xl aspect-[4/5] mb-6 shadow-inner bg-background border border-white/5">
+              <div className="relative overflow-hidden rounded-2xl aspect-square mb-6 shadow-inner bg-background border border-white/5">
                 <img
                   src={member.profileImage ? (member.profileImage.startsWith('http') ? member.profileImage : `${IMAGE_URL}${member.profileImage}`) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${member.name}`}
                   alt={member.name}
