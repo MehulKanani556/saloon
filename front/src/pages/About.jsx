@@ -84,7 +84,7 @@ const StorySection = () => {
                 <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Our Story</p>
                 <div className="w-12 h-[2px] bg-primary/30" />
               </div>
-              <h2 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-4 md:mb-8 text-center font-luxury">
+              <h2 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-4 md:mb-8 text-center md:text-left font-luxury">
                 WHERE PASSION <br />
                 <span className="text-primary">MEETS STYLE</span>
               </h2>
