@@ -53,8 +53,8 @@ export default function Signup() {
                     <div className="mb-6">
                         <img src={Logo} alt="Glow Saloon" className="h-16 w-auto object-contain brightness-0 invert" />
                     </div>
-                    <h1 className="text-2xl font-black text-white tracking-tight leading-none uppercase font-luxury">Establish <span className="text-primary ">Identity</span></h1>
-                    <p className="text-muted text-[9px] font-bold uppercase tracking-[0.2em] mt-3 underline decoration-primary/30 underline-offset-4 decoration-2 text-center">Establish Customer Profile</p>
+                    <h1 className="text-2xl font-black text-white tracking-tight leading-none uppercase font-luxury">Create <span className="text-primary ">Account</span></h1>
+                    <p className="text-muted text-[9px] font-bold uppercase tracking-[0.2em] mt-3 underline decoration-primary/30 underline-offset-4 decoration-2 text-center">Sign Up for Glow Saloon</p>
                 </div>
 
                 <form onSubmit={formik.handleSubmit} className="grid grid-cols-1 gap-5">
@@ -79,7 +79,7 @@ export default function Signup() {
                     </div>
 
                     <div className="space-y-1.5">
-                        <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-1">Email Identity</label>
+                        <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-1">Email Address</label>
                         <div className="relative group">
                             <Mail size={16} className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors ${formik.touched.email && formik.errors.email ? 'text-red-400' : 'text-primary/40 group-focus-within:text-primary'}`} />
                             <input
@@ -99,7 +99,7 @@ export default function Signup() {
                     </div>
 
                     <div className="space-y-1.5">
-                        <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-1">Passkey</label>
+                        <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-1">Password</label>
                         <div className="relative group">
                             <Lock size={16} className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors ${formik.touched.password && formik.errors.password ? 'text-red-400' : 'text-primary/40 group-focus-within:text-primary'}`} />
                             <input
@@ -123,9 +123,9 @@ export default function Signup() {
                         disabled={loading}
                         className={`w-full py-4 mt-2 bg-primary text-secondary rounded-2xl font-black text-[10px] tracking-[0.2em] uppercase shadow-premium hover:shadow-primary/20 hover:scale-[1.01] active:scale-[0.98] transition-all flex items-center justify-center gap-3 group ${loading ? 'opacity-70 cursor-wait' : ''}`}
                     >
-                        {loading ? 'Creating Profile...' : (
+                        {loading ? 'Creating Account...' : (
                             <>
-                                Establish Identity
+                                Create Account
                                 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                             </>
                         )}
@@ -135,13 +135,13 @@ export default function Signup() {
                 <div className="mt-8 text-center flex flex-col gap-4">
                     <div className="h-[1px] w-full bg-white/5" />
                     <p className="text-[10px] font-bold text-muted uppercase tracking-widest">
-                        Already have an identity?
-                        <Link to="/login" className="text-primary ml-2 hover:underline decoration-2">Access Portal</Link>
+                        Already have an account?
+                        <Link to="/login" className="text-primary ml-2 hover:underline decoration-2">Log In</Link>
                     </p>
                 </div>
 
                 <p className="mt-10 text-center text-[8px] font-black text-muted uppercase tracking-[0.3em] leading-relaxed">
-                    Glow Saloon Collective <br /> Unified Customer Core
+                    Glow Saloon <br /> Customer Registration
                 </p>
             </motion.div>
         </div>

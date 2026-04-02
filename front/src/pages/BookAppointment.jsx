@@ -69,15 +69,15 @@ const SuccessModal = ({ data, onClose }) => {
           <CheckCircle2 className="w-10 h-10 md:w-14 md:h-14" strokeWidth={1.5} />
         </div>
 
-        <h2 className="text-xl md:text-4xl font-black text-white uppercase tracking-tighter mb-4 font-luxury">Ritual Confirmed!</h2>
+        <h2 className="text-xl md:text-4xl font-black text-white uppercase tracking-tighter mb-4 font-luxury">Booking Confirmed!</h2>
         <p className="text-muted font-bold text-[9px] md:text-[10px] uppercase tracking-widest leading-relaxed mb-8 md:mb-10 px-2 lg:px-6">
-          Your transformation at Glow & Elegance is officially in the chronicles. We've sent a detailed confirmation to your email.
+          Your appointment at Glow & Elegance is confirmed. We've sent a detailed confirmation to your email.
         </p>
 
 
         <div className="bg-background rounded-2xl p-4 md:p-6 mb-8 md:mb-10 text-left space-y-4 border border-white/5">
           <div className="flex flex-col gap-1.5 text-[10px] font-black uppercase tracking-widest">
-            <span className="text-muted text-[8px]">Reference:</span>
+            <span className="text-muted text-[8px]">Reference ID:</span>
             <span className="text-white break-all leading-relaxed">#{data.id || 'N/A'}</span>
           </div>
           <div className="flex flex-col gap-1.5 text-[10px] font-black uppercase tracking-widest">
@@ -90,7 +90,7 @@ const SuccessModal = ({ data, onClose }) => {
           onClick={onClose}
           className="w-full py-4 md:py-5 bg-primary text-secondary rounded-2xl font-black text-xs uppercase shadow-xl hover:bg-primary/90 transition-all active:scale-95"
         >
-          Return to Sanctuary
+          Return to Salon
         </button>
       </motion.div>
     </motion.div>
@@ -198,7 +198,7 @@ export default function BookAppointment() {
         };
         const res = await dispatch(addAppointment(body)).unwrap();
         
-        // Store guest data for next ritual
+        // Store guest data for next appointment
         localStorage.setItem('guest_name', values.clientName);
         localStorage.setItem('guest_email', values.clientEmail);
         localStorage.setItem('guest_phone', values.clientPhone);
@@ -286,9 +286,9 @@ export default function BookAppointment() {
   }
 
   const steps = [
-    { title: "Choose Rituals", icon: <Scissors size={18} /> },
-    { title: "Your Mandate", icon: <User size={18} /> },
-    { title: "Final Seal", icon: <CheckCircle2 size={18} /> },
+    { title: "Select Services", icon: <Scissors size={18} /> },
+    { title: "Your Details", icon: <User size={18} /> },
+    { title: "Confirmation", icon: <CheckCircle2 size={18} /> },
   ];
 
   return (
@@ -314,11 +314,11 @@ export default function BookAppointment() {
               className="inline-flex items-center gap-3 px-4 py-1.5 bg-primary/10 border border-primary/20 rounded-full mb-3 md:mb-6"
             >
               <Sparkles size={12} className="text-primary" />
-              <span className="text-[9px] font-black text-primary uppercase tracking-[0.3em]">Temporal Slot</span>
+              <span className="text-[9px] font-black text-primary uppercase tracking-[0.3em]">Book Your Time</span>
             </motion.div>
 
             <h1 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-4 md:mb-8 flex justify-center gap-[2px] font-luxury ">
-              {"SECURE A RITUAL".split("").map((char, i) => (
+              {"BOOK APPOINTMENT".split("").map((char, i) => (
                 <motion.span
                   key={i}
                   initial={{ opacity: 0, y: 30 }}
@@ -336,7 +336,7 @@ export default function BookAppointment() {
               transition={{ delay: 1 }}
               className="mt-4 md:mt-8 flex items-center justify-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-muted"
             >
-              <Link to="/" className="hover:text-primary transition-colors">Home Base</Link>
+              <Link to="/" className="hover:text-primary transition-colors">Home</Link>
               <span className="w-1.5 h-px bg-white/20" />
               <span className="text-primary ">Book Appointment</span>
             </motion.div>
@@ -466,7 +466,7 @@ export default function BookAppointment() {
                                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                               />
                               <div className="absolute top-3 right-3 px-2 py-1 bg-background/90 backdrop-blur-md rounded-full text-[8px] font-black text-primary uppercase tracking-widest shadow-lg">
-                                {service.category?.name || "Ritual"}
+                                {service.category?.name || "Service"}
                               </div>
                               {isSelected && (
                                 <div className="absolute inset-0 bg-primary/40 backdrop-blur-[2px] flex items-center justify-center">
@@ -487,7 +487,7 @@ export default function BookAppointment() {
                                 </span>
                                 <span className="h-0.5 w-0.5 bg-white/10 rounded-full" />
                                 <span className="flex items-center gap-1">
-                                  <Sparkles size={10} className="text-primary" /> Elite Care
+                                  <Sparkles size={10} className="text-primary" /> Expert Care
                                 </span>
                               </div>
                             </div>
@@ -510,12 +510,12 @@ export default function BookAppointment() {
                   >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                       <div className="space-y-1 md:space-y-3">
-                        <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Full Master Name</label>
+                        <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Full Name</label>
                         <div className="relative">
                           <User size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-primary" />
                           <input
                             {...formik.getFieldProps('clientName')}
-                            placeholder="e.g. Alexander Pierce"
+                            placeholder="e.g. John Doe"
                             className={`w-full bg-background border-2 rounded-2xl pl-14 pr-6 py-4 text-sm font-bold outline-none transition-all text-white ${formik.touched.clientName && formik.errors.clientName ? 'border-red-500/30' : 'border-transparent focus:border-primary/20'
                               }`}
                           />
@@ -526,12 +526,12 @@ export default function BookAppointment() {
                       </div>
 
                       <div className="space-y-1 md:space-y-3">
-                        <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Email Transmission</label>
+                        <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Email Address</label>
                         <div className="relative">
                           <Mail size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-primary" />
                           <input
                             {...formik.getFieldProps('clientEmail')}
-                            placeholder="ritual@glow.com"
+                            placeholder="your@email.com"
                             className="w-full bg-background border-2 border-transparent focus:border-primary/20 rounded-2xl pl-14 pr-6 py-4 text-sm font-bold outline-none transition-all text-white"
                           />
                         </div>
@@ -541,7 +541,7 @@ export default function BookAppointment() {
                       </div>
  
                       <div className="space-y-1 md:space-y-3">
-                        <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Contact Signal</label>
+                        <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Phone Number</label>
                         <div className="flex bg-background border-2 border-transparent focus-within:border-primary/20 rounded-2xl transition-all overflow-hidden shadow-inner">
                           <div className="flex items-center pl-4 md:pl-6 pr-4 border-r border-white/5 bg-white/5">
                             <span className="text-xs md:text-sm font-black text-muted leading-none">+1</span>
@@ -563,7 +563,7 @@ export default function BookAppointment() {
                       </div>
  
                       <div className="space-y-1 md:space-y-3">
-                        <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Appointed Date</label>
+                        <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Appointment Date</label>
                         <div className="relative">
                           <Calendar size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-primary" />
                           <input
@@ -578,7 +578,7 @@ export default function BookAppointment() {
 
                       {/* Staff Selection Section */}
                       <div className="md:col-span-2 space-y-4 pt-6 border-t border-white/5">
-                        <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Select Your Master (Specialize for each ritual)</label>
+                        <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Pick Your Stylist (Optional)</label>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           {selectedServices.map(service => {
                             const eligibleStaff = allStaff.filter(s => s.services?.some(ser => (typeof ser === 'string' ? ser === service._id : ser._id === service._id)));
@@ -586,14 +586,14 @@ export default function BookAppointment() {
                               <div key={service._id} className="bg-background md:flex-row flex-col gap-y-2 p-4 rounded-2xl border border-white/5 flex items-center justify-between shadow-sm">
                                 <div className="flex flex-col w-full">
                                   <span className="text-[10px] font-black uppercase text-primary truncate w-auto md:max-w-[120px] font-luxury">{service.name}</span>
-                                  <span className="text-[8px] text-muted font-black uppercase tracking-tighter">performed by</span>
+                                  <span className="text-[8px] text-muted font-black uppercase tracking-tighter">service</span>
                                 </div>
                                 <select
                                   value={staffAssignments[service._id] || ""}
                                   onChange={(e) => setStaffAssignments({ ...staffAssignments, [service._id]: e.target.value })}
                                   className="bg-secondary px-3 py-2 w-full rounded-xl text-[9px] font-black uppercase outline-none cursor-pointer text-white border border-white/5 focus:ring-0"
                                 >
-                                  <option value="">Any Master</option>
+                                  <option value="">Any Specialist</option>
                                   {eligibleStaff.map(stf => (
                                     <option key={stf._id} value={stf._id}>{stf.name}</option>
                                   ))}
@@ -605,7 +605,7 @@ export default function BookAppointment() {
                       </div>
 
                       <div className="space-y-1 md:space-y-3 md:col-span-2">
-                        <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Preferred Time Slot</label>
+                        <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Appointment Time</label>
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 md:gap-3 relative min-h-[100px]">
                           {slotsLoading && (
                             <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/60 backdrop-blur-[1px] rounded-2xl">
@@ -688,7 +688,7 @@ export default function BookAppointment() {
                               >
                                 <AlertCircle size={16} className="text-primary" />
                                 <p className="text-[10px] font-black text-primary uppercase tracking-widest leading-relaxed">
-                                  All qualified masters are occupied during this temporal slot
+                                  All qualified stylists are booked during this time
                                 </p>
                               </motion.div>
                             );
@@ -709,7 +709,7 @@ export default function BookAppointment() {
                         className="flex items-center gap-2 text-[10px] font-black text-muted uppercase tracking-widest hover:text-primary transition-colors"
                       >
                         <ChevronLeft size={18} />
-                        Back to Selection
+                        Back to Services
                       </button>
                     </div>
 
@@ -731,7 +731,7 @@ export default function BookAppointment() {
 
                       <div className="relative z-10 space-y-10">
                         <div>
-                          <h3 className="text-2xl font-black uppercase tracking-tighter mb-8  font-luxury">The Ritual Summary</h3>
+                          <h3 className="text-2xl font-black uppercase tracking-tighter mb-8  font-luxury">Booking Summary</h3>
                           <div className="space-y-4">
                             {selectedServices.map(s => (
                               <div key={s._id} className="flex justify-between items-center py-3 border-b border-white/5">
@@ -744,7 +744,7 @@ export default function BookAppointment() {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
                           <div className="space-y-2">
-                            <span className="text-[9px] font-black text-white/40 uppercase tracking-widest block mb-1 md:mb-2">Champion</span>
+                            <span className="text-[9px] font-black text-white/40 uppercase tracking-widest block mb-1 md:mb-2">Name</span>
                             <p className="text-xs md:text-sm font-black uppercase tracking-widest">{formik.values.clientName}</p>
                           </div>
                           <div className="space-y-2">
@@ -756,12 +756,12 @@ export default function BookAppointment() {
 
                         <div className="pt-10 border-t border-white/10 flex items-center justify-between">
                           <div className="flex flex-col">
-                            <span className="text-[9px] font-black text-white/40 uppercase tracking-widest mb-1">Total Investment</span>
+                            <span className="text-[9px] font-black text-white/40 uppercase tracking-widest mb-1">Total Price</span>
                             <span className="text-4xl font-black text-primary tracking-tighter  font-luxury">${totalPrice}</span>
                           </div>
                           <div className="flex items-center gap-3 text-white/60">
                             <Clock size={16} />
-                            <span className="text-[10px] font-black uppercase tracking-widest">~{totalDuration} Min</span>
+                            <span className="text-[10px] font-black uppercase tracking-widest">~{totalDuration} Mins</span>
                           </div>
                         </div>
                       </div>
@@ -773,7 +773,7 @@ export default function BookAppointment() {
                         className="flex items-center gap-2 text-[10px] font-black text-muted uppercase tracking-widest hover:text-primary transition-colors"
                       >
                         <ChevronLeft size={18} />
-                        Adjust Rituals
+                        Adjust Services
                       </button>
                     </div>
                   </motion.div>
@@ -793,7 +793,7 @@ export default function BookAppointment() {
                   className="bg-secondary/95 backdrop-blur-xl rounded-2xl p-4 border border-white/10 shadow-2xl flex items-center justify-between gap-4"
                 >
                   <div className="flex-1">
-                    <p className="text-[8px] font-black text-muted uppercase tracking-widest mb-0.5">Total Rituals ({selectedServices.length})</p>
+                    <p className="text-[8px] font-black text-muted uppercase tracking-widest mb-0.5">Total Services ({selectedServices.length})</p>
                     <h4 className="text-xl font-black text-primary font-luxury">${totalPrice}</h4>
                   </div>
                   

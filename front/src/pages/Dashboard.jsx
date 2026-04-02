@@ -67,13 +67,13 @@ export default function Dashboard() {
     <div className="space-y-8 md:space-y-12 pb-20">
       {/* Cinematic Header Section */}
       <AdminHeader
-        title="Executive Summary"
-        subtitle="Matrix Active | Connected"
+        title="Dashboard"
+        subtitle="Business Overview"
         icon={Activity}
         rightContent={
           <div className="flex items-center gap-4 md:gap-8 bg-secondary/40 backdrop-blur-md px-6 md:px-10 py-4 md:py-6 rounded-2xl border border-white/5 shadow-3xl group hover:border-primary/20 transition-all duration-500 w-full md:w-auto">
             <div className="text-left">
-              <p className="text-[8px] md:text-[10px] font-black text-primary uppercase tracking-[0.4em] leading-none mb-2 md:mb-3 ">Total Archive Value</p>
+              <p className="text-[8px] md:text-[10px] font-black text-primary uppercase tracking-[0.4em] leading-none mb-2 md:mb-3 ">Total Revenue</p>
               <p className="text-2xl md:text-4xl font-black text-white tracking-tighter font-luxury leading-none group-hover:scale-105 transition-transform duration-500">
                 $ {data.stats.totalRevenue.toLocaleString()}
               </p>
@@ -135,7 +135,7 @@ export default function Dashboard() {
                 </div>
                 Earnings Report
               </h3>
-              <p className="text-[8px] md:text-[10px] font-black text-muted uppercase tracking-[0.4em] opacity-60">Financial Velocity | Success Parameters</p>
+              <p className="text-[8px] md:text-[10px] font-black text-muted uppercase tracking-[0.4em] opacity-60">Revenue Report</p>
             </div>
           </div>
           <div className="h-[200px] sm:h-[300px] md:h-[400px] w-full pr-2 md:pr-0">
@@ -174,7 +174,7 @@ export default function Dashboard() {
         <div className="bg-secondary/30 backdrop-blur-sm p-6 md:p-10 rounded-2xl border border-white/5 shadow-3xl relative flex flex-col">
           <h3 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase mb-8 md:mb-12 font-luxury flex items-center gap-4">
             <Star className="text-primary" size={20} md:size={24} />
-            Ritual Hierarchy
+            Popular Services
           </h3>
           <div className="space-y-5 md:space-y-6 flex-1 max-h-[250px] md:max-h-[350px] overflow-y-auto scrollbar-hide pr-1">
             {data.serviceHierarchy.map((service, i) => (
@@ -210,8 +210,8 @@ export default function Dashboard() {
         <div className="bg-secondary/30 backdrop-blur-md p-6 md:p-10 rounded-2xl border border-white/5 shadow-3xl relative overflow-hidden group">
           <div className="flex items-center justify-between gap-6 mb-8 md:mb-12 relative z-10 leading-none">
             <div>
-              <h3 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase mb-2 md:mb-3 font-luxury">Previous Rituals</h3>
-              <p className="text-[8px] md:text-[10px] font-black text-muted uppercase tracking-[0.4em] opacity-60">Archived customer engagements</p>
+              <h3 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase mb-2 md:mb-3 font-luxury">Recent Appointments</h3>
+              <p className="text-[8px] md:text-[10px] font-black text-muted uppercase tracking-[0.4em] opacity-60">Past customer bookings</p>
             </div>
             <div className="w-10 h-10 md:w-12 md:h-12 bg-primary/10 rounded-xl md:rounded-2xl flex items-center justify-center text-primary">
               <CalendarCheck2 size={20} md:size={24} />
@@ -254,8 +254,8 @@ export default function Dashboard() {
         <div className="bg-secondary/30 backdrop-blur-md p-6 md:p-10 rounded-2xl border border-white/5 shadow-3xl relative overflow-hidden group">
           <div className="flex items-center justify-between gap-6 mb-8 md:mb-12 relative z-10 leading-none">
             <div>
-              <h3 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase mb-2 md:mb-3 font-luxury">Diurnal Pipeline</h3>
-              <p className="text-[8px] md:text-[10px] font-black text-muted uppercase tracking-[0.4em] opacity-60">Pending masterpieces today</p>
+              <h3 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase mb-2 md:mb-3 font-luxury">Today's Schedule</h3>
+              <p className="text-[8px] md:text-[10px] font-black text-muted uppercase tracking-[0.4em] opacity-60">Appointments scheduled for today</p>
             </div>
             <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-primary text-secondary flex items-center justify-center font-black text-lg md:text-xl border-4 border-white/10 shadow-2xl font-luxury ">
               {data.upcomingRituals.length.toString().padStart(2, '0')}
@@ -304,7 +304,7 @@ export default function Dashboard() {
           <div>
             <h3 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase mb-2 md:mb-3 flex items-center gap-4 font-luxury">
               <Activity className="text-primary" size={20} md:size={24} />
-              Occupancy Intensity
+              Busy Hours
             </h3>
             <p className="text-[8px] md:text-[10px] font-black text-muted uppercase tracking-[0.4em] opacity-60">Peak temporal footfall analysis</p>
           </div>

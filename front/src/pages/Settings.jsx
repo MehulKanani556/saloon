@@ -40,12 +40,12 @@ export default function Settings() {
     enableReinitialize: true,
     validationSchema: SettingsSchema,
     onSubmit: async (values) => {
-      toast.promise(
+        toast.promise(
         dispatch(updateSettings(values)).unwrap(),
         {
-          loading: 'Synchronizing sanctuary parameters...',
-          success: 'Sanctuary legacy updated',
-          error: 'Parameter synchronization failed'
+          loading: 'Saving settings...',
+          success: 'Settings updated successfully',
+          error: 'Failed to update settings'
         }
       );
     },
@@ -60,8 +60,8 @@ export default function Settings() {
   return (
     <div className="space-y-6 md:space-y-12">
       <AdminHeader 
-        title="Saloon Manifesto"
-        subtitle="Configure global business identity and operational protocols"
+        title="Salon Settings"
+        subtitle="Update your business information and hours"
         icon={Building2}
         rightContent={
           <button
@@ -93,10 +93,10 @@ export default function Settings() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
               {[
-                { name: 'salonName', label: 'Saloon Title', icon: Building2 },
-                { name: 'tagline', label: 'Motto / Tagline', icon: ShieldCheck },
-                { name: 'email', label: 'Command Email', icon: Mail, type: 'email' },
-                { name: 'phone', label: 'Secure Line', icon: Phone }
+                { name: 'salonName', label: 'Salon Name', icon: Building2 },
+                { name: 'tagline', label: 'Tagline', icon: ShieldCheck },
+                { name: 'email', label: 'Email Address', icon: Mail, type: 'email' },
+                { name: 'phone', label: 'Phone Number', icon: Phone }
               ].map((field) => (
                 <div key={field.name} className="space-y-3">
                   <label className="text-[10px] font-black text-muted uppercase tracking-widest pl-2 flex items-center gap-2 ">
@@ -120,7 +120,7 @@ export default function Settings() {
               <div className="md:col-span-2 space-y-3">
                 <label className="text-[10px] font-black text-muted uppercase tracking-widest pl-2 flex items-center gap-2 ">
                   <MapPin size={12} className="text-primary" />
-                  Operational Address
+                  Business Address
                 </label>
                 <textarea
                   name="address"
@@ -140,7 +140,7 @@ export default function Settings() {
               <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-background flex items-center justify-center text-primary border border-white/5 shadow-inner">
                 <Clock size={20} md:size={24} />
               </div>
-              Business Protocol (Hours)
+              Business Hours
             </h3>
             <div className="space-y-3 md:space-y-4">
               {formik.values.businessHours.map((day, index) => (
@@ -183,7 +183,7 @@ export default function Settings() {
 
         <div className="space-y-6 md:space-y-10">
           <div className="bg-secondary p-6 md:p-10 rounded-2xl border border-white/5 shadow-2xl group text-center flex flex-col items-center">
-            <h3 className="text-md md:text-lg font-black text-white mb-6 md:mb-10 uppercase tracking-tighter  font-luxury">Visual Landmark (Logo)</h3>
+            <h3 className="text-md md:text-lg font-black text-white mb-6 md:mb-10 uppercase tracking-tighter  font-luxury">Salon Logo</h3>
             <div
               onClick={() => logoInputRef.current?.click()}
               className="w-32 h-32 md:w-48 md:h-48 rounded-2xl bg-background border-4 border-dashed border-white/5 flex flex-col items-center justify-center text-muted mb-6 md:mb-8 cursor-pointer hover:border-primary/50 transition-all group overflow-hidden relative shadow-inner"
@@ -220,7 +220,7 @@ export default function Settings() {
           </div>
 
           <div className="bg-secondary p-6 md:p-10 rounded-2xl border border-white/5 shadow-2xl">
-            <h3 className="text-md md:text-lg font-black text-white mb-8 md:mb-10 uppercase tracking-tighter  font-luxury">Vault Channels</h3>
+            <h3 className="text-md md:text-lg font-black text-white mb-8 md:mb-10 uppercase tracking-tighter  font-luxury">Payment Methods</h3>
             <div className="space-y-4">
               {formik.values.paymentMethods.map((method, index) => (
                 <div key={method.name} className="flex xl:flex-row lg:flex-col flex-row xl:items-center lg:items-start items-center justify-between p-4 md:p-6 rounded-2xl border border-white/5 bg-background group hover:border-primary/20 transition-all gap-4 shadow-inner">

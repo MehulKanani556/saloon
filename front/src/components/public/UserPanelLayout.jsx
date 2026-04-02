@@ -12,7 +12,7 @@ import PublicFooter from './PublicFooter';
 const menuItems = [
   { icon: UserCircle, label: 'My Profile', path: '/profile' },
   { icon: ShoppingBag, label: 'Order History', path: '/my-orders' },
-  { icon: Calendar, label: 'Reservations', path: '/my-appointments' },
+  { icon: Calendar, label: 'My Appointments', path: '/my-appointments' },
   { icon: ShieldCheck, label: 'Change Password', path: '/change-password' },
   { icon: Trash2, label: 'Delete Account', path: '/delete-account' },
 ];
@@ -40,7 +40,7 @@ export default function UserPanelLayout({ children, title, hideSidebar = false }
             {/* Breadcrumbs (Condensed) */}
             <div className="flex items-center gap-3 mb-6 text-[9px] font-bold uppercase tracking-[0.2em] text-muted/40">
               <Link to="/" className="hover:text-primary transition-colors flex items-center gap-1.5">
-                <Home size={10} strokeWidth={2.5} /> Atelier
+                <Home size={10} strokeWidth={2.5} /> Home
               </Link>
               <span className="opacity-20">/</span>
               <span className="text-white tracking-widest">{title}</span>

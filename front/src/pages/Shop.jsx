@@ -21,17 +21,17 @@ const LuxuryItem = ({ name, price, category, image, _id, delay, item }) => {
     e.stopPropagation();
     if (isWishlisted) {
       dispatch(removeFromWishlist(_id));
-      toast.success('Asset de-cataloged');
+      toast.success('Removed from favorites');
     } else {
       dispatch(addToWishlist(item));
-      toast.success('Asset cataloged');
+      toast.success('Added to favorites');
     }
   };
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
     dispatch(addToCart(item));
-    toast.success(`${name} Induction Complete`);
+    toast.success(`${name} added to cart`);
   };
 
   return (
@@ -95,7 +95,7 @@ const LuxuryItem = ({ name, price, category, image, _id, delay, item }) => {
           className="w-full py-4 rounded-2xl bg-white/[0.03] border border-white/5 text-[10px] font-black uppercase tracking-[0.2em] text-white hover:bg-primary hover:text-secondary hover:border-primary transition-all duration-300 shadow-lg group-hover:shadow-primary/10 flex items-center justify-center gap-2"
         >
           <ShoppingBag size={14} />
-          Induct To Matrix
+          Add To Cart
         </button>
       </div>
     </motion.div>
@@ -149,10 +149,10 @@ export default function Shop() {
                   <p className="text-[10px] font-black text-primary uppercase tracking-[0.6em] animate-pulse">New Collection</p>
                 </div>
                 <h2 className="text-4xl md:text-7xl font-black text-white uppercase tracking-tighter leading-[0.9] font-luxury">
-                  Aesthetic <br /><span className="text-primary/50">Curations</span>
+                  Premium <br /><span className="text-primary/50">Products</span>
                 </h2>
                 <p className="text-muted/60 text-[12px] md:text-[14px] font-medium leading-relaxed max-w-lg tracking-wide uppercase">
-                  Synchronize your daily ritual with high-fidelity formulations synthesized for the modern collective.
+                  High-quality beauty products designed for your daily routine.
                 </p>
                 <div className="flex items-center gap-6 md:gap-8 pt-4">
                   <div className="flex flex-col items-center gap-2">

@@ -149,7 +149,7 @@ const PublicNavbar = () => {
                     className="absolute right-0 mt-4 w-64 bg-secondary rounded-2xl shadow-premium border border-white/10 overflow-hidden"
                   >
                     <div className="p-4 bg-white/5 border-b border-white/5">
-                      <p className="text-[9px] font-black text-muted uppercase tracking-widest mb-1">Authenticated Identity</p>
+                      <p className="text-[9px] font-black text-muted uppercase tracking-widest mb-1">User Profile</p>
                       <p className="text-sm font-black text-white truncate">{userInfo.name}</p>
                       <p className="text-[10px] text-muted truncate">{userInfo.email}</p>
                     </div>
@@ -161,7 +161,7 @@ const PublicNavbar = () => {
                           className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 text-white transition-colors group"
                         >
                           <Shield size={16} className="group-hover:text-primary transition-colors" />
-                          <span className="text-[10px] font-black uppercase tracking-widest text-left">Admin Terminal</span>
+                          <span className="text-[10px] font-black uppercase tracking-widest text-left">Admin Dashboard</span>
                         </button>
                       )}
 
@@ -170,7 +170,7 @@ const PublicNavbar = () => {
                         className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 text-white transition-colors group"
                       >
                         <User size={16} className="group-hover:text-primary transition-colors" />
-                        <span className="text-[10px] font-black uppercase tracking-widest text-left">Profile Section</span>
+                        <span className="text-[10px] font-black uppercase tracking-widest text-left">My Profile</span>
                       </button>
 
                       {/* <button
@@ -188,7 +188,7 @@ const PublicNavbar = () => {
                         className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-red-500/10 text-red-500 transition-colors group"
                       >
                         <LogOut size={16} />
-                        <span className="text-[10px] font-black uppercase tracking-widest text-left">Logout Protocol</span>
+                        <span className="text-[10px] font-black uppercase tracking-widest text-left">Logout</span>
                       </button>
                     </div>
                   </motion.div>
@@ -201,7 +201,7 @@ const PublicNavbar = () => {
               className="premium-button-primary !py-2 !px-6 text-[10px] font-black uppercase tracking-widest flex items-center gap-2 group shadow-xl shadow-primary/10"
             >
               <LogIn size={14} className="group-hover:translate-x-1 transition-transform" />
-              Access Portal
+              Login / Register
             </button>
           )}
         </div>
@@ -253,7 +253,7 @@ const PublicNavbar = () => {
                 className="w-full text-[10px] font-black uppercase tracking-widest text-muted text-left flex items-center gap-2"
               >
                 <LogIn size={14} className="text-primary" />
-                {userInfo ? (userInfo.role === 'Admin' ? 'Go to Admin Terminal' : 'Proceed to Portal') : 'Access Portal'}
+                {userInfo ? (userInfo.role === 'Admin' ? 'Go to Admin Dashboard' : 'Open User Menu') : 'Login / Register'}
               </button>
             </div>
           </motion.div>

@@ -16,7 +16,7 @@ const ITEMS_PER_PAGE = 12;
 // --- Sub-components ---
 
 const PageHero = () => {
-  const title = "OUR RITUALS".split("");
+  const title = "OUR SERVICES".split("");
 
   return (
     <section className="relative h-[45vh] flex items-center justify-center overflow-hidden bg-background">
@@ -36,7 +36,7 @@ const PageHero = () => {
           className="inline-flex items-center gap-3 px-4 py-1.5 bg-primary/10 border border-primary/20 rounded-full mb-3 md:mb-6"
         >
           <Sparkles size={12} className="text-primary" />
-          <span className="text-[9px] font-black text-primary uppercase tracking-[0.3em]">Pure Elegance</span>
+          <span className="text-[9px] font-black text-primary uppercase tracking-[0.3em]">Our Services</span>
         </motion.div>
 
         <h1 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-4 md:mb-8 flex justify-center gap-[2px] font-luxury ">
@@ -60,7 +60,7 @@ const PageHero = () => {
         >
           <Link to="/" className="hover:text-primary transition-colors">Home Base</Link>
           <span className="w-1.5 h-px bg-white/20" />
-          <span className="text-primary ">The Menu</span>
+          <span className="text-primary ">Our Services</span>
         </motion.div>
       </div>
     </section>
@@ -139,7 +139,7 @@ export default function PublicServices() {
                     }`} />
 
                   <span className="relative z-10 text-[9px] font-medium uppercase tracking-[0.25em] whitespace-nowrap">
-                    All Rituals
+                    All Services
                   </span>
 
                   {/* Bottom Highlight */}
@@ -192,10 +192,10 @@ export default function PublicServices() {
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-[2px] bg-primary/30" />
-                  <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Available Experiences</p>
+                  <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Available Services</p>
                 </div>
                 <h2 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl font-black text-white uppercase tracking-wide font-luxury">
-                  {activeCategory === 'All' ? 'The Collection' : categories.find(c => c._id === activeCategory)?.name}
+                  {activeCategory === 'All' ? 'Our Collection' : categories.find(c => c._id === activeCategory)?.name}
                 </h2>
               </div>
               <p className="text-muted text-[10px] font-black uppercase tracking-widest bg-secondary/50 px-5 py-2.5 rounded-xl border border-white/5">
@@ -238,7 +238,7 @@ export default function PublicServices() {
                           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                         />
                         <div className="absolute top-4 right-4 px-4 py-2 bg-background/90 backdrop-blur-md rounded-full text-[9px] font-black text-primary uppercase tracking-widest shadow-xl border border-white/10">
-                          {service.category?.name || categories.find(c => c._id === (service.category?._id || service.category))?.name || "Ritual"}
+                          {service.category?.name || categories.find(c => c._id === (service.category?._id || service.category))?.name || "Service"}
                         </div>
                       </div>
 
@@ -266,7 +266,7 @@ export default function PublicServices() {
                           onClick={() => navigate('/book', { state: { serviceId: service._id } })}
                           className="w-full py-4 rounded-2xl bg-white/[0.03] border border-white/5 text-[10px] font-black uppercase tracking-[0.2em] text-white hover:bg-primary hover:text-secondary hover:border-primary transition-all duration-300 shadow-lg group-hover:shadow-primary/10"
                         >
-                          Book Protocol
+                          Book Now
                         </button>
                       </div>
                     </motion.div>
@@ -277,7 +277,7 @@ export default function PublicServices() {
                       <LayoutGrid size={80} strokeWidth={1} />
                     </div>
                     <h3 className="text-4xl font-black text-white uppercase tracking-tighter mb-6 font-luxury">No Matches Found</h3>
-                    <p className="text-[11px] font-black text-muted uppercase tracking-[0.3em] max-w-sm leading-relaxed opacity-60">The current filter criteria returned zero available rituals. Please refine your selection.</p>
+                    <p className="text-[11px] font-black text-muted uppercase tracking-[0.3em] max-w-sm leading-relaxed opacity-60">The current filter criteria returned zero available services. Please refine your selection.</p>
                   </div>
                 )}
               </motion.div>
@@ -323,7 +323,7 @@ export default function PublicServices() {
                 </div>
 
                 <p className="text-[9px] font-black text-muted/40 uppercase tracking-[0.5em] ">
-                  Chronicle Page {currentPage} of {totalPages}
+                  Page {currentPage} of {totalPages}
                 </p>
               </div>
             )}

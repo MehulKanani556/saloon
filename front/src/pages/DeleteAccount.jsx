@@ -24,7 +24,7 @@ export default function DeleteAccount() {
   };
 
   return (
-    <UserPanelLayout title="Account Closure">
+    <UserPanelLayout title="Delete Account">
       <div className="w-full max-w-4xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -39,8 +39,8 @@ export default function DeleteAccount() {
               <ShieldX size={32} strokeWidth={1.5} />
             </div>
             <div className="space-y-1">
-              <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight uppercase leading-none">Account <span className="text-red-500 italic">Closure</span></h2>
-              <p className="text-muted/40 text-[11px] font-medium tracking-widest uppercase">Permanent removal of your atelier profile and history</p>
+              <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight uppercase leading-none">Delete <span className="text-red-500 italic">Account</span></h2>
+              <p className="text-muted/40 text-[11px] font-medium tracking-widest uppercase">Permanently delete your account and history</p>
             </div>
           </div>
 
@@ -48,21 +48,21 @@ export default function DeleteAccount() {
             <div className="bg-red-500/[0.03] border border-red-500/10 rounded-2xl p-6 md:p-8 space-y-6 backdrop-blur-md">
               <div className="flex items-center gap-3">
                 <AlertCircle className="text-red-500" size={18} />
-                <p className="text-[12px] font-bold text-red-500 uppercase tracking-widest leading-none">Irreversible Action Warning</p>
+                <p className="text-[12px] font-bold text-red-500 uppercase tracking-widest leading-none">Warning: This Cannot Be Undone</p>
               </div>
               
               <div className="space-y-4 text-[13px] text-muted/60 font-medium leading-relaxed">
                 <div className="flex items-start gap-4">
                   <div className="w-1.5 h-1.5 rounded-full bg-red-500/40 mt-1.5 shrink-0" />
-                  <p>Removal of your digital footprint from the Salon atelier matrix.</p>
+                  <p>Your account will be completely removed from our system.</p>
                 </div>
                 <div className="flex items-start gap-4">
                   <div className="w-1.5 h-1.5 rounded-full bg-red-500/40 mt-1.5 shrink-0" />
-                  <p>Permanent archival of all reservation history and aesthetic records.</p>
+                  <p>All your appointments and records will be permanently deleted.</p>
                 </div>
                 <div className="flex items-start gap-4">
                   <div className="w-1.5 h-1.5 rounded-full bg-red-500/40 mt-1.5 shrink-0" />
-                  <p>Revocation of all membership privileges and synchronization access.</p>
+                  <p>You will lose access to all member benefits and features.</p>
                 </div>
               </div>
             </div>
@@ -72,7 +72,7 @@ export default function DeleteAccount() {
                 onClick={() => setShowConfirm(true)}
                 className="w-full bg-red-500/10 hover:bg-red-600 border border-red-500/20 hover:border-transparent py-5 rounded-2xl text-[11px] font-bold uppercase tracking-[0.3em] text-red-500 hover:text-white transition-all shadow-xl hover:shadow-red-500/20 group flex items-center justify-center gap-4 active:scale-[0.99]"
               >
-                Begin Account Closure
+                Begin Account Deletion
                 <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
@@ -104,15 +104,15 @@ export default function DeleteAccount() {
                   </div>
 
                   <div className="space-y-3">
-                    <h3 className="text-2xl md:text-3xl font-extrabold text-white uppercase tracking-tight leading-none">Security <span className="text-red-500 italic">Auth</span></h3>
+                    <h3 className="text-2xl md:text-3xl font-extrabold text-white uppercase tracking-tight leading-none">Confirm <span className="text-red-500 italic">Identity</span></h3>
                     <p className="text-muted/40 text-[11px] font-bold uppercase tracking-[0.25em] max-w-xs mx-auto leading-relaxed">
-                      Confirm your identity to finalize the removal process.
+                      Enter your password to confirm account deletion.
                     </p>
                   </div>
 
                   <div className="space-y-8 text-left">
                     <div className="space-y-3">
-                      <label className="text-[10px] font-bold text-muted/30 uppercase tracking-[0.2em] ml-2">Verification Key</label>
+                      <label className="text-[10px] font-bold text-muted/30 uppercase tracking-[0.2em] ml-2">Password</label>
                       <input
                         type="password"
                         value={password}
@@ -127,7 +127,7 @@ export default function DeleteAccount() {
                         onClick={() => setShowConfirm(false)}
                         className="flex-1 px-8 py-4 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-white/10 text-muted hover:text-white transition-all"
                       >
-                        Abort Closure
+                        Cancel
                       </button>
                       <button
                         onClick={handleDissolve}
@@ -135,7 +135,7 @@ export default function DeleteAccount() {
                         className="flex-1 px-8 py-4 bg-red-600 text-white rounded-2xl text-[10px] font-bold uppercase tracking-[0.2em] shadow-xl shadow-red-600/20 disabled:opacity-30 flex items-center justify-center gap-3 transition-all hover:scale-[1.02] active:scale-[0.98]"
                       >
                         {loading ? <Loader2 className="animate-spin" size={18} /> : <Trash2 size={18} />}
-                        Final Closure
+                        Delete Account
                       </button>
                     </div>
                   </div>

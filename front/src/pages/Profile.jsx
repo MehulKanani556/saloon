@@ -71,7 +71,7 @@ export default function Profile() {
               <UserCircle size={16} className="text-primary/40" />
             </div>
           </div>
-          <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-muted/60 animate-pulse">Authenticating Profile...</p>
+          <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-muted/60 animate-pulse">Loading Profile...</p>
         </div>
       </UserPanelLayout>
     )
@@ -110,7 +110,7 @@ export default function Profile() {
 
               <div className="space-y-3 flex-1 text-center sm:text-left">
                 <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4">
-                  <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight uppercase leading-none">Client <span className="text-primary italic">Profile</span></h2>
+                  <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight uppercase leading-none">My <span className="text-primary italic">Profile</span></h2>
                   <div className="px-4 py-1 bg-primary/10 text-primary border border-primary/20 rounded-full text-[9px] font-bold uppercase tracking-widest">
                     {user?.role || 'CLIENT'}
                   </div>
@@ -120,7 +120,7 @@ export default function Profile() {
                     <Fingerprint size={14} className="text-primary/30" /> REF: <span className="text-primary/80 font-mono">#{user?.customId || user?._id?.slice(-8).toUpperCase()}</span>
                   </p>
                   <p className="text-muted/40 text-[12px] font-medium max-w-md leading-relaxed mx-auto sm:mx-0">
-                    Your bespoke credentials and history within the Salon atelier ecosystem.
+                    Your personal details and profile information.
                   </p>
                 </div>
               </div>
@@ -139,7 +139,7 @@ export default function Profile() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-10">
               {/* Name */}
               <div className="space-y-3">
-                <label className="text-[10px] font-bold text-muted/40 uppercase tracking-[0.3em] ml-2">Display Name</label>
+                <label className="text-[10px] font-bold text-muted/40 uppercase tracking-[0.3em] ml-2">Full Name</label>
                 <div className="relative group/field">
                   <div className={`absolute left-5 top-1/2 -translate-y-1/2 transition-colors ${isEditing ? 'text-primary' : 'text-muted/20'}`}>
                     <User size={18} />
@@ -210,7 +210,7 @@ export default function Profile() {
                     {updating ? (
                       <>
                         <Loader2 className="animate-spin" size={16} />
-                        Syncing...
+                        Saving...
                       </>
                     ) : (
                       <>

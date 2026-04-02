@@ -17,7 +17,7 @@ import { Link } from 'react-router-dom';
 // --- Sub-components ---
 
 const PageHero = () => {
-  const title = "THE CHRONICLE".split("");
+  const title = "OUR STORY".split("");
 
   return (
     <section className="relative h-[45vh] flex items-center justify-center overflow-hidden bg-background">
@@ -36,7 +36,7 @@ const PageHero = () => {
           className="inline-flex items-center gap-3 px-4 py-1.5 bg-primary/10 border border-primary/20 rounded-full mb-3 md:mb-6"
         >
           <Sparkles size={12} className="text-primary" />
-          <span className="text-[9px] font-black text-primary uppercase tracking-[0.3em]">Our Legacy</span>
+          <span className="text-[9px] font-black text-primary uppercase tracking-[0.3em]">Our Vision</span>
         </motion.div>
 
         <h1 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-4 md:mb-8 flex justify-center gap-[2px] font-luxury ">
@@ -58,7 +58,7 @@ const PageHero = () => {
           transition={{ delay: 1 }}
           className="mt-4 md:mt-8 flex items-center justify-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-muted"
         >
-          <Link to="/" className="hover:text-primary transition-colors">Home Base</Link>
+          <Link to="/" className="hover:text-primary transition-colors">Home</Link>
           <span className="w-1.5 h-px bg-white/20" />
           <span className="text-primary ">Our Story</span>
         </motion.div>
@@ -81,31 +81,31 @@ const StorySection = () => {
             <div className="flex flex-col items-start mb-5">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-[2px] bg-primary/30" />
-                <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">The Beginning</p>
+                <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Our Story</p>
                 <div className="w-12 h-[2px] bg-primary/30" />
               </div>
               <h2 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-4 md:mb-8 text-center font-luxury">
                 WHERE PASSION <br />
-                <span className="text-primary">MEETS ARTISTRY</span>
+                <span className="text-primary">MEETS STYLE</span>
               </h2>
             </div>
             <p className="leading-normal md:leading-loose tracking-wide text-xs md:text-sm font-bold opacity-80 mb-2">
-              Founded in 2014, Glow & Elegance was born from a singular passion: to redefine the boundary between beauty and artistry. For over a decade, we've curated an oasis of sophistication where every ritual is a masterpiece.
+              Founded in 2014, Glow & Elegance was born from a simple passion: to provide expert beauty care. For over a decade, we've created a space where every service is done with care and skill.
             </p>
             <p className="leading-normal md:leading-loose tracking-wide text-xs md:text-sm font-bold opacity-80">
-              Our artisans are not just technicians; they are visionaries trained at the highest international levels. We believe that true beauty is realized when inner confidence harmonizes with outer radiance.
+              Our stylists are highly trained professionals who love what they do. We believe that true beauty comes from both inner confidence and outer care.
             </p>
 
             <div className="pt-4 md:pt-8 grid grid-cols-2 gap-5 md:gap-10">
               <div className="space-y-4">
                 <Award className="text-primary" size={32} strokeWidth={1} />
-                <h4 className="text-xs font-black text-white uppercase tracking-widest leading-none">Global Standards</h4>
-                <p className="text-[10px] font-bold tracking-widest leading-relaxed opacity-50">Certified excellence in every ritual protocol performed.</p>
+                <h4 className="text-xs font-black text-white uppercase tracking-widest leading-none">High Quality</h4>
+                <p className="text-[10px] font-bold tracking-widest leading-relaxed opacity-50">Professional quality in every service we provide.</p>
               </div>
               <div className="space-y-4">
                 <Shield className="text-primary" size={32} strokeWidth={1} />
-                <h4 className="text-xs font-black text-white uppercase tracking-widest leading-none">Safe Sanctuary</h4>
-                <p className="text-[10px] font-bold tracking-widest leading-relaxed opacity-50">Uncompromising hygiene and premium care in every sanctuary.</p>
+                <h4 className="text-xs font-black text-white uppercase tracking-widest leading-none">Clean & Safe</h4>
+                <p className="text-[10px] font-bold tracking-widest leading-relaxed opacity-50">Strict hygiene standards in a clean, safe environment.</p>
               </div>
             </div>
           </motion.div>
@@ -161,11 +161,11 @@ const PhilosophySection = () => {
         >
           <Quote className="text-primary/20 mx-auto mb-5 md:mb-10" size={60} strokeWidth={1} />
           <h2 className="text-2xl md:text-4xl lg:text-5xl font-black text-white uppercase tracking-normal leading-tight mb-6 md:mb-12 font-luxury">
-            "Beauty is not an accessory, it is the <span className="text-primary">ultimate expression</span> of one's architectural soul."
+            "Beauty is not just an accessory, it is the <span className="text-primary">true expression</span> of who you are."
           </h2>
           <div className="flex flex-col items-center">
             <div className="w-12 h-px bg-primary mb-6" />
-            <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em]">The Glow Philosophy</p>
+            <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em]">Our Vision</p>
           </div>
         </motion.div>
       </div>
@@ -177,20 +177,20 @@ const ProtocolSection = () => {
   const steps = [
     {
       id: "01",
-      title: "Archetype Consultation",
-      desc: "Every ritual begins with a deep analysis of your personal aesthetic archetype and scalp/skin signature.",
+      title: "Consultation",
+      desc: "Every service starts with understanding your style and needs.",
       icon: <Fingerprint className="text-primary" size={24} />
     },
     {
       id: "02",
-      title: "Mastery Execution",
-      desc: "Our artists employ verified global protocols v3.0, using rare formulations and artisanal tools.",
+      title: "Professional Service",
+      desc: "Our stylists use proven techniques and quality products.",
       icon: <Zap className="text-primary" size={24} />
     },
     {
       id: "03",
-      title: "Longevity Protocol",
-      desc: "We provide bespoke aftercare scripts and temporal follow-ups to maintain the masterpiece.",
+      title: "Aftercare Tips",
+      desc: "We give you personalized tips to maintain your new look.",
       icon: <Activity className="text-primary" size={24} />
     }
   ];
@@ -199,9 +199,9 @@ const ProtocolSection = () => {
     <section className="py-12 md:py-24 bg-secondary/30">
       <div className="container mx-auto px-6">
         <div className="flex flex-col items-center mb-8 md:mb-16 text-center">
-          <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em] mb-4">Operational Standards</p>
+          <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em] mb-4">How We Work</p>
           <h2 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white uppercase tracking-wide leading-[1.1] font-luxury">
-            THE <span className="text-primary">SANCTITY</span> PROTOCOL
+            OUR <span className="text-primary">SERVICE</span> STEPS
           </h2>
         </div>
 
@@ -235,18 +235,18 @@ const ProtocolSection = () => {
 const MissionVision = () => {
   const data = [
     {
-      title: "The Mission",
-      desc: "To empower individuals through personalized beauty rituals that harmonize inner confidence with outer radiance.",
+      title: "Our Mission",
+      desc: "To help people feel confident through personalized beauty services.",
       icon: <Target className="text-primary" />
     },
     {
-      title: "The Vision",
-      desc: "To become the global benchmark for luxury grooming, where innovation meets the timeless traditions of elegance.",
+      title: "Our Vision",
+      desc: "To be the best salon for quality grooming and modern styles.",
       icon: <Eye className="text-primary" />
     },
     {
-      title: "The Core",
-      desc: "Integrity, excellence, and inclusivity are the pillars of every masterpiece we create at Glow & Elegance.",
+      title: "Our Values",
+      desc: "Honesty, quality, and welcoming everyone are important to us.",
       icon: <Heart className="text-primary" />
     }
   ];
@@ -291,11 +291,11 @@ const TeamSection = () => {
         <div className="flex flex-col items-center mb-8 md:mb-16 text-center">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-12 h-[2px] bg-primary/30" />
-            <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">The Elite Collective</p>
+            <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Our Expert Team</p>
             <div className="w-12 h-[2px] bg-primary/30" />
           </div>
           <h2 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white uppercase tracking-wide leading-[1.1] text-center font-luxury">
-            THE <span className="text-primary font-luxury">ARTISTS</span>
+            MEET OUR <span className="text-primary font-luxury">STYLISTS</span>
           </h2>
         </div>
 
@@ -321,13 +321,13 @@ const TeamSection = () => {
                   className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110"
                 />
                 <div className="absolute top-4 right-4 px-3 py-1 bg-background/90 backdrop-blur-md rounded-full text-[9px] font-black text-primary uppercase tracking-widest shadow-lg">
-                  {member.role || "Elite Artisan"}
+                  {member.role || "Expert Stylist"}
                 </div>
               </div>
               <div className="px-2 pb-2">
                 <div className="mb-4">
                   <h4 className="text-lg font-black text-white uppercase tracking-tight line-clamp-1 font-luxury leading-none">{member.name}</h4>
-                  <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mt-2 mb-1 opacity-80">Maestro</p>
+                  <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mt-2 mb-1 opacity-80">Expert</p>
                 </div>
 
                 <div className="flex items-center gap-3 text-muted text-[9px] font-black uppercase tracking-widest mb-6">
@@ -336,7 +336,7 @@ const TeamSection = () => {
                   </span>
                   <span className="h-1 w-1 bg-white/10 rounded-full" />
                   <span className="flex items-center gap-1.5">
-                    Verified Protocol
+                    Best Techniques
                   </span>
                 </div>
               </div>
@@ -373,10 +373,10 @@ const SalonDetails = () => {
           <div className="flex flex-col items-start mb-8 md:mb-16 text-left">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-[2px] bg-primary/30" />
-              <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Access Terminal</p>
+              <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Help</p>
               <div className="w-12 h-[2px] bg-primary/30" />
             </div>
-            <h3 className="text-lg md:text-2xl lg:text-4xl xl:text-5xl font-black text-white uppercase tracking-wide leading-[1.1] text-left font-luxury">Operational Window</h3>
+            <h3 className="text-lg md:text-2xl lg:text-4xl xl:text-5xl font-black text-white uppercase tracking-wide leading-[1.1] text-left font-luxury">Opening Hours</h3>
           </div>
 
           <div className="space-y-2">
@@ -394,10 +394,10 @@ const SalonDetails = () => {
             <div className="flex flex-col items-start mb-8 md:mb-16 text-left">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-[2px] bg-primary/30" />
-                <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Coordinates</p>
+                <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Location</p>
                 <div className="w-12 h-[2px] bg-primary/30" />
               </div>
-              <h3 className="text-lg md:text-2xl lg:text-4xl xl:text-5xl font-black text-white uppercase tracking-wide leading-[1.1] text-left font-luxury">Find The Sanctuary</h3>
+              <h3 className="text-lg md:text-2xl lg:text-4xl xl:text-5xl font-black text-white uppercase tracking-wide leading-[1.1] text-left font-luxury">Visit Our Salon</h3>
             </div>
 
             <div className="space-y-8">
@@ -407,7 +407,7 @@ const SalonDetails = () => {
                 </div>
                 <div>
                   <h5 className="text-[10px] font-black text-white uppercase tracking-[0.3em] mb-1 md:mb-2">Primary Address</h5>
-                  <p className="text-xs font-bold text-muted leading-relaxed tracking-widest opacity-60">123, LUXURY LANE, BANDRA WEST, <br /> MUMBAI, MAHARASHTRA 400050</p>
+                  <p className="text-xs font-bold text-muted leading-relaxed tracking-widest opacity-60">123, LUXURY STREET, MUMBAI, 400050</p>
                 </div>
               </div>
 
@@ -416,7 +416,7 @@ const SalonDetails = () => {
                   <Phone size={24} strokeWidth={1} />
                 </div>
                 <div>
-                  <h5 className="text-[10px] font-black text-white uppercase tracking-[0.3em] mb-1 md:mb-2">Voice Channel</h5>
+                  <h5 className="text-[10px] font-black text-white uppercase tracking-[0.3em] mb-1 md:mb-2">Call Us</h5>
                   <p className="text-xs font-bold text-muted leading-relaxed tracking-widest opacity-60">+91 98765 43210</p>
                 </div>
               </div>
@@ -426,7 +426,7 @@ const SalonDetails = () => {
                   <Mail size={24} strokeWidth={1} />
                 </div>
                 <div>
-                  <h5 className="text-[10px] font-black text-white uppercase tracking-[0.3em] mb-1 md:mb-2">Digital Protocol</h5>
+                  <h5 className="text-[10px] font-black text-white uppercase tracking-[0.3em] mb-1 md:mb-2">Email Us</h5>
                   <p className="text-xs font-bold text-muted leading-relaxed tracking-widest opacity-60">HQ@GLOWELEGANCE.COM</p>
                 </div>
               </div>

@@ -20,12 +20,12 @@ const PublicFooter = () => {
                 <h2 className="text-xl font-black text-white uppercase tracking-[0.3em] font-luxury ">
                   Glow <span className="text-primary">&</span> Elegance
                 </h2>
-                <p className="text-[8px] font-black text-primary/60 uppercase tracking-[0.4em] mt-1 ml-1">Premium Saloon Collective</p>
+                <p className="text-[8px] font-black text-primary/60 uppercase tracking-[0.4em] mt-1 ml-1">Expert Hair & Beauty Care</p>
               </div>
             </Link>
 
             <p className="text-muted text-[10px] font-bold leading-relaxed tracking-[0.15em] max-w-[280px]">
-              The ultimate destination for luxury beauty and lifestyle. Crafting your perfect aesthetic narrative since day one.
+              The ultimate destination for professional beauty and lifestyle care. Crafting your perfect look since day one.
             </p>
 
             <div className="flex items-center gap-4">
@@ -62,7 +62,7 @@ const PublicFooter = () => {
           <div className="flex col-span-2 md:col-span-1 flex-col items-center md:items-start order-4 lg:order-3">
             <h4 className="text-[11px] font-black text-white uppercase tracking-[0.3em] mb-5 lg:mb-10 border-b-2 border-primary/20 pb-2">Our Focus</h4>
             <div className="flex flex-col gap-4">
-              {['Architectural Hair', 'Advanced Skincare', 'Bridal Rituals', 'Visual Artistry'].map((item) => (
+              {['Expert Haircuts', 'Skin Treatments', 'Bridal Services', 'Beauty Care'].map((item) => (
                 <span key={item} className="text-muted text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
                   <div className="w-1.5 h-1.5 rounded-full bg-primary/20" />
                   {item}
@@ -80,7 +80,7 @@ const PublicFooter = () => {
                   <Phone size={14} />
                 </div>
                 <div>
-                  <p className="text-[8px] font-black text-muted uppercase tracking-widest mb-0.5 text-start">Direct Line</p>
+                  <p className="text-[8px] font-black text-muted uppercase tracking-widest mb-0.5 text-start">Phone Number</p>
                   <p className="text-[10px] text-white font-medium tracking-widest">+91 98765 43210</p>
                 </div>
               </div>
@@ -89,7 +89,7 @@ const PublicFooter = () => {
                   <Mail size={14} />
                 </div>
                 <div>
-                  <p className="text-[8px] font-black text-muted uppercase tracking-widest mb-0.5 text-start">Electronic Link</p>
+                  <p className="text-[8px] font-black text-muted uppercase tracking-widest mb-0.5 text-start">Email Address</p>
                   <p className="text-[10px] text-white font-medium tracking-widest lowercase">concierge@glowelegance.com</p>
                 </div>
               </div>
@@ -98,7 +98,7 @@ const PublicFooter = () => {
                   <MapPin size={14} />
                 </div>
                 <div>
-                  <p className="text-[8px] font-black text-muted uppercase tracking-widest mb-0.5 text-start">Physical HQ</p>
+                  <p className="text-[8px] font-black text-muted uppercase tracking-widest mb-0.5 text-start">Our Location</p>
                   <p className="text-[10px] text-white font-medium tracking-widest leading-tight text-start ">
                     123, Luxury Lane, Bandra West, Mumbai
                   </p>
@@ -111,12 +111,12 @@ const PublicFooter = () => {
         {/* Bottom Bar */}
         <div className="pt-6 lg:pt-12 border-t border-white/5 flex flex-col lg:flex-row items-center justify-between gap-2 lg:gap-8">
           <p className="text-[9px] font-black text-muted/50 tracking-[0.3em] text-center ">
-            &copy; 2026 GLOW & ELEGANCE COLLECTIVE. SYSTEM ARCHITECTURE BY ARCHITECTS OF BEAUTY.
+            &copy; 2026 GLOW & ELEGANCE SALOON. ALL RIGHTS RESERVED.
           </p>
           <div className="hidden md:flex items-center gap-3 text-[9px] font-black text-muted tracking-[0.2em]">
             <span className="opacity-50">Crafted with</span>
             <Heart size={12} className="text-red-500 fill-red-500 animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.4)]" />
-            <span className="opacity-50">by Premium Aesthetic Artisans</span>
+            <span className="opacity-50">with expert beauty specialists</span>
           </div>
         </div>
       </div>

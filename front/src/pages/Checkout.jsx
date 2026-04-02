@@ -123,12 +123,12 @@ const PaymentForm = ({ formik, total, cartItems, setStep, dispatch, isProcessing
                     setIsProcessing(false);
                     setStep(3);
                     dispatch(clearCart());
-                    toast.success('Acquisition Successful');
+                    toast.success('Order Successful');
                 }
             }
         } catch (err) {
             setIsProcessing(false);
-            toast.error(err.response?.data?.message || 'Acquisition protocol failed');
+            toast.error(err.response?.data?.message || 'Payment failed');
         }
     };
 
@@ -270,9 +270,9 @@ export default function Checkout() {
                     <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center border border-white/10">
                         <ShoppingBag size={30} className="text-muted/20" />
                     </div>
-                    <p className="text-[10px] font-black uppercase tracking-[0.4em] text-muted">No active acquisitions to process.</p>
+                    <p className="text-[10px] font-black uppercase tracking-[0.4em] text-muted">Your cart is empty.</p>
                     <button onClick={() => navigate('/shop')} className="premium-button-primary !px-12 py-5 text-[10px] uppercase font-black tracking-widest ">
-                        Return to Archives
+                        Continue Shopping
                     </button>
                 </div>
             </UserPanelLayout>
@@ -280,7 +280,7 @@ export default function Checkout() {
     }
 
     return (
-        <UserPanelLayout title="Checkout Protocol" hideSidebar={true}>
+        <UserPanelLayout title="Checkout" hideSidebar={true}>
             <div className="max-w-6xl mx-auto">
                 <AnimatePresence mode="wait">
                     {step === 1 && (

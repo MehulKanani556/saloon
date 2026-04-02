@@ -37,8 +37,8 @@ export default function Reports() {
   return (
     <div className="space-y-12">
       <AdminHeader 
-        title="Business Intelligence"
-        subtitle="Operational audit and growth analytics vault"
+        title="Business Reports"
+        subtitle="View your business performance and analytics"
         icon={TrendingUp}
       />
 

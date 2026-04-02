@@ -19,7 +19,7 @@ export default function Contact() {
     // Simulate API call
     setTimeout(() => {
       setIsSubmitting(false);
-      toast.success("Message sent to our sanctuary!");
+      toast.success("Message sent to our salon!");
       e.target.reset();
     }, 1500);
   };
@@ -46,7 +46,7 @@ export default function Contact() {
               className="inline-flex items-center gap-3 px-4 py-1.5 bg-primary/10 border border-primary/20 rounded-full mb-3 md:mb-6"
             >
               <Sparkles size={12} className="text-primary" />
-              <span className="text-[9px] font-black text-primary uppercase tracking-[0.3em]">Direct Channel</span>
+              <span className="text-[9px] font-black text-primary uppercase tracking-[0.3em]">Contact Us</span>
             </motion.div>
 
             <h1 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-4 md:mb-8 flex justify-center gap-[2px] font-luxury ">
@@ -68,9 +68,9 @@ export default function Contact() {
               transition={{ delay: 1 }}
               className="mt-4 md:mt-8 flex items-center justify-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-muted"
             >
-              <Link to="/" className="hover:text-primary transition-colors">Home Base</Link>
+              <Link to="/" className="hover:text-primary transition-colors">Home</Link>
               <span className="w-1.5 h-px bg-white/20" />
-              <span className="text-primary ">Reach Out</span>
+              <span className="text-primary ">Contact Us</span>
             </motion.div>
           </div>
         </section>
@@ -81,17 +81,17 @@ export default function Contact() {
             {/* Contact Info Sidebar */}
             <div className="lg:col-span-5 space-y-12">
               <div>
-                <h3 className="text-lg md:text-3xl font-black text-white uppercase tracking-wide mb-2">The HQ Sanctuary</h3>
+                <h3 className="text-lg md:text-3xl font-black text-white uppercase tracking-wide mb-2">Our Salon</h3>
                 <p className="text-muted text-xs md:text-sm font-medium tracking-widest leading-relaxed mb-10">
-                  Visit us for a consultation or simply to experience the ambiance of true luxury. Our artisans are waiting to listen.
+                  Visit us to talk about your needs or see our services. Our friendly staff is here to help you.
                 </p>
 
                 <div className="space-y-8">
                   {[
-                    { icon: <MapPin />, title: "Headquarters", details: "123 Sanctuary Road, Bandra West, Mumbai, 400050" },
-                    { icon: <Phone />, title: "Hotline", details: "+91 98765 43210 (24/7 Support)" },
-                    { icon: <Mail />, title: "Email Channel", details: "artisans@glowelegance.com" },
-                    { icon: <Clock />, title: "Open Ritual Hours", details: "Mon - Sat: 9 AM - 9 PM" },
+                    { icon: <MapPin />, title: "Our Location", details: "123 Luxury Street, Bandra West, Mumbai, 400050" },
+                    { icon: <Phone />, title: "Phone", details: "+91 98765 43210" },
+                    { icon: <Mail />, title: "Email", details: "contact@glowelegance.com" },
+                    { icon: <Clock />, title: "Opening Hours", details: "Mon - Sat: 9 AM - 9 PM" },
                   ].map((item, i) => (
                     <motion.div
                       key={i}
@@ -114,7 +114,7 @@ export default function Contact() {
               </div>
 
               <div className="pt-12 border-t border-white/5">
-                <h4 className="text-[10px] font-black text-white uppercase tracking-widest mb-8">Digital Connections</h4>
+                <h4 className="text-[10px] font-black text-white uppercase tracking-widest mb-8">Follow Us</h4>
                 <div className="flex items-center gap-4">
                   {[Instagram, Facebook, Twitter].map((Icon, i) => (
                     <a key={i} href="#" className="w-10 h-10 rounded-lg bg-secondary border border-white/5 flex items-center justify-center text-muted hover:text-primary hover:border-primary/30 hover:scale-110 transition-all duration-300 shadow-xl">
@@ -131,36 +131,36 @@ export default function Contact() {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="bg-secondary rounded-2xl p-5 md:p-10 md:p-16 shadow-2xl border border-white/5 relative overflow-hidden"
+                className="bg-secondary rounded-2xl p-5 md:p-16 shadow-2xl border border-white/5 relative overflow-hidden"
               >
                 <div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none">
                   <Sparkles size={150} strokeWidth={1} className="text-primary" />
                 </div>
 
                 <div className="relative z-10">
-                  <h3 className="text-lg md:text-2xl font-black text-white uppercase tracking-wide mb-2">Send an Inquiry</h3>
-                  <p className="text-muted font-bold text-[10px] uppercase tracking-widest mb-12">We respond to all transmissions within 2 hours.</p>
+                  <h3 className="text-lg md:text-2xl font-black text-white uppercase tracking-wide mb-2">Send a Message</h3>
+                  <p className="text-muted font-bold text-[10px] uppercase tracking-widest mb-12">We'll reply within 24 hours.</p>
 
                   <form onSubmit={handleSubmit} className="space-y-3 md:space-y-8">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                       <div className="space-y-1 md:space-y-3">
-                        <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Full Identity</label>
+                        <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Your Name</label>
                         <input required placeholder="Your Name" className="w-full bg-background border-2 border-transparent focus:border-primary/20 rounded-2xl px-6 py-4 text-sm font-bold outline-none transition-all text-white" />
                       </div>
                       <div className="space-y-1 md:space-y-3">
-                        <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Contact Portal</label>
+                        <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Email Address</label>
                         <input required type="email" placeholder="Email Address" className="w-full bg-background border-2 border-transparent focus:border-primary/20 rounded-2xl px-6 py-4 text-sm font-bold outline-none transition-all text-white" />
                       </div>
                     </div>
 
                     <div className="space-y-1 md:space-y-3">
-                      <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Subject Matter</label>
+                      <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Subject</label>
                       <input placeholder="e.g. Bridal Packages" className="w-full bg-background border-2 border-transparent focus:border-primary/20 rounded-2xl px-6 py-4 text-sm font-bold outline-none transition-all text-white" />
                     </div>
 
                     <div className="space-y-1 md:space-y-3">
-                      <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Detailed Message</label>
-                      <textarea required rows={5} placeholder="Tell us about your requirements..." className="w-full bg-background border-2 border-transparent focus:border-primary/20 rounded-2xl px-6 py-4 text-sm font-bold outline-none transition-all text-white resize-none" />
+                      <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Your Message</label>
+                      <textarea required rows={5} placeholder="Tell us what you need..." className="w-full bg-background border-2 border-transparent focus:border-primary/20 rounded-2xl px-6 py-4 text-sm font-bold outline-none transition-all text-white resize-none" />
                     </div>
 
                     <button
@@ -171,7 +171,7 @@ export default function Contact() {
                         <div className="w-6 h-6 border-2 border-secondary/30 border-t-secondary rounded-full animate-spin" />
                       ) : (
                         <>
-                          Transmit Message
+                          Send Message
                           <Send size={18} />
                         </>
                       )}

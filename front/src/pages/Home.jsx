@@ -21,7 +21,7 @@ import { fetchCategories } from '../redux/slices/categorySlice';
 // --- Sub-components ---
 const Hero = () => {
   const { userInfo } = useSelector((state) => state.auth);
-  const headlineWords = "WHERE BEAUTY MEETS ARTISTRY".split(" ");
+  const headlineWords = "EXPERT HAIR & BEAUTY CARE".split(" ");
   const navigate = useNavigate();
 
   return (
@@ -100,7 +100,7 @@ const Hero = () => {
           transition={{ duration: 1, delay: 1.2 }}
           className="text-muted text-xs md:text-base font-medium tracking-widest uppercase lg:mb-12 mb-6 max-w-xl mx-auto"
         >
-          Crafting Your Perfect Style Since Day One
+          Beautiful styles since 2012
         </motion.p>
 
         {/* Buttons */}
@@ -220,7 +220,7 @@ const ServicesPreview = () => {
                     }}
                   />
                   <div className="absolute top-4 right-4 px-3 py-1 bg-background/90 backdrop-blur-md rounded-full text-[9px] font-black text-primary uppercase tracking-widest shadow-lg">
-                    {service.category?.name || "Ritual"}
+                    {service.category?.name || "Service"}
                   </div>
                 </div>
                 <div className="px-2 pb-2">
@@ -241,7 +241,7 @@ const ServicesPreview = () => {
                     onClick={() => navigate('/book', { state: { serviceId: service._id } })}
                     className="w-full py-3.5 rounded-xl bg-background text-[10px] font-black uppercase tracking-[0.2em] text-white hover:bg-primary hover:text-secondary transition-all shadow-sm group-hover:shadow-primary/20"
                   >
-                    Book Ritual Now
+                    Book Service Now
                   </button>
                 </div>
               </motion.div>
@@ -264,26 +264,26 @@ const WhyChooseUs = () => {
   const features = [
     {
       icon: <Scissors size={24} />,
-      title: "Maestro Stylists",
-      desc: "Architects of hair, trained in global haute couture techniques.",
+      title: "Expert Stylists",
+      desc: "Professional stylists trained in modern hair techniques.",
       prefix: "01"
     },
     {
       icon: <Star size={24} />,
-      title: "Organic Formations",
-      desc: "Pure botanical extracts fused with advanced molecular science.",
+      title: "Natural Products",
+      desc: "High-quality natural products with advanced care formulas.",
       prefix: "02"
     },
     {
       icon: <Clock size={24} />,
-      title: "Temporal Fluidity",
-      desc: "Your ritual, your schedule. Seamless zero-latency booking.",
+      title: "Easy Booking",
+      desc: "Book your appointment anytime, anywhere with ease.",
       prefix: "03"
     },
     {
       icon: <Shield size={24} />,
-      title: "Elite Sanitization",
-      desc: "Surgical-grade hygiene protocols for your absolute peace.",
+      title: "Clean & Safe",
+      desc: "Hospital-level cleanliness standards for your safety.",
       prefix: "04"
     },
   ];
@@ -309,14 +309,14 @@ const WhyChooseUs = () => {
             >
               <div className="inline-flex items-center gap-3 px-4 py-1 rounded-full bg-white/5 border border-white/10 mb-6">
                 <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                <span className="text-[10px] font-black text-white uppercase tracking-[0.4em]">The Glow Philosophy</span>
+                <span className="text-[10px] font-black text-white uppercase tracking-[0.4em]">Our Vision</span>
               </div>
               <h2 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-4 lg:mb-8 text-center lg:text-left">
                 Where <span className="text-transparent bg-clip-text bg-luxury-gradient">Excellence</span> <br />
                 Becomes Habit
               </h2>
               <p className="text-muted text-sm lg:text-base font-medium leading-relaxed tracking-wider max-w-full lg:max-w-lg mb-5 lg:mb-10">
-                We transcend the traditional salon experience. Every appointment is a meticulously choreographed ritual of transformation, precision, and luxury.
+                We go beyond the traditional salon experience. Every appointment is a carefully planned experience focused on your transformation and comfort.
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
@@ -381,14 +381,14 @@ const WhyChooseUs = () => {
                 <span className="text-4xl md:text-7xl font-black text-transparent bg-clip-text bg-luxury-gradient tracking-tighter ">12+</span>
                 <p className="text-[8px] md:text-[10px] font-medium md:font-black text-white uppercase tracking-[0.4em] mt-2 md:mt-4 mb-2">Years of Mastery</p>
                 <div className="h-px w-12 bg-primary mx-auto" />
-                <p className="text-[8px] text-muted font-medium md:font-bold uppercase tracking-widest mt-2 md:mt-4">Pioneering the future of cinematic beauty since 2012.</p>
+                <p className="text-[8px] text-muted font-medium md:font-bold uppercase tracking-widest mt-2 md:mt-4">Pioneering the future of beauty since 2012.</p>
               </div>
             </motion.div>
 
             {/* Experience Detail Tag */}
             <div className="absolute top-4 md:top-12 left-4 md:left-12 flex flex-col gap-2 md:gap-4">
               <div className="px-3 py-2 md:px-6 md:py-3 rounded-xl bg-background/80 border border-white/10 backdrop-blur-xl">
-                <p className="text-[8px] md:text-[10px] font-black text-white uppercase tracking-widest">Ritual Protocol v3.0</p>
+                <p className="text-[8px] md:text-[10px] font-black text-white uppercase tracking-widest">Service Standards</p>
               </div>
               <div className="px-3 py-2 md:px-6 md:py-3 rounded-xl bg-primary border border-primary shadow-xl shadow-primary/20">
                 <p className="text-[8px] md:text-[10px] font-black text-secondary uppercase tracking-widest">Certified Excellence</p>
@@ -435,7 +435,7 @@ const RitualMenu = () => {
             The Ultimate Collection
           </motion.p>
           <h2 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-4 md:mb-8">
-            Ritual <span className="text-primary font-luxury">Menu</span>
+            Service <span className="text-primary font-luxury">Menu</span>
           </h2>
 
           {/* Clean Category Tabs */}
@@ -485,7 +485,7 @@ const RitualMenu = () => {
                       </span>
                     </div>
                     <p className="text-[10px] font-bold text-muted uppercase tracking-widest leading-relaxed">
-                      {service.duration} Minutes of pure luxury
+                      {service.duration} Minutes of premium care
                     </p>
                   </div>
                 </motion.div>
@@ -495,7 +495,7 @@ const RitualMenu = () => {
 
           {filteredServices.length === 0 && (
             <div className="py-24 text-center text-muted  uppercase text-[11px] font-black tracking-[0.4em] bg-secondary/50 rounded-2xl border border-white/5 shadow-inner">
-              Consulting the ritual archive...
+              Loading our service list...
             </div>
           )}
         </div>
@@ -528,14 +528,14 @@ const TeamPreview = () => {
             whileInView={{ opacity: 1 }}
             className="text-primary font-luxury font-black uppercase tracking-[0.3em] text-[10px] mb-4"
           >
-            Maestros of Style
+            Expert Stylists
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white uppercase tracking-wide leading-[1.1]"
           >
-            Meet Our <span className="text-primary">Artists</span>
+            Meet Our <span className="text-primary">Experts</span>
           </motion.h2>
         </div>
 
@@ -586,7 +586,7 @@ const TeamPreview = () => {
                     onClick={() => navigate('/book')}
                     className="w-full py-3.5 rounded-xl bg-background text-[10px] font-black uppercase tracking-[0.2em] text-white hover:bg-primary hover:text-secondary transition-all shadow-sm group-hover:shadow-primary/20"
                   >
-                    Induct Ritual
+                    Book Service
                   </button>
                 </div>
               </motion.div>
@@ -666,10 +666,10 @@ const Testimonials = () => {
 const FAQ = () => {
   const [open, setOpen] = useState(0);
   const faqs = [
-    { q: "How do I secure a ritual booking?", a: "Navigate to our booking protocol portal, select your desired ritual and maestro, and confirm your temporal slot. Digital confirmation will follow immediately." },
-    { q: "What is your rescheduling protocol?", a: "We require a minimum of 24-hour notice for temporal adjustments to ensure operational fluidity and maestro availability." },
-    { q: "Do you offer premium membership tiers?", a: "Yes, our 'Lumina Elite' program offers priority booking, exclusive ritual access, and cinematic lounge privileges. Inquire in-house for elevation." },
-    { q: "Are ritual products available for acquisition?", a: "Select professional-grade formations used during your masterpiece session are available for home integration within our retail vault." }
+    { q: "How do I book a service?", a: "Navigate to our booking section, select your desired service and stylist, and choose an available time slot. You'll receive a confirmation email immediately." },
+    { q: "What is your cancellation policy?", a: "We require at least 24 hours' notice for any changes or cancellations to your appointment." },
+    { q: "Do you offer premium memberships?", a: "Yes, our 'Elite' program offers priority booking, exclusive service access, and loyalty rewards. Ask our staff for more details." },
+    { q: "Can I buy the products used during my service?", a: "Yes, many of the professional-grade products we use are available for purchase in our salon." }
   ];
 
   return (
@@ -677,10 +677,10 @@ const FAQ = () => {
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-16 items-start">
           <div>
-            <p className="text-primary font-black uppercase tracking-[0.3em] text-[10px] mb-2 md:mb-4 text-center lg:text-left">Curiosity Protocol</p>
+            <p className="text-primary font-black uppercase tracking-[0.3em] text-[10px] mb-2 md:mb-4 text-center lg:text-left">Need Help?</p>
             <h2 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white uppercase tracking-wide mb-4 md:mb-8 leading-tight md:leading-none text-center lg:text-left">Frequently <br /> <span className=" text-transparent bg-clip-text bg-luxury-gradient">Asked Questions</span></h2>
             <p className="text-muted text-sm md:text-base max-w-lg mx-auto lg:max-w-md font-bold tracking-wide leading-relaxed text-center lg:text-left">
-              Informing your journey through the Glow Saloon ecosystem. Clear answers for a clear mind.
+              Common questions about booking and our services at Glow Saloon.
             </p>
           </div>
           <div className="space-y-4">
@@ -735,10 +735,10 @@ const BookingCTA = () => {
 
           <div className="relative z-10 max-w-2xl mx-auto">
             <h2 className="text-2xl md:text-5xl font-black uppercase tracking-wide mb-3 md:mb-6 leading-none whitespace-pre-line">
-              READY FOR YOUR {"\n"} TRANSFORMATION?
+              READY FOR YOUR {"\n"} NEW LOOK?
             </h2>
             <p className="text-secondary/90 text-sm md:text-base font-black tracking-widest mb-5 md:mb-10 max-w-md mx-auto">
-              Book your appointment today and experience luxury like never before.
+              Book your appointment today and experience professional care like never before.
             </p>
             <motion.button
               whileHover={{ scale: 1.05 }}

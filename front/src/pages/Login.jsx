@@ -134,7 +134,7 @@ export default function Login() {
             <img src={Logo} alt="Glow Saloon" className="h-16 w-auto object-contain brightness-0 invert" />
           </div>
           <h1 className="text-3xl font-black text-white tracking-tight leading-none uppercase font-luxury">Glow <span className="text-primary ">Saloon</span></h1>
-          <p className="text-muted text-[10px] font-bold uppercase tracking-[0.2em] mt-3 underline decoration-primary/30 underline-offset-4 decoration-2">UNIFIED ACCESS PORTAL</p>
+          <p className="text-muted text-[10px] font-bold uppercase tracking-[0.2em] mt-3 underline decoration-primary/30 underline-offset-4 decoration-2">LOGIN</p>
         </div>
 
         {/* Method Toggle */}
@@ -167,8 +167,8 @@ export default function Login() {
           {/* Identity Field */}
           <div className="space-y-3">
             <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-1 flex justify-between">
-              <span>Contact Signal</span>
-              <span className="text-[9px] lowercase font-medium ">identity matrix</span>
+              <span>Email or Phone</span>
+              <span className="text-[9px] lowercase font-medium ">your login</span>
             </label>
             <div className={`relative flex items-center bg-background border rounded-2xl overflow-hidden transition-all duration-300 ${formik.touched.identity && formik.errors.identity ? 'border-red-500/50 shadow-[0_0_0_1px_rgba(239,68,68,0.1)]' : 'border-white/5 shadow-premium'}`}>
 
@@ -209,7 +209,7 @@ export default function Login() {
                 exit={{ opacity: 0, y: -10 }}
                 className="space-y-2"
               >
-                <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-1">Authorization Passkey</label>
+                <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-1">Password</label>
                 <div className="relative group">
                   <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center gap-2 border-r border-white/10 pr-3 mr-3 h-5 pointer-events-none">
                     <ShieldCheck size={16} className="text-primary/70" />
@@ -245,7 +245,7 @@ export default function Login() {
                     className="w-full py-4 border-2 border-dashed border-primary/20 rounded-2xl flex items-center justify-center gap-3 text-primary font-black text-[10px] tracking-widest uppercase hover:bg-primary/5 transition-colors"
                   >
                     <Key size={16} />
-                    Generate Access Code
+                    Send Code
                   </button>
                 ) : (
                   <div className="space-y-2">
@@ -289,9 +289,9 @@ export default function Login() {
             disabled={loading}
             className={`w-full py-4 bg-primary text-secondary rounded-2xl font-black text-[10px] tracking-[0.2em] uppercase shadow-premium hover:shadow-primary/20 hover:scale-[1.01] active:scale-[0.98] transition-all flex items-center justify-center gap-3 group ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
-            {loading ? 'Processing Protocol...' : (
+            {loading ? 'Processing...' : (
               <>
-                {(formik.values.method === 'otp' && !otpSent) ? 'Generate Access Code' : 'Validate Identity'}
+                {(formik.values.method === 'otp' && !otpSent) ? 'Send Code' : 'Log In'}
                 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </>
             )}
@@ -302,12 +302,12 @@ export default function Login() {
           <div className="h-[1px] w-full bg-white/5" />
           <p className="text-[10px] font-bold text-muted uppercase tracking-widest">
             New to Glow Saloon?
-            <Link to="/signup" className="text-primary ml-2 hover:underline decoration-2">Establish Identity</Link>
+            <Link to="/signup" className="text-primary ml-2 hover:underline decoration-2">Create Account</Link>
           </p>
         </div>
 
         <p className="mt-10 text-center text-[9px] font-black text-white/20 uppercase tracking-[0.3em] leading-relaxed">
-          Proprietary Intelligence Suite <br /> Glow Saloon Collective
+          Secure Login System <br /> Glow Saloon
         </p>
       </motion.div>
     </div>
