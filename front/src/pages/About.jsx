@@ -178,52 +178,76 @@ const ProtocolSection = () => {
     {
       id: "01",
       title: "Consultation",
-      desc: "Every service starts with understanding your style and needs.",
-      icon: <Fingerprint className="text-primary" size={24} />
+      desc: "Every journey begins with a deep dive into your personal style and aesthetic aspirations.",
+      icon: <Fingerprint className="text-primary" size={28} strokeWidth={1} />
     },
     {
       id: "02",
-      title: "Professional Service",
-      desc: "Our stylists use proven techniques and quality products.",
-      icon: <Zap className="text-primary" size={24} />
+      title: "The Craft",
+      desc: "Our master artists execute your vision using world-class techniques and elite products.",
+      icon: <Zap className="text-primary" size={28} strokeWidth={1} />
     },
     {
       id: "03",
-      title: "Aftercare Tips",
-      desc: "We give you personalized tips to maintain your new look.",
-      icon: <Activity className="text-primary" size={24} />
+      title: "Longevity",
+      desc: "We provide tailored aftercare protocols to ensure your ritual's brilliance remains eternal.",
+      icon: <Activity className="text-primary" size={28} strokeWidth={1} />
     }
   ];
 
   return (
-    <section className="py-12 md:py-24 bg-secondary/30">
-      <div className="container mx-auto px-6">
-        <div className="flex flex-col items-center mb-8 md:mb-16 text-center">
-          <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em] mb-4">How We Work</p>
-          <h2 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white uppercase tracking-wide leading-[1.1] font-luxury">
-            OUR <span className="text-primary">SERVICE</span> STEPS
+    <section className="py-24 bg-secondary/20 relative overflow-hidden">
+        {/* Background Text */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none select-none">
+            <h2 className="text-[20vw] font-black uppercase tracking-tighter">PROTOCOLS</h2>
+        </div>
+
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="flex flex-col items-center mb-16 text-center">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-8 h-px bg-primary/40" />
+            <p className="text-[10px] font-black text-primary uppercase tracking-[0.5em]">The Experience</p>
+            <div className="w-8 h-px bg-primary/40" />
+          </div>
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-black text-white uppercase tracking-tight leading-none font-luxury">
+            OUR <span className="text-primary">Service</span> STEPS
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {steps.map((step, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.2 }}
-              className="relative p-6 lg:p-10 bg-background border border-white/5 rounded-3xl group hover:border-primary/30 transition-all duration-500 overflow-hidden"
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.2, duration: 0.8 }}
+              className="relative p-10 bg-background/40 backdrop-blur-sm border border-white/5 rounded-[2rem] group hover:border-primary/20 transition-all duration-700"
             >
-              <div className="absolute top-0 right-0 p-8 opacity-5 text-7xl font-black group-hover:opacity-10 transition-opacity">
-                {step.id}
+              <div className="absolute -top-6 -right-6 w-24 h-24 bg-primary/10 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
+              
+              <div className="flex justify-between items-start mb-12">
+                <div className="p-5 bg-secondary rounded-[1.5rem] border border-white/5 group-hover:border-primary/20 transition-colors shadow-2xl">
+                  {step.icon}
+                </div>
+                <span className="text-5xl font-black text-white/5 group-hover:text-primary/10 transition-colors tracking-tighter">
+                  {step.id}
+                </span>
               </div>
-              <div className="mb-8 p-4 bg-secondary inline-block rounded-2xl">
-                {step.icon}
-              </div>
-              <h3 className="text-xl font-black text-white uppercase tracking-tight mb-4 font-luxury">{step.title}</h3>
-              <p className="text-xs font-medium text-muted tracking-wide leading-loose opacity-60">
+
+              <h3 className="text-xl font-black text-white uppercase tracking-wider mb-5 font-luxury group-hover:text-primary transition-colors">
+                {step.title}
+              </h3>
+              <p className="text-[11px] font-bold text-muted tracking-widest leading-loose opacity-50 group-hover:opacity-80 transition-opacity">
                 {step.desc}
               </p>
+              
+              {/* <div className="mt-8 pt-8 border-t border-white/5">
+                <div className="flex gap-1">
+                   <div className="h-0.5 w-8 bg-primary rounded-full" />
+                   <div className="h-0.5 w-2 bg-white/10 rounded-full" />
+                </div>
+              </div> */}
             </motion.div>
           ))}
         </div>
@@ -236,39 +260,58 @@ const MissionVision = () => {
   const data = [
     {
       title: "Our Mission",
-      desc: "To help people feel confident through personalized beauty services.",
-      icon: <Target className="text-primary" />
+      desc: "Empowering confidence through meticulously personalized beauty care and artistic precision.",
+      icon: <Target className="text-primary" size={32} strokeWidth={1} />,
+      bg: "from-primary/10 to-transparent"
     },
     {
       title: "Our Vision",
-      desc: "To be the best salon for quality grooming and modern styles.",
-      icon: <Eye className="text-primary" />
+      desc: "Setting the gold standard in luxury grooming by blending timeless elegance with modern innovation.",
+      icon: <Eye className="text-primary" size={32} strokeWidth={1} />,
+      bg: "from-amber-500/10 to-transparent"
     },
     {
       title: "Our Values",
-      desc: "Honesty, quality, and welcoming everyone are important to us.",
-      icon: <Heart className="text-primary" />
+      desc: "Unwavering integrity, inclusive excellence, and a commitment to hygiene that never wavers.",
+      icon: <Heart className="text-primary" size={32} strokeWidth={1} />,
+      bg: "from-rose-500/10 to-transparent"
     }
   ];
 
   return (
-    <section className="py-12 md:py-24 bg-secondary border-y border-white/5">
-      <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-0 divide-y md:divide-y-0 md:divide-x divide-white/10">
+    <section className="py-24 bg-background relative overflow-hidden">
+      {/* Background Decor */}
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/20 rounded-full blur-[120px] pointer-events-none" />
+      
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
           {data.map((item, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.2 }}
-              className="px-8 py-4 space-y-3 md:space-y-6"
+              transition={{ delay: i * 0.2, duration: 0.8, ease: "easeOut" }}
+              className="group relative p-8 rounded-[2.5rem] bg-secondary/40 backdrop-blur-md border border-white/5 hover:border-primary/20 transition-all duration-700"
             >
-              <div className="flex items-center gap-4">
-                {item.icon}
-                <h3 className="text-xl font-black text-white uppercase tracking-wide font-luxury">{item.title}</h3>
+              <div className={`absolute inset-0 bg-gradient-to-br ${item.bg} opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-[2.5rem]`} />
+              
+              <div className="relative z-10 space-y-6">
+                <div className="w-16 h-16 bg-background rounded-2xl flex items-center justify-center border border-white/5 group-hover:scale-110 group-hover:border-primary/30 transition-all duration-500 shadow-2xl">
+                  {item.icon}
+                </div>
+                
+                <div className="space-y-4">
+                  <h3 className="text-xl font-black text-white uppercase tracking-wider font-luxury group-hover:text-primary transition-colors">
+                    {item.title}
+                  </h3>
+                  <div className="w-8 h-px bg-primary/30 group-hover:w-16 transition-all duration-700" />
+                  <p className="text-[11px] font-bold text-muted tracking-widest leading-loose opacity-60 group-hover:opacity-90">
+                    {item.desc}
+                  </p>
+                </div>
               </div>
-              <p className="text-xs font-medium text-muted tracking-wide leading-loose max-w-lg">{item.desc}</p>
             </motion.div>
           ))}
         </div>

@@ -123,90 +123,95 @@ export default function AdminProducts() {
         title={editingProduct ? 'Edit Product' : 'Add Product'}
         subtitle="Inventory Management"
       >
-        <form onSubmit={formik.handleSubmit} className="space-y-10 p-2">
-          <div className="space-y-4">
-            <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2 ">Product Image</label>
-            <div className="relative aspect-video rounded-2xl bg-background border-2 border-dashed border-white/10 overflow-hidden group cursor-pointer shadow-3xl hover:border-primary/40 transition-all duration-500">
-              {preview ? (
-                <img
-                  src={preview.startsWith('blob') || !preview.startsWith('/uploads') ? preview : `${IMAGE_URL}${preview}`}
-                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
-                />
-              ) : (
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-white/5">
-                  <ImageIcon size={48} strokeWidth={1} className="mb-4 opacity-50 group-hover:scale-110 transition-transform" />
-                  <span className="text-[10px] font-black uppercase tracking-[0.5em] ">Upload Product Image</span>
+        <form onSubmit={formik.handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-3">
+              <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2">Product Image</label>
+              <div className="relative h-44 rounded-2xl bg-background border-2 border-dashed border-white/10 overflow-hidden group cursor-pointer shadow-3xl hover:border-primary/40 transition-all duration-500">
+                {preview ? (
+                  <img
+                    src={preview.startsWith('blob') || !preview.startsWith('/uploads') ? preview : `${IMAGE_URL}${preview}`}
+                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center text-white/5">
+                    <ImageIcon size={32} strokeWidth={1} className="mb-2 opacity-50 group-hover:scale-110 transition-transform" />
+                    <span className="text-[8px] font-black uppercase tracking-[0.5em]">Upload Image</span>
+                  </div>
+                )}
+                <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                  <Upload size={24} className="text-secondary" />
                 </div>
-              )}
-              <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-                <Upload size={32} className="text-secondary" />
+                <input type="file" accept="image/*" onChange={handleImageChange} className="absolute inset-0 opacity-0 cursor-pointer z-10" />
               </div>
-              <input type="file" accept="image/*" onChange={handleImageChange} className="absolute inset-0 opacity-0 cursor-pointer z-10" />
             </div>
-          </div>
 
-          <div className="space-y-4">
-            <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2 ">Product Name</label>
-            <input
-              {...formik.getFieldProps('name')}
-              placeholder="e.g. LUXURY FACE CREAM"
-              className="w-full bg-secondary/50 border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.3em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5 font-luxury"
-            />
-            {formik.touched.name && formik.errors.name && <p className="text-rose-500 text-[10px] uppercase font-black tracking-widest pl-2 pt-1">{formik.errors.name}</p>}
-          </div>
+            <div className="space-y-6">
+              <div className="space-y-3">
+                <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2">Product Name</label>
+                <input
+                  {...formik.getFieldProps('name')}
+                  placeholder="E.G. LUXURY CREAM"
+                  className="w-full bg-secondary/50 border border-white/10 focus:border-primary/50 rounded-xl px-4 py-3 text-[10px] font-black uppercase tracking-[0.2em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5 font-luxury"
+                />
+                {formik.touched.name && formik.errors.name && <p className="text-rose-500 text-[9px] uppercase font-black tracking-widest pl-2">{formik.errors.name}</p>}
+              </div>
 
-          <div className="grid grid-cols-2 gap-8">
-            <CustomSelect
-              label="Category"
-              name="category"
-              value={formik.values.category}
-              onChange={formik.handleChange}
-              options={[
-                { label: 'Select Category...', value: '' },
-                { label: 'Skincare', value: 'Skincare' },
-                { label: 'Fragrance', value: 'Fragrance' },
-                { label: 'Haircare', value: 'Haircare' },
-                { label: 'Accessories', value: 'Accessories' },
-                { label: 'Grooming', value: 'Grooming' },
-              ]}
-              icon={Layers}
-            />
-            <div className="space-y-4">
-              <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2 ">Stock Quantity</label>
-              <input
-                type="number"
-                {...formik.getFieldProps('stock')}
-                className="w-full bg-secondary/50 border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.3em] outline-none text-white shadow-2xl transition-all font-luxury"
+              <CustomSelect
+                label="Category"
+                name="category"
+                value={formik.values.category}
+                onChange={formik.handleChange}
+                options={[
+                  { label: 'Select category...', value: '' },
+                  { label: 'Skincare', value: 'Skincare' },
+                  { label: 'Fragrance', value: 'Fragrance' },
+                  { label: 'Haircare', value: 'Haircare' },
+                  { label: 'Accessories', value: 'Accessories' },
+                  { label: 'Grooming', value: 'Grooming' },
+                ]}
+                icon={Layers}
+                compact
               />
             </div>
           </div>
 
-          <div className="space-y-4">
-            <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2 ">Price ($)</label>
-            <input
-              type="number"
-              {...formik.getFieldProps('price')}
-              className="w-full bg-secondary/50 border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.3em] outline-none text-white shadow-2xl transition-all font-luxury"
-            />
+          <div className="grid grid-cols-2 gap-6">
+            <div className="space-y-3">
+              <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2">Stock Quantity</label>
+              <input
+                type="number"
+                {...formik.getFieldProps('stock')}
+                className="w-full bg-secondary/50 border border-white/10 focus:border-primary/50 rounded-xl px-4 py-3 text-[10px] font-black uppercase tracking-[0.2em] outline-none text-white shadow-2xl transition-all font-luxury"
+              />
+            </div>
+            <div className="space-y-3">
+              <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2">Price ($)</label>
+              <input
+                type="number"
+                {...formik.getFieldProps('price')}
+                className="w-full bg-secondary/50 border border-white/10 focus:border-primary/50 rounded-xl px-4 py-3 text-[10px] font-black uppercase tracking-[0.2em] outline-none text-white shadow-2xl transition-all font-luxury"
+              />
+            </div>
           </div>
 
-          <div className="space-y-4">
-            <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2 ">Description</label>
+          <div className="space-y-3">
+            <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2">Description</label>
             <textarea
               {...formik.getFieldProps('description')}
-              rows={4}
+              rows={3}
               placeholder="PRODUCT DESCRIPTION..."
-              className="w-full bg-secondary/50 border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.3em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5 resize-none"
+              className="w-full bg-secondary/50 border border-white/10 focus:border-primary/50 rounded-xl px-4 py-3 text-[10px] font-black uppercase tracking-[0.2em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5 resize-none"
             />
           </div>
 
           <button
             type="submit"
             disabled={formik.isSubmitting}
-            className="w-full flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury disabled:opacity-50"
+            className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-primary text-secondary rounded-xl font-black uppercase text-[10px] tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.02] transition-all group font-luxury disabled:opacity-50"
           >
             {formik.isSubmitting ? (
-              <span className="flex items-center gap-3"><Loader2 className="animate-spin" size={16} /> SAVING...</span>
+              <span className="flex items-center gap-3"><Loader2 className="animate-spin" size={14} /> SAVING...</span>
             ) : (
                 <span className="whitespace-nowrap">{editingProduct ? 'SAVE CHANGES' : 'ADD PRODUCT'}</span>
             )}

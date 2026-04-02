@@ -12,7 +12,8 @@ const CustomSelect = ({
   className = "",
   placeholder = "Select Option",
   isFilter = false,
-  isMulti = false
+  isMulti = false,
+  compact = false
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef(null);
@@ -62,7 +63,7 @@ const CustomSelect = ({
   return (
     <div className={`relative ${className}`} ref={containerRef}>
       {label && (
-        <label className="text-[10px] font-black text-muted uppercase tracking-[0.2em] ml-2 mb-4 block">
+        <label className={`text-[10px] font-black text-muted uppercase tracking-[0.2em] ml-2 block ${compact ? 'mb-3' : 'mb-4'}`}>
           {label}
         </label>
       )}
@@ -71,15 +72,16 @@ const CustomSelect = ({
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={`
-          w-full flex items-center justify-between gap-4 px-8 py-4 
+          w-full flex items-center justify-between gap-4 
+          ${compact ? 'px-4 py-3 rounded-xl' : 'px-8 py-4 rounded-2xl'}
           bg-secondary border border-white/5 
-          rounded-2xl text-[10px] font-black uppercase tracking-widest 
+          text-[10px] font-black uppercase tracking-widest 
           hover:border-primary/30 shadow-premium transition-all group
           ${isFilter ? 'min-w-[220px]' : ''}
         `}
       >
         <span className="flex items-center gap-3 truncate text-white">
-          {Icon && <Icon size={14} className="text-primary opacity-60 group-hover:opacity-100 transition-opacity" />}
+          {Icon && <Icon size={compact ? 12 : 14} className="text-primary opacity-60 group-hover:opacity-100 transition-opacity" />}
           {getLabel()}
         </span>
         <div className="flex items-center gap-3">
@@ -89,7 +91,7 @@ const CustomSelect = ({
             </span>
           )}
           <ChevronDown 
-            size={14} 
+            size={compact ? 12 : 14} 
             className={`text-muted group-hover:text-primary transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} 
           />
         </div>
@@ -115,7 +117,8 @@ const CustomSelect = ({
                   type="button"
                   onClick={() => handleToggle(option.value)}
                   className={`
-                    w-full flex items-center justify-between px-8 py-4 
+                    w-full flex items-center justify-between 
+                    ${compact ? 'px-4 py-3' : 'px-8 py-4'}
                     text-[10px] font-black uppercase tracking-widest whitespace-nowrap
                     hover:bg-white/5 transition-all text-left
                     ${isSelected(option.value) ? 'text-primary' : 'text-muted'}
@@ -128,7 +131,7 @@ const CustomSelect = ({
                       animate={{ scale: 1 }}
                       className="p-1 bg-primary/10 rounded-2xl"
                     >
-                      <Check size={14} className="text-primary" />
+                      <Check size={compact ? 12 : 14} className="text-primary" />
                     </motion.div>
                   )}
                 </button>
