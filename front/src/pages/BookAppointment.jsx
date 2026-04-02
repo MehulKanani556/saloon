@@ -63,32 +63,32 @@ const SuccessModal = ({ data, onClose }) => {
       <motion.div
         initial={{ scale: 0.9, y: 20 }}
         animate={{ scale: 1, y: 0 }}
-        className="w-full max-w-lg bg-secondary rounded-2xl p-5 md:p-12 text-center shadow-2xl relative border border-white/5 overflow-hidden"
+        className="w-full max-w-lg bg-secondary rounded-2xl px-6 py-10 md:p-12 text-center shadow-2xl relative border border-white/5 overflow-hidden"
       >
-        <div className="w-24 h-24 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-8 border border-primary/20 shadow-inner">
-          <CheckCircle2 size={56} strokeWidth={1.5} />
+        <div className="w-20 h-20 md:w-24 md:h-24 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-6 md:mb-8 border border-primary/20 shadow-inner">
+          <CheckCircle2 className="w-10 h-10 md:w-14 md:h-14" strokeWidth={1.5} />
         </div>
 
-        <h2 className="text-2xl md:text-4xl font-black text-white uppercase tracking-tighter mb-4 font-luxury">Ritual Confirmed!</h2>
-        <p className="text-muted font-bold text-[10px] uppercase tracking-widest leading-relaxed mb-6 md:mb-10 px-2">
+        <h2 className="text-xl md:text-4xl font-black text-white uppercase tracking-tighter mb-4 font-luxury">Ritual Confirmed!</h2>
+        <p className="text-muted font-bold text-[9px] md:text-[10px] uppercase tracking-widest leading-relaxed mb-8 md:mb-10 px-2 lg:px-6">
           Your transformation at Glow & Elegance is officially in the chronicles. We've sent a detailed confirmation to your email.
         </p>
 
 
-        <div className="bg-background rounded-2xl p-6 mb-10 text-left space-y-4 border border-white/5">
-          <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
-            <span className="text-muted">Reference:</span>
-            <span className="text-white">#{data.id || 'N/A'}</span>
+        <div className="bg-background rounded-2xl p-4 md:p-6 mb-8 md:mb-10 text-left space-y-4 border border-white/5">
+          <div className="flex flex-col gap-1.5 text-[10px] font-black uppercase tracking-widest">
+            <span className="text-muted text-[8px]">Reference:</span>
+            <span className="text-white break-all leading-relaxed">#{data.id || 'N/A'}</span>
           </div>
-          <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
-            <span className="text-muted">Schedule:</span>
-            <span className="text-white">{data.date.toLocaleDateString()} at {data.time}</span>
+          <div className="flex flex-col gap-1.5 text-[10px] font-black uppercase tracking-widest">
+            <span className="text-muted text-[8px]">Schedule:</span>
+            <span className="text-white leading-relaxed">{data.date.toLocaleDateString()} at {data.time}</span>
           </div>
         </div>
 
         <button
           onClick={onClose}
-          className="w-full py-5 bg-primary text-secondary rounded-2xl font-black text-xs uppercase shadow-xl hover:bg-primary/90 transition-all active:scale-95"
+          className="w-full py-4 md:py-5 bg-primary text-secondary rounded-2xl font-black text-xs uppercase shadow-xl hover:bg-primary/90 transition-all active:scale-95"
         >
           Return to Sanctuary
         </button>
@@ -101,6 +101,7 @@ export default function BookAppointment() {
   const { userInfo } = useSelector((state) => state.auth);
   const [step, setStep] = useState(1);
   const [selectedServices, setSelectedServices] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('All');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [bookingResponse, setBookingResponse] = useState(null);
@@ -122,6 +123,9 @@ export default function BookAppointment() {
           if (prev.find(s => s._id === service._id)) return prev;
           return [...prev, service];
         });
+        if (service.category?.name) {
+          setSelectedCategory(service.category.name);
+        }
       }
     }
   }, [location.state, services]);
@@ -263,6 +267,11 @@ export default function BookAppointment() {
   const totalPrice = selectedServices.reduce((sum, s) => sum + s.price, 0);
   const totalDuration = selectedServices.reduce((sum, s) => sum + s.duration, 0);
 
+  const categories = ['All', ...new Set(services.map(s => s.category?.name).filter(Boolean))];
+  const filteredServices = selectedCategory === 'All'
+    ? services
+    : services.filter(s => s.category?.name === selectedCategory);
+
   const nextStep = () => {
     if (step === 1 && selectedServices.length === 0) return;
     setStep(prev => prev + 1);
@@ -343,20 +352,27 @@ export default function BookAppointment() {
 
               {/* Step Indicator */}
             {/* Luxury Segmented Progress Indicator */}
-            <div className="flex items-center justify-between mb-16 md:mb-24 relative px-4 md:px-16 max-w-4xl mx-auto">
+            <div className="flex items-center justify-between mb-8 md:mb-16 relative  max-w-4xl mx-auto">
                 
                 {/* Precision Connection System */}
-                <div className="absolute top-[28px] md:top-[32px] left-10 md:left-24 right-10 md:right-24 h-[1px] bg-white/5 z-0" />
-                
-                {/* Ritual Progress Pipe */}
-                <motion.div
-                  initial={{ width: 0 }}
-                  animate={{ 
-                    width: step === 1 ? '0%' : step === 2 ? '50%' : '100%'
-                  }}
-                  transition={{ duration: 0.8, ease: "circOut" }}
-                  className="absolute top-[28px] md:top-[32px] left-10 md:left-24 h-[2px] bg-primary z-0 shadow-[0_0_20px_rgba(201,162,39,0.4)]"
-                />
+                <div className="absolute top-[28px] md:top-[32px] left-7 md:left-8 right-7 md:right-8 h-[1px] bg-white/10 z-0">
+                  {/* Ritual Progress Pipe */}
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{
+                      width: step === 1 ? '0%' : step === 2 ? '50%' : '100%'
+                    }}
+                    transition={{ duration: 0.8, ease: "circOut" }}
+                    className="h-full bg-primary shadow-[0_0_20px_rgba(201,162,39,0.4)] relative"
+                  >
+                    {/* Active Pulse Head */}
+                    <motion.div 
+                      animate={{ opacity: [0.5, 1, 0.5] }}
+                      transition={{ repeat: Infinity, duration: 1.5 }}
+                      className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-white rounded-full blur-[1px]"
+                    />
+                  </motion.div>
+                </div>
 
                 {steps.map((s, i) => {
                   const isActive = !showSuccess && step === i + 1;
@@ -371,7 +387,7 @@ export default function BookAppointment() {
                           backgroundColor: isCompleted ? "#10b981" : isActive ? "#C9A227" : "#121212",
                           borderColor: isCompleted ? "#10b981" : isActive ? "transparent" : "rgba(245, 230, 200, 0.1)"
                         }}
-                        className={`w-14 h-14 md:w-16 md:h-16 rounded-[22px] border flex items-center justify-center transition-all duration-500 shadow-2xl relative overflow-hidden`}
+                        className={`w-12 h-12 md:w-14 md:h-14 rounded-xl border flex items-center justify-center transition-all duration-500 shadow-2xl relative overflow-hidden`}
                       >
                         {/* Internal Glow for Active */}
                         {isActive && (
@@ -387,11 +403,11 @@ export default function BookAppointment() {
                         </div>
                       </motion.div>
 
-                      <div className="hidden sm:block absolute -bottom-10 whitespace-nowrap text-center">
-                        <span className={`text-[9px] font-black uppercase tracking-[0.25em] transition-all duration-500 ${isActive ? 'text-primary' : 'text-muted/40'}`}>
+                      {/* <div className="hidden sm:block absolute -bottom-10 whitespace-nowrap text-center">
+                        <span className={`text-[9px] font-black uppercase tracking-[0.25em] transition-all duration-500 ${isCompleted ? 'text-white/60' : isActive ? 'text-primary' : 'text-muted/30'}`}>
                           {s.title}
                         </span>
-                      </div>
+                      </div> */}
                     </div>
                   );
                 })}
@@ -407,13 +423,30 @@ export default function BookAppointment() {
                     exit={{ opacity: 0, x: -50 }}
                     className="space-y-10"
                   >
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
+                    <div className="space-y-10">
+                      {/* Category Navigation */}
+                      <div className="flex flex-wrap items-center gap-2 md:gap-3">
+                        {categories.map(cat => (
+                          <button
+                            key={cat}
+                            onClick={() => setSelectedCategory(cat)}
+                            className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${selectedCategory === cat
+                                ? 'bg-primary text-secondary shadow-lg shadow-primary/20 scale-105'
+                                : 'bg-background border border-white/5 text-muted hover:bg-white/5 hover:text-white'
+                              }`}
+                          >
+                            {cat}
+                          </button>
+                        ))}
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
 
                       {(servicesLoading || staffLoading) ? (
                         [...Array(6)].map((_, i) => (
                           <div key={i} className="aspect-square bg-background rounded-2xl animate-pulse" />
                         ))
-                      ) : services.map((service) => {
+                      ) : filteredServices.map((service) => {
                         const isSelected = selectedServices.find(s => s._id === service._id);
                         return (
                           <motion.div
@@ -462,27 +495,9 @@ export default function BookAppointment() {
                       })}
                     </div>
 
-                    <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-6">
-                      <div className="hidden md:flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-primary">
-                          <Sparkles size={18} />
-                        </div>
-                        <p className="text-[9px] font-black text-muted uppercase tracking-widest leading-relaxed">
-                          Select multiple rituals for a <br /> complete transformation.
-                        </p>
-                      </div>
-                      <button
-                        onClick={nextStep}
-                        disabled={selectedServices.length === 0}
-                        className="w-full sm:w-auto px-10 py-4 bg-primary text-secondary rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-all flex items-center justify-center gap-3"
-                      >
-                        Next Chapter
-                        <ChevronRight size={18} />
-                      </button>
                     </div>
-
-                  </motion.div>
-                )}
+                </motion.div>
+              )}
 
                 {step === 2 && (
                   <motion.div
@@ -567,15 +582,15 @@ export default function BookAppointment() {
                           {selectedServices.map(service => {
                             const eligibleStaff = allStaff.filter(s => s.services?.some(ser => (typeof ser === 'string' ? ser === service._id : ser._id === service._id)));
                             return (
-                              <div key={service._id} className="bg-background p-4 rounded-2xl border border-white/5 flex items-center justify-between shadow-sm">
-                                <div className="flex flex-col">
-                                  <span className="text-[10px] font-black uppercase text-primary truncate max-w-[120px] font-luxury">{service.name}</span>
+                              <div key={service._id} className="bg-background md:flex-row flex-col gap-y-2 p-4 rounded-2xl border border-white/5 flex items-center justify-between shadow-sm">
+                                <div className="flex flex-col w-full">
+                                  <span className="text-[10px] font-black uppercase text-primary truncate w-auto md:max-w-[120px] font-luxury">{service.name}</span>
                                   <span className="text-[8px] text-muted font-black uppercase tracking-tighter">performed by</span>
                                 </div>
                                 <select
                                   value={staffAssignments[service._id] || ""}
                                   onChange={(e) => setStaffAssignments({ ...staffAssignments, [service._id]: e.target.value })}
-                                  className="bg-secondary px-3 py-2 rounded-xl text-[9px] font-black uppercase outline-none cursor-pointer text-white border border-white/5 focus:ring-0"
+                                  className="bg-secondary px-3 py-2 w-full rounded-xl text-[9px] font-black uppercase outline-none cursor-pointer text-white border border-white/5 focus:ring-0"
                                 >
                                   <option value="">Any Master</option>
                                   {eligibleStaff.map(stf => (
@@ -687,21 +702,13 @@ export default function BookAppointment() {
                       </div>
                     </div>
 
-                    <div className="pt-8 border-t border-white/5 flex flex-col-reverse sm:flex-row items-center justify-between gap-6">
+                    <div className="pt-8 border-t border-white/5">
                       <button
                         onClick={prevStep}
                         className="flex items-center gap-2 text-[10px] font-black text-muted uppercase tracking-widest hover:text-primary transition-colors"
                       >
                         <ChevronLeft size={18} />
                         Back to Selection
-                      </button>
-                      <button
-                        onClick={nextStep}
-                        disabled={!formik.isValid || !formik.values.clientName || !formik.values.time}
-                        className="w-full sm:w-auto px-10 py-4 bg-primary text-secondary rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl disabled:opacity-50 hover:bg-primary/90 transition-all flex items-center justify-center gap-3"
-                      >
-                        Confirm Details
-                        <ChevronRight size={18} />
                       </button>
                     </div>
 
@@ -759,27 +766,13 @@ export default function BookAppointment() {
                       </div>
                     </div>
 
-                    <div className="pt-8 flex flex-col md:flex-row items-center gap-6">
+                    <div className="pt-8">
                       <button
                         onClick={prevStep}
                         className="flex items-center gap-2 text-[10px] font-black text-muted uppercase tracking-widest hover:text-primary transition-colors"
                       >
                         <ChevronLeft size={18} />
                         Adjust Rituals
-                      </button>
-                      <button
-                        onClick={formik.handleSubmit}
-                        disabled={isSubmitting}
-                        className="w-full py-6 bg-primary text-secondary rounded-2xl font-black text-xs uppercase shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-4"
-                      >
-                        {isSubmitting ? (
-                          <Loader2 size={24} className="animate-spin" />
-                        ) : (
-                          <>
-                            Establish Protocol
-                            <ChevronRight size={20} />
-                          </>
-                        )}
                       </button>
                     </div>
                   </motion.div>
@@ -788,26 +781,47 @@ export default function BookAppointment() {
             </div>
           </div>
 
-          {/* Mobile Summary (Visible when rituals are selected) */}
-          <div className="lg:hidden">
+          {/* Mobile Summary & Action Bar */}
+          <div className="lg:hidden fixed bottom-6 left-6 right-6 z-50">
             <AnimatePresence>
-              {selectedServices.length > 0 && step < 3 && (
+              {selectedServices.length > 0 && !showSuccess && (
                 <motion.div
-                  initial={{ opacity: 0, y: 50 }}
+                  initial={{ opacity: 0, y: 100 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 50 }}
-                  className="bg-secondary rounded-2xl p-6 border border-white/5 shadow-2xl mb-8"
+                  exit={{ opacity: 0, y: 100 }}
+                  className="bg-secondary/95 backdrop-blur-xl rounded-2xl p-4 border border-white/10 shadow-2xl flex items-center justify-between gap-4"
                 >
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <p className="text-[8px] font-black text-muted uppercase tracking-widest mb-1">Selections</p>
-                      <h4 className="text-xl font-black text-primary font-luxury">${totalPrice}</h4>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-[8px] font-black text-muted uppercase tracking-widest mb-1">Total Rituals</p>
-                      <p className="text-sm font-black text-white">{selectedServices.length}</p>
-                    </div>
+                  <div className="flex-1">
+                    <p className="text-[8px] font-black text-muted uppercase tracking-widest mb-0.5">Total Rituals ({selectedServices.length})</p>
+                    <h4 className="text-xl font-black text-primary font-luxury">${totalPrice}</h4>
                   </div>
+                  
+                  {step === 1 && (
+                    <button
+                      onClick={nextStep}
+                      className="px-6 py-4 bg-primary text-secondary rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg flex items-center gap-2 transition-all active:scale-95"
+                    >
+                      Next <ChevronRight size={14} />
+                    </button>
+                  )}
+                  {step === 2 && (
+                    <button
+                      onClick={nextStep}
+                      disabled={!formik.isValid || !formik.values.clientName || !formik.values.time}
+                      className="px-6 py-4 bg-primary text-secondary rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg flex items-center gap-2 disabled:opacity-50 transition-all active:scale-95"
+                    >
+                      Confirm <ChevronRight size={14} />
+                    </button>
+                  )}
+                  {step === 3 && (
+                    <button
+                      onClick={formik.handleSubmit}
+                      disabled={isSubmitting}
+                      className="px-6 py-4 bg-primary text-secondary rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg flex items-center gap-2 transition-all active:scale-95"
+                    >
+                      {isSubmitting ? <Loader2 size={14} className="animate-spin" /> : <>Finalize <Check size={14} /></>}
+                    </button>
+                  )}
                 </motion.div>
               )}
             </AnimatePresence>
@@ -864,6 +878,46 @@ export default function BookAppointment() {
                     <span className="text-[9px] font-black text-muted uppercase tracking-[0.3em]">Total Investment</span>
                     <span className="text-3xl font-black text-primary tracking-tighter  font-luxury">${totalPrice}</span>
                   </div>
+                </div>
+
+                {/* Desktop Action Buttons */}
+                <div className="mt-10">
+                  {step === 1 && (
+                    <button
+                      onClick={nextStep}
+                      disabled={selectedServices.length === 0}
+                      className="w-full py-5 bg-primary text-secondary rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-all flex items-center justify-center gap-3 group"
+                    >
+                      Next Chapter
+                      <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                    </button>
+                  )}
+                  {step === 2 && (
+                    <button
+                      onClick={nextStep}
+                      disabled={!formik.isValid || !formik.values.clientName || !formik.values.time}
+                      className="w-full py-5 bg-primary text-secondary rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl disabled:opacity-50 hover:bg-primary/90 transition-all flex items-center justify-center gap-3 group"
+                    >
+                      Confirm Details
+                      <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                    </button>
+                  )}
+                  {step === 3 && (
+                    <button
+                      onClick={formik.handleSubmit}
+                      disabled={isSubmitting}
+                      className="w-full py-5 bg-primary text-secondary rounded-2xl font-black text-xs uppercase shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-4"
+                    >
+                      {isSubmitting ? (
+                        <Loader2 size={24} className="animate-spin" />
+                      ) : (
+                        <>
+                          Establish Protocol
+                          <Check size={20} />
+                        </>
+                      )}
+                    </button>
+                  )}
                 </div>
               </div>
 
