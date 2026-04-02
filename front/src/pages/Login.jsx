@@ -238,15 +238,13 @@ export default function Login() {
                 className="space-y-4"
               >
                 {!otpSent ? (
-                  <button
-                    type="button"
-                    onClick={handleSendOTP}
-                    disabled={loading}
-                    className="w-full py-4 border-2 border-dashed border-primary/20 rounded-2xl flex items-center justify-center gap-3 text-primary font-black text-[10px] tracking-widest uppercase hover:bg-primary/5 transition-colors"
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="py-6 border-y border-white/5 flex flex-col items-center gap-2"
                   >
-                    <Key size={16} />
-                    Send Code
-                  </button>
+                    <p className="text-[9px] font-black text-muted/30 uppercase tracking-[0.3em]">Identity Verification Req.</p>
+                  </motion.div>
                 ) : (
                   <div className="space-y-2">
                     <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-1 flex justify-between">
