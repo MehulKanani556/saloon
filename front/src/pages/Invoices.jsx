@@ -27,7 +27,7 @@ const InvoiceDetailModal = ({ appointment, onClose }) => {
       document.body.appendChild(link);
       link.click();
     } catch (err) {
-      toast.error('Export protocol failed');
+      toast.error('Failed to export invoice');
     }
   };
 
@@ -35,7 +35,7 @@ const InvoiceDetailModal = ({ appointment, onClose }) => {
     <Modal
       isOpen={!!appointment}
       onClose={onClose}
-      title="Financial Archive"
+      title="Invoice Details"
       subtitle={`Ref: ${appointment.appointmentId || appointment._id.substring(18).toUpperCase()}`}
       maxWidth="max-w-4xl"
     >
@@ -57,9 +57,9 @@ const InvoiceDetailModal = ({ appointment, onClose }) => {
                 </div>
               </div>
               <div className="text-left md:text-right space-y-3 md:space-y-4 relative">
-                <h2 className="text-2xl md:text-4xl font-black tracking-tighter text-white/5 uppercase select-none leading-none absolute -top-2 md:relative md:top-0 md:-mb-4 right-0 md:right-auto">Fiscal Record</h2>
+                <h2 className="text-2xl md:text-4xl font-black tracking-tighter text-white/5 uppercase select-none leading-none absolute -top-2 md:relative md:top-0 md:-mb-4 right-0 md:right-auto">Invoice</h2>
                 <div className="space-y-1">
-                  <p className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] text-primary ">Recipient Protocol</p>
+                  <p className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] text-primary ">Bill To</p>
                   <p className="text-lg md:text-xl font-black tracking-tight uppercase text-white font-luxury">{appointment.client?.name}</p>
                   <p className="text-[8px] md:text-[9px] font-black text-muted uppercase tracking-widest ">{appointment.client?.email}</p>
                 </div>
@@ -68,22 +68,22 @@ const InvoiceDetailModal = ({ appointment, onClose }) => {
 
             <div className="mb-4 md:mb-6 grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4">
               <div className="p-3 md:p-4 rounded-lg md:rounded-xl bg-background/50 shadow-inner group">
-                <p className="text-[7px] md:text-[8px] font-black uppercase tracking-[0.2em] text-primary mb-1 md:mb-2 ">Creation Archive</p>
+                <p className="text-[7px] md:text-[8px] font-black uppercase tracking-[0.2em] text-primary mb-1 md:mb-2 ">Invoice Date</p>
                 <p className="font-black text-[9px] md:text-xs text-white tracking-widest uppercase">{format(new Date(appointment.createdAt), 'MMM dd, yyyy')}</p>
               </div>
               <div className="p-3 md:p-4 rounded-lg md:rounded-xl bg-background/50 shadow-inner group">
-                <p className="text-[7px] md:text-[8px] font-black uppercase tracking-[0.2em] text-primary mb-1 md:mb-2 ">Ritual Identity</p>
+                <p className="text-[7px] md:text-[8px] font-black uppercase tracking-[0.2em] text-primary mb-1 md:mb-2 ">Invoice ID</p>
                 <p className="font-black text-[9px] md:text-xs text-white tracking-widest">#{appointment.appointmentId || appointment._id.substring(18).toUpperCase()}</p>
               </div>
               <div className="col-span-2 md:col-span-1 p-3 md:p-4 rounded-lg md:rounded-xl bg-background/50 shadow-inner flex justify-between items-center md:block md:space-y-2">
                 <div>
-                  <p className="text-[7px] md:text-[8px] font-black uppercase tracking-[0.2em] text-primary mb-1 md:mb-2 ">Ritual State</p>
+                  <p className="text-[7px] md:text-[8px] font-black uppercase tracking-[0.2em] text-primary mb-1 md:mb-2 ">Appointment Status</p>
                   <p className={`font-black text-[8px] md:text-[10px] uppercase tracking-[0.1em] ${appointment.status === 'Cancelled' ? 'text-rose-500' : appointment.status === 'Completed' ? 'text-emerald-500' : 'text-primary'}`}>
                     {appointment.status || 'Pending'}
                   </p>
                 </div>
                 <div className="border-l border-white/10 pl-3 md:border-l-0 md:pl-0">
-                  <p className="text-[7px] md:text-[8px] font-black uppercase tracking-[0.2em] text-primary mb-1 md:mb-2 ">Settlement</p>
+                  <p className="text-[7px] md:text-[8px] font-black uppercase tracking-[0.2em] text-primary mb-1 md:mb-2 ">Payment Status</p>
                   <p className={`font-black text-[8px] md:text-[10px] uppercase tracking-[0.1em] ${appointment.paymentStatus === 'Paid' ? 'text-emerald-500' : 'text-amber-500'}`}>
                     {appointment.paymentStatus || 'Pending'}
                   </p>
@@ -95,9 +95,9 @@ const InvoiceDetailModal = ({ appointment, onClose }) => {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-white/5 text-left">
-                    <th className="pb-1.5 md:pb-3 text-[7px] md:text-[8px] font-black uppercase tracking-[0.2em] text-primary px-1">Masterpiece</th>
-                    <th className="pb-1.5 md:pb-3 text-right text-[7px] md:text-[8px] font-black uppercase tracking-[0.2em] text-primary px-1">Timeline</th>
-                    <th className="pb-1.5 md:pb-3 text-right text-[7px] md:text-[8px] font-black uppercase tracking-[0.2em] text-primary px-1">Value</th>
+                    <th className="pb-1.5 md:pb-3 text-[7px] md:text-[8px] font-black uppercase tracking-[0.2em] text-primary px-1">Service</th>
+                    <th className="pb-1.5 md:pb-3 text-right text-[7px] md:text-[8px] font-black uppercase tracking-[0.2em] text-primary px-1">Date</th>
+                    <th className="pb-1.5 md:pb-3 text-right text-[7px] md:text-[8px] font-black uppercase tracking-[0.2em] text-primary px-1">Price</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
@@ -126,26 +126,26 @@ const InvoiceDetailModal = ({ appointment, onClose }) => {
             <div className="flex justify-end pt-4 md:pt-6 border-t border-white/10">
               <div className="w-full md:w-1/2 space-y-2 md:space-y-3">
                 <div className="flex justify-between items-center px-4">
-                  <span className="text-[7px] md:text-[8px] font-black uppercase tracking-[0.2em] text-muted ">Ritual Summation</span>
+                  <span className="text-[7px] md:text-[8px] font-black uppercase tracking-[0.2em] text-muted ">Subtotal</span>
                   <span className="font-black text-[10px] md:text-xs text-white tracking-widest">${appointment.totalPrice.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between items-center p-3 md:p-4 bg-primary rounded-lg md:rounded-xl text-secondary shadow-2xl shadow-primary/20 relative overflow-hidden group">
                   <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
-                  <span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em] relative z-10">Eternal Value</span>
+                  <span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em] relative z-10">Total Amount</span>
                   <span className="text-base md:text-xl font-black tracking-tighter font-luxury relative z-10 leading-none">${appointment.totalPrice.toLocaleString()}</span>
                 </div>
               </div>
             </div>
 
             <div className="shrink-0 mt-4 md:mt-8 pt-4 md:pt-6 border-t border-white/5 text-center space-y-3">
-              <p className="text-[6px] md:text-[8px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] text-white/5 ">Certified Financial Asset Authentication</p>
+              <p className="text-[6px] md:text-[8px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] text-white/5 ">This is an electronically generated invoice</p>
               <div className="flex items-center justify-center">
                 <button
                   onClick={handleExportPDF}
                   className="w-full md:w-auto flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury"
                 >
                   <Download size={18} md:size={20} strokeWidth={3} className="group-hover:translate-y-1 transition-transform" />
-                  <span className="whitespace-nowrap">AUTHORIZE PDF EXPORT</span>
+                  <span className="whitespace-nowrap">DOWNLOAD PDF</span>
                 </button>
               </div>
             </div>
@@ -196,7 +196,7 @@ export default function Invoices() {
       document.body.appendChild(link);
       link.click();
     } catch (err) {
-      toast.error('Extraction failed');
+      toast.error('Failed to download invoice');
     }
   };
 
@@ -209,8 +209,8 @@ export default function Invoices() {
   return (
     <div className="space-y-12">
       <AdminHeader
-        title="Financial Archive"
-        subtitle="Audit trail of all financial ritual settlements"
+        title="Invoices"
+        subtitle="View and manage all customer invoices"
         icon={FileText}
         rightContent={
           <div className="relative group w-full lg:w-96">
@@ -219,7 +219,7 @@ export default function Invoices() {
             </div>
             <input
               type="text"
-              placeholder="Query Masterpiece Archives..."
+              placeholder="Search invoices..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full bg-secondary/40 backdrop-blur-md border border-white/5 rounded-2xl px-16 py-3 md:py-5 text-[11px] font-black uppercase tracking-[0.2em] outline-none focus:border-primary/50 shadow-3xl transition-all text-white placeholder:text-white/10"
@@ -235,12 +235,12 @@ export default function Invoices() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-background/80">
-                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Ritual Ref</th>
-                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Client Identity</th>
-                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Masterpiece</th>
-                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Execution</th>
-                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Value</th>
-                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Settlement</th>
+                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Invoice ID</th>
+                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Client</th>
+                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Service</th>
+                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Date & Time</th>
+                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Price</th>
+                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Status</th>
                 <th className="px-5 py-5 text-center text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Actions</th>
               </tr>
             </thead>
@@ -342,7 +342,7 @@ export default function Invoices() {
             <div className="w-24 h-24 bg-white/5 rounded-2xl flex items-center justify-center mx-auto border border-dashed border-white/10 animate-pulse">
               <AlertCircle className="text-white/10" size={48} strokeWidth={1} />
             </div>
-            <p className="text-muted/40 font-black uppercase tracking-[0.5em] text-[10px] ">No Masterpiece Records Detected in Matrix</p>
+            <p className="text-muted/40 font-black uppercase tracking-[0.5em] text-[10px] ">No invoices found</p>
           </div>
         )
         }

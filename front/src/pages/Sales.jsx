@@ -29,10 +29,10 @@ export default function Sales() {
       amount: Yup.number()
         .required('Amount required')
         .min(10, 'Minimum withdrawal $10')
-        .max(matrix.totalRevenue || 0, 'Insufficient vault balance'),
+        .max(matrix.totalRevenue || 0, 'Insufficient balance'),
       bankAccount: Yup.string()
-        .required('Bank tether required')
-        .matches(/^[0-9]+$/, 'Invalid digital sequence (Numeric only)'),
+        .required('Bank account number required')
+        .matches(/^[0-9]+$/, 'Invalid account number (Numbers only)'),
       notes: Yup.string().max(100, 'Keep it concise')
     }),
     onSubmit: async (values) => {
@@ -57,8 +57,8 @@ export default function Sales() {
   return (
     <div className="space-y-10">
       <AdminHeader 
-        title="Financial Matrix"
-        subtitle="Real-time audit of saloon revenue ecosystems"
+        title="Financial Overview"
+        subtitle="Real-time tracking of your salon's revenue and growth"
         icon={Wallet}
         rightContent={
           <button
@@ -66,7 +66,7 @@ export default function Sales() {
             className="flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury"
           >
             <Plus size={18} md:size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
-            <span className="whitespace-nowrap">Withdrawal Protocol</span>
+            <span className="whitespace-nowrap">Withdraw Funds</span>
           </button>
         }
       />
@@ -74,9 +74,9 @@ export default function Sales() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {[
-          { label: 'Net Vault Revenue', value: `$${matrix.totalRevenue.toLocaleString()}`, icon: DollarSign, trend: '+12.4%' },
-          { label: 'Daily Momentum', value: `$${Math.round(matrix.dailyAvg).toLocaleString()}`, icon: TrendingUp, trend: '+8.4%' },
-          { label: 'Growth Trajectory', value: `${matrix.growth}%`, icon: Target, trend: '+2.1%' },
+          { label: 'Total Revenue', value: `$${matrix.totalRevenue.toLocaleString()}`, icon: DollarSign, trend: '+12.4%' },
+          { label: 'Daily Average', value: `$${Math.round(matrix.dailyAvg).toLocaleString()}`, icon: TrendingUp, trend: '+8.4%' },
+          { label: 'Growth Rate', value: `${matrix.growth}%`, icon: Target, trend: '+2.1%' },
         ].map((stat, i) => (
           <div key={i} className="bg-secondary p-6 md:p-8 rounded-2xl border border-white/5 shadow-2xl relative group hover:scale-[1.02] transition-transform overflow-hidden">
             <div className="flex items-center justify-between mb-6">
@@ -97,7 +97,7 @@ export default function Sales() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
         <div className="bg-secondary p-6 md:p-10 rounded-2xl shadow-2xl border border-white/5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 md:mb-12">
-            <h3 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase  font-luxury">Revenue Velocity</h3>
+            <h3 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase  font-luxury">Revenue Over Time</h3>
             <div className="flex items-center gap-2 text-[10px] font-black text-muted uppercase tracking-widest bg-background px-4 py-2 rounded-xl w-fit border border-white/5">
               <TrendingUp size={14} className="text-primary" />
               Live Feed
@@ -137,7 +137,7 @@ export default function Sales() {
         </div>
 
         <div className="bg-secondary p-6 md:p-10 rounded-2xl shadow-2xl border border-white/5 flex flex-col items-center justify-center">
-          <h3 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase  mb-8 md:mb-12 w-full text-left font-luxury">Niche Distribution</h3>
+          <h3 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase  mb-8 md:mb-12 w-full text-left font-luxury">Revenue by Category</h3>
           <div className="h-[250px] md:h-[300px] w-full relative">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -166,7 +166,7 @@ export default function Sales() {
                               <p className="text-[10px] font-black text-white uppercase tracking-widest  leading-none">{payload[0].name}</p>
                             </div>
                             <span className="text-[8px] font-black text-primary bg-primary/10 px-2 py-1 rounded-2xl uppercase tracking-widest leading-none">
-                              {payload[0].payload.count} Rituals
+                              {payload[0].payload.count} Services
                             </span>
                           </div>
                           <p className="text-lg font-black text-primary  leading-none">${payload[0].value.toLocaleString()}</p>
@@ -180,7 +180,7 @@ export default function Sales() {
             </ResponsiveContainer>
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-0">
               <p className="text-[8px] md:text-[10px] font-black text-muted uppercase tracking-widest leading-none">Total</p>
-              <p className="text-lg md:text-2xl font-black text-white tracking-tighter leading-none font-luxury">Niches</p>
+              <p className="text-lg md:text-2xl font-black text-white tracking-tighter leading-none font-luxury">Category</p>
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-6 w-full mt-8 md:mt-12">
@@ -201,13 +201,13 @@ export default function Sales() {
         isOpen={isWithdrawModalOpen}
         onClose={() => setIsWithdrawModalOpen(false)}
         title="Withdraw Funds"
-        subtitle="Initiating extraction protocol"
+        subtitle="Transfer funds to your bank account"
         maxWidth="max-w-md"
       >
         <div className="space-y-6">
           <div className="p-6 bg-primary rounded-xl text-secondary flex items-center justify-between shadow-xl shadow-primary/10">
             <div className="space-y-1">
-              <p className="text-[8px] font-black uppercase tracking-widest opacity-60  leading-none">In Vault</p>
+              <p className="text-[8px] font-black uppercase tracking-widest opacity-60  leading-none">Available Balance</p>
               <p className="text-2xl font-black tracking-tighter  leading-none font-luxury">${matrix.totalRevenue.toLocaleString()}</p>
             </div>
             <Wallet size={32} className="opacity-20" />
@@ -215,7 +215,7 @@ export default function Sales() {
 
           <form onSubmit={withdrawalFormik.handleSubmit} className="space-y-6">
             <div className="space-y-3">
-              <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-2 ">Extraction Amount ($)</label>
+              <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-2 ">Withdrawal Amount ($)</label>
               <input
                 name="amount" type="number" onChange={withdrawalFormik.handleChange} value={withdrawalFormik.values.amount}
                 className="w-full bg-background border-2 border-transparent focus:border-primary/30 rounded-xl px-5 py-4 text-sm font-black outline-none transition-all text-white shadow-inner"
@@ -227,11 +227,11 @@ export default function Sales() {
             </div>
 
             <div className="space-y-3">
-              <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-2 ">Destination Bank Tether</label>
+              <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-2 ">Destination Bank Account</label>
               <input
                 name="bankAccount" onChange={withdrawalFormik.handleChange} value={withdrawalFormik.values.bankAccount}
                 className="w-full bg-background border-2 border-transparent focus:border-primary/30 rounded-xl px-5 py-4 text-xs font-bold outline-none transition-all text-white tracking-widest shadow-inner"
-                placeholder="Enter account sequence..."
+                placeholder="Enter account number..."
               />
               {withdrawalFormik.touched.bankAccount && withdrawalFormik.errors.bankAccount && (
                 <p className="text-[8px] font-black uppercase text-red-500 ml-2 ">{withdrawalFormik.errors.bankAccount}</p>
@@ -242,7 +242,7 @@ export default function Sales() {
               type="submit" disabled={loading}
               className="w-full flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury disabled:opacity-50"
             >
-              <span className="whitespace-nowrap">Confirm Extraction</span>
+              <span className="whitespace-nowrap">Confirm Withdrawal</span>
               <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </button>
           </form>

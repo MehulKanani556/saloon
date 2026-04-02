@@ -86,10 +86,10 @@ export default function Dashboard() {
       {/* Industrial Matrix Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
         {[
-          { label: 'Eternal Customers', value: data.stats.totalClients, icon: Users, trend: '12.5%' },
-          { label: 'Ritual Records', value: data.stats.totalAppointments, icon: CalendarCheck2, trend: '4.2%' },
-          { label: 'Diurnal Value', value: `$${data.stats.todayRevenue.toLocaleString()}`, icon: DollarSign, trend: '18.1%' },
-          { label: 'Pending Excursions', value: data.stats.pendingLeaves || 0, icon: CalendarClock, trend: 'Absence' },
+          { label: 'Total Clients', value: data.stats.totalClients, icon: Users, trend: '12.5%' },
+          { label: 'Appointments', value: data.stats.totalAppointments, icon: CalendarCheck2, trend: '4.2%' },
+          { label: 'Revenue Today', value: `$${data.stats.todayRevenue.toLocaleString()}`, icon: DollarSign, trend: '18.1%' },
+          { label: 'Staff on Leave', value: data.stats.pendingLeaves || 0, icon: CalendarClock, trend: 'Absence' },
         ].map((stat, i) => (
           <motion.div
             key={i}
@@ -133,9 +133,9 @@ export default function Dashboard() {
                 <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                   <TrendingUp size={20} md:size={24} />
                 </div>
-                Earnings Report
+                Revenue Overview
               </h3>
-              <p className="text-[8px] md:text-[10px] font-black text-muted uppercase tracking-[0.4em] opacity-60">Revenue Report</p>
+              <p className="text-[8px] md:text-[10px] font-black text-muted uppercase tracking-[0.4em] opacity-60">Business Performance</p>
             </div>
           </div>
           <div className="h-[200px] sm:h-[300px] md:h-[400px] w-full pr-2 md:pr-0">
@@ -199,7 +199,7 @@ export default function Dashboard() {
           </div>
           <div onClick={() => navigate('/admin/categories')} className="mt-6 md:mt-10 pt-6 md:pt-10 border-t border-white/5 mx-auto">
             <button className="w-full flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury">
-              <span className="whitespace-nowrap">VIEW ALL ANALYTICS</span>
+              <span className="whitespace-nowrap">VIEW DETAILED REPORTS</span>
               <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
@@ -254,8 +254,8 @@ export default function Dashboard() {
         <div className="bg-secondary/30 backdrop-blur-md p-6 md:p-10 rounded-2xl border border-white/5 shadow-3xl relative overflow-hidden group">
           <div className="flex items-center justify-between gap-6 mb-8 md:mb-12 relative z-10 leading-none">
             <div>
-              <h3 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase mb-2 md:mb-3 font-luxury">Today's Schedule</h3>
-              <p className="text-[8px] md:text-[10px] font-black text-muted uppercase tracking-[0.4em] opacity-60">Appointments scheduled for today</p>
+              <h3 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase mb-2 md:mb-3 font-luxury">Today's Appointments</h3>
+              <p className="text-[8px] md:text-[10px] font-black text-muted uppercase tracking-[0.4em] opacity-60">Your bookings for today</p>
             </div>
             <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-primary text-secondary flex items-center justify-center font-black text-lg md:text-xl border-4 border-white/10 shadow-2xl font-luxury ">
               {data.upcomingRituals.length.toString().padStart(2, '0')}
@@ -266,24 +266,24 @@ export default function Dashboard() {
                 <motion.div
                   key={app._id}
                   whileHover={{ scale: 1.02, x: 10 }}
-                  className="flex flex-col sm:flex-row sm:items-center justify-between p-5 md:p-8 rounded-2xl bg-primary text-secondary shadow-2xl relative overflow-hidden group/ritual cursor-pointer gap-6"
+                  className="flex flex-col sm:flex-row sm:items-center justify-between p-5 md:p-8 rounded-2xl bg-primary text-secondary shadow-2xl relative overflow-hidden group/appointment cursor-pointer gap-6"
                 >
-                  <div className="absolute inset-0 bg-white/10 opacity-0 group-hover/ritual:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute inset-0 bg-white/10 opacity-0 group-hover/appointment:opacity-100 transition-opacity duration-500" />
                   <div className="flex items-center gap-4 md:gap-6 relative z-10 min-w-0">
                     <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl bg-secondary/20 backdrop-blur-xl flex items-center justify-center border border-white/20 shrink-0">
                       <Clock size={20} md:size={24} strokeWidth={2.5} />
                     </div>
                     <div className="min-w-0">
                       <h4 className="font-black uppercase text-base md:text-xl font-luxury tracking-tighter leading-none mb-1 md:mb-2 truncate">{app.client?.name}</h4>
-                      <p className="text-[8px] md:text-[11px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] opacity-60 ">{format(new Date(app.appointmentDate), 'HH:mm')} PROTOCOL</p>
+                      <p className="text-[8px] md:text-[11px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] opacity-60 ">{format(new Date(app.appointmentDate), 'HH:mm')} APPOINTMENT</p>
                     </div>
                   </div>
                   <div className="flex items-center justify-between sm:justify-end gap-6 relative z-10 w-full sm:w-auto mt-2 sm:mt-0">
                     <div className="text-left sm:text-right">
-                      <p className="text-[7px] md:text-[9px] font-black uppercase tracking-[0.4em] opacity-40 mb-1">Magnitude</p>
+                      <p className="text-[7px] md:text-[9px] font-black uppercase tracking-[0.4em] opacity-40 mb-1">Price</p>
                       <p className="text-xl md:text-2xl font-black font-luxury tracking-tighter leading-none">${app.totalPrice}</p>
                     </div>
-                    <ArrowRight size={20} md:size={24} strokeWidth={2.5} className="opacity-20 group-hover/ritual:opacity-100 transition-all -translate-x-4 group-hover/ritual:translate-x-0 hidden sm:block" />
+                    <ArrowRight size={20} md:size={24} strokeWidth={2.5} className="opacity-20 group-hover/appointment:opacity-100 transition-all -translate-x-4 group-hover/appointment:translate-x-0 hidden sm:block" />
                   </div>
                 </motion.div>
             )) : (
@@ -291,7 +291,7 @@ export default function Dashboard() {
                 <div className="w-16 h-16 md:w-20 md:h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
                   <CheckCircle2 size={24} md:size={32} className="text-white/10" strokeWidth={1} />
                 </div>
-                <p className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-[0.5em] ">No pending masterpieces today</p>
+                <p className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-[0.5em] ">No appointments scheduled for today</p>
               </div>
             )}
           </div>
@@ -306,7 +306,7 @@ export default function Dashboard() {
               <Activity className="text-primary" size={20} md:size={24} />
               Busy Hours
             </h3>
-            <p className="text-[8px] md:text-[10px] font-black text-muted uppercase tracking-[0.4em] opacity-60">Peak temporal footfall analysis</p>
+            <p className="text-[8px] md:text-[10px] font-black text-muted uppercase tracking-[0.4em] opacity-60">Salon activity by hour</p>
           </div>
         </div>
         <div className="h-[250px] md:h-[350px] w-full pr-2 md:pr-0">

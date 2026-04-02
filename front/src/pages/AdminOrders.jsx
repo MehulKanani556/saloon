@@ -54,7 +54,7 @@ export default function AdminOrders() {
             setOrders(data);
             setLoading(false);
         } catch (err) {
-            setError(err.response?.data?.message || 'Matrix synchronization failed');
+            setError(err.response?.data?.message || 'Failed to load orders');
             setLoading(false);
         }
     };
@@ -62,13 +62,13 @@ export default function AdminOrders() {
     const updateStatus = async (orderId, newStatus) => {
         try {
             await api.put(`/orders/${orderId}/status`, { status: newStatus });
-            toast.success(`Protocol ${newStatus} Initiated`);
+            toast.success(`Order status updated to ${newStatus}`);
             if (selectedOrder && selectedOrder._id === orderId) {
                 setSelectedOrder({ ...selectedOrder, status: newStatus });
             }
             fetchOrders();
         } catch (err) {
-            toast.error('Protocol transformation failed');
+            toast.error('Failed to update order status');
         }
     };
 
@@ -92,9 +92,9 @@ export default function AdminOrders() {
     const currentItems = filteredOrders.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
     const stats = [
-        { label: 'Active Acquisitions', value: orders.filter(o => o.status === 'Processing').length, icon: Clock, color: 'text-primary' },
-        { label: 'Completed Fulfillment', value: orders.filter(o => o.status === 'Delivered').length, icon: CheckCircle2, color: 'text-emerald-500' },
-        { label: 'Asset Magnitude', value: `$${orders.reduce((sum, o) => sum + o.totalAmount, 0).toLocaleString()}`, icon: ShoppingBag, color: 'text-white' }
+        { label: 'Pending Orders', value: orders.filter(o => o.status === 'Processing').length, icon: Clock, color: 'text-primary' },
+        { label: 'Delivered Orders', value: orders.filter(o => o.status === 'Delivered').length, icon: CheckCircle2, color: 'text-emerald-500' },
+        { label: 'Total Sales', value: `$${orders.reduce((sum, o) => sum + o.totalAmount, 0).toLocaleString()}`, icon: ShoppingBag, color: 'text-white' }
     ];
 
     return (
@@ -120,7 +120,7 @@ export default function AdminOrders() {
                             <div className="p-8 border-b border-white/5 flex items-center justify-between bg-white/5 relative">
                                 <div className="absolute top-0 left-0 w-full h-[1px] bg-luxury-gradient opacity-20" />
                                 <div>
-                                    <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em] mb-2">Acquisition Manifest</p>
+                                    <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em] mb-2">Order Details</p>
                                     <h2 className="text-2xl font-black text-white uppercase tracking-tighter font-luxury">{selectedOrder.orderId}</h2>
                                 </div>
                                 <button
@@ -138,7 +138,7 @@ export default function AdminOrders() {
                                     <div className="space-y-8">
                                         <div className="p-6 bg-white/5 rounded-2xl border border-white/5 space-y-4">
                                             <h3 className="text-[10px] font-black text-white uppercase tracking-[0.3em] flex items-center gap-3">
-                                                <User size={14} className="text-primary" /> Customer Identity
+                                                <User size={14} className="text-primary" /> Customer Info
                                             </h3>
                                             <div className="space-y-1">
                                                 <p className="text-sm font-black text-white uppercase font-luxury">{selectedOrder.user?.name}</p>
@@ -147,7 +147,7 @@ export default function AdminOrders() {
                                         </div>
                                         <div className="p-6 bg-white/5 rounded-2xl border border-white/5 space-y-4">
                                             <h3 className="text-[10px] font-black text-white uppercase tracking-[0.3em] flex items-center gap-3">
-                                                <Truck size={14} className="text-primary" /> Logistics Target
+                                                <Truck size={14} className="text-primary" /> Shipping Address
                                             </h3>
                                             <div className="space-y-2">
                                                 <p className="text-[11px] font-black text-white uppercase tracking-widest leading-relaxed">
@@ -164,7 +164,7 @@ export default function AdminOrders() {
                                     <div className="space-y-8">
                                         <div className="p-6 bg-white/5 rounded-2xl border border-white/5 space-y-4">
                                             <h3 className="text-[10px] font-black text-white uppercase tracking-[0.3em] flex items-center gap-3">
-                                                <ShoppingBag size={14} className="text-primary" /> Fulfillment Status
+                                                <ShoppingBag size={14} className="text-primary" /> Order Status
                                             </h3>
                                             <div className="flex items-center gap-4">
                                                 <div className={`px-5 py-2 rounded-full border text-[8px] font-black uppercase tracking-widest ${getStatusColor(selectedOrder.status)}`}>
@@ -177,7 +177,7 @@ export default function AdminOrders() {
                                         </div>
                                         <div className="p-8 bg-luxury-gradient rounded-2xl text-secondary flex items-center justify-between shadow-2xl">
                                             <div>
-                                                <p className="text-[10px] font-black uppercase tracking-[0.4em] mb-1 opacity-60 text-secondary/60">Revenue Magnitude</p>
+                                                <p className="text-[10px] font-black uppercase tracking-[0.4em] mb-1 opacity-60 text-secondary/60">Total Amount</p>
                                                 <p className="text-4xl font-black font-luxury text-secondary">${selectedOrder.totalAmount?.toFixed(2)}</p>
                                             </div>
                                             <Package size={40} className="opacity-20 text-secondary" strokeWidth={1} />
@@ -187,15 +187,15 @@ export default function AdminOrders() {
 
                                 {/* Order Items Table */}
                                 <div className="space-y-6">
-                                    <h3 className="text-[10px] font-black text-white uppercase tracking-[0.4em] px-2">Archived Assets</h3>
+                                    <h3 className="text-[10px] font-black text-white uppercase tracking-[0.4em] px-2">Order Items</h3>
                                     <div className="border border-white/5 rounded-2xl overflow-hidden bg-white/5 backdrop-blur-sm">
                                         <table className="w-full text-left">
                                             <thead>
                                                 <tr className="bg-white/5 text-[9px] font-black uppercase tracking-[0.3em] text-primary">
-                                                    <th className="px-6 py-4">Asset Name</th>
+                                                    <th className="px-6 py-4">Product Name</th>
                                                     <th className="px-6 py-4">Quantity</th>
-                                                    <th className="px-6 py-4">Unit Value</th>
-                                                    <th className="px-6 py-4 text-right">Magnitude</th>
+                                                    <th className="px-6 py-4">Unit Price</th>
+                                                    <th className="px-6 py-4 text-right">Total</th>
                                                 </tr>
                                             </thead>
                                             <tbody className="divide-y divide-white/5">
@@ -221,10 +221,10 @@ export default function AdminOrders() {
                                     className="flex-1 flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury disabled:opacity-50 disabled:hover:scale-100"
                                 >
                                     <Truck size={18} className="group-hover:translate-x-1 transition-transform" />
-                                    <span className="whitespace-nowrap">Initiate Deployment</span>
+                                    <span className="whitespace-nowrap">Mark as Shipped</span>
                                 </button>
                                 <button className="px-8 py-4 bg-white/5 border border-white/10 rounded-xl text-white font-black text-[10px] uppercase tracking-[0.3em] hover:bg-white/10 transition-all">
-                                    Download Manifest
+                                    Download Invoice
                                 </button>
                             </div>
                         </motion.div>
@@ -233,8 +233,8 @@ export default function AdminOrders() {
             </AnimatePresence>
 
             <AdminHeader
-                title="Order Ledger"
-                subtitle="Acquisition Manifest & Asset Fulfillment"
+                title="Order Management"
+                subtitle="Track and manage customer orders"
                 icon={Package}
                 rightContent={
                     <div className="flex flex-col md:flex-row gap-5 w-full lg:w-auto items-center">
@@ -242,7 +242,7 @@ export default function AdminOrders() {
                             <Search size={18} className="text-primary/40 group-focus-within:text-primary transition-colors" />
                             <input
                                 type="text"
-                                placeholder="SEARCH ARCHIVES..."
+                                placeholder="SEARCH ORDERS..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 className="bg-transparent border-none outline-none text-[10px] md:text-[11px] font-black text-white tracking-[0.2em] w-full placeholder:text-white/5 uppercase"
@@ -298,7 +298,7 @@ export default function AdminOrders() {
                         {loading ? (
                             <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 z-20">
                                 <Loader2 className="w-12 h-12 text-primary animate-spin" strokeWidth={1} />
-                                <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em]">Synchronizing Ledger...</p>
+                                <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em]">Loading orders...</p>
                             </div>
                         ) : error ? (
                             <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 z-20">
@@ -309,17 +309,17 @@ export default function AdminOrders() {
                         ) : filteredOrders.length === 0 ? (
                             <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 z-20 opacity-40">
                                 <Package size={64} strokeWidth={0.5} className="text-muted" />
-                                <p className="text-[10px] font-black text-muted uppercase tracking-[0.5em]">No acquisition records found.</p>
+                                <p className="text-[10px] font-black text-muted uppercase tracking-[0.5em]">No orders found.</p>
                             </div>
                         ) : (
                             <table className="w-full text-left border-collapse">
                                 <thead>
                                     <tr className="bg-background/80">
-                                        <th className="px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Order Manifest</th>
-                                        <th className="px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Customer Entity</th>
-                                        <th className="px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Timestamp</th>
-                                        <th className="px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Magnitude</th>
-                                        <th className="px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Protocol Status</th>
+                                        <th className="px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Order ID</th>
+                                        <th className="px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Customer</th>
+                                        <th className="px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Date</th>
+                                        <th className="px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Total</th>
+                                        <th className="px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Status</th>
                                         <th className="px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap text-right">Actions</th>
                                     </tr>
                                 </thead>
@@ -343,8 +343,8 @@ export default function AdminOrders() {
                                                     </div>
                                                 </td>
                                                 <td className="px-8 py-6">
-                                                    <p className="text-[11px] font-black text-white uppercase tracking-widest mb-1">{order.user?.name || 'Unknown Protocol'}</p>
-                                                    <p className="text-[8px] font-black text-muted uppercase tracking-[0.2em]">{order.items?.length || 0} ARCHIVED ASSETS</p>
+                                                    <p className="text-[11px] font-black text-white uppercase tracking-widest mb-1">{order.user?.name || 'User'}</p>
+                                                    <p className="text-[8px] font-black text-muted uppercase tracking-[0.2em]">{order.items?.length || 0} ITEMS</p>
                                                 </td>
                                                 <td className="px-8 py-6">
                                                     <p className="text-[10px] font-black text-muted uppercase tracking-[0.3em]">
@@ -402,7 +402,7 @@ export default function AdminOrders() {
                                                                 setIsModalOpen(true);
                                                             }}
                                                             className="p-3 bg-background border border-white/5 rounded-xl text-muted hover:text-primary hover:border-primary/30 transition-all shadow-xl"
-                                                            title="Inspect Manifest"
+                                                            title="View Details"
                                                         >
                                                             <Eye size={16} />
                                                         </button>

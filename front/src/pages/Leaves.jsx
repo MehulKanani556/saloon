@@ -37,7 +37,7 @@ export default function Leaves() {
             const { data } = await api.get(endpoint);
             setLeaves(data);
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Failed to fetch records');
+            toast.error(error.response?.data?.message || 'Failed to load leave requests');
         } finally {
             setLoading(false);
         }
@@ -58,16 +58,16 @@ export default function Leaves() {
             totalHours: 8
         },
         validationSchema: Yup.object({
-            reason: Yup.string().required('Reason required'),
-            startDate: Yup.date().required('Start date required'),
-            endDate: Yup.date().min(Yup.ref('startDate'), "End date can't be before start date").required('End date required'),
+            reason: Yup.string().required('Please provide a reason'),
+            startDate: Yup.date().required('Start date is required'),
+            endDate: Yup.date().min(Yup.ref('startDate'), "End date cannot be earlier than start date").required('End date required'),
             startTime: Yup.string().required('Start time required'),
             endTime: Yup.string().required('End time required'),
         }),
         onSubmit: async (values, { resetForm }) => {
             try {
                 await api.post('/leaves', values);
-                toast.success('Leave protocol initiated');
+                toast.success('Leave request submitted successfully');
                 setIsModalOpen(false);
                 resetForm();
                 fetchLeaves();
@@ -102,11 +102,11 @@ export default function Leaves() {
     const handleUpdateStatus = async (status) => {
         try {
             await api.put(`/leaves/${selectedLeave._id}`, { status });
-            toast.success(`Leave Status: ${status}`);
+            toast.success(`Request ${status}`);
             setIsActionModalOpen(false);
             fetchLeaves();
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Status update failed');
+            toast.error(error.response?.data?.message || 'Failed to update leave status');
         }
     };
 
@@ -128,7 +128,7 @@ export default function Leaves() {
             {/* Standardized Header */}
             <AdminHeader 
                 title="Leave Management"
-                subtitle="Absence Request Authorization"
+                subtitle="Manage staff leave and absences"
                 icon={CalendarClock}
                 rightContent={
                     <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4 md:gap-6 w-full md:w-auto">
@@ -161,9 +161,9 @@ export default function Leaves() {
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="bg-background/80">
-                                {isAdmin && <th className="px-4 md:px-10 py-4 md:py-6 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Artisan</th>}
+                                {isAdmin && <th className="px-4 md:px-10 py-4 md:py-6 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Staff Member</th>}
                                 <th className="px-4 md:px-10 py-4 md:py-6 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Type</th>
-                                <th className="px-4 md:px-10 py-4 md:py-6 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Timeline</th>
+                                <th className="px-4 md:px-10 py-4 md:py-6 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Dates</th>
                                 <th className="px-4 md:px-10 py-4 md:py-6 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Hours</th>
                                 <th className="px-4 md:px-10 py-4 md:py-6 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Status</th>
                                 <th className="px-4 md:px-10 py-4 md:py-6 text-center text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Action</th>
@@ -222,7 +222,7 @@ export default function Leaves() {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 title="Add Leave"
-                subtitle="Absence Protocols Initiation"
+                subtitle="Submit a new leave request"
                 maxWidth="max-w-[550px]"
             >
                 <form onSubmit={formik.handleSubmit} className="space-y-6">
@@ -333,14 +333,14 @@ export default function Leaves() {
                             type="submit"
                             className="flex-1 flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury"
                         >
-                            Authorize Absence
+                            Submit Request
                         </button>
                         <button
                             type="button"
                             onClick={() => setIsModalOpen(false)}
                             className="flex-1 px-8 md:px-10 py-4 md:py-5 bg-white/5 hover:bg-white/10 text-white/60 hover:text-white rounded-xl font-black uppercase text-[10px] md:text-[11px] tracking-[0.2em] md:tracking-[0.3em] border border-white/5 transition-all font-luxury"
                         >
-                            Discard
+                            Cancel
                         </button>
                     </div>
                 </form>
@@ -350,15 +350,15 @@ export default function Leaves() {
             <Modal
                 isOpen={isActionModalOpen}
                 onClose={() => setIsActionModalOpen(false)}
-                title="Status Authority"
-                subtitle={`Verification for ${selectedLeave?.staff?.name}'s Absence`}
+                title="Review Leave Request"
+                subtitle={`Reviewing request for ${selectedLeave?.staff?.name}`}
                 maxWidth="max-w-xl"
             >
                 <div className="text-center space-y-10">
                     {/* Leave Core Context */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pb-6 border-b border-white/5">
                         <div className="p-6 bg-white/5 rounded-2xl border border-white/5 text-left group">
-                            <p className="text-[9px] font-black text-primary uppercase tracking-[0.4em] mb-4 ">Temporal Matrix</p>
+                            <p className="text-[9px] font-black text-primary uppercase tracking-[0.4em] mb-4 ">Leave Dates</p>
                             <p className="text-xl font-black text-white tracking-widest font-luxury uppercase leading-none mb-4">
                                 {selectedLeave && format(new Date(selectedLeave.startDate), 'MMM dd')} - {selectedLeave && format(new Date(selectedLeave.endDate), 'MMM dd')}
                             </p>
@@ -370,7 +370,7 @@ export default function Leaves() {
                             </div>
                         </div>
                         <div className="p-6 bg-white/5 rounded-2xl border border-white/5 text-left group">
-                            <p className="text-[9px] font-black text-primary uppercase tracking-[0.4em] mb-4 ">Quantum Impact</p>
+                            <p className="text-[9px] font-black text-primary uppercase tracking-[0.4em] mb-4 ">Total Duration</p>
                             <p className="text-4xl font-black text-white tracking-tighter font-luxury uppercase leading-none mb-3">
                                 {(selectedLeave?.totalHours / 8).toFixed(1)} <span className="text-sm opacity-40">Days</span>
                             </p>
@@ -379,7 +379,7 @@ export default function Leaves() {
                     </div>
 
                     <div className="p-8 bg-white/5 rounded-2xl border border-white/5">
-                        <p className="text-[9px] font-black text-primary uppercase tracking-[0.4em] mb-4 ">Assertion Provided</p>
+                        <p className="text-[9px] font-black text-primary uppercase tracking-[0.4em] mb-4 ">Reason for Leave</p>
                         <p className="text-sm font-black text-white tracking-widest uppercase leading-relaxed font-luxury italic">
                             "{selectedLeave?.reason}"
                         </p>

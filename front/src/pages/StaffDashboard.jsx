@@ -69,12 +69,12 @@ export default function StaffDashboard() {
       {/* Standardized Header */}
       <AdminHeader 
         title="Staff Dashboard"
-        subtitle="Personal Workspace Active"
+        subtitle="Your daily overview"
         icon={Activity}
         rightContent={
           <div className="flex items-center gap-4 md:gap-8 bg-secondary/40 backdrop-blur-md px-6 md:px-10 py-4 md:py-6 rounded-xl md:rounded-2xl border border-white/5 shadow-3xl group hover:border-primary/20 transition-all duration-500">
             <div className="text-left">
-              <p className="text-[8px] md:text-[10px] font-black text-primary uppercase tracking-[0.4em] leading-none mb-2 md:mb-3 ">My Total Earnings</p>
+              <p className="text-[8px] md:text-[10px] font-black text-primary uppercase tracking-[0.4em] leading-none mb-2 md:mb-3 ">Total Earnings</p>
               <p className="text-2xl md:text-4xl font-black text-white tracking-tighter  font-luxury leading-none group-hover:scale-105 transition-transform duration-500">
                 $ {data.stats.totalRevenue.toLocaleString()}
               </p>
@@ -86,10 +86,10 @@ export default function StaffDashboard() {
       {/* Industrial Matrix Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {[
-          { label: 'My Unique Clients', value: data.stats.totalClients, icon: Users, trend: 'Managed' },
-          { label: 'Total Rituals', value: data.stats.totalAppointments, icon: CalendarCheck2, trend: 'Historical' },
-          { label: 'Today\'s Value', value: `$${data.stats.todayRevenue.toLocaleString()}`, icon: DollarSign, trend: 'Active' },
-          { label: 'Pending Excursions', value: data.stats.pendingLeaves || 0, icon: CalendarClock, trend: 'Absence' },
+          { label: 'Total Clients', value: data.stats.totalClients, icon: Users, trend: 'Managed' },
+          { label: 'Appointments Completed', value: data.stats.totalAppointments, icon: CalendarCheck2, trend: 'Historical' },
+          { label: 'Today\'s Sales', value: `$${data.stats.todayRevenue.toLocaleString()}`, icon: DollarSign, trend: 'Active' },
+          { label: 'Leave Requests', value: data.stats.pendingLeaves || 0, icon: CalendarClock, trend: 'Pending' },
         ].map((stat, i) => (
           <motion.div
             key={i}
@@ -133,9 +133,9 @@ export default function StaffDashboard() {
                 <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
                   <TrendingUp size={18} md:size={24} />
                 </div>
-                My Weekly Growth
+                Revenue Growth
               </h3>
-              <p className="text-[8px] md:text-[10px] font-black text-muted uppercase tracking-[0.3em] md:tracking-[0.4em]  opacity-60">Revenue Contributions | 7 Day Flow</p>
+              <p className="text-[8px] md:text-[10px] font-black text-muted uppercase tracking-[0.3em] md:tracking-[0.4em]  opacity-60">Your revenue contribution over the last 7 days</p>
             </div>
           </div>
           <div className="h-[200px] sm:h-[300px] md:h-[400px] w-full">
@@ -200,8 +200,8 @@ export default function StaffDashboard() {
         <div className="bg-secondary/30 backdrop-blur-md p-6 md:p-10 rounded-xl md:rounded-2xl border border-white/5 shadow-3xl relative overflow-hidden group">
           <div className="flex items-center justify-between gap-4 md:gap-6 mb-8 md:mb-12 relative z-10 leading-none">
             <div>
-              <h3 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase mb-2 md:mb-3  font-luxury">My Recent Clients</h3>
-              <p className="text-[8px] md:text-[10px] font-black text-muted uppercase tracking-[0.3em] md:tracking-[0.4em]  opacity-60">Archived service records</p>
+              <h3 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase mb-2 md:mb-3  font-luxury">Recent Clients</h3>
+              <p className="text-[8px] md:text-[10px] font-black text-muted uppercase tracking-[0.3em] md:tracking-[0.4em]  opacity-60">History of your recent appointments</p>
             </div>
             <div className="w-10 h-10 md:w-12 md:h-12 bg-primary/10 rounded-xl md:rounded-2xl flex items-center justify-center text-primary shrink-0">
               <CalendarCheck2 size={20} md:size={24} />
@@ -244,8 +244,8 @@ export default function StaffDashboard() {
         <div className="bg-secondary/30 backdrop-blur-md p-6 md:p-10 rounded-xl md:rounded-2xl border border-white/5 shadow-3xl relative overflow-hidden group">
           <div className="flex items-center justify-between gap-4 md:gap-6 mb-8 md:mb-12 relative z-10 leading-none">
             <div>
-              <h3 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase mb-2 md:mb-3  font-luxury">Next Assignments</h3>
-              <p className="text-[8px] md:text-[10px] font-black text-muted uppercase tracking-[0.3em] md:tracking-[0.4em]  opacity-60">Pending sessions for today</p>
+              <h3 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase mb-2 md:mb-3  font-luxury">Upcoming Appointments</h3>
+              <p className="text-[8px] md:text-[10px] font-black text-muted uppercase tracking-[0.3em] md:tracking-[0.4em]  opacity-60">Your scheduled bookings for today</p>
             </div>
             <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-primary text-secondary flex items-center justify-center font-black text-lg md:text-xl border-2 md:border-4 border-white/10 shadow-2xl font-luxury shrink-0">
               {data.upcomingRituals.length.toString().padStart(2, '0')}
@@ -257,24 +257,24 @@ export default function StaffDashboard() {
                   key={app._id}
                   whileHover={{ scale: 1.02, x: 10 }}
                   onClick={() => navigate('/staff/appointments')}
-                  className="flex items-center justify-between p-4 md:p-8 rounded-xl md:rounded-2xl bg-primary text-secondary shadow-2xl relative overflow-hidden group/ritual cursor-pointer"
+                  className="flex items-center justify-between p-4 md:p-8 rounded-xl md:rounded-2xl bg-primary text-secondary shadow-2xl relative overflow-hidden group/appointment cursor-pointer"
                 >
-                  <div className="absolute inset-0 bg-white/10 opacity-0 group-hover/ritual:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute inset-0 bg-white/10 opacity-0 group-hover/appointment:opacity-100 transition-opacity duration-500" />
                   <div className="flex items-center gap-4 md:gap-6 relative z-10 min-w-0">
                     <div className="w-10 h-10 md:w-14 md:h-14 rounded-lg md:rounded-2xl bg-secondary/20 backdrop-blur-xl flex items-center justify-center border border-white/20 shrink-0">
                       <Clock size={18} md:size={24} strokeWidth={2.5} />
                     </div>
                     <div className="min-w-0">
                       <h4 className="font-black uppercase text-base md:text-xl font-luxury tracking-tighter  leading-none mb-1 md:mb-2 truncate">{app.client?.name}</h4>
-                      <p className="text-[9px] md:text-[11px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] opacity-60 ">{format(new Date(app.appointmentDate), 'HH:mm')} SESSION</p>
+                      <p className="text-[9px] md:text-[11px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] opacity-60 ">{format(new Date(app.appointmentDate), 'HH:mm')} APPOINTMENT</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 md:gap-6 relative z-10 shrink-0">
                     <div className="text-right">
-                      <p className="text-[7px] md:text-[9px] font-black uppercase tracking-[0.4em] opacity-40  mb-1">Amount</p>
+                      <p className="text-[7px] md:text-[9px] font-black uppercase tracking-[0.4em] opacity-40  mb-1">Price</p>
                       <p className="text-lg md:text-2xl font-black  font-luxury tracking-tighter leading-none">${app.totalPrice}</p>
                     </div>
-                    <ArrowRight size={18} md:size={24} strokeWidth={2.5} className="opacity-20 group-hover/ritual:opacity-100 transition-all -translate-x-4 group-hover/ritual:translate-x-0 hidden sm:block" />
+                    <ArrowRight size={18} md:size={24} strokeWidth={2.5} className="opacity-20 group-hover/appointment:opacity-100 transition-all -translate-x-4 group-hover/appointment:translate-x-0 hidden sm:block" />
                   </div>
                 </motion.div>
             )) : (
@@ -282,7 +282,7 @@ export default function StaffDashboard() {
                 <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
                   <CheckCircle2 size={32} className="text-white/10" strokeWidth={1} />
                 </div>
-                <p className="text-[10px] font-black text-muted uppercase tracking-[0.5em] ">No pending sessions today</p>
+                <p className="text-[10px] font-black text-muted uppercase tracking-[0.5em] ">No appointments scheduled for today</p>
               </div>
             )}
           </div>
@@ -295,9 +295,9 @@ export default function StaffDashboard() {
           <div>
             <h3 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase mb-2 md:mb-3  flex items-center gap-3 md:gap-4 font-luxury">
               <Activity className="text-primary shrink-0" size={20} md:size={24} />
-              My Daily Intensity
+              Hourly Activity
             </h3>
-            <p className="text-[8px] md:text-[10px] font-black text-muted uppercase tracking-[0.3em] md:tracking-[0.4em]  opacity-60">Temporal engagement analysis</p>
+            <p className="text-[8px] md:text-[10px] font-black text-muted uppercase tracking-[0.3em] md:tracking-[0.4em]  opacity-60">Your busy hours today</p>
           </div>
         </div>
         <div className="h-[200px] md:h-[300px] w-full">

@@ -54,7 +54,7 @@ export default function Specializations() {
                 setCategories(categoriesRes.data);
                 fetchRequests();
             } catch (error) {
-                toast.error('Failed to extract ritual archive');
+                toast.error('Failed to load services');
             } finally {
                 setLoading(false);
             }
@@ -85,7 +85,7 @@ export default function Specializations() {
 
     const handleCommit = async () => {
         if (selectedServices.length === 0 && specializations.length === 0 && bio === '') {
-            return toast.error('Selection requested details for synchronization');
+            return toast.error('Please select at least one service or skill');
         }
         try {
             await api.post('/specializations/requests', { 
@@ -93,14 +93,14 @@ export default function Specializations() {
                 bio,
                 specialization: specializations
             });
-            toast.success('Synchronization Protocol Initiated');
+            toast.success('Specialization update request submitted');
             setIsStaffAddModalOpen(false);
             setSelectedServices([]);
             setSpecializations([]);
             setBio('');
             fetchRequests();
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Initialization failed');
+            toast.error(error.response?.data?.message || 'Request failed');
         }
     };
 
@@ -115,7 +115,7 @@ export default function Specializations() {
                 dispatch(fetchCurrentUser());
             }
         } catch (error) {
-            toast.error('Action failed');
+            toast.error('Failed to process request');
         }
     };
 
@@ -150,8 +150,8 @@ export default function Specializations() {
     return (
         <div className="space-y-6 md:space-y-12 pb-20">
             <AdminHeader 
-                title="Expertise Matrix"
-                subtitle="Architectural Specialization Alignment"
+                title="Staff Specialties"
+                subtitle="Manage staff services and skills"
                 icon={Scissors}
                 rightContent={
                     <div className="flex flex-col lg:flex-row gap-4 md:gap-6 w-full lg:w-auto">
@@ -162,14 +162,14 @@ export default function Specializations() {
                                 className={`flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl transition-all group font-luxury ${hasPendingRequest ? 'bg-secondary text-muted cursor-not-allowed border border-white/5' : 'bg-primary text-secondary shadow-primary/20 hover:scale-[1.05]'}`}
                             >
                                 <Plus size={16} md:size={18} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
-                                <span className="whitespace-nowrap">{hasPendingRequest ? 'PENDING VALIDATION' : 'ADD SERVICE ALIGNMENT'}</span>
+                                <span className="whitespace-nowrap">{hasPendingRequest ? 'REQUEST PENDING' : 'UPDATE MY SPECIALTIES'}</span>
                             </button>
                         )}
                         <div className="relative group w-full lg:min-w-[300px]">
                             <Search className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-primary transition-colors" size={16} md:size={20} />
                             <input
                                 type="text"
-                                placeholder={isAdmin ? "Search pending requests..." : "Search established rituals..."}
+                                placeholder={isAdmin ? "Search pending requests..." : "Search my services..."}
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 className="w-full bg-secondary/40 backdrop-blur-md border border-white/5 rounded-xl md:rounded-2xl px-12 md:px-16 py-3.5 md:py-5 text-[10px] md:text-[11px] font-black uppercase tracking-[0.1em] md:tracking-[0.2em] outline-none focus:border-primary/50 shadow-3xl transition-all text-white placeholder:text-white/10"
@@ -179,13 +179,12 @@ export default function Specializations() {
                 }
             />
 
-            {/* Staff's Current Established Expertise (READ ONLY) */}
             {!isAdmin && (
                 <div className="space-y-4 md:space-y-8">
                     <div className="flex items-center justify-between">
                          <div>
-                            <h3 className="text-lg md:text-xl font-black text-white uppercase tracking-tighter font-luxury">Current Expertise Portfolio</h3>
-                            <p className="text-[8px] md:text-[10px] font-black text-primary uppercase tracking-[0.4em] mt-1">Verified Ritual Alignment</p>
+                            <h3 className="text-lg md:text-xl font-black text-white uppercase tracking-tighter font-luxury">My Current Services & Skills</h3>
+                            <p className="text-[8px] md:text-[10px] font-black text-primary uppercase tracking-[0.4em] mt-1">Approved by Administration</p>
                         </div>
                     </div>
                     
@@ -209,11 +208,11 @@ export default function Specializations() {
                                             <Scissors size={16} md:size={20} strokeWidth={2.5} />
                                         </div>
                                         <div className="flex items-center gap-1.5 px-3 md:px-4 py-1 md:py-2 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-lg md:rounded-xl text-[7px] md:text-[9px] font-black uppercase tracking-widest ">
-                                            <CheckCircle2 size={10} md:size={12} /> ESTABLISHED
+                                            <CheckCircle2 size={10} md:size={12} /> APPROVED
                                         </div>
                                     </div>
                                     <div className="min-w-0 pr-2">
-                                        <p className="text-[7px] md:text-[9px] font-black text-primary uppercase tracking-[0.3em] md:tracking-[0.4em] mb-1 md:mb-2 ">{service.category?.name || 'MASTERPIECE'}</p>
+                                        <p className="text-[7px] md:text-[9px] font-black text-primary uppercase tracking-[0.3em] md:tracking-[0.4em] mb-1 md:mb-2 ">{service.category?.name || 'SERVICE'}</p>
                                         <h3 className="text-sm md:text-lg font-black text-white font-luxury uppercase tracking-tight truncate md:whitespace-normal">{service.name}</h3>
                                     </div>
                                 </div>
@@ -223,21 +222,21 @@ export default function Specializations() {
                 </div>
             )}
 
-            {/* Expertise Audit History */}
+            {/* Request History */}
             <div className="bg-secondary/30 backdrop-blur-md rounded-2xl border border-white/5 shadow-3xl overflow-hidden">
                 <div className="p-8 border-b border-white/5">
-                    <h3 className="text-xl font-black text-white uppercase tracking-tighter font-luxury">Expertise Audit</h3>
-                    <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em] mt-1">Matrix Revision History</p>
+                    <h3 className="text-xl font-black text-white uppercase tracking-tighter font-luxury">Request History</h3>
+                    <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em] mt-1">History of specialty updates</p>
                 </div>
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
                         <thead>
                             <tr className="bg-background/80">
-                                <th className="px-4 md:px-10 py-3.5 md:py-5 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Artisan</th>
-                                <th className="px-4 md:px-10 py-3.5 md:py-5 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap md:table-cell hidden">Delta Logic</th>
-                                <th className="px-4 md:px-10 py-3.5 md:py-5 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Alignment</th>
+                                <th className="px-4 md:px-10 py-3.5 md:py-5 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Staff Member</th>
+                                <th className="px-4 md:px-10 py-3.5 md:py-5 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap md:table-cell hidden">Update Details</th>
+                                <th className="px-4 md:px-10 py-3.5 md:py-5 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Services</th>
                                 <th className="px-4 md:px-10 py-3.5 md:py-5 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Status</th>
-                                <th className="px-4 md:px-10 py-3.5 md:py-5 text-center text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Authority</th>
+                                <th className="px-4 md:px-10 py-3.5 md:py-5 text-center text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-white/5">
@@ -260,18 +259,18 @@ export default function Specializations() {
                                                     <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl overflow-hidden border border-white/5 bg-primary/10 flex items-center justify-center text-primary shrink-0">
                                                         <LayoutDashboard size={14} md:size={18} />
                                                     </div>
-                                                    <span className="text-[10px] md:text-[11px] font-black text-white uppercase tracking-widest">Self ID</span>
+                                                    <span className="text-[10px] md:text-[11px] font-black text-white uppercase tracking-widest">Profile Update</span>
                                                 </div>
                                             )}
                                         </td>
                                         <td className="px-4 md:px-10 py-4 md:py-6 md:table-cell hidden">
                                             <div className="flex flex-col gap-1">
-                                                <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest">+{newRituals.length} ADDITIONS</span>
+                                                <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest">+{newRituals.length} NEW SERVICES</span>
                                                 <p className="text-[10px] font-black text-muted uppercase tracking-widest leading-relaxed line-clamp-1 max-w-[200px]"> "{req.bio || 'General update'}" </p>
                                             </div>
                                         </td>
                                         <td className="px-4 md:px-10 py-4 md:py-6">
-                                            <span className="text-[9px] md:text-[10px] font-black text-primary/60 uppercase tracking-widest whitespace-nowrap">{req.services?.length} PROTOCOLS</span>
+                                            <span className="text-[9px] md:text-[10px] font-black text-primary/60 uppercase tracking-widest whitespace-nowrap">{req.services?.length} SERVICES</span>
                                         </td>
                                         <td className="px-4 md:px-10 py-4 md:py-6">
                                             <div className={`inline-flex px-3 md:px-4 py-1.5 md:py-2 rounded-lg md:rounded-xl text-[8px] md:text-[9px] font-black uppercase tracking-widest border whitespace-nowrap ${req.status === 'Approved' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : req.status === 'Rejected' ? 'bg-rose-500/10 text-rose-500 border-rose-500/20' : 'bg-amber-500/10 text-amber-500 border-amber-500/20'}`}>
@@ -303,8 +302,8 @@ export default function Specializations() {
                     <motion.div initial={{ opacity: 0, scale: 0.95, y: 30 }} animate={{ opacity: 1, scale: 1, y: 0 }} className="bg-secondary relative z-20 w-full max-w-4xl rounded-xl md:rounded-3xl border border-white/5 shadow-3xl overflow-hidden p-6 md:p-12 flex flex-col max-h-[92vh]">
                         <div className="flex items-center justify-between mb-8 md:mb-12 shrink-0">
                             <div className="min-w-0 pr-4">
-                                <h3 className="text-xl md:text-3xl font-black text-white uppercase tracking-tighter font-luxury truncate md:whitespace-normal">Propose Alignment</h3>
-                                <p className="text-[8px] md:text-[10px] font-black text-primary uppercase tracking-[0.3em] md:tracking-[0.4em] mt-2 md:mt-3">Expansion of Architectural Expertise</p>
+                                <h3 className="text-xl md:text-3xl font-black text-white uppercase tracking-tighter font-luxury truncate md:whitespace-normal">Update Specialties</h3>
+                                <p className="text-[8px] md:text-[10px] font-black text-primary uppercase tracking-[0.3em] md:tracking-[0.4em] mt-2 md:mt-3">Request to add new services or skills to your profile</p>
                             </div>
                             <button onClick={() => setIsStaffAddModalOpen(false)} className="p-2 md:p-4 rounded-xl md:rounded-2xl bg-white/5 text-muted hover:text-white transition-all shrink-0"><X size={18} md:size={20} /></button>
                         </div>
@@ -339,7 +338,7 @@ export default function Specializations() {
                                                             <span className="text-[8px] font-black text-primary uppercase tracking-[0.3em] md:tracking-[0.4em]">${service.price}</span>
                                                         </div>
                                                     </div>
-                                                    {isAlreadyEstablished && <div className="absolute top-2 right-2 px-2 py-1 bg-emerald-500/20 text-emerald-500 rounded text-[7px] font-black uppercase tracking-widest">Established</div>}
+                                                    {isAlreadyEstablished && <div className="absolute top-2 right-2 px-2 py-1 bg-emerald-500/20 text-emerald-500 rounded text-[7px] font-black uppercase tracking-widest">Approved</div>}
                                                 </div>
                                             );
                                         })}
@@ -351,22 +350,22 @@ export default function Specializations() {
                                     <div className="space-y-4">
                                         <div className="flex items-center gap-4 text-primary bg-primary/10 px-6 py-4 rounded-2xl border border-primary/20 border-dashed ">
                                             <ListPlus size={20} />
-                                            <span className="text-[10px] font-black uppercase tracking-widest">{selectedServices.length} Rituals Selected</span>
+                                            <span className="text-[10px] font-black uppercase tracking-widest">{selectedServices.length} Services Selected</span>
                                         </div>
                                     </div>
 
                                     <div className="space-y-4">
-                                        <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em] leading-none mb-3 font-luxury">Authorization Context (Admin Comment)</p>
+                                        <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em] leading-none mb-3 font-luxury">Additional Information</p>
                                         <textarea 
                                             value={bio}
                                             onChange={(e) => setBio(e.target.value)}
-                                            placeholder="Explain the operational context for this addition..."
+                                            placeholder="Add any notes for the administrator..."
                                             className="w-full bg-background border border-white/5 focus:border-primary/30 rounded-2xl px-6 py-6 text-xs font-bold outline-none transition-all text-white shadow-inner placeholder:text-white/5 resize-none min-h-[180px]"
                                         />
                                     </div>
 
                                     <div className="space-y-4">
-                                        <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em] leading-none mb-3 font-luxury">Additional Skills (New)</p>
+                                        <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em] leading-none mb-3 font-luxury">New Skills</p>
                                         <div className="flex flex-wrap gap-3 mb-4">
                                             {specializations.map(tag => (
                                                 <span key={tag} className="flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 text-primary rounded-xl text-[8px] font-black uppercase tracking-widest">
@@ -392,7 +391,7 @@ export default function Specializations() {
                                 onClick={handleCommit}
                                 className="w-full flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury"
                             > 
-                                <span className="whitespace-nowrap">COMMIT SYNCHRONIZATION</span>
+                                <span className="whitespace-nowrap">SUBMIT REQUEST</span>
                                 <Sparkles size={16} md:size={18} className="group-hover:rotate-12 transition-transform" />
                             </button>
                         </div>
@@ -407,19 +406,19 @@ export default function Specializations() {
                     <motion.div initial={{ opacity: 0, scale: 0.95, y: 30 }} animate={{ opacity: 1, scale: 1, y: 0 }} className="bg-secondary relative z-20 w-full max-w-2xl rounded-xl md:rounded-3xl border border-white/5 shadow-3xl overflow-hidden p-6 md:p-12 flex flex-col max-h-[92vh]">
                         <div className="flex items-center justify-between mb-8 md:mb-12 shrink-0">
                             <div className="min-w-0 pr-4">
-                                <h3 className="text-xl md:text-3xl font-black text-white uppercase tracking-tighter font-luxury truncate md:whitespace-normal">Authority Delta</h3>
-                                <p className="text-[8px] md:text-[10px] font-black text-primary uppercase tracking-[0.3em] md:tracking-[0.4em] mt-2 md:mt-3">Verifying {selectedRequest.staff?.name}'s Matrix Revision</p>
+                                <h3 className="text-xl md:text-3xl font-black text-white uppercase tracking-tighter font-luxury truncate md:whitespace-normal">Review Update Request</h3>
+                                <p className="text-[8px] md:text-[10px] font-black text-primary uppercase tracking-[0.3em] md:tracking-[0.4em] mt-2 md:mt-3">Reviewing profile update for {selectedRequest.staff?.name}</p>
                             </div>
                             <button onClick={() => setIsActionModalOpen(false)} className="p-2 md:p-4 rounded-xl md:rounded-2xl bg-white/5 text-muted hover:text-white transition-all shrink-0"><X size={18} md:size={20} /></button>
                         </div>
                         <div className="flex-1 space-y-8 md:space-y-12 overflow-y-auto custom-scrollbar">
                             <div className="p-6 bg-white/5 rounded-2xl border border-white/5">
-                                <p className="text-[9px] font-black text-primary uppercase tracking-[0.4em] mb-4 ">Artistic Narrative (Target Status)</p>
+                                <p className="text-[9px] font-black text-primary uppercase tracking-[0.4em] mb-4 ">Staff Member's Note</p>
                                 <div className="flex items-start gap-4">
                                      <div className="flex-1 space-y-2">
                                         <p className="text-sm font-black text-white italic font-luxury leading-relaxed uppercase tracking-widest">"{selectedRequest.bio || 'General update'}"</p>
                                         {selectedRequest.bio !== selectedRequest.staff?.bio && (
-                                            <p className="text-[8px] font-black text-amber-500 uppercase tracking-widest bg-amber-500/10 px-2 py-1 rounded-md inline-block">MEMBER NARRATIVE HAS CHANGED</p>
+                                            <p className="text-[8px] font-black text-amber-500 uppercase tracking-widest bg-amber-500/10 px-2 py-1 rounded-md inline-block">PROFILE NOTE UPDATED</p>
                                         )}
                                      </div>
                                 </div>
@@ -427,8 +426,8 @@ export default function Specializations() {
 
                             <div className="space-y-6">
                                 <div className="flex items-center justify-between">
-                                    <p className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.4em] mb-2 ">Proposed New additions (Verify Carefully)</p>
-                                    <span className="px-3 py-1 bg-emerald-500/10 text-emerald-500 rounded-lg text-[9px] font-black">+{getNewRituals(selectedRequest).length} Rituals</span>
+                                    <p className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.4em] mb-2 ">Proposed New Services</p>
+                                    <span className="px-3 py-1 bg-emerald-500/10 text-emerald-500 rounded-lg text-[9px] font-black">+{getNewRituals(selectedRequest).length} Services</span>
                                 </div>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     {getNewRituals(selectedRequest).map(s => (
@@ -438,13 +437,13 @@ export default function Specializations() {
                                             </div>
                                             <div className="flex flex-col">
                                                 <span className="text-[11px] font-black text-white uppercase tracking-widest">{s.name}</span>
-                                                <span className="text-[8px] font-black text-emerald-500/70 uppercase tracking-widest">NEW COMPETENCY</span>
+                                                <span className="text-[8px] font-black text-emerald-500/70 uppercase tracking-widest">NEW SKILL</span>
                                             </div>
                                         </div>
                                     ))}
                                     {getNewRituals(selectedRequest).length === 0 && (
                                         <div className="col-span-full py-8 text-center bg-white/5 rounded-xl border border-dashed border-white/10">
-                                            <p className="text-[9px] font-black text-muted uppercase tracking-[0.3em]">No new rituals added (Bio/Keywords update only)</p>
+                                            <p className="text-[9px] font-black text-muted uppercase tracking-[0.3em]">No new services added</p>
                                         </div>
                                     )}
                                 </div>
@@ -452,7 +451,7 @@ export default function Specializations() {
 
                             {selectedRequest.staff?.services?.length > 0 && (
                                 <div className="space-y-4 opacity-40">
-                                    <p className="text-[9px] font-black text-muted uppercase tracking-[0.4em]">Current Expertise Matrix (Established)</p>
+                                    <p className="text-[9px] font-black text-muted uppercase tracking-[0.4em]">Current Staff Specialties (Approved)</p>
                                     <div className="flex flex-wrap gap-3">
                                         {selectedRequest.staff.services.map(s => (
                                             <div key={s._id} className="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-[8px] font-black uppercase text-muted tracking-widest flex items-center gap-2">
@@ -464,8 +463,8 @@ export default function Specializations() {
                             )}
 
                             <div className="space-y-4">
-                                <p className="text-[9px] font-black text-muted uppercase tracking-[0.4em] pl-2">Authorization Feedback</p>
-                                <textarea value={adminReason} onChange={(e) => setAdminReason(e.target.value)} placeholder="Provide operational context..." className="w-full bg-background/50 border border-white/5 rounded-xl px-6 py-4 text-[10px] font-black uppercase tracking-widest outline-none text-white transition-all placeholder:text-white/5 resize-none min-h-[100px]" />
+                                <p className="text-[9px] font-black text-muted uppercase tracking-[0.4em] pl-2">Reviewer Feedback (Optional)</p>
+                                <textarea value={adminReason} onChange={(e) => setAdminReason(e.target.value)} placeholder="Add feedback for the staff member..." className="w-full bg-background/50 border border-white/5 rounded-xl px-6 py-4 text-[10px] font-black uppercase tracking-widest outline-none text-white transition-all placeholder:text-white/5 resize-none min-h-[100px]" />
                             </div>
                         </div>
                         <div className="grid grid-cols-2 gap-4 md:gap-8 pt-6 md:pt-8 border-t border-white/5 mt-auto shrink-0">

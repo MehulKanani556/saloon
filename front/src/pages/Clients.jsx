@@ -50,9 +50,9 @@ export default function Clients() {
       imageFile: null
     },
     validationSchema: Yup.object({
-      name: Yup.string().required('Legal name required').min(2, 'Name too short'),
-      email: Yup.string().email('Invalid digital signature').required('Required'),
-      phone: Yup.string().required('Contact tether required')
+      name: Yup.string().required('Full name is required').min(2, 'Name too short'),
+      email: Yup.string().email('Invalid email address').required('Required'),
+      phone: Yup.string().required('Phone number is required')
     }),
     onSubmit: (values) => {
       const formData = new FormData();
@@ -110,8 +110,8 @@ export default function Clients() {
   return (
     <div className="space-y-12">
       <AdminHeader
-        title="Customer Archives"
-        subtitle="Cataloging Eternal Beauty Profiles"
+        title="Client Directory"
+        subtitle="Manage your salon's client records"
         icon={User2}
         rightContent={
           <div className="flex flex-col lg:flex-row gap-6 w-full lg:w-auto">
@@ -119,7 +119,7 @@ export default function Clients() {
               <Search size={18} className="text-muted group-focus-within:text-primary transition-colors" />
               <input
                 type="text"
-                placeholder="Query by name, signal, email..."
+                placeholder="Search by name, phone, or email..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="bg-transparent border-none outline-none text-[10px] md:text-[11px] w-full font-black uppercase tracking-widest text-white placeholder:text-white/10"
@@ -130,7 +130,7 @@ export default function Clients() {
               className="w-full lg:w-auto flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury"
             >
               <Plus size={18} md:size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
-              <span className="whitespace-nowrap">INDuct NEW PROTOCOL</span>
+              <span className="whitespace-nowrap">ADD NEW CLIENT</span>
             </button>
           </div>
         }
@@ -142,9 +142,9 @@ export default function Clients() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-background/80">
-                <th className="px-3 lg:px-5 py-3 lg:py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap">Identity</th>
-                <th className="px-3 lg:px-5 py-3 lg:py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap">Tethers & Signals</th>
-                <th className="px-3 lg:px-5 py-3 lg:py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap text-center">Frequency</th>
+                <th className="px-3 lg:px-5 py-3 lg:py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap">Client</th>
+                <th className="px-3 lg:px-5 py-3 lg:py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap">Contact Info</th>
+                <th className="px-3 lg:px-5 py-3 lg:py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap text-center">Visits</th>
                 <th className="px-3 lg:px-5 py-3 lg:py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap text-right">Actions</th>
               </tr >
             </thead >
@@ -172,7 +172,7 @@ export default function Clients() {
                           <p className="font-black text-white text-sm lg:text-base tracking-tighter uppercase  whitespace-nowrap font-luxury group-hover:text-primary transition-colors leading-none mb-1.5 lg:mb-3">{client.name}</p>
                           <div className="flex items-center gap-2">
                             <div className="w-1 h-1 lg:w-1.5 lg:h-1.5 rounded-full bg-primary" />
-                            <p className="text-[8px] lg:text-[9px] font-black text-muted uppercase tracking-[0.2em] whitespace-nowrap">Protocol Est. {new Date(client.createdAt).getFullYear()}</p>
+                            <p className="text-[8px] lg:text-[9px] font-black text-muted uppercase tracking-[0.2em] whitespace-nowrap">Member since {new Date(client.createdAt).getFullYear()}</p>
                           </div>
                         </div>
                       </div>
@@ -193,7 +193,7 @@ export default function Clients() {
                     <td className="px-3 lg:px-5 py-3 lg:py-5 text-center">
                       <div className="inline-flex flex-col items-center bg-background/50 px-4 lg:px-6 py-3 lg:py-4 rounded-xl lg:rounded-2xl border border-white/5 group-hover:bg-primary transition-all duration-500">
                         <span className="text-lg lg:text-xl font-black text-white tracking-tighter whitespace-nowrap group-hover:text-secondary">{(client.bookingHistory?.length || 0).toString().padStart(2, '0')}</span>
-                        <span className="text-[7px] lg:text-[8px] font-black text-primary uppercase tracking-[0.3em] mt-0.5 lg:mt-1 whitespace-nowrap group-hover:text-secondary group-hover:opacity-40 ">Rituals</span>
+                        <span className="text-[7px] lg:text-[8px] font-black text-primary uppercase tracking-[0.3em] mt-0.5 lg:mt-1 whitespace-nowrap group-hover:text-secondary group-hover:opacity-40 ">Appointments</span>
                       </div>
                     </td>
                     <td className="px-3 lg:px-5 py-3 lg:py-5 text-right w-[160px] lg:w-[200px]">
@@ -241,8 +241,8 @@ export default function Clients() {
       <Modal
         isOpen={isDrawerOpen}
         onClose={handleCloseDrawer}
-        title={selectedClient ? 'Edit Identity' : 'INDuct PROTOCOL'}
-        subtitle="Customer Matrix Management"
+        title={selectedClient ? 'Edit Client' : 'ADD NEW CLIENT'}
+        subtitle="Manage client profile"
       >
         <div className="flex flex-col items-center mb-12">
           <div className="relative group">
@@ -272,43 +272,43 @@ export default function Clients() {
               <Plus size={24} strokeWidth={3} />
             </div>
           </div>
-          <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em] mt-8 ">Geometric Identity Signature</p>
+          <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em] mt-8 ">Profile Photo</p>
         </div>
 
         <form onSubmit={formik.handleSubmit} className="space-y-10">
           <div className="space-y-4">
-            <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2  underline decoration-primary/30 decoration-2 underline-offset-8">Legal Identity</label>
+            <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2  underline decoration-primary/30 decoration-2 underline-offset-8">Full Name</label>
             <input
               name="name"
               onChange={formik.handleChange}
               value={formik.values.name}
               className="w-full bg-secondary border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.2em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5 "
-              placeholder="ENTER NOMENCLATURE"
+              placeholder="ENTER FULL NAME"
             />
             {formik.touched.name && formik.errors.name && <p className="text-rose-500 text-[9px] font-black ml-4 uppercase  tracking-widest">{formik.errors.name}</p>}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-4">
-              <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 ">Digital Beacon (Email)</label>
+              <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 ">Email Address</label>
               <input
                 name="email"
                 onChange={formik.handleChange}
                 value={formik.values.email}
                 className="w-full bg-secondary border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.2em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5"
-                placeholder="EMAIL@MATRIX.COM"
+                placeholder="EMAIL@EXAMPLE.COM"
               />
               {formik.touched.email && formik.errors.email && <p className="text-rose-500 text-[9px] font-black ml-4 uppercase  tracking-widest">{formik.errors.email}</p>}
             </div>
 
             <div className="space-y-4">
-              <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 ">Tether Signal (Phone)</label>
+              <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 ">Phone Number</label>
               <input
                 name="phone"
                 onChange={formik.handleChange}
                 value={formik.values.phone}
                 className="w-full bg-secondary border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.2em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5"
-                placeholder="+XX XXXXX XXXXX"
+                placeholder="+1 (555) 000-0000"
               />
               {formik.touched.phone && formik.errors.phone && <p className="text-rose-500 text-[9px] font-black ml-4 uppercase  tracking-widest">{formik.errors.phone}</p>}
             </div>
@@ -320,7 +320,7 @@ export default function Clients() {
               disabled={loading}
               className="w-full py-6 bg-primary text-secondary rounded-2xl text-[10px] font-black uppercase tracking-[0.5em] hover:bg-primary/90 transition-all shadow-2xl shadow-primary/20 active:scale-[0.98] disabled:opacity-50 font-luxury "
             >
-              {selectedClient ? 'COMMIT IDENTITY UPDATE' : 'AUTHORIZE PROTOCOL ENTRY'}
+              {selectedClient ? 'SAVE CHANGES' : 'ADD CLIENT'}
             </button>
           </div>
         </form>
@@ -329,8 +329,8 @@ export default function Clients() {
       <Modal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
-        title="DISSOLVE IDENTITY?"
-        subtitle="Final Administrative Liquidation"
+        title="DELETE CLIENT?"
+        subtitle="This action cannot be undone."
         maxWidth="max-w-sm"
       >
         <div className="text-center p-4">
@@ -338,7 +338,7 @@ export default function Clients() {
             <Trash2 size={48} strokeWidth={1} />
           </div>
           <p className="text-muted font-black text-[10px] uppercase tracking-[0.3em] leading-relaxed mb-10 ">
-            Eliminating digital signature of <br /><span className="text-rose-500 text-base font-luxury  underline decoration-rose-500/30 decoration-2 underline-offset-4">{clientToDelete?.name}</span> <br /> from active records.
+            Are you sure you want to delete the client <br /><span className="text-rose-500 text-base font-luxury  underline decoration-rose-500/30 decoration-2 underline-offset-4">{clientToDelete?.name}</span> <br /> permanently?
           </p>
           <div className="flex flex-col gap-4">
             <button
@@ -348,13 +348,13 @@ export default function Clients() {
               }}
               className="w-full py-5 bg-rose-500 text-white rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:bg-rose-600 transition-all shadow-xl active:scale-95 font-luxury "
             >
-              CONFIRM DISSOLUTION
+              CONFIRM DELETE
             </button>
             <button
               onClick={() => setIsDeleteModalOpen(false)}
               className="w-full py-5 bg-white/5 text-muted rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:text-white transition-all font-luxury "
             >
-              ABORT OPERATION
+              CANCEL
             </button>
           </div>
         </div>
@@ -364,7 +364,7 @@ export default function Clients() {
         isOpen={isProfileOpen}
         onClose={() => { setIsProfileOpen(false); setProfileClient(null); }}
         title={profileClient?.name}
-        subtitle="ETERNAL MEMBER"
+        subtitle="VALUED CLIENT"
         headerImage={profileClient?.profileImage ? (profileClient.profileImage.startsWith('/uploads') ? `${IMAGE_URL}${profileClient.profileImage}` : profileClient.profileImage) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${profileClient?.name}`}
         footer={(
           <>
@@ -372,7 +372,7 @@ export default function Clients() {
               onClick={() => { setIsProfileOpen(false); handleEdit(profileClient); }}
               className="flex-1 py-5 bg-primary text-secondary rounded-2xl text-[10px] font-black uppercase tracking-[0.4em] hover:bg-primary/90 transition-all shadow-xl active:scale-95 font-luxury "
             >
-              REDEFINE PROTOCOL
+              EDIT PROFILE
             </button>
             <button
               onClick={() => { setIsProfileOpen(false); setProfileClient(null); }}
@@ -389,7 +389,7 @@ export default function Clients() {
               <div className="p-6 bg-secondary/50 rounded-2xl border border-white/5 shadow-inner">
                 <div className="flex items-center gap-3 text-primary mb-4 ">
                   <ShoppingBag size={14} strokeWidth={2.5} />
-                  <span className="text-[9px] font-black uppercase tracking-[0.3em]">Rituals</span>
+                  <span className="text-[9px] font-black uppercase tracking-[0.3em]">Appointments</span>
                 </div>
                 <div className="text-3xl font-black text-white  font-luxury leading-none">{(profileClient.bookingHistory?.length || 0).toString().padStart(2, '0')}</div>
               </div>
@@ -404,7 +404,7 @@ export default function Clients() {
 
             <div className="p-8 bg-background/50 rounded-2xl border border-white/5 flex items-center justify-between group shadow-3xl hover:border-primary/20 transition-all duration-500">
               <div className="space-y-4">
-                <p className="text-[9px] font-black text-muted uppercase tracking-[0.5em] ">Active Tether</p>
+                <p className="text-[9px] font-black text-muted uppercase tracking-[0.5em] ">Phone Number</p>
                 <p className="text-2xl font-black text-white tracking-tighter  font-luxury group-hover:text-primary transition-all">{profileClient.phone}</p>
               </div>
               <div className="w-16 h-16 bg-secondary rounded-2xl flex items-center justify-center text-muted group-hover:bg-primary group-hover:text-secondary transition-all duration-500 shadow-xl border border-white/5">
@@ -416,7 +416,7 @@ export default function Clients() {
               <div className="flex items-center justify-between px-2">
                 <div className="flex items-center gap-4">
                   <Calendar size={16} className="text-primary" />
-                  <span className="text-[10px] font-black text-white uppercase tracking-[0.4em]  leading-none">Ritual Archive</span>
+                  <span className="text-[10px] font-black text-white uppercase tracking-[0.4em]  leading-none">Appointment History</span>
                 </div>
                 <span className="h-[1px] flex-1 bg-white/5 mx-6" />
               </div>
@@ -444,7 +444,7 @@ export default function Clients() {
                 {appointments.filter(app => app.client?._id === profileClient._id).length === 0 && (
                   <div className="py-20 text-center bg-white/5 rounded-2xl border border-dashed border-white/10">
                     <Clock className="mx-auto text-white/5 mb-6" size={48} strokeWidth={1} />
-                    <p className="text-muted/40  text-[10px] uppercase font-black tracking-[0.4em]">No archives found in matrix</p>
+                    <p className="text-muted/40  text-[10px] uppercase font-black tracking-[0.4em]">No appointment history found</p>
                   </div>
                 )}
               </div>

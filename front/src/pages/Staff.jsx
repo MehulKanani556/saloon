@@ -47,10 +47,10 @@ export default function Staff() {
       imageFile: null
     },
     validationSchema: Yup.object({
-      name: Yup.string().required('Nomenclature required'),
-      email: Yup.string().email('Invalid digital beacon').required('Required'),
-      phone: Yup.string().required('Tether required'),
-      services: Yup.array().min(1, 'Select at least one ritual mastery'),
+      name: Yup.string().required('Name is required'),
+      email: Yup.string().email('Invalid email').required('Required'),
+      phone: Yup.string().required('Phone number is required'),
+      services: Yup.array().min(1, 'Select at least one service'),
     }),
     onSubmit: async (values) => {
       const formData = new FormData();
@@ -74,7 +74,7 @@ export default function Staff() {
         }
         handleCloseDrawer();
       } catch (err) {
-        console.error('Expert setup failed:', err);
+        console.error('Staff setup failed:', err);
       }
     }
   });
@@ -131,8 +131,8 @@ export default function Staff() {
   return (
     <div className="space-y-12">
       <AdminHeader
-        title="Artisan Collective"
-        subtitle="Cataloging Master Grooming Specialists"
+        title="Staff Management"
+        subtitle="Manage your salon's professional staff"
         icon={LayoutGrid}
         rightContent={
           <button
@@ -140,7 +140,7 @@ export default function Staff() {
             className="w-full lg:w-auto flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury"
           >
             <Plus size={18} md:size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
-            <span className="whitespace-nowrap">INDuct NEW ARTISAN</span>
+            <span className="whitespace-nowrap">ADD NEW STAFF</span>
           </button>
         }
       />
@@ -163,7 +163,7 @@ export default function Staff() {
                   className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110"
                 />
                 <div className="absolute top-4 right-4 px-3 py-1.5 bg-background/90 backdrop-blur-md rounded-xl text-[8px] font-black text-primary uppercase tracking-[0.2em] shadow-lg border border-white/5">
-                  {member.role || "Artisan"}
+                  {member.role || "Staff Member"}
                 </div>
 
                 {/* Admin Actions Overlay */}
@@ -204,7 +204,7 @@ export default function Staff() {
                   onClick={() => { setProfileExpert(member); setIsProfileOpen(true); }}
                   className="w-full mt-auto py-4 rounded-xl bg-background border border-white/5 text-[9px] font-black uppercase tracking-[0.3em] text-muted hover:bg-primary hover:text-secondary hover:border-primary transition-all shadow-sm active:scale-95 group-hover:shadow-primary/10"
                 >
-                  View Dossier
+                  View Profile
                 </button>
               </div>
             </motion.div>
@@ -215,8 +215,8 @@ export default function Staff() {
       <Modal
         isOpen={isDrawerOpen}
         onClose={handleCloseDrawer}
-        title={selectedExpert ? 'Refine Artisan' : 'INDuct ARTISAN'}
-        subtitle="Specialist Matrix Onboarding"
+        title={selectedExpert ? 'Edit Staff Member' : 'ADD STAFF MEMBER'}
+        subtitle="Set up a new professional profile"
       >
         <div className="flex flex-col items-center mb-8 md:mb-12">
           <div className="relative group">
@@ -243,20 +243,20 @@ export default function Staff() {
 
         <form onSubmit={formik.handleSubmit} className="space-y-6 md:space-y-10">
           <div className="space-y-2 md:space-y-4">
-            <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2  underline decoration-primary/30 decoration-2 underline-offset-8">Artisan Nomenclature</label>
+            <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2  underline decoration-primary/30 decoration-2 underline-offset-8">Full Name</label>
             <input
               name="name"
               onChange={formik.handleChange}
               value={formik.values.name}
               className="w-full bg-secondary border border-white/10 focus:border-primary/50 rounded-xl md:rounded-2xl px-4 md:px-6 py-4 md:py-5 text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5 font-luxury "
-              placeholder="ENTER LEGAL IDENTITY"
+              placeholder="ENTER FULL NAME"
             />
             {formik.touched.name && formik.errors.name && <p className="text-rose-500 text-[8px] font-black ml-4 uppercase  tracking-widest">{formik.errors.name}</p>}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
             <div className="space-y-2 md:space-y-4">
-              <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 ">Digital Beacon</label>
+              <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 ">Email Address</label>
               <input
                 name="email"
                 onChange={formik.handleChange}
@@ -268,7 +268,7 @@ export default function Staff() {
             </div>
 
             <div className="space-y-2 md:space-y-4">
-              <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 ">Tether Signal</label>
+              <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 ">Phone Number</label>
               <input
                 name="phone"
                 onChange={formik.handleChange}
@@ -281,7 +281,7 @@ export default function Staff() {
           </div>
 
           <div className="space-y-4 md:space-y-6">
-            <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 ">Ritual Specializations</label>
+            <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 ">Service Specialties</label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 max-h-[250px] md:max-h-[350px] overflow-y-auto pr-2 md:pr-4 custom-scrollbar">
               {services.map(s => (
                 <label key={s._id} className={`flex items-center justify-between p-4 md:p-6 rounded-xl md:rounded-2xl cursor-pointer transition-all border border-white/5 group ${formik.values.services.includes(s._id) ? 'bg-primary text-secondary shadow-xl shadow-primary/20' : 'bg-background hover:bg-white/5 text-muted'}`}>
@@ -312,7 +312,7 @@ export default function Staff() {
             disabled={loading}
             className="w-full py-5 md:py-6 px-2 bg-primary text-secondary rounded-xl md:rounded-2xl text-[10px] md:text-[11px] uppercase tracking-[0.5em] hover:bg-primary/90 transition-all shadow-2xl active:scale-[0.98] disabled:opacity-50 font-luxury "
           >
-            {selectedExpert ? 'COMMIT PROTOCOL UPDATES' : 'AUTHORIZE ONBOARDING'}
+            {selectedExpert ? 'SAVE CHANGES' : 'ADD STAFF MEMBER'}
           </button>
         </form>
       </Modal>
@@ -321,7 +321,7 @@ export default function Staff() {
         isOpen={isProfileOpen}
         onClose={() => { setIsProfileOpen(false); setProfileExpert(null); }}
         title={profileExpert?.name}
-        subtitle="MASTER ARTISAN"
+        subtitle="STAFF MEMBER"
         headerImage={profileExpert?.profileImage?.startsWith('/uploads') ? `${IMAGE_URL}${profileExpert.profileImage}` : profileExpert?.profileImage}
         footer={(
           <>
@@ -329,7 +329,7 @@ export default function Staff() {
               onClick={() => { setIsProfileOpen(false); handleEdit(profileExpert); }}
               className="flex-1 py-5 bg-primary text-secondary rounded-2xl text-[10px] font-black uppercase tracking-[0.4em] hover:bg-primary/90 transition-all shadow-xl active:scale-95 font-luxury "
             >
-              REDEFINE IDENTITY
+              EDIT PROFILE
             </button>
             <button
               onClick={() => { setIsProfileOpen(false); setProfileExpert(null); }}
@@ -346,16 +346,16 @@ export default function Staff() {
               <div className="p-5 md:p-6 bg-secondary/50 rounded-2xl border border-white/5 shadow-inner group">
                 <div className="flex items-center gap-3 text-primary mb-3 md:mb-4">
                   <Phone size={14} strokeWidth={2.5} />
-                  <span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em]">Signal</span>
+                  <span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em]">Phone</span>
                 </div>
-                <div className="text-[11px] md:text-xs font-black text-white tracking-widest break-all group-hover:text-primary transition-colors">{profileExpert.phone || 'NO TETHER'}</div>
+                <div className="text-[11px] md:text-xs font-black text-white tracking-widest break-all group-hover:text-primary transition-colors">{profileExpert.phone || 'NO PHONE NUMBER'}</div>
               </div>
               <div className="p-5 md:p-6 bg-secondary/50 rounded-2xl border border-white/5 shadow-inner group">
                 <div className="flex items-center gap-3 text-primary mb-3 md:mb-4">
                   <Mail size={14} strokeWidth={2.5} />
-                  <span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em]">Beacon</span>
+                  <span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em]">Email</span>
                 </div>
-                <div className="text-[11px] md:text-xs font-black text-white tracking-widest break-all group-hover:text-primary transition-colors">{profileExpert.email || 'NO BEACON'}</div>
+                <div className="text-[11px] md:text-xs font-black text-white tracking-widest break-all group-hover:text-primary transition-colors">{profileExpert.email || 'NO EMAIL'}</div>
               </div>
             </div>
 
@@ -363,7 +363,7 @@ export default function Staff() {
               <div className="flex items-center justify-between px-2">
                 <div className="flex items-center gap-4">
                   <Award size={16} className="text-primary" />
-                  <span className="text-[10px] font-black text-white uppercase tracking-[0.4em] leading-none">Service Masteries</span>
+                  <span className="text-[10px] font-black text-white uppercase tracking-[0.4em] leading-none">Services Provided</span>
                 </div>
                 <span className="h-[1px] flex-1 bg-white/5 mx-6 hidden sm:block" />
               </div>
@@ -386,8 +386,8 @@ export default function Staff() {
       <Modal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
-        title="DISSOLVE RECORD?"
-        subtitle="Institutional Erasure Protocol"
+        title="DELETE RECORD?"
+        subtitle="This action cannot be undone"
         maxWidth="max-w-sm"
       >
         <div className="text-center p-4">
@@ -404,13 +404,13 @@ export default function Staff() {
               onClick={confirmDelete}
               className="w-full py-5 bg-rose-500 text-white rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:bg-rose-600 transition-all shadow-xl active:scale-95 font-luxury "
             >
-              CONFIRM ERASURE
+              CONFIRM DELETE
             </button>
             <button
               onClick={() => setIsDeleteModalOpen(false)}
               className="w-full py-5 bg-white/5 text-muted rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:text-white transition-all font-luxury "
             >
-              ABORT PROTOCOL
+              CANCEL
             </button>
           </div>
         </div>

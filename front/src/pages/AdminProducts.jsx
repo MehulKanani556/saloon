@@ -242,7 +242,7 @@ export default function AdminProducts() {
       </Modal>
 
       <AdminHeader
-        title="Inventory Terminal"
+        title="Product Inventory"
         subtitle="Manage your product catalog"
         icon={Package}
         rightContent={
@@ -364,7 +364,7 @@ export default function AdminProducts() {
           <div className="w-32 h-32 bg-secondary/50 rounded-2xl flex items-center justify-center border border-white/5 shadow-3xl text-white/10 group-hover:text-primary/20 transition-all duration-700">
             <Target size={64} strokeWidth={1} className="group-hover:rotate-45 transition-transform duration-1000" />
           </div>
-          <p className="text-[11px] font-black text-muted uppercase tracking-[0.6em]">Inventory archives yield no data matches.</p>
+          <p className="text-[11px] font-black text-muted uppercase tracking-[0.6em]">No products found matching your search.</p>
         </div>
       )}
     </div>

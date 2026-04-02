@@ -185,10 +185,10 @@ export default function AdminServices() {
               >
                 <div className="flex items-center gap-3 mb-2">
                   <Zap size={14} className="text-primary animate-pulse" />
-                  <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white/50 ">Quick Category Creator</span>
+                  <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white/50 ">Add New Category</span>
                 </div>
                 <input
-                  placeholder="NEW CATEGORY NAME..." value={newCategoryName}
+                  placeholder="CATEGORY NAME..." value={newCategoryName}
                   onChange={(e) => setNewCategoryName(e.target.value)}
                   className="w-full bg-secondary/80 border border-white/5 px-6 py-4 rounded-xl outline-none font-black text-[10px] uppercase tracking-[0.2em] text-white placeholder:text-white/5"
                 />
@@ -203,7 +203,7 @@ export default function AdminServices() {
                       setIsAddingCategory(false);
                     }}
                     className="flex-1 py-4 bg-primary text-secondary rounded-xl font-black text-[9px] uppercase tracking-[0.3em] hover:bg-primary/90 transition-all font-luxury "
-                  >SAVE CATEGORY</button>
+                  >ADD CATEGORY</button>
                   <button type="button" onClick={() => setIsAddingCategory(false)} className="px-6 text-[9px] font-black uppercase tracking-widest text-muted hover:text-white transition-colors">CANCEL</button>
                 </div>
               </motion.div>
@@ -232,7 +232,7 @@ export default function AdminServices() {
           <div className="flex items-center justify-between p-4 md:p-6 bg-secondary/30 backdrop-blur-md rounded-xl md:rounded-2xl border border-white/5 shadow-inner">
             <div className="flex items-center gap-3 md:gap-4">
               <Activity size={16} md:size={18} className="text-primary" />
-              <span className="text-[9px] md:text-[10px] font-black text-white/60 uppercase tracking-[0.4em] ">Availability Status</span>
+              <span className="text-[9px] md:text-[10px] font-black text-white/60 uppercase tracking-[0.4em] ">Status</span>
             </div>
             <label className="relative inline-flex items-center cursor-pointer group">
               <input type="checkbox" checked={formik.values.isActive} onChange={(e) => formik.setFieldValue('isActive', e.target.checked)} className="sr-only peer" />
@@ -278,8 +278,8 @@ export default function AdminServices() {
       </Modal>
 
       <AdminHeader
-        title="Ritual Catalog"
-        subtitle="Operational Portfolio & Service Archives"
+        title="Service Menu"
+        subtitle="Manage your salon's professional treatments"
         icon={Scissors}
         rightContent={
           <div className="flex flex-col md:flex-row gap-5 w-full lg:w-auto items-center">
@@ -287,7 +287,7 @@ export default function AdminServices() {
               <Search size={18} className="text-primary/40 group-focus-within:text-primary transition-colors" />
               <input
                 type="text"
-                placeholder="SEARCH ARCHIVES..."
+                placeholder="SEARCH SERVICES..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="bg-transparent border-none outline-none text-[10px] md:text-[11px] font-black text-white tracking-[0.2em] w-full placeholder:text-white/5 uppercase"
@@ -304,7 +304,7 @@ export default function AdminServices() {
               className="w-full lg:w-auto flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury"
             >
               <Plus size={18} md:size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
-              <span className="whitespace-nowrap">INDuct NEW Ritual</span>
+              <span className="whitespace-nowrap">ADD NEW SERVICE</span>
             </button>
           </div>
         }
@@ -328,7 +328,7 @@ export default function AdminServices() {
                   className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110"
                 />
                 <div className="absolute top-4 right-4 px-3 py-1 bg-background/90 backdrop-blur-md rounded-full text-[9px] font-black text-primary uppercase tracking-widest shadow-lg">
-                  {service.category?.name || "Ritual"}
+                  {service.category?.name || "Service"}
                 </div>
 
                 {/* Admin Actions Overlay */}
@@ -403,7 +403,7 @@ export default function AdminServices() {
           <div className="w-32 h-32 bg-secondary/50 rounded-2xl flex items-center justify-center border border-white/5 shadow-3xl text-white/10 group-hover:text-primary/20 transition-all duration-700">
             <Target size={64} strokeWidth={1} className="group-hover:rotate-45 transition-transform duration-1000" />
           </div>
-          <p className="text-[11px] font-black text-muted uppercase tracking-[0.6em] ">Archives yield no data matches.</p>
+          <p className="text-[11px] font-black text-muted uppercase tracking-[0.6em] ">No services found matching your search.</p>
         </div>
       )}
     </div>

@@ -64,7 +64,7 @@ export default function Appointments() {
     validationSchema: Yup.object({
       clientEmail: Yup.string().email('Invalid email').when('clientId', {
         is: 'new',
-        then: (schema) => schema.required('Identity Required'),
+        then: (schema) => schema.required('Email Required'),
         otherwise: (schema) => schema.notRequired()
       }),
       clientName: Yup.string().when('clientId', {
@@ -77,7 +77,7 @@ export default function Appointments() {
         then: (schema) => schema.required('Phone Required').matches(/^[0-9]{10}$/, 'Phone number must be 10 digits'),
         otherwise: (schema) => schema.notRequired()
       }),
-      services: Yup.array().min(1, 'Select at least one ritual').required('Required'),
+      services: Yup.array().min(1, 'Select at least one service').required('Required'),
       date: Yup.string().required('Required'),
     }),
     onSubmit: async (values, { resetForm }) => {
@@ -92,7 +92,7 @@ export default function Appointments() {
         resetForm();
       } catch (error) {
         toast.error(error.message || 'Operation failed');
-        console.error("Masterpiece Sync Failed:", error);
+        console.error("Appointment Sync Failed:", error);
       }
     }
   });
@@ -125,7 +125,7 @@ export default function Appointments() {
       toast.success('Booking cancelled');
       setIsDeleteModalOpen(false);
     } catch (error) {
-      toast.error(error.message || 'Dissolution failed');
+      toast.error(error.message || 'Deletion failed');
     }
   };
 
@@ -162,8 +162,8 @@ export default function Appointments() {
     <div className="flex-1 flex flex-col min-h-0 gap-6 md:gap-10">
       {/* Header */}
       <AdminHeader 
-        title="Appointment Bookings"
-        subtitle="Architectural Management of the Temporal Record"
+        title="Appointments"
+        subtitle="View and manage all customer appointments"
         icon={CalendarIcon}
         rightContent={
           <button
@@ -176,7 +176,7 @@ export default function Appointments() {
             className="flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury"
           >
             <Plus size={18} md:size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
-            <span className="whitespace-nowrap">Secure Ritual Slot</span>
+            <span className="whitespace-nowrap">Book Appointment</span>
           </button>
         }
       />
@@ -190,7 +190,7 @@ export default function Appointments() {
 
             <div className="flex flex-row gap-4 sm:items-center justify-between mb-6 md:mb-8 relative z-10">
               <div className="flex flex-col">
-                <span className="text-[8px] font-black text-primary uppercase tracking-[0.4em] leading-none mb-2 ">Temporal Matrix</span>
+                <span className="text-[8px] font-black text-primary uppercase tracking-[0.4em] leading-none mb-2 ">Calendar</span>
                 <h3 className="text-xl md:text-2xl font-black text-white uppercase tracking-tighter  font-luxury">{format(currentDate, 'MMMM yyyy')}</h3>
               </div>
               <div className="flex gap-3">
@@ -256,7 +256,7 @@ export default function Appointments() {
         <div className="lg:col-span-5 flex flex-col min-h-0 gap-6">
           <div className="flex items-center justify-between px-4 shrink-0">
             <div className="space-y-1">
-              <h3 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase leading-none font-luxury ">Selected Protocol</h3>
+              <h3 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase leading-none font-luxury ">Appointments for</h3>
               <p className="text-primary font-black text-[9px] uppercase tracking-[0.3em]">{format(selectedDate, 'MMMM do, yyyy')}</p>
             </div>
             <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-secondary border border-white/5 flex items-center justify-center text-primary font-black text-lg shadow-inner">
@@ -362,13 +362,13 @@ export default function Appointments() {
                   className="flex-1 flex flex-col items-center justify-center p-12 text-center bg-secondary/10 rounded-2xl border border-dashed border-white/5"
                 >
                   <Clock className="text-white/5 mb-6 rotate-12" size={48} strokeWidth={1} />
-                  <p className="text-muted/40 font-black uppercase tracking-[0.4em] text-[10px] ">No active protocols recorded</p>
+                  <p className="text-muted/40 font-black uppercase tracking-[0.4em] text-[10px] ">No appointments scheduled</p>
                   <button
                     onClick={() => setIsDrawerOpen(true)}
                     className="mt-8 flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury mx-auto"
                   >
                     <Plus size={18} md:size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
-                    <span className="whitespace-nowrap">Initialize Ritual</span>
+                    <span className="whitespace-nowrap">Book Now</span>
                   </button>
                 </motion.div>
               )}
@@ -384,13 +384,13 @@ export default function Appointments() {
           setIsNewClient(false);
           formik.resetForm();
         }}
-        title={selectedAppointment ? 'Refine Ritual' : 'Initialize Protocol'}
-        subtitle="Operational Schedule Management"
+        title={selectedAppointment ? 'Edit Appointment' : 'New Appointment'}
+        subtitle="Manage appointment details"
       >
         <form onSubmit={formik.handleSubmit} className="space-y-6 md:space-y-10">
           <div className="space-y-4">
             <CustomSelect
-              label="Select Target Identity"
+              label="Select Client"
               name="clientId"
               value={formik.values.clientId}
               onChange={(e) => {
@@ -408,8 +408,8 @@ export default function Appointments() {
                 }
               }}
               options={[
-                { label: 'Select Client Identity...', value: '' },
-                ...(!selectedAppointment ? [{ label: '+ Protocol New Client', value: 'new' }] : []),
+                { label: 'Select Client...', value: '' },
+                ...(!selectedAppointment ? [{ label: '+ Add New Client', value: 'new' }] : []),
                 ...clients.map(c => ({ label: `${c.name}`, value: c._id }))
               ]}
               icon={User}
@@ -423,7 +423,7 @@ export default function Appointments() {
                 className="space-y-6 md:space-y-8 overflow-hidden bg-white/5 p-4 md:p-8 rounded-xl md:rounded-2xl border border-white/5"
               >
                 <div className="space-y-2 md:space-y-3">
-                  <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-widest ml-2 ">Legal Identifer</label>
+                  <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-widest ml-2 ">Full Name</label>
                   <input
                     name="clientName" onChange={formik.handleChange} value={formik.values.clientName}
                     className="w-full bg-background border border-white/5 focus:border-primary/30 rounded-xl px-4 md:px-6 py-3 md:py-4 text-xs font-bold outline-none transition-all text-white shadow-inner placeholder:text-white/5"
@@ -433,7 +433,7 @@ export default function Appointments() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                   <div className="space-y-2 md:space-y-3">
-                    <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-widest ml-2 ">Contact Tether</label>
+                    <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-widest ml-2 ">Phone Number</label>
                     <input
                       name="clientPhone" onChange={formik.handleChange} value={formik.values.clientPhone}
                       className="w-full bg-background border border-white/5 focus:border-primary/30 rounded-xl px-4 md:px-6 py-3 md:py-4 text-xs font-bold outline-none transition-all text-white shadow-inner placeholder:text-white/5"
@@ -441,11 +441,11 @@ export default function Appointments() {
                     />
                   </div>
                   <div className="space-y-2 md:space-y-3">
-                    <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-widest ml-2 ">Digital Signature</label>
+                    <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-widest ml-2 ">Email Address</label>
                     <input
                       name="clientEmail" onChange={formik.handleChange} value={formik.values.clientEmail}
                       className="w-full bg-background border border-white/5 focus:border-primary/30 rounded-xl px-4 md:px-6 py-3 md:py-4 text-xs font-bold outline-none transition-all text-white shadow-inner placeholder:text-white/5"
-                      placeholder="Email Coordinate"
+                      placeholder="Email Address"
                     />
                   </div>
                 </div>
@@ -455,7 +455,7 @@ export default function Appointments() {
 
           <div className="space-y-4">
             <CustomSelect
-              label="Ritual Selections"
+              label="Select Services"
               name="services"
               value={formik.values.services}
               onChange={formik.handleChange}
@@ -466,24 +466,24 @@ export default function Appointments() {
           </div>
 
           <div className="space-y-3 md:space-y-4">
-            <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-widest ml-2 underline decoration-primary/30 decoration-2 underline-offset-4">Temporal Coordinates</label>
+            <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-widest ml-2 underline decoration-primary/30 decoration-2 underline-offset-4">Date & Time</label>
             <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 gap-3 md:gap-4">
               <input
                 name="date" type="datetime-local" onChange={formik.handleChange} value={formik.values.date}
                 className="w-full bg-secondary border border-white/10 focus:border-primary/50 rounded-xl md:rounded-2xl px-3 md:px-6 py-4 md:py-5 text-[10px] md:text-[11px] font-black uppercase tracking-[0.1em] md:tracking-[0.2em] outline-none text-white shadow-2xl transition-all appearance-none"
               />
             </div>
-            <p className="text-[7px] font-black text-primary/40 uppercase tracking-[0.2em] ml-2">* High-density temporal engagement selection</p>
+            <p className="text-[7px] font-black text-primary/40 uppercase tracking-[0.2em] ml-2">* Select a preferred date and time</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2  gap-4 md:gap-6">
             <CustomSelect
-              label="Operational Status" name="status" value={formik.values.status}
+              label="Status" name="status" value={formik.values.status}
               onChange={formik.handleChange}
               options={['Pending', 'Confirmed', 'Completed', 'Cancelled'].map(s => ({ label: s, value: s }))}
             />
             <CustomSelect
-              label="Financial Status" name="paymentStatus" value={formik.values.paymentStatus}
+              label="Payment Status" name="paymentStatus" value={formik.values.paymentStatus}
               onChange={formik.handleChange}
               options={['Pending', 'Paid'].map(s => ({ label: s, value: s }))}
             />
@@ -494,7 +494,7 @@ export default function Appointments() {
               type="submit" disabled={formik.isSubmitting}
               className="w-full flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury disabled:opacity-50"
             >
-              <span className="whitespace-nowrap">{formik.isSubmitting ? 'Architecting Matrix...' : selectedAppointment ? 'COMMIT REFINEMENTS' : 'AUTHORIZE INITIATION'}</span>
+              <span className="whitespace-nowrap">{formik.isSubmitting ? 'Saving...' : selectedAppointment ? 'SAVE CHANGES' : 'BOOK APPOINTMENT'}</span>
               <Sparkles size={18} md:size={20} className="group-hover:rotate-12 transition-transform" />
             </button>
           </div>
@@ -504,8 +504,8 @@ export default function Appointments() {
       <Modal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
-        title="DISSOLVE PROTOCOL?"
-        subtitle="Final Irreversible Liquidation"
+        title="DELETE APPOINTMENT?"
+        subtitle="This action cannot be undone."
         maxWidth="max-w-sm"
       >
         <div className="text-center p-4">
@@ -513,14 +513,14 @@ export default function Appointments() {
             <AlertTriangle size={48} strokeWidth={1.5} />
           </div>
           <p className="text-muted font-black text-[10px] uppercase tracking-[0.3em] leading-relaxed mb-10">
-            Eliminating ritual record for <br /><span className="text-rose-500 text-base font-luxury  underline decoration-rose-500/30 decoration-2 underline-offset-4">{appointmentToDelete?.client?.name}</span> <br /> from active reality.
+            Are you sure you want to delete the appointment for <br /><span className="text-rose-500 text-base font-luxury  underline decoration-rose-500/30 decoration-2 underline-offset-4">{appointmentToDelete?.client?.name}</span> <br /> permanently?
           </p>
           <div className="flex flex-col gap-4">
             <button
               onClick={handleDelete}
               className="w-full py-5 bg-rose-500 text-white rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] shadow-xl shadow-rose-500/20 active:scale-95 hover:bg-rose-600 transition-all font-luxury "
-            >CONFIRM DISSOLUTION</button>
-            <button onClick={() => setIsDeleteModalOpen(false)} className="w-full py-5 bg-white/5 text-muted rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:text-white transition-all font-luxury ">ABORT OPERATION</button>
+            >CONFIRM DELETE</button>
+            <button onClick={() => setIsDeleteModalOpen(false)} className="w-full py-5 bg-white/5 text-muted rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:text-white transition-all font-luxury ">CANCEL</button>
           </div>
         </div>
       </Modal>

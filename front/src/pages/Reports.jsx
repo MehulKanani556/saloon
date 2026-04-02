@@ -49,7 +49,7 @@ export default function Reports() {
           { label: 'Active Appointments', value: intel.stats.active, icon: Database },
           { label: 'Completed Sessions', value: intel.stats.downloads, icon: Zap },
           { label: 'Total Clients', value: intel.stats.shared, icon: Share2 },
-          { label: 'Revenue Vault', value: `$${intel.stats.archiveSize}`, icon: ShieldCheck },
+          { label: 'Total Revenue', value: `$${intel.stats.archiveSize}`, icon: ShieldCheck },
         ].map((stat, i) => (
           <motion.div
             key={i}
