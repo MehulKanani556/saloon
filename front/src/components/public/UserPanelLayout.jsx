@@ -46,9 +46,9 @@ export default function UserPanelLayout({ children, title, hideSidebar = false }
               <span className="text-white tracking-widest">{title}</span>
             </div>
 
-            <div className={`flex flex-col lg:flex-row gap-6 md:gap-10 items-start ${hideSidebar ? 'justify-center' : ''}`}>
+            <div className={`flex flex-col md:flex-row gap-6 lg:gap-10 items-start ${hideSidebar ? 'justify-center' : ''}`}>
               {!hideSidebar && (
-                <aside className="w-full lg:w-72 shrink-0 lg:sticky lg:top-24">
+                <aside className="w-full md:w-72 shrink-0 md:sticky md:top-24">
                   <div className="bg-secondary/40 backdrop-blur-2xl border border-white/5 rounded-2xl p-3 shadow-xl">
                     <nav className="flex flex-col gap-1">
                       {menuItems.map((item) => {

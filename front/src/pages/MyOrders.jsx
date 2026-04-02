@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Package, User, Sparkles, Calendar } from 'lucide-react';
+import { Package, User, Sparkles, Clock, ChevronRight, Hash, CreditCard, X } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
@@ -12,150 +12,155 @@ export default function MyOrders() {
   const navigate = useNavigate();
   const { orders = [], loading } = useSelector((state) => state.orders || {});
 
+  const [selectedOrder, setSelectedOrder] = React.useState(null);
+
+  useEffect(() => {
+    if (selectedOrder) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [selectedOrder]);
+
   useEffect(() => {
     dispatch(fetchMyOrders());
   }, [dispatch]);
 
   const statusColors = {
-    'Processing': 'bg-amber-500/10 text-amber-500 border-amber-500/20',
-    'Shipped': 'bg-primary/10 text-primary border-primary/20',
-    'Delivered': 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20',
-    'Cancelled': 'bg-red-500/10 text-red-500 border-red-500/20',
+    'Processing': 'text-amber-400 bg-amber-400/5 border-amber-400/10',
+    'Shipped': 'text-primary bg-primary/5 border-primary/10',
+    'Delivered': 'text-emerald-400 bg-emerald-400/5 border-emerald-400/10',
+    'Cancelled': 'text-red-400 bg-red-400/5 border-red-400/10',
   };
 
   return (
-    <UserPanelLayout title="Order History">
-      <div className="flex flex-col gap-10 md:gap-16 min-h-[80vh]">
-        {/* Editorial Header */}
-        <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-8 pb-10 border-b border-white/5 relative">
-          <div className="space-y-4 md:space-y-6 flex-1">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-[1px] bg-primary" />
-              <p className="text-[9px] md:text-[10px] font-bold text-primary uppercase tracking-[0.4em] md:tracking-[0.6em]">Retail Log</p>
+    <UserPanelLayout title="Orders">
+      <div className="flex flex-col gap-6 lg:gap-8 min-h-[70vh]">
+
+        {/* Compact Ledger Header */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 py-4 border-b border-white/[0.05]">
+          <div className="space-y-1 text-center md:text-left">
+            <div className="flex items-center justify-center md:justify-start gap-2">
+              <span className="w-8 h-px bg-primary/30" />
+              <p className="text-[9px] font-black text-primary uppercase tracking-[0.4em]">Chronicle Ledger</p>
             </div>
-            <h1 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight leading-none">
-              Order <span className="text-primary italic">History</span>
+            <h1 className="text-xl md:text-2xl font-black text-white uppercase tracking-wide font-luxury">
+              Order <span className="text-primary">Archive</span>
             </h1>
-            <p className="text-muted/60 text-[12px] md:text-[13px] font-medium tracking-wide max-w-xl">
-              A chronological ledger of your product acquisitions and physical goods from our atelier.
-            </p>
           </div>
-          <button 
+          <button
             onClick={() => navigate('/shop')}
-            className="w-full md:w-auto group px-8 py-4 bg-primary text-secondary rounded-full flex items-center justify-center gap-3 font-bold text-[11px] uppercase tracking-[0.2em] transition-all hover:scale-105 active:scale-95 shadow-[0_20px_40px_rgba(201,162,39,0.2)]"
+            className="group px-6 py-3 w-full md:w-fit bg-white/[0.03] border border-white/5 text-white hover:bg-primary hover:text-secondary hover:border-primary rounded-xl flex items-center justify-center md:justify-start gap-3 text-[10px] font-black uppercase tracking-widest transition-all shadow-lg"
           >
-            <Sparkles size={16} className="group-hover:rotate-12 transition-transform" />
-            Visit Shop
+            <Sparkles size={14} /> Back to Shop
           </button>
         </div>
 
         {loading && orders.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-40 gap-8">
-            <div className="relative">
-              <motion.div 
-                animate={{ rotate: 360 }}
-                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                className="w-20 h-20 md:w-24 md:h-24 border border-primary/20 rounded-full" 
-              />
-              <motion.div 
-                animate={{ rotate: -360 }}
-                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                className="w-14 h-14 md:w-16 md:h-16 border-t-2 border-primary rounded-full absolute top-3 left-3 md:top-4 md:left-4" 
-              />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <Package className="text-primary/40 animate-pulse" size={20} />
-              </div>
-            </div>
-            <p className="text-[10px] md:text-[11px] font-bold uppercase tracking-[0.4em] md:tracking-[0.6em] text-muted/60">Retrieving Ledgers...</p>
+          <div className="flex flex-col items-center justify-center py-32 gap-6">
+            <div className="w-16 h-16 border-2 border-white/5 border-t-primary rounded-full animate-spin" />
+            <p className="text-[9px] font-black uppercase tracking-[0.5em] text-muted/40">Syncing Data Matrix...</p>
           </div>
         ) : orders.length === 0 ? (
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-white/[0.02] border border-white/5 p-12 md:p-20 text-center rounded-3xl flex flex-col items-center gap-6 md:gap-8"
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-[#1A1A1A] border border-white/5 p-12 text-center rounded-3xl flex flex-col items-center"
           >
-            <div className="w-20 h-20 md:w-24 md:h-24 bg-primary/5 rounded-full flex items-center justify-center text-primary/30">
-              <Package className="w-8 h-8 md:w-10 md:h-10" />
+            <div className="w-16 h-16 bg-white/[0.02] rounded-2xl flex items-center justify-center text-white/5 mb-8">
+              <Package size={32} />
             </div>
-            <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-white uppercase tracking-[-0.05em] mb-4 md:mb-6 font-luxury leading-none">Archive <span className="text-muted/20">Null</span></h3>
-            <p className="text-muted/40 text-[10px] md:text-[12px] font-black tracking-[0.2em] max-w-xs md:max-w-sm mx-auto mb-10 md:mb-16 leading-relaxed">Your chronological records contain zero active acquisitions in the current branch.</p>
-            <button onClick={() => navigate('/shop')} className="px-8 py-5 md:px-12 md:py-7 bg-luxury-gradient text-secondary rounded-2xl flex items-center gap-4 md:gap-5 mx-auto font-black text-[10px] md:text-[12px] uppercase tracking-[0.2em] shadow-3xl hover:scale-105 active:scale-95 transition-all font-luxury">
-              <Sparkles className="w-4 h-4 md:w-5 md:h-5" /> Visit Archives
+            <h3 className="text-xl font-black text-white uppercase tracking-tight mb-3 font-luxury">Archive Empty</h3>
+            <p className="text-[10px] font-bold text-muted/40 uppercase tracking-[0.2em] mb-8">No order records were discovered in your profile.</p>
+            <button onClick={() => navigate('/shop')} className="px-8 py-4 bg-primary text-secondary rounded-xl font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all">
+              Initiate Acquisition
             </button>
           </motion.div>
         ) : (
-          <div className="flex flex-col gap-6 md:gap-8 pb-32">
+          <div className="grid gap-3 md:gap-4 pb-20">
             <AnimatePresence mode="popLayout">
               {orders.map((order, index) => (
                 <motion.div
                   key={order._id}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1, duration: 0.5 }}
-                  className="bg-dark-card border border-white/10 p-6 md:p-8 rounded-3xl hover:border-primary/30 transition-all flex flex-col gap-6 shadow-xl"
+                  transition={{ delay: index * 0.05 }}
+                  className="group relative bg-[#1A1A1A] border border-white/[0.05] hover:border-primary/20 transition-all duration-300 rounded-2xl overflow-hidden shadow-2xl"
                 >
-                  {/* Header */}
-                  <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 pb-6 border-b border-white/5">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20 shrink-0">
-                        <Package size={20} className="text-primary" />
-                      </div>
-                      <div>
-                        <p className="text-[10px] font-black text-muted/60 uppercase tracking-widest mb-1">Order Ref: {order._id.substring(0, 8)}</p>
-                        <p className="text-sm font-bold text-white tracking-wide">{format(new Date(order.createdAt), 'MMMM dd, yyyy - HH:mm')}</p>
-                      </div>
-                    </div>
-                    <div className={`px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border shadow-inner self-start sm:self-auto ${statusColors[order.status] || statusColors['Processing']}`}>
-                      {order.status}
-                    </div>
-                  </div>
+                  <div className="flex flex-col lg:flex-row divide-y lg:divide-y-0 lg:divide-x divide-white/[0.03]">
 
-                  {/* Body */}
-                  <div className="flex flex-col gap-8">
-                    {/* Items */}
-                    <div className="space-y-4">
-                      <h4 className="text-[10px] font-black text-muted/60 uppercase tracking-widest ml-2">Purchased Items</h4>
-                      <div className="bg-background/40 rounded-2xl border border-white/5 overflow-hidden shadow-inner flex flex-col">
-                        {order.items && order.items.map((item, i) => (
-                          <div key={i} className={`flex flex-col gap-3 p-5 ${i !== order.items.length - 1 ? 'border-b border-white/5' : ''}`}>
-                            <div className="flex items-center gap-4">
-                              <div className="w-2 h-2 rounded-full bg-primary/30" />
-                              <span className="text-[11px] font-black text-white/90 uppercase tracking-wider">{item.name || item.product?.name || 'Product'}</span>
-                            </div>
-                            <span className="text-[11px] font-black text-muted uppercase tracking-widest pl-6">Qty: {item.qty}</span>
+                    {/* Primary Info (Left) */}
+                    <div className="flex-1 p-5 md:p-8 space-y-5">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-9 h-9 rounded-xl bg-white/[0.02] flex items-center justify-center border border-white/5 text-primary/70">
+                            <Hash size={16} />
                           </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Summary */}
-                    <div className="flex flex-col gap-6 bg-background/40 p-6 rounded-2xl border border-white/5 shadow-inner">
-                      <div className="flex flex-col gap-2">
-                        <p className="text-[9px] font-black text-muted/60 uppercase tracking-widest">Recipient</p>
-                        <p className="text-[11px] font-black text-white uppercase tracking-wider flex items-center gap-2">
-                          <User size={12} className="text-primary/50" /> {order.shippingAddress?.fullName || 'N/A'}
-                        </p>
-                      </div>
-                      
-                      <div className="h-px bg-white/5" />
-                      
-                      <div className="flex flex-col gap-2">
-                        <p className="text-[9px] font-black text-muted/60 uppercase tracking-widest">Payment Status</p>
-                        <div className="flex items-center gap-2">
-                          <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${order.paymentStatus === 'Paid' ? 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)]' : 'bg-primary shadow-[0_0_10px_rgba(201,162,39,0.8)]'}`} />
-                          <p className={`text-[11px] font-black uppercase tracking-wider ${order.paymentStatus === 'Paid' ? 'text-emerald-400' : 'text-primary'}`}>
-                            {order.paymentStatus || 'Pending'}
-                          </p>
+                          <div>
+                            <p className="text-[13px] font-black text-white font-luxury uppercase tracking-tight">#{order._id.substring(order._id.length - 8)}</p>
+                            <p className="text-[9px] font-bold text-muted/40 uppercase tracking-widest flex items-center gap-1.5">
+                              <Clock size={10} /> {format(new Date(order.createdAt), 'MMM dd, yyyy')}
+                            </p>
+                          </div>
+                        </div>
+                        <div className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border transition-all self-start sm:self-auto ${statusColors[order.status] || statusColors['Processing']}`}>
+                          {order.status}
                         </div>
                       </div>
 
-                      <div className="h-px bg-white/5" />
-                      
-                      <div className="flex flex-col gap-2">
-                        <p className="text-[9px] font-black text-muted/60 uppercase tracking-widest">Total Amount</p>
-                        <p className="text-2xl font-black text-primary font-luxury">${order.totalAmount?.toFixed(2)}</p>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-6 pt-2">
+                        <div className="space-y-0.5">
+                          <p className="text-[8px] font-black text-white/20 uppercase tracking-widest">Total Value</p>
+                          <p className="text-xl font-black text-primary font-luxury drop-shadow-primary-sm">${order.totalAmount?.toFixed(2)}</p>
+                        </div>
+                        <div className="space-y-0.5">
+                          <p className="text-[8px] font-black text-white/20 uppercase tracking-widest">Recipient</p>
+                          <p className="text-[10px] font-black text-white uppercase tracking-widest flex items-center gap-2 truncate">
+                            <User size={12} className="text-primary/40" /> {order.shippingAddress?.fullName?.split(' ')[0] || 'N/A'}
+                          </p>
+                        </div>
+                        <div className="space-y-0.5 col-span-2 md:col-span-1">
+                          <p className="text-[8px] font-black text-white/20 uppercase tracking-widest">Settlement</p>
+                          <div className="flex items-center gap-2">
+                            <span className={`w-1.5 h-1.5 rounded-full ${order.paymentStatus === 'Paid' ? 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]' : 'bg-primary/40'}`} />
+                            <p className={`text-[10px] font-black uppercase tracking-widest ${order.paymentStatus === 'Paid' ? 'text-emerald-400' : 'text-primary/60'}`}>{order.paymentStatus || 'Awaiting'}</p>
+                          </div>
+                        </div>
                       </div>
                     </div>
+
+                    {/* Ritual Breakdown (Right) */}
+                    <div className="w-full lg:w-72 xl:w-80 p-5 md:p-8 bg-white/[0.01] flex flex-col justify-between gap-6">
+                      <div className="space-y-3">
+                        <h4 className="text-[9px] font-black text-white/20 uppercase tracking-widest flex items-center gap-2">
+                          <Package size={12} /> Manifested Items
+                        </h4>
+                        <div className="space-y-2">
+                          {order.items?.slice(0, 2).map((item, i) => (
+                            <div key={i} className="flex items-center justify-between text-[10px] font-black uppercase tracking-wide">
+                              <span className="text-white/60 truncate max-w-[140px]">
+                                {item.name || item.product?.name || 'Aesthetic Good'}
+                              </span>
+                              <span className="text-muted/30 tabular-nums">QTY: 0{item.qty}</span>
+                            </div>
+                          ))}
+                          {order.items?.length > 2 && (
+                            <p className="text-[9px] font-black text-primary/40 italic tracking-widest">+{order.items.length - 2} Sequential Units</p>
+                          )}
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={() => setSelectedOrder(order)}
+                        className="w-full py-3.5 bg-white/[0.03] border border-white/5 text-[9px] font-black uppercase tracking-widest text-white hover:bg-primary hover:text-secondary hover:border-primary transition-all duration-300 rounded-xl flex items-center justify-center gap-2 group/btn shadow-lg"
+                      >
+                        View Ledger <ChevronRight size={12} className="group-hover/btn:translate-x-0.5 transition-transform" />
+                      </button>
+                    </div>
+
                   </div>
                 </motion.div>
               ))}
@@ -163,6 +168,138 @@ export default function MyOrders() {
           </div>
         )}
       </div>
+
+      {/* Order Details Modal - Pro Interface */}
+      <AnimatePresence>
+        {selectedOrder && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 md:p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedOrder(null)}
+              className="absolute inset-0 bg-background/95 backdrop-blur-md"
+            />
+            
+            <motion.div
+              layoutId={`order-card-${selectedOrder._id}`}
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-2xl bg-[#1A1A1A] border border-white/[0.05] rounded-2xl overflow-hidden shadow-2xl"
+            >
+              <div className="p-5 sm:p-8 md:p-10">
+                {/* Modal Header */}
+                <div className="flex justify-between items-start mb-6 md:mb-10 pb-6 border-b border-white/[0.05]">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="w-8 h-px bg-primary" />
+                      <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Log Retrieval</p>
+                    </div>
+                    <h2 className="text-xl sm:text-3xl font-black text-white uppercase tracking-tight font-luxury">Order Detail</h2>
+                    <p className="text-[9px] font-black text-muted/40 uppercase tracking-widest truncate max-w-[200px] sm:max-w-none">
+                      ID REFERENCE: {selectedOrder._id}
+                    </p>
+                  </div>
+                  <button 
+                    onClick={() => setSelectedOrder(null)}
+                    className="p-2.5 bg-white/[0.02] border border-white/5 rounded-xl text-muted hover:text-white transition-all focus:outline-none"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+
+                {/* Modal Body */}
+                <div className="space-y-8 md:space-y-10 max-h-[65vh] overflow-y-auto scrollbar-hide pr-1 md:pr-2">
+                  
+                  {/* Status & Date */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-8 bg-white/[0.02] p-5 md:p-6 rounded-2xl md:rounded-3xl border border-white/[0.03]">
+                    <div className="space-y-1.5">
+                      <p className="text-[9px] font-black text-white/20 uppercase tracking-widest">Chronicle Date</p>
+                      <p className="text-[10px] sm:text-[11px] font-black text-white uppercase tracking-widest flex items-center gap-2">
+                        <Clock size={12} className="text-primary" /> {format(new Date(selectedOrder.createdAt), 'MMM dd, yyyy @ HH:mm')}
+                      </p>
+                    </div>
+                    <div className="space-y-2">
+                      <p className="text-[9px] font-black text-white/20 uppercase tracking-widest">Acquisition Status</p>
+                      <div className="inline-block">
+                        <span className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border transition-all ${statusColors[selectedOrder.status] || statusColors['Processing']}`}>
+                          {selectedOrder.status}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Items Breakdown */}
+                  <div className="space-y-5">
+                    <h4 className="text-[10px] font-black text-primary uppercase tracking-[0.3em] flex items-center gap-3">
+                      <Package size={14} /> Acquisition Metrics
+                    </h4>
+                    <div className="space-y-2">
+                      {selectedOrder.items?.map((item, i) => (
+                        <div key={i} className="flex items-center justify-between group py-3 px-1 border-b border-white/[0.03] hover:bg-white/[0.01] transition-colors rounded-lg">
+                          <div className="flex items-center gap-3">
+                            <div className="w-1 h-1 bg-primary/40 rounded-full group-hover:bg-primary transition-colors" />
+                            <div className="space-y-0.5">
+                              <p className="text-[11px] font-black text-white uppercase tracking-wide truncate max-w-[150px] sm:max-w-xs">
+                                {item.name || item.product?.name || 'Aesthetic Goods'}
+                              </p>
+                              <p className="text-[9px] font-bold text-muted/30 uppercase tracking-widest">
+                                UNIT QTY: 0{item.qty}
+                              </p>
+                            </div>
+                          </div>
+                          <span className="text-[12px] font-black text-primary tabular-nums">
+                            ${(item.price * item.qty).toFixed(2)}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Logistics & Payment */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                    <div className="space-y-4">
+                      <h4 className="text-[10px] font-black text-primary uppercase tracking-[0.3em] flex items-center gap-3">
+                        <User size={14} /> Logistics Recipient
+                      </h4>
+                      <div className="bg-white/[0.02] p-5 md:p-6 rounded-2xl md:rounded-3xl border border-white/[0.03] space-y-3">
+                        <p className="text-[11px] font-black text-white uppercase tracking-wider">{selectedOrder.shippingAddress?.fullName}</p>
+                        <p className="text-[10px] font-bold text-muted uppercase tracking-widest opacity-60 leading-relaxed">
+                          {selectedOrder.shippingAddress?.address}<br />
+                          {selectedOrder.shippingAddress?.city}, {selectedOrder.shippingAddress?.postalCode}<br />
+                          {selectedOrder.shippingAddress?.phone}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <h4 className="text-[10px] font-black text-primary uppercase tracking-[0.3em] flex items-center gap-3">
+                        <CreditCard size={14} /> Settlement Summary
+                      </h4>
+                      <div className="bg-white/[0.02] p-5 md:p-6 rounded-2xl md:rounded-3xl border border-white/[0.03] space-y-4">
+                        <div className="flex justify-between items-center text-[10px] font-bold">
+                          <span className="text-muted/30 uppercase tracking-widest">Payment Status</span>
+                          <span className={`px-2 py-0.5 rounded border ${selectedOrder.paymentStatus === 'Paid' ? 'text-emerald-400 border-emerald-400/20 bg-emerald-400/5' : 'text-primary border-primary/20 bg-primary/5'}`}>
+                            {selectedOrder.paymentStatus?.toUpperCase() || 'PENDING'}
+                          </span>
+                        </div>
+                        <div className="h-px bg-white/[0.05]" />
+                        <div className="flex justify-between items-baseline pt-2">
+                          <span className="text-[10px] font-black text-muted/30 uppercase tracking-widest">Grand Total</span>
+                          <span className="text-2xl sm:text-3xl font-black text-primary font-luxury drop-shadow-primary-sm">${selectedOrder.totalAmount?.toFixed(2)}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </UserPanelLayout>
   );
 }
+
