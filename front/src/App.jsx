@@ -41,12 +41,18 @@ import DeleteAccount from './pages/DeleteAccount'
 import ProductDetail from './pages/ProductDetail'
 import MyOrders from './pages/MyOrders'
 
+import { syncCart } from './redux/slices/cartSlice'
+import { syncWishlist } from './redux/slices/wishlistSlice'
+
 const WrappedLayout = ({ children, isAuthPage, isLandingPage }) => {
   if (isAuthPage || isLandingPage) return <>{children}</>;
   return <Layout>{children}</Layout>;
 };
 
+import { useSocket } from './hooks/useSocket'
+
 const AppContent = () => {
+  useSocket();
   const { userInfo } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const location = useLocation();
@@ -57,6 +63,12 @@ const AppContent = () => {
   useEffect(() => {
     if (localStorage.getItem('token')) {
       dispatch(fetchCurrentUser());
+      
+      const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+      const wishlistItems = JSON.parse(localStorage.getItem('wishlistItems') || '[]');
+      
+      if (cartItems?.length) dispatch(syncCart(cartItems));
+      if (wishlistItems?.length) dispatch(syncWishlist(wishlistItems));
     }
   }, [dispatch]);
 

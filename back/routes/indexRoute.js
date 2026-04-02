@@ -137,10 +137,34 @@ router.post('/orders', protect, orderController.createOrder);
 router.get('/orders/my', protect, orderController.getMyOrders);
 router.get('/orders', protect, authorize('Admin'), orderController.getOrders);
 router.put('/orders/:id/status', protect, authorize('Admin'), orderController.updateOrderStatus);
+router.put('/orders/:id/cancel', protect, orderController.cancelOrder);
 
 // ==========================================
 // PAYMENT ROUTES
 // ==========================================
 router.post('/payment/create-payment-intent', protect, paymentController.createPaymentIntent);
+
+// ==========================================
+// WEBHOOK ROUTES (Requires Raw Body Parsing)
+// ==========================================
+const webhookController = require('../controllers/webhookController');
+router.post('/webhooks/stripe', express.raw({ type: 'application/json' }), webhookController.handleStripeWebhook);
+
+// ==========================================
+// RATING & REVIEW SYSTEM ROUTES
+// ==========================================
+const reviewController = require('../controllers/reviewController');
+router.post('/reviews', protect, reviewController.createReview);
+router.get('/reviews/:targetId', reviewController.getReviews);
+
+// ==========================================
+// CART & WISHLIST PERSISTENCE ROUTES
+// ==========================================
+const cartController = require('../controllers/cartController');
+const wishlistController = require('../controllers/wishlistController');
+router.get('/cart', protect, cartController.getCart);
+router.post('/cart/sync', protect, cartController.syncCart);
+router.get('/wishlist', protect, wishlistController.getWishlist);
+router.post('/wishlist/sync', protect, wishlistController.syncWishlist);
 
 module.exports = router;

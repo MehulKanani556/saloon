@@ -72,8 +72,15 @@ export default function Specializations() {
 
     const handleAddSpec = (e) => {
         if (e.key === 'Enter' && specInput.trim()) {
-            if (!specializations.includes(specInput.trim())) {
-                setSpecializations([...specializations, specInput.trim()]);
+            const tag = specInput.trim();
+            if (!/^[a-zA-Z0-9\s]+$/.test(tag)) {
+                return toast.error('Alphanumeric characters only please');
+            }
+            if (tag.length > 20) {
+                return toast.error('Skill tag is too long');
+            }
+            if (!specializations.includes(tag)) {
+                setSpecializations([...specializations, tag]);
             }
             setSpecInput('');
         }

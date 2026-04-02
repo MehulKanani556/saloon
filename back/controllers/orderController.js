@@ -4,11 +4,28 @@ const Product = require('../models/Product');
 // @desc Create a new order after checkout
 const createOrder = async (req, res) => {
     try {
-        const { items, totalAmount, shippingAddress } = req.body;
+        const { items, totalAmount, shippingAddress, paymentIntentId } = req.body;
 
         if (!items || items.length === 0) {
             return res.status(400).json({ message: 'No items provided for acquisition' });
         }
+
+        // 1. Verify and Update Inventory Stock Protocol
+        const productUpdates = [];
+        for (const item of items) {
+            const product = await Product.findById(item._id);
+            if (!product) {
+                return res.status(404).json({ message: `Inventory component ${item.name} not found in the matrix.` });
+            }
+            if (product.stock < item.qty) {
+                return res.status(400).json({ message: `Insufficient inventory for ${product.name}. Remaining: ${product.stock}` });
+            }
+            product.stock -= item.qty;
+            productUpdates.push(product.save());
+        }
+
+        // Parallel execution of inventory sync
+        await Promise.all(productUpdates);
 
         const order = new Order({
             user: req.user._id,
@@ -20,13 +37,41 @@ const createOrder = async (req, res) => {
             })),
             totalAmount,
             shippingAddress,
-            paymentStatus: 'Paid' // Simulated for now
+            paymentIntentId,
+            paymentStatus: paymentIntentId ? 'Paid' : 'Pending' 
         });
 
         const createdOrder = await order.save();
         res.status(201).json(createdOrder);
     } catch (err) {
-        res.status(500).json({ message: 'Order protocol failed', error: err.message });
+        console.error('ORDER_CREATION_ERR:', err);
+        res.status(500).json({ message: 'Order protocol failed: ' + err.message });
+    }
+};
+
+// @desc Cancel order by User
+const cancelOrder = async (req, res) => {
+    try {
+        const order = await Order.findOne({ _id: req.params.id, user: req.user._id });
+
+        if (!order) {
+            return res.status(404).json({ message: 'Order protocol not found or unauthorized' });
+        }
+
+        if (order.status !== 'Processing') {
+            return res.status(400).json({ message: 'Only processing orders can be cancelled' });
+        }
+
+        // Restock items
+        for (const item of order.items) {
+            await Product.findByIdAndUpdate(item.product, { $inc: { stock: item.qty } });
+        }
+
+        order.status = 'Cancelled';
+        await order.save();
+        res.status(200).json({ message: 'Acquisition cancelled successfully', order });
+    } catch (err) {
+        res.status(500).json({ message: 'Cancellation failed', error: err.message });
     }
 };
 

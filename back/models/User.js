@@ -23,6 +23,11 @@ const userSchema = new mongoose.Schema({
 
     // Client/User specific fields
     bookingHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Appointment' }],
+    cart: [{
+        product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+        quantity: { type: Number, default: 1 }
+    }],
+    wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
 
     // Admin specific fields (Salon Info)
     salonInfo: {

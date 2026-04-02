@@ -22,6 +22,13 @@ const createSpecializationRequest = async (req, res) => {
             status: 'Pending'
         });
 
+        const { notifyAdmin } = require('../helpers/socketHelper');
+        notifyAdmin('new_specialization_request', {
+            id: newRequest._id,
+            staff: req.user.name,
+            type: 'Expertise Update'
+        });
+
         res.status(201).json(newRequest);
     } catch (error) {
         res.status(500).json({ message: error.message });

@@ -68,19 +68,25 @@ const sendOTP = async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // Use fixed OTP for testing as requested by user's manual edit
-        const otp = '123456';
+        // Generate a 100% random 6-digit code for maximum security
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
         user.otp = otp;
-        user.otpExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+        user.otpExpires = Date.now() + 10 * 60 * 1000; // 10 minutes window
         await user.save();
 
-        // Relay logic disabled for testing as requested by user's manual edit
-        console.log(`Test OTP for ${identity}: ${otp}`);
+        // Dispatch OTP through appropriate relay (Email or SMS)
+        if (isEmail) {
+            await sendEmailOTP(user.email, otp);
+        } else {
+            // Note: phone number must start with + for Twilio (e.g., +91, +1)
+            const formattedPhone = user.phone.startsWith('+') ? user.phone : `+${user.phone}`;
+            await sendSMSOTP(formattedPhone, otp);
+        }
 
-        res.status(200).json({ message: 'OTP sent successfully' });
+        res.status(200).json({ message: 'A secure verification code has been dispatched. Authenticate within 10 minutes.' });
     } catch (error) {
-        console.error('OTP Sending Error:', error);
-        res.status(500).json({ message: error.message || 'System failed to relay code. Operation aborted.' });
+        console.error('OTP Dispatch Error:', error);
+        res.status(500).json({ message: 'System failed to relay code: ' + (error.message || 'Verification relay failed.') });
     }
 };
 
@@ -163,7 +169,7 @@ const refresh = async (req, res) => {
             if (err) return res.status(403).json({ message: 'Forbidden' });
 
             const user = await User.findById(decoded.id);
-            if (!user) return res.status(401).json({ message: 'Unauthorized' });
+            if (!user || user.isDeleted) return res.status(401).json({ message: 'Identity dissolved. Unauthorized access.' });
 
             const accessToken = generateAccessToken(user._id);
             res.json({ accessToken });

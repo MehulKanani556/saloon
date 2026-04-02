@@ -236,7 +236,7 @@ export default function Checkout() {
         validationSchema: Yup.object({
             fullName: Yup.string().required('Full Name is required'),
             email: Yup.string().email('Invalid email format').required('Email is required'),
-            phone: Yup.string().matches(/^[0-9]{10,15}$/, 'Invalid phone number format').required('Phone Number is required'),
+            phone: Yup.string().matches(/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/, 'Must be in 416-123-4567 format').required('Phone Number is required'),
             address: Yup.string().required('Address is required'),
             city: Yup.string().required('City is required'),
             zipCode: Yup.string().required('ZIP Code is required'),
@@ -245,6 +245,16 @@ export default function Checkout() {
             // This is actually handled by the handlePayment function now
         }
     });
+
+    const handlePhoneChange = (e) => {
+        let val = e.target.value.replace(/\D/g, '').substring(0, 10);
+        if (val.length > 6) {
+            val = `${val.slice(0, 3)}-${val.slice(3, 6)}-${val.slice(6)}`;
+        } else if (val.length > 3) {
+            val = `${val.slice(0, 3)}-${val.slice(3)}`;
+        }
+        formik.setFieldValue('phone', val);
+    };
 
     const handleStep1Submit = async (e) => {
         e.preventDefault();
@@ -327,10 +337,13 @@ export default function Checkout() {
                                         <div className="relative group">
                                             <Phone size={16} className="absolute left-6 top-1/2 -translate-y-1/2 text-primary/40 group-focus-within:text-primary transition-colors" />
                                             <input 
-                                                {...formik.getFieldProps('phone')}
-                                                className={`w-full bg-dark-card border ${formik.touched.phone && formik.errors.phone ? 'border-red-500/50' : 'border-white/10'} focus:border-primary/40 px-14 py-5 rounded-xl outline-none text-[11px] font-black uppercase tracking-widest text-white transition-all shadow-xl`}
-                                                placeholder="+1 (555) 000-0000"
-                                            />
+                                                 name="phone"
+                                                 value={formik.values.phone}
+                                                 onChange={handlePhoneChange}
+                                                 onBlur={formik.handleBlur}
+                                                 className={`w-full bg-dark-card border ${formik.touched.phone && formik.errors.phone ? 'border-red-500/50' : 'border-white/10'} focus:border-primary/40 px-14 py-5 rounded-xl outline-none text-[11px] font-black uppercase tracking-widest text-white transition-all shadow-xl`}
+                                                 placeholder="416-123-4567"
+                                             />
                                         </div>
                                         {formik.touched.phone && formik.errors.phone && <p className="text-[8px] text-red-500 font-black uppercase tracking-widest ml-2">{formik.errors.phone}</p>}
                                     </div>

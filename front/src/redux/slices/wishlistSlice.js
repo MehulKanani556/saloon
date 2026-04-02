@@ -1,4 +1,10 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import api from '../../utils/api';
+
+export const syncWishlist = createAsyncThunk('wishlist/sync', async (items) => {
+    const { data } = await api.post('/wishlist/sync', { wishlist: items });
+    return data.wishlist;
+});
 
 const initialState = {
     wishlistItems: JSON.parse(localStorage.getItem('wishlistItems')) || [],
@@ -10,9 +16,7 @@ const wishlistSlice = createSlice({
     reducers: {
         addToWishlist: (state, action) => {
             const item = action.payload;
-            const existItem = state.wishlistItems.find((x) => x._id === item._id);
-
-            if (!existItem) {
+            if (!state.wishlistItems.find((x) => x._id === item._id)) {
                 state.wishlistItems = [...state.wishlistItems, item];
             }
             localStorage.setItem('wishlistItems', JSON.stringify(state.wishlistItems));
@@ -26,6 +30,12 @@ const wishlistSlice = createSlice({
             localStorage.removeItem('wishlistItems');
         },
     },
+    extraReducers: (builder) => {
+        builder.addCase(syncWishlist.fulfilled, (state, action) => {
+            state.wishlistItems = action.payload;
+            localStorage.setItem('wishlistItems', JSON.stringify(action.payload));
+        });
+    }
 });
 
 export const { addToWishlist, removeFromWishlist, clearWishlist } = wishlistSlice.actions;

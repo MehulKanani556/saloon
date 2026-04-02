@@ -5,45 +5,85 @@ const moment = require('moment');
 
 const createAppointment = async (req, res) => {
     try {
-        const { clientEmail, clientName, clientPhone, services, assignments, date, status, paymentStatus } = req.body;
+        const { clientEmail, clientName, clientPhone, services, assignments, date, status, paymentStatus, paymentIntentId } = req.body;
 
-        // 1. Resolve Services and Assignments
+        // 1. Service Analysis & Temporal Alignment
         let finalAssignments = assignments || [];
         let serviceIds = services || finalAssignments.map(a => a.service);
 
-        // Robust parsing for serviceIds from form-data or mixed inputs
+        // Robust parsing for serviceIds from various formats
         if (serviceIds && typeof serviceIds === 'string') {
-            if (serviceIds.includes(',')) {
-                serviceIds = serviceIds.split(',').map(s => s.replace(/[\[\]'"]/g, '').trim());
-            } else {
-                serviceIds = [serviceIds.replace(/[\[\]'"]/g, '').trim()];
-            }
+            serviceIds = serviceIds.split(',').map(s => s.replace(/[\[\]'"]/g, '').trim());
         }
-
-        // Ensure it's an array and filter valid 24-char IDs
         serviceIds = Array.isArray(serviceIds) ? serviceIds.filter(s => s && s.length === 24) : [];
 
-        // 2. Validate Temple Coordinates (Date)
         const normalizedDate = moment(date, ["DD/MM/YYYY", "YYYY-MM-DD", "MM/DD/YYYY", moment.ISO_8601], true);
         if (!date || !normalizedDate.isValid()) {
-            return res.status(400).json({ message: 'Temporal coordinates are invalid or missing. Ensure format is DD/MM/YYYY or YYYY-MM-DD.' });
+            return res.status(400).json({ message: 'Invalid appointment window. Please select a valid date and time.' });
         }
 
         if (serviceIds.length === 0) {
-            return res.status(400).json({ message: 'At least one ritual component (service) is required' });
+            return res.status(400).json({ message: 'Select at least one service to proceed.' });
         }
 
         const servicesFound = await Service.find({ _id: { $in: serviceIds } });
         if (!servicesFound.length) {
-            return res.status(404).json({ message: 'Ritual components not found' });
+            return res.status(404).json({ message: 'One or more selected services are no longer available.' });
         }
 
+        const totalDuration = servicesFound.reduce((acc, curr) => acc + (curr.duration || 30), 0);
         const totalPrice = servicesFound.reduce((acc, curr) => acc + curr.price, 0);
-        const requestedTime = normalizedDate.toDate();
+        const requestedStart = normalizedDate.toDate().getTime();
+        const requestedEnd = requestedStart + (totalDuration * 60 * 1000);
 
-        // 3. Handle Auto-Assignment if needed
+        // 2. Master (Staff) Availability Protocol
+        const Leave = require('../models/Leave');
+        
+        const checkMasterAvailability = async (staffId) => {
+            // Check for Leave Conflicts (including partial days)
+            const leaves = await Leave.find({
+                staff: staffId,
+                status: 'Approved',
+                startDate: { $lte: new Date(requestedEnd) },
+                endDate: { $gte: new Date(requestedStart) }
+            });
+
+            for (const lv of leaves) {
+                let lvStart = lv.startDate.getTime();
+                let lvEnd = lv.endDate.getTime();
+                if (lv.startTime) {
+                    const [h, m] = lv.startTime.split(':');
+                    lvStart = Math.max(lvStart, normalizedDate.clone().set({ hour: parseInt(h), minute: parseInt(m) }).toDate().getTime());
+                }
+                if (lv.endTime) {
+                    const [h, m] = lv.endTime.split(':');
+                    lvEnd = Math.min(lvEnd, normalizedDate.clone().set({ hour: parseInt(h), minute: parseInt(m) }).toDate().getTime());
+                }
+                if (requestedStart < lvEnd && requestedEnd > lvStart) return false;
+            }
+
+            // Check for Appointment Overlaps
+            const conflicts = await Appointment.find({
+                'assignments.staff': staffId,
+                appointmentDate: { 
+                    $gte: normalizedDate.clone().startOf('day').toDate(), 
+                    $lte: normalizedDate.clone().endOf('day').toDate() 
+                },
+                status: { $nin: ['Cancelled', 'No Show'] }
+            }).populate('assignments.service');
+
+            for (const conflict of conflicts) {
+                const cStart = new Date(conflict.appointmentDate).getTime();
+                const cDuration = conflict.assignments.reduce((acc, a) => acc + (a.service?.duration || 30), 0) * 60 * 1000;
+                const cEnd = cStart + cDuration;
+                if (requestedStart < cEnd && requestedEnd > cStart) return false;
+            }
+
+            return true;
+        };
+
         if (finalAssignments.length === 0 || !finalAssignments[0].staff) {
-            // Find qualified staff who can do ALL rituals
+            // Auto-Assignment Logic: Find first available master
             const eligibleStaff = await User.find({
                 role: 'Staff',
                 isActive: true,
@@ -51,76 +91,39 @@ const createAppointment = async (req, res) => {
             });
 
             let assignedStaffId = null;
-            const Leave = require('../models/Leave');
-            
             for (const stf of eligibleStaff) {
-                // Check Leave Conflict
-                const onLeave = await Leave.findOne({
-                    staff: stf._id,
-                    status: 'Approved',
-                    startDate: { $lte: requestedTime },
-                    endDate: { $gte: requestedTime }
-                });
-
-                if (onLeave) continue;
-
-                const conflict = await Appointment.findOne({
-                    'assignments.staff': stf._id,
-                    appointmentDate: requestedTime,
-                    status: { $ne: 'Cancelled' }
-                });
-                if (!conflict) {
+                if (await checkMasterAvailability(stf._id)) {
                     assignedStaffId = stf._id;
                     break;
                 }
             }
 
             if (!assignedStaffId) {
-                return res.status(400).json({ message: 'All qualified masters are occupied during this temporal slot' });
+                return res.status(400).json({ message: 'No specialists are available during this slot. Please try another time.' });
             }
-
             finalAssignments = serviceIds.map(sid => ({ service: sid, staff: assignedStaffId }));
         } else {
-            // Verify user-selected staff availability
-            const Leave = require('../models/Leave');
+            // Verified User-Selected Staff
             for (const asm of finalAssignments) {
-                // Check Leave Conflict
-                const onLeave = await Leave.findOne({
-                    staff: asm.staff,
-                    status: 'Approved',
-                    startDate: { $lte: requestedTime },
-                    endDate: { $gte: requestedTime }
-                });
-
-                if (onLeave) {
-                    return res.status(400).json({ message: 'The selected master is officially unavailable (Approved Leave) during this temporal slot' });
-                }
-
-                const conflict = await Appointment.findOne({
-                    'assignments.staff': asm.staff,
-                    appointmentDate: requestedTime,
-                    status: { $ne: 'Cancelled' }
-                });
-                if (conflict) {
-                    return res.status(400).json({ message: 'One of the selected masters has been reserved in the meantime' });
+                if (!(await checkMasterAvailability(asm.staff))) {
+                    return res.status(400).json({ message: 'The selected specialist is no longer available. Please refine your selection.' });
                 }
             }
         }
 
-        // 3. SECURE Client Profile (Relaxed role check to prevent duplicate key errors)
+        // 3. SECURE Client Profiling
         let client = await User.findOne({ 
             $or: [
                 { phone: clientPhone },
-                { email: clientEmail && clientEmail.trim() !== "" ? clientEmail : "no-email@temporary.com" }
+                { email: clientEmail && clientEmail.trim() !== "" ? clientEmail : "no-email@aura.com" }
             ]
         });
 
         if (!client) {
             client = await User.create({ name: clientName, email: clientEmail, phone: clientPhone, role: 'User' });
         } else {
-            // Update details if they've changed
             if (clientPhone) client.phone = clientPhone;
-            if (clientEmail) client.email = clientEmail;
+            if (clientEmail && clientEmail.trim() !== "") client.email = clientEmail;
             if (clientName) client.name = clientName;
             await client.save();
         }
@@ -128,9 +131,10 @@ const createAppointment = async (req, res) => {
         const appointment = new Appointment({
             client: client._id,
             assignments: finalAssignments,
-            appointmentDate: requestedTime,
+            appointmentDate: normalizedDate.toDate(),
             status: status || 'Pending',
-            paymentStatus: paymentStatus || 'Pending',
+            paymentStatus: paymentIntentId ? 'Paid' : (paymentStatus || 'Pending'),
+            paymentIntentId,
             totalPrice
         });
 
@@ -140,10 +144,17 @@ const createAppointment = async (req, res) => {
         client.bookingHistory.push(createdAppointment._id);
         await client.save();
         
+        const { notifyAdmin } = require('../helpers/socketHelper');
+        notifyAdmin('new_appointment', {
+            id: createdAppointment._id,
+            client: client.name,
+            date: createdAppointment.appointmentDate
+        });
+
         res.status(201).json(createdAppointment);
     } catch (error) {
-        console.error('CRITICAL_BACKEND_ERR:', error);
-        res.status(500).json({ message: 'System error during protocol deployment: ' + error.message });
+        console.error('APPOINTMENT_CREATION_ERR:', error);
+        res.status(500).json({ message: 'Internal engine error during booking: ' + error.message });
     }
 };
 
@@ -283,127 +294,130 @@ const getOccupiedSlots = async (req, res) => {
     try {
         const { date, serviceIds, staffIds } = req.query;
         if (!date || !serviceIds) {
-            return res.status(400).json({ message: 'Temporal coordinates and rituals required for analysis' });
+            return res.status(400).json({ message: 'Date and Services are required for slot analysis.' });
         }
 
-        const requestedServices = serviceIds.split(',');
-        const requestedStaffIds = staffIds ? staffIds.split(',') : null;
+        const requestedServices = serviceIds.split(',').filter(id => id.length === 24);
+        const requestedStaffIds = staffIds ? staffIds.split(',').filter(id => id.length === 24) : [];
 
         const normalizedDate = moment(date, ["DD/MM/YYYY", "YYYY-MM-DD", "MM/DD/YYYY", moment.ISO_8601], true);
         if (!normalizedDate.isValid()) {
-            return res.status(400).json({ message: 'Target temporal window is invalid. Ensure DD/MM/YYYY or YYYY-MM-DD.' });
+            return res.status(400).json({ message: 'Invalid date format. Use DD/MM/YYYY or YYYY-MM-DD.' });
         }
 
-        const targetDate = normalizedDate.clone().startOf('day').toDate();
-        const nextDate = normalizedDate.clone().add(1, 'days').startOf('day').toDate();
+        const targetDateStart = normalizedDate.clone().startOf('day').toDate();
+        const targetDateEnd = normalizedDate.clone().endOf('day').toDate();
 
-        const rituals = await Service.find({ _id: { $in: requestedServices } });
-        const totalDuration = rituals.reduce((acc, curr) => acc + curr.duration, 0);
+        const services = await Service.find({ _id: { $in: requestedServices } });
+        const totalDuration = services.reduce((acc, s) => acc + (s.duration || 30), 0);
+        const requiredDurationMs = totalDuration * 60 * 1000;
 
-        // Find relevant staff
+        // 1. Identify Elite Staff (Qualified and Active)
         let qualifiedStaff;
-        if (requestedStaffIds && requestedStaffIds.length > 0) {
-            // User picked specific staff - check only those
-            qualifiedStaff = await User.find({
-                _id: { $in: requestedStaffIds },
-                role: 'Staff',
-                isActive: true
-            });
+        const staffQuery = { role: 'Staff', isActive: true };
+        if (requestedStaffIds.length > 0) {
+            staffQuery._id = { $in: requestedStaffIds };
         } else {
-            // Auto-assign: Find all who can do ALL rituals
-            qualifiedStaff = await User.find({
-                role: 'Staff',
-                isActive: true,
-                services: { $all: requestedServices }
-            });
+            staffQuery.services = { $all: requestedServices };
         }
+        qualifiedStaff = await User.find(staffQuery);
 
         if (qualifiedStaff.length === 0) {
-            return res.json({ allOccupied: true, message: 'No masters qualified for this ritual' });
+            return res.json({ allOccupied: true, message: 'No qualified specialists found for these services' });
         }
 
+        const staffIdsArr = qualifiedStaff.map(s => s._id);
+
+        // 2. Aggregate Busy Intervals (Appointments + Approved Leaves)
         const Leave = require('../models/Leave');
-        const [appointments, leaves] = await Promise.all([
+        const [dayAppointments, dayLeaves] = await Promise.all([
             Appointment.find({
-                'assignments.staff': { $in: qualifiedStaff.map(s => s._id) },
-                appointmentDate: { $gte: targetDate, $lt: nextDate },
-                status: { $ne: 'Cancelled' }
+                'assignments.staff': { $in: staffIdsArr },
+                appointmentDate: { $gte: targetDateStart, $lte: targetDateEnd },
+                status: { $nin: ['Cancelled', 'No Show'] }
             }).populate('assignments.service'),
             Leave.find({
-                staff: { $in: qualifiedStaff.map(s => s._id) },
+                staff: { $in: staffIdsArr },
                 status: 'Approved',
-                startDate: { $lte: nextDate },
-                endDate: { $gte: targetDate }
+                startDate: { $lte: targetDateEnd },
+                endDate: { $gte: targetDateStart }
             })
         ]);
 
-        const staffBusyBlocks = {};
-        qualifiedStaff.forEach(s => staffBusyBlocks[s._id] = []);
+        const staffIntervals = {};
+        staffIdsArr.forEach(id => staffIntervals[id.toString()] = []);
 
-        // Add Leave Blocks (Staff is busy entire day if on leave)
-        leaves.forEach(lv => {
-            if (staffBusyBlocks[lv.staff]) {
-                const lvStart = lv.startDate.getTime();
-                const lvEnd = lv.endDate.getTime();
-                // If the leave has specific times, use them, otherwise full day
-                staffBusyBlocks[lv.staff].push({ 
-                    start: lv.startTime ? moment(targetDate).set({ hour: lv.startTime.split(':')[0], minute: lv.startTime.split(':')[1] }).toDate().getTime() : targetDate.getTime(), 
-                    end: lv.endTime ? moment(targetDate).set({ hour: lv.endTime.split(':')[0], minute: lv.endTime.split(':')[1] }).toDate().getTime() : nextDate.getTime()
-                });
+        // Add Leave Intervals
+        dayLeaves.forEach(lv => {
+            const sid = lv.staff.toString();
+            if (!staffIntervals[sid]) return;
+
+            // Handle partial day leaves
+            let start = lv.startDate < targetDateStart ? targetDateStart.getTime() : lv.startDate.getTime();
+            let end = lv.endDate > targetDateEnd ? targetDateEnd.getTime() : lv.endDate.getTime();
+
+            if (lv.startTime) {
+                const [h, m] = lv.startTime.split(':');
+                const tS = normalizedDate.clone().set({ hour: parseInt(h), minute: parseInt(m), second: 0, millisecond: 0 }).toDate().getTime();
+                start = Math.max(start, tS);
             }
+            if (lv.endTime) {
+                const [h, m] = lv.endTime.split(':');
+                const tE = normalizedDate.clone().set({ hour: parseInt(h), minute: parseInt(m), second: 0, millisecond: 0 }).toDate().getTime();
+                end = Math.min(end, tE);
+            }
+            staffIntervals[sid].push({ start, end });
         });
 
-        appointments.forEach(app => {
-            const start = new Date(app.appointmentDate).getTime();
-            const durationMs = app.assignments.reduce((acc, a) => acc + (a.service?.duration || 30), 0) * 60 * 1000;
+        // Add Appointment Intervals
+        dayAppointments.forEach(app => {
+            const appStart = new Date(app.appointmentDate).getTime();
+            const appDuration = app.assignments.reduce((acc, a) => acc + (a.service?.duration || 30), 0) * 60 * 1000;
+            const appEnd = appStart + appDuration;
+
             app.assignments.forEach(a => {
-                if (staffBusyBlocks[a.staff]) {
-                    staffBusyBlocks[a.staff].push({ start, end: start + durationMs });
+                const sid = a.staff.toString();
+                if (staffIntervals[sid]) {
+                    staffIntervals[sid].push({ start: appStart, end: appEnd });
                 }
             });
         });
 
+        // 3. Define Analysis Matrix (9:00 AM to 7:00 PM every 30 mins)
         const timeSlots = [];
-        for (let hour = 9; hour <= 19; hour++) {
-            const h0 = normalizedDate.clone().hour(hour).minute(0).second(0).millisecond(0).toDate();
-            timeSlots.push(h0);
-            if (hour < 19) {
-                const h30 = normalizedDate.clone().hour(hour).minute(30).second(0).millisecond(0).toDate();
-                timeSlots.push(h30);
-            }
+        for (let hour = 9; hour < 19; hour++) {
+            timeSlots.push(normalizedDate.clone().set({ hour, minute: 0, second: 0, millisecond: 0 }).toDate());
+            timeSlots.push(normalizedDate.clone().set({ hour, minute: 30, second: 0, millisecond: 0 }).toDate());
         }
+        timeSlots.push(normalizedDate.clone().set({ hour: 19, minute: 0, second: 0, millisecond: 0 }).toDate());
 
-        const occupiedSlots = [];
-        const requiredDurationMs = totalDuration * 60 * 1000;
+        // 4. Analysis Protocol: Filter Occupied Slots
+        const occupiedSlots = timeSlots.filter(slot => {
+            const sStart = slot.getTime();
+            const sEnd = sStart + requiredDurationMs;
 
-        timeSlots.forEach(slot => {
-            const slotStart = slot.getTime();
-            const slotEnd = slotStart + requiredDurationMs;
+            // Business hours check (don't allow appointments stretching past 8 PM)
+            const dayLimit = normalizedDate.clone().set({ hour: 20, minute: 0, second: 0, millisecond: 0 }).toDate().getTime();
+            if (sEnd > dayLimit) return true;
 
-            const freeStaff = qualifiedStaff.filter(stf => {
-                const busyBlocks = staffBusyBlocks[stf._id];
-                const overlaps = busyBlocks.some(block => {
-                    return (slotStart < block.end && slotEnd > block.start);
-                });
-                return !overlaps;
-            });
+            const availableStaffCount = qualifiedStaff.filter(stf => {
+                const busy = staffIntervals[stf._id.toString()] || [];
+                return !busy.some(b => (sStart < b.end && sEnd > b.start));
+            }).length;
 
-            // If user picked specific staff, ALL must be free
-            if (requestedStaffIds && requestedStaffIds.length > 0) {
-                if (freeStaff.length < qualifiedStaff.length) {
-                    occupiedSlots.push(slot.toISOString());
-                }
+            if (requestedStaffIds.length > 0) {
+                // If user picked specific staff, ALL of them must be available
+                return availableStaffCount < requestedStaffIds.length;
             } else {
-                // Auto-assign: At least one must be free
-                if (freeStaff.length === 0) {
-                    occupiedSlots.push(slot.toISOString());
-                }
+                // Auto-assign: At least one qualified person must be available
+                return availableStaffCount === 0;
             }
-        });
+        }).map(slot => slot.toISOString());
 
         res.json({ occupiedSlots });
     } catch (err) {
-        res.status(500).json({ message: 'Slot analysis failed', error: err.message });
+        console.error("SLOT_ENGINE_ERR:", err);
+        res.status(500).json({ message: 'Dynamic slot analysis phase failed', error: err.message });
     }
 };
 

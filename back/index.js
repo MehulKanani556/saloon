@@ -29,6 +29,8 @@ app.use(cookieParser());
 app.use(morgan('dev'));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+const { initSocket } = require('./helpers/socketHelper');
+
 // Routes (centralized in routes/indexRoute.js)
 app.use('/api', require('./routes/indexRoute'));
 
@@ -38,6 +40,9 @@ app.get('/', (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+
+// Initialize Socket.io
+initSocket(server);

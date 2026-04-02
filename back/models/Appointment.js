@@ -8,8 +8,17 @@ const appointmentSchema = new mongoose.Schema({
         staff: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
     }],
     appointmentDate: { type: Date, required: true },
-    status: { type: String, enum: ['Pending', 'Confirmed', 'Completed', 'Cancelled'], default: 'Pending' },
-    paymentStatus: { type: String, enum: ['Pending', 'Paid'], default: 'Pending' },
+    status: {
+        type: String,
+        enum: ['Pending', 'Confirmed', 'Completed', 'Cancelled', 'No Show'],
+        default: 'Pending'
+    },
+    paymentStatus: {
+        type: String,
+        enum: ['Pending', 'Paid', 'Refunded', 'Failed'],
+        default: 'Pending'
+    },
+    paymentIntentId: { type: String },
     totalPrice: { type: Number, required: true }
 }, { timestamps: true });
 

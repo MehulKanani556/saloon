@@ -323,7 +323,7 @@ export default function AdminServices() {
             >
               <div className="relative overflow-hidden rounded-2xl aspect-[4/3] mb-6 shadow-inner bg-background">
                 <img
-                  src={service.image?.startsWith('/uploads') ? `${IMAGE_URL}${service.image}` : service.image}
+                  src={service.image?.startsWith('http') ? service.image : `${IMAGE_URL}${service.image}`}
                   alt={service.name}
                   className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110"
                 />

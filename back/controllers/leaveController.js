@@ -69,17 +69,49 @@ const updateLeaveStatus = async (req, res) => {
         leave.status = status || leave.status;
         leave.adminComment = adminComment || leave.adminComment;
 
-        const updatedLeave = await leave.save();
-
-        // If newly approved, subtract hours from staff balance
+        // Conflict check for appointments
         if (status === 'Approved' && oldStatus !== 'Approved') {
+            const Appointment = require('../models/Appointment');
+            const start = moment(leave.startDate).startOf('day');
+            const end = moment(leave.endDate).endOf('day');
+
+            const conflicts = await Appointment.find({
+                'assignments.staff': leave.staff,
+                status: 'Confirmed',
+                appointmentDate: { $gte: start.toDate(), $lte: end.toDate() }
+            });
+
+            // More precise check for partial day leaves
+            const actualConflicts = conflicts.filter(app => {
+                const appTime = moment(app.appointmentDate);
+                if (leave.startTime && leave.endTime) {
+                    const startFull = moment(leave.startDate).set({
+                        hour: parseInt(leave.startTime.split(':')[0]),
+                        minute: parseInt(leave.startTime.split(':')[1])
+                    });
+                    const endFull = moment(leave.endDate).set({
+                        hour: parseInt(leave.endTime.split(':')[0]),
+                        minute: parseInt(leave.endTime.split(':')[1])
+                    });
+                    return appTime.isBetween(startFull, endFull, null, '[]');
+                }
+                return true; // Full day conflict
+            });
+
+            if (actualConflicts.length > 0) {
+                return res.status(400).json({ 
+                    message: `Personnel deployment detected: ${actualConflicts.length} active service commitments during this range. Please reschedule appointments before approving departure.` 
+                });
+            }
+
             const User = require('../models/User');
             await User.findByIdAndUpdate(leave.staff, {
                 $inc: { leaveBalance: -(leave.totalHours || 0) }
             });
         }
 
-        const populatedLeave = await Leave.findById(updatedLeave._id).populate('staff', 'name email profileImage phone');
+        await leave.save();
+        const populatedLeave = await Leave.findById(leave._id).populate('staff', 'name email profileImage phone');
         res.json(populatedLeave);
     } catch (error) {
         res.status(500).json({ message: 'Record mutation failed', error: error.message });
