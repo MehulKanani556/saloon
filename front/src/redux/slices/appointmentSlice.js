@@ -42,8 +42,8 @@ export const deleteAppointment = createAsyncThunk('appointments/delete', async (
 
 export const fetchOccupiedSlots = createAsyncThunk('appointments/fetchOccupiedSlots', async ({ date, serviceIds, staffIds }, { rejectWithValue }) => {
     try {
-        const { data } = await api.get('/appointments/occupied-slots', {
-            params: { date, serviceIds, staffIds }
+        const { data } = await api.post('/appointments/occupied-slots', {
+            date, serviceIds, staffIds
         });
         return data.occupiedSlots || [];
     } catch (err) {

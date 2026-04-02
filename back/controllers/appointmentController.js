@@ -292,13 +292,22 @@ const updateAppointmentStatus = async (req, res) => {
 
 const getOccupiedSlots = async (req, res) => {
     try {
-        const { date, serviceIds, staffIds } = req.query;
+        const { date, serviceIds, staffIds } = req.method === 'POST' ? req.body : req.query;
         if (!date || !serviceIds) {
-            return res.status(400).json({ message: 'Date and Services are required for slot analysis.' });
+            return res.status(400).json({ message: 'Temporal coordinates and Ritual parameters are required for matrix analysis.' });
         }
 
-        const requestedServices = serviceIds.split(',').filter(id => id.length === 24);
-        const requestedStaffIds = staffIds ? staffIds.split(',').filter(id => id.length === 24) : [];
+        // Standardize input as arrays
+        const requestedServices = Array.isArray(serviceIds) 
+            ? serviceIds 
+            : serviceIds.split(',').filter(id => id.length === 24);
+        
+        const rawStaffIds = Array.isArray(staffIds) 
+            ? staffIds 
+            : (staffIds ? staffIds.split(',').filter(id => id.length === 24) : []);
+
+        // DEDUPLICATION PROTOCOL: Ensure we only check unique specialists
+        const requestedStaffIds = [...new Set(rawStaffIds)];
 
         const normalizedDate = moment(date, ["DD/MM/YYYY", "YYYY-MM-DD", "MM/DD/YYYY", moment.ISO_8601], true);
         if (!normalizedDate.isValid()) {
@@ -385,20 +394,17 @@ const getOccupiedSlots = async (req, res) => {
 
         // 3. Define Analysis Matrix (9:00 AM to 7:00 PM every 30 mins)
         const timeSlots = [];
-        for (let hour = 9; hour < 19; hour++) {
+        for (let hour = 9; hour < 20; hour++) {
             timeSlots.push(normalizedDate.clone().set({ hour, minute: 0, second: 0, millisecond: 0 }).toDate());
             timeSlots.push(normalizedDate.clone().set({ hour, minute: 30, second: 0, millisecond: 0 }).toDate());
         }
-        timeSlots.push(normalizedDate.clone().set({ hour: 19, minute: 0, second: 0, millisecond: 0 }).toDate());
+        timeSlots.push(normalizedDate.clone().set({ hour: 20, minute: 0, second: 0, millisecond: 0 }).toDate());
 
         // 4. Analysis Protocol: Filter Occupied Slots
         const occupiedSlots = timeSlots.filter(slot => {
+            // Availability Matrix Protocol: Check specialist availability for the full session duration
             const sStart = slot.getTime();
             const sEnd = sStart + requiredDurationMs;
-
-            // Business hours check (don't allow appointments stretching past 8 PM)
-            const dayLimit = normalizedDate.clone().set({ hour: 20, minute: 0, second: 0, millisecond: 0 }).toDate().getTime();
-            if (sEnd > dayLimit) return true;
 
             const availableStaffCount = qualifiedStaff.filter(stf => {
                 const busy = staffIntervals[stf._id.toString()] || [];

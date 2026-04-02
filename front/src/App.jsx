@@ -99,8 +99,8 @@ const AppContent = () => {
         <Route path="/admin/reports" element={<PrivateRoute roles={['Admin']}><Reports /></PrivateRoute>} />
         <Route path="/admin/leaves" element={<PrivateRoute roles={['Admin']}><Leaves /></PrivateRoute>} />
         <Route path="/admin/expertise-approvals" element={<PrivateRoute roles={['Admin']}><Specializations /></PrivateRoute>} />
-        <Route path="/admin/settings" element={<PrivateRoute roles={['Admin']}><Settings /></PrivateRoute>} />
-
+        <Route path="/admin/settings" element={<PrivateRoute roles={['Admin']}><StaffSettings /></PrivateRoute>} />
+        
         {/* Staff Routes */}
         <Route path="/staff/dashboard" element={<PrivateRoute roles={['Staff']}><StaffDashboard /></PrivateRoute>} />
         <Route path="/staff/appointments" element={<PrivateRoute roles={['Staff']}><Appointments /></PrivateRoute>} />

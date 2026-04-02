@@ -119,18 +119,18 @@ const StorySection = () => {
           >
             <div className="space-y-4 md:space-y-6 md:pt-16">
               <div className="rounded-2xl overflow-hidden aspect-[4/5] border border-white/5">
-                <img src="https://images.unsplash.com/photo-1562322140-8baeececf3df?q=80&w=1169&auto=format&fit=crop" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt="Salon Detail" />
+                <img src="https://images.unsplash.com/photo-1562322140-8baeececf3df?q=80&w=1169&auto=format&fit=crop" className="w-full h-full object-cover xl:grayscale xl:hover:grayscale-0 transition-all duration-700" alt="Salon Detail" />
               </div>
               <div className="rounded-2xl overflow-hidden aspect-square border border-white/5">
-                <img src="https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=1169&auto=format&fit=crop" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt="Salon Detail" />
+                <img src="https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=1169&auto=format&fit=crop" className="w-full h-full object-cover xl:grayscale xl:hover:grayscale-0 transition-all duration-700" alt="Salon Detail" />
               </div>
             </div>
             <div className="space-y-4 md:space-y-6">
               <div className="rounded-2xl overflow-hidden aspect-square border border-white/5">
-                <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1074&auto=format&fit=crop" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt="Salon Detail" />
+                <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1074&auto=format&fit=crop" className="w-full h-full object-cover xl:grayscale xl:hover:grayscale-0 transition-all duration-700" alt="Salon Detail" />
               </div>
               <div className="rounded-2xl overflow-hidden aspect-[4/5] border border-white/5">
-                <img src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?q=80&w=2070&auto=format&fit=crop" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt="Salon Detail" />
+                <img src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?q=80&w=2070&auto=format&fit=crop" className="w-full h-full object-cover xl:grayscale xl:hover:grayscale-0 transition-all duration-700" alt="Salon Detail" />
               </div>
             </div>
           </motion.div>
@@ -318,7 +318,7 @@ const TeamSection = () => {
                 <img
                   src={member.profileImage ? (member.profileImage.startsWith('http') ? member.profileImage : `${IMAGE_URL}${member.profileImage}`) : `https://api.dicebear.com/9.x/adventurer/svg?seed=${member.name}`}
                   alt={member.name}
-                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
                 />
                 <div className="absolute top-4 right-4 px-3 py-1 bg-background/90 backdrop-blur-md rounded-full text-[9px] font-black text-primary uppercase tracking-widest shadow-lg">
                   {member.role || "Expert Stylist"}
@@ -361,9 +361,9 @@ const SalonDetails = () => {
     { day: "Tuesday", open: "09:00 AM", close: "08:00 PM" },
     { day: "Wednesday", open: "09:00 AM", close: "08:00 PM" },
     { day: "Thursday", open: "09:00 AM", close: "08:00 PM" },
-    { day: "Friday", open: "10:00 AM", close: "09:00 PM" },
-    { day: "Saturday", open: "10:00 AM", close: "10:00 PM" },
-    { day: "Sunday", open: "10:00 AM", close: "06:00 PM" },
+    { day: "Friday", open: "09:00 AM", close: "08:00 PM" },
+    { day: "Saturday", open: "09:00 AM", close: "08:00 PM" },
+    { day: "Sundayaaa", open: "09:00 AM", close: "08:00 PM" },
   ];
 
   return (

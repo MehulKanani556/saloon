@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { 
     User, Mail, Phone, Shield, Save, Fingerprint, Edit3, 
-    Camera, Loader2, Key, ShieldCheck, Lock, CheckCircle2 
+    Camera, Loader2, Key, ShieldCheck, Lock, CheckCircle2,
+    Eye, EyeOff
 } from 'lucide-react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -19,7 +20,12 @@ export default function StaffSettings() {
     const [updating, setUpdating] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [preview, setPreview] = useState(null);
-    const [passwordLoading, setPasswordLoading] = useState(false);
+    const [passwordLoading, setPasswordLoading] = useState(false);  
+    const [showPasswords, setShowPasswords] = useState({
+        current: false,
+        new: false,
+        confirm: false
+    });
     const fileInputRef = useRef(null);
 
     // Profile Formik
@@ -70,7 +76,7 @@ export default function StaffSettings() {
         onSubmit: async (values, { resetForm }) => {
             setPasswordLoading(true);
             try {
-                await api.put('/auth/update-password', values);
+                await api.put('/auth/change-password', values);
                 toast.success('Password updated successfully');
                 resetForm();
             } catch (error) {
@@ -214,13 +220,29 @@ export default function StaffSettings() {
                                         </div>
                                         <input
                                             name={field.name}
-                                            type="password"
+                                            type={
+                                                field.name === 'currentPassword' ? (showPasswords.current ? 'text' : 'password') :
+                                                field.name === 'newPassword' ? (showPasswords.new ? 'text' : 'password') :
+                                                (showPasswords.confirm ? 'text' : 'password')
+                                            }
                                             placeholder="••••••••"
                                             onChange={passwordFormik.handleChange}
                                             onBlur={passwordFormik.handleBlur}
                                             value={passwordFormik.values[field.name]}
-                                            className="w-full bg-background border border-white/5 focus:border-emerald-500/30 px-6 py-4 pl-14 rounded-xl outline-none font-black text-white transition-all text-xs tracking-[0.4em] shadow-inner"
+                                            className="w-full bg-background border border-white/5 focus:border-emerald-500/30 px-6 py-4 pl-14 pr-14 rounded-xl outline-none font-black text-white transition-all text-xs tracking-[0.4em] shadow-inner"
                                         />
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                const key = field.name === 'currentPassword' ? 'current' : field.name === 'newPassword' ? 'new' : 'confirm';
+                                                setShowPasswords({ ...showPasswords, [key]: !showPasswords[key] });
+                                            }}
+                                            className="absolute right-5 top-1/2 -translate-y-1/2 text-muted/20 hover:text-emerald-500 transition-colors"
+                                        >
+                                            {(field.name === 'currentPassword' ? showPasswords.current : field.name === 'newPassword' ? showPasswords.new : showPasswords.confirm) ? 
+                                                <EyeOff size={18} /> : <Eye size={18} />
+                                            }
+                                        </button>
                                     </div>
                                     {passwordFormik.touched[field.name] && passwordFormik.errors[field.name] && (
                                         <p className="text-emerald-500/80 text-[8px] uppercase font-black tracking-widest pl-2 animate-pulse">{passwordFormik.errors[field.name]}</p>

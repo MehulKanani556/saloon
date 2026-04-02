@@ -235,8 +235,8 @@ export default function BookAppointment() {
 
   useEffect(() => {
     if (formik.values.date && selectedServices.length > 0) {
-      const serviceIds = selectedServices.map(s => s._id).join(',');
-      const staffIds = Object.values(staffAssignments).filter(id => id).join(',');
+      const serviceIds = selectedServices.map(s => s._id);
+      const staffIds = Object.values(staffAssignments).filter(id => id);
       dispatch(fetchOccupiedSlots({
         date: formik.values.date,
         serviceIds,
@@ -280,9 +280,9 @@ export default function BookAppointment() {
   const prevStep = () => setStep(prev => prev - 1);
 
   const timeSlots = [];
-  for (let hour = 9; hour <= 19; hour++) {
+  for (let hour = 9; hour <= 20; hour++) {
     timeSlots.push(`${hour % 12 || 12}:00 ${hour < 12 ? 'AM' : 'PM'}`);
-    if (hour < 19) timeSlots.push(`${hour % 12 || 12}:30 ${hour < 12 ? 'AM' : 'PM'}`);
+    if (hour < 20) timeSlots.push(`${hour % 12 || 12}:30 ${hour < 12 ? 'AM' : 'PM'}`);
   }
 
   const steps = [

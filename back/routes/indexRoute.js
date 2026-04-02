@@ -40,7 +40,7 @@ router.delete('/auth/profile', protect, authController.softDeleteUser);
 // ==========================================
 router.get('/appointments/my', protect, appointmentController.getMyAppointments);
 router.get('/appointments', protect, authorize('Admin', 'Staff'), appointmentController.getAppointments);
-router.get('/appointments/occupied-slots', appointmentController.getOccupiedSlots);
+router.post('/appointments/occupied-slots', appointmentController.getOccupiedSlots);
 router.post('/appointments', appointmentController.createAppointment);
 router.put('/appointments/:id', protect, authorize('Admin', 'Staff'), appointmentController.updateAppointment);
 router.delete('/appointments/:id', protect, authorize('Admin', 'Staff', 'User'), appointmentController.deleteAppointment);
