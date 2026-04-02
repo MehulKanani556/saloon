@@ -109,33 +109,32 @@ export default function Clients() {
 
   return (
     <div className="space-y-12">
-      <AdminHeader 
+      <AdminHeader
         title="Customer Archives"
         subtitle="Cataloging Eternal Beauty Profiles"
         icon={User2}
         rightContent={
-          <div className="flex flex-col md:flex-row gap-6">
-            <div className="bg-secondary/40 backdrop-blur-md px-6 py-4 rounded-2xl border border-white/5 shadow-2xl flex items-center gap-4 w-full md:w-96 group focus-within:border-primary/40 transition-all">
-              <Search size={20} className="text-muted group-focus-within:text-primary transition-colors" />
+          <div className="flex flex-col lg:flex-row gap-6 w-full lg:w-auto">
+            <div className="bg-secondary/40 backdrop-blur-md px-6 py-4 rounded-2xl border border-white/5 shadow-2xl flex items-center gap-4 w-full lg:w-96 group focus-within:border-primary/40 transition-all">
+              <Search size={18} className="text-muted group-focus-within:text-primary transition-colors" />
               <input
                 type="text"
                 placeholder="Query by name, signal, email..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="bg-transparent border-none outline-none text-[11px] w-full font-black uppercase tracking-widest text-white placeholder:text-white/10"
+                className="bg-transparent border-none outline-none text-[10px] md:text-[11px] w-full font-black uppercase tracking-widest text-white placeholder:text-white/10"
               />
             </div>
             <button
               onClick={() => setIsDrawerOpen(true)}
-              className="flex items-center gap-4 px-10 py-5 bg-primary text-secondary rounded-2xl font-black uppercase text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group"
+              className="w-full lg:w-auto flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury"
             >
-              <Plus size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
-              INDuct NEW PROTOCOL
+              <Plus size={18} md:size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
+              <span className="whitespace-nowrap">INDuct NEW PROTOCOL</span>
             </button>
           </div>
         }
       />
-
 
       <div className="bg-secondary/30 backdrop-blur-sm rounded-2xl overflow-hidden shadow-3xl border border-white/5 relative">
         <div className="absolute top-0 left-0 w-full h-[1px] bg-luxury-gradient opacity-10" />
@@ -149,92 +148,92 @@ export default function Clients() {
                 <th className="px-3 lg:px-5 py-3 lg:py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary  whitespace-nowrap text-right">Actions</th>
               </tr >
             </thead >
-    <tbody className="divide-y divide-white/5">
-      <AnimatePresence mode="popLayout">
-        {filteredClients.map((client, index) => (
-          <motion.tr
-            key={client._id}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 20 }}
-            transition={{ delay: index * 0.02, ease: "easeOut" }}
-            className="hover:bg-white/5 transition-all group"
-          >
-            <td className="px-3 lg:px-5 py-3 lg:py-5">
-              <div className="flex items-center gap-4 lg:gap-6">
-                <div className="w-12 h-12 lg:w-16 lg:h-16 rounded-xl lg:rounded-2xl bg-background p-1 border border-white/10 group-hover:rotate-6 transition-all duration-500 shadow-2xl relative overflow-hidden shrink-0">
-                  <img
-                    src={client.profileImage ? (client.profileImage.startsWith('http') ? client.profileImage : `${IMAGE_URL}${client.profileImage}`) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${client.name}`}
-                    alt={client.name}
-                    className="w-full h-full rounded-xl lg:rounded-2xl object-cover grayscale transition-all duration-700 group-hover:grayscale-0"
-                  />
-                </div>
-                <div>
-                  <p className="font-black text-white text-sm lg:text-base tracking-tighter uppercase  whitespace-nowrap font-luxury group-hover:text-primary transition-colors leading-none mb-1.5 lg:mb-3">{client.name}</p>
-                  <div className="flex items-center gap-2">
-                    <div className="w-1 h-1 lg:w-1.5 lg:h-1.5 rounded-full bg-primary" />
-                    <p className="text-[8px] lg:text-[9px] font-black text-muted uppercase tracking-[0.2em] whitespace-nowrap">Protocol Est. {new Date(client.createdAt).getFullYear()}</p>
-                  </div>
-                </div>
-              </div>
-            </td>
-            <td className="px-3 lg:px-5 py-3 lg:py-5">
-              <div className="space-y-1 lg:space-y-3">
-                <p className="text-[9px] lg:text-[10px] font-black text-muted group-hover:text-white transition-colors flex items-center gap-3 lg:gap-4 whitespace-nowrap tracking-widest uppercase">
-                  <Mail size={12} lg:size={14} className="text-primary/40 group-hover:text-primary" />
-                  {client.email}
-                </p>
-                <p className="text-[9px] lg:text-[10px] font-black text-muted group-hover:text-white transition-colors flex items-center gap-3 lg:gap-4 whitespace-nowrap tracking-widest uppercase">
-                  <Phone size={12} lg:size={14} className="text-primary/40 group-hover:text-primary" />
-                  {client.phone}
-                </p>
-              </div>
-            </td>
+            <tbody className="divide-y divide-white/5">
+              <AnimatePresence mode="popLayout">
+                {filteredClients.map((client, index) => (
+                  <motion.tr
+                    key={client._id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    transition={{ delay: index * 0.02, ease: "easeOut" }}
+                    className="hover:bg-white/5 transition-all group"
+                  >
+                    <td className="px-3 lg:px-5 py-3 lg:py-5">
+                      <div className="flex items-center gap-4 lg:gap-6">
+                        <div className="w-12 h-12 lg:w-16 lg:h-16 rounded-xl lg:rounded-2xl bg-background p-1 border border-white/10 group-hover:rotate-6 transition-all duration-500 shadow-2xl relative overflow-hidden shrink-0">
+                          <img
+                            src={client.profileImage ? (client.profileImage.startsWith('http') ? client.profileImage : `${IMAGE_URL}${client.profileImage}`) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${client.name}`}
+                            alt={client.name}
+                            className="w-full h-full rounded-xl lg:rounded-2xl object-cover grayscale transition-all duration-700 group-hover:grayscale-0"
+                          />
+                        </div>
+                        <div>
+                          <p className="font-black text-white text-sm lg:text-base tracking-tighter uppercase  whitespace-nowrap font-luxury group-hover:text-primary transition-colors leading-none mb-1.5 lg:mb-3">{client.name}</p>
+                          <div className="flex items-center gap-2">
+                            <div className="w-1 h-1 lg:w-1.5 lg:h-1.5 rounded-full bg-primary" />
+                            <p className="text-[8px] lg:text-[9px] font-black text-muted uppercase tracking-[0.2em] whitespace-nowrap">Protocol Est. {new Date(client.createdAt).getFullYear()}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-3 lg:px-5 py-3 lg:py-5">
+                      <div className="space-y-1 lg:space-y-3">
+                        <p className="text-[9px] lg:text-[10px] font-black text-muted group-hover:text-white transition-colors flex items-center gap-3 lg:gap-4 whitespace-nowrap tracking-widest uppercase">
+                          <Mail size={12} lg:size={14} className="text-primary/40 group-hover:text-primary" />
+                          {client.email}
+                        </p>
+                        <p className="text-[9px] lg:text-[10px] font-black text-muted group-hover:text-white transition-colors flex items-center gap-3 lg:gap-4 whitespace-nowrap tracking-widest uppercase">
+                          <Phone size={12} lg:size={14} className="text-primary/40 group-hover:text-primary" />
+                          {client.phone}
+                        </p>
+                      </div>
+                    </td>
 
-            <td className="px-3 lg:px-5 py-3 lg:py-5 text-center">
-              <div className="inline-flex flex-col items-center bg-background/50 px-4 lg:px-6 py-3 lg:py-4 rounded-xl lg:rounded-2xl border border-white/5 group-hover:bg-primary transition-all duration-500">
-                <span className="text-lg lg:text-xl font-black text-white tracking-tighter whitespace-nowrap group-hover:text-secondary">{(client.bookingHistory?.length || 0).toString().padStart(2, '0')}</span>
-                <span className="text-[7px] lg:text-[8px] font-black text-primary uppercase tracking-[0.3em] mt-0.5 lg:mt-1 whitespace-nowrap group-hover:text-secondary group-hover:opacity-40 ">Rituals</span>
-              </div>
-            </td>
-            <td className="px-3 lg:px-5 py-3 lg:py-5 text-right w-[160px] lg:w-[200px]">
-              <div className="flex items-center justify-end gap-2 lg:gap-3 transition-all duration-500 opacity-100">
-                <button
-                  onClick={() => navigate(`/admin/invoices?id=${client.name}`)}
-                  className="p-3 lg:p-4 bg-background border border-white/5 rounded-xl lg:rounded-2xl text-muted hover:text-white transition-all shadow-xl"
-                >
-                  <FileText size={16} lg:size={18} />
-                </button>
-                <button
-                  onClick={() => {
-                    setProfileClient(client);
-                    setIsProfileOpen(true);
-                  }}
-                  className="p-3 lg:p-4 bg-background border border-white/5 rounded-xl lg:rounded-2xl text-muted hover:text-primary transition-all shadow-xl"
-                >
-                  <Eye size={16} lg:size={18} />
-                </button>
-                <button
-                  onClick={() => handleEdit(client)}
-                  className="p-3 lg:p-4 bg-background border border-white/5 rounded-xl lg:rounded-2xl text-muted hover:text-primary transition-all shadow-xl"
-                >
-                  <Edit3 size={16} lg:size={18} />
-                </button>
-                <button
-                  onClick={() => {
-                    setClientToDelete(client);
-                    setIsDeleteModalOpen(true);
-                  }}
-                  className="p-3 lg:p-4 bg-background border border-rose-500/10 rounded-xl lg:rounded-2xl text-muted hover:text-rose-500 transition-all shadow-xl"
-                >
-                  <Trash2 size={16} lg:size={18} />
-                </button>
-              </div>
-            </td>
-          </motion.tr>
-        ))}
-      </AnimatePresence>
-    </tbody>
+                    <td className="px-3 lg:px-5 py-3 lg:py-5 text-center">
+                      <div className="inline-flex flex-col items-center bg-background/50 px-4 lg:px-6 py-3 lg:py-4 rounded-xl lg:rounded-2xl border border-white/5 group-hover:bg-primary transition-all duration-500">
+                        <span className="text-lg lg:text-xl font-black text-white tracking-tighter whitespace-nowrap group-hover:text-secondary">{(client.bookingHistory?.length || 0).toString().padStart(2, '0')}</span>
+                        <span className="text-[7px] lg:text-[8px] font-black text-primary uppercase tracking-[0.3em] mt-0.5 lg:mt-1 whitespace-nowrap group-hover:text-secondary group-hover:opacity-40 ">Rituals</span>
+                      </div>
+                    </td>
+                    <td className="px-3 lg:px-5 py-3 lg:py-5 text-right w-[160px] lg:w-[200px]">
+                      <div className="flex items-center justify-end gap-2 lg:gap-3 transition-all duration-500 opacity-100">
+                        <button
+                          onClick={() => navigate(`/admin/invoices?id=${client.name}`)}
+                          className="p-3 lg:p-4 bg-background border border-white/5 rounded-xl lg:rounded-2xl text-muted hover:text-white transition-all shadow-xl"
+                        >
+                          <FileText size={16} lg:size={18} />
+                        </button>
+                        <button
+                          onClick={() => {
+                            setProfileClient(client);
+                            setIsProfileOpen(true);
+                          }}
+                          className="p-3 lg:p-4 bg-background border border-white/5 rounded-xl lg:rounded-2xl text-muted hover:text-primary transition-all shadow-xl"
+                        >
+                          <Eye size={16} lg:size={18} />
+                        </button>
+                        <button
+                          onClick={() => handleEdit(client)}
+                          className="p-3 lg:p-4 bg-background border border-white/5 rounded-xl lg:rounded-2xl text-muted hover:text-primary transition-all shadow-xl"
+                        >
+                          <Edit3 size={16} lg:size={18} />
+                        </button>
+                        <button
+                          onClick={() => {
+                            setClientToDelete(client);
+                            setIsDeleteModalOpen(true);
+                          }}
+                          className="p-3 lg:p-4 bg-background border border-rose-500/10 rounded-xl lg:rounded-2xl text-muted hover:text-rose-500 transition-all shadow-xl"
+                        >
+                          <Trash2 size={16} lg:size={18} />
+                        </button>
+                      </div>
+                    </td>
+                  </motion.tr>
+                ))}
+              </AnimatePresence>
+            </tbody>
           </table >
         </div >
       </div >
@@ -248,11 +247,11 @@ export default function Clients() {
         <div className="flex flex-col items-center mb-12">
           <div className="relative group">
             <div className="w-40 h-40 rounded-2xl bg-background border-4 border-white/5 flex items-center justify-center text-white/5 shadow-inner overflow-hidden transition-all duration-500 group-hover:border-primary/20 group-hover:scale-105">
-                <img
-                  src={imagePreview ? (imagePreview.startsWith('blob') || imagePreview.startsWith('http') ? imagePreview : `${IMAGE_URL}${imagePreview}`) : `https://api.dicebear.com/9.x/adventurer/svg?seed=${formik.values.name || 'Client'}`}
-                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
-                  alt="Preview"
-                />
+              <img
+                src={imagePreview ? (imagePreview.startsWith('blob') || imagePreview.startsWith('http') ? imagePreview : `${IMAGE_URL}${imagePreview}`) : `https://api.dicebear.com/9.x/adventurer/svg?seed=${formik.values.name || 'Client'}`}
+                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                alt="Preview"
+              />
               <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
                 <CameraIcon size={32} className="text-secondary" />
               </div>

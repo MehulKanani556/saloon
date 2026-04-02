@@ -173,10 +173,10 @@ export default function Appointments() {
               formik.resetForm();
               setIsDrawerOpen(true);
             }}
-            className="flex items-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group"
+            className="flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury"
           >
             <Plus size={18} md:size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
-            Secure Ritual Slot
+            <span className="whitespace-nowrap">Secure Ritual Slot</span>
           </button>
         }
       />
@@ -365,9 +365,10 @@ export default function Appointments() {
                   <p className="text-muted/40 font-black uppercase tracking-[0.4em] text-[10px] ">No active protocols recorded</p>
                   <button
                     onClick={() => setIsDrawerOpen(true)}
-                    className="mt-8 text-primary font-black text-[9px] uppercase tracking-[0.5em] flex items-center justify-center gap-3 mx-auto group hover:scale-105 transition-all"
+                    className="mt-8 flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury mx-auto"
                   >
-                    <Plus size={14} className="group-hover:rotate-90 transition-transform" /> Initialize Ritual
+                    <Plus size={18} md:size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
+                    <span className="whitespace-nowrap">Initialize Ritual</span>
                   </button>
                 </motion.div>
               )}
@@ -491,9 +492,9 @@ export default function Appointments() {
           <div className="pt-4 md:pt-8">
             <button
               type="submit" disabled={formik.isSubmitting}
-              className="w-full py-5 md:py-6 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] md:tracking-[0.4em] shadow-2xl shadow-primary/20 hover:scale-[1.02] transition-all flex items-center justify-center gap-3 md:gap-4 active:scale-[0.98] disabled:opacity-50 group font-luxury "
+              className="w-full flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury disabled:opacity-50"
             >
-              {formik.isSubmitting ? 'Architecting Matrix...' : selectedAppointment ? 'COMMIT REFINEMENTS' : 'AUTHORIZE INITIATION'}
+              <span className="whitespace-nowrap">{formik.isSubmitting ? 'Architecting Matrix...' : selectedAppointment ? 'COMMIT REFINEMENTS' : 'AUTHORIZE INITIATION'}</span>
               <Sparkles size={18} md:size={20} className="group-hover:rotate-12 transition-transform" />
             </button>
           </div>

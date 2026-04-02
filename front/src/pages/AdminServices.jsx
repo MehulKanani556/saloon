@@ -28,7 +28,7 @@ export default function AdminServices() {
   const [preview, setPreview] = useState('');
   const [isAddingCategory, setIsAddingCategory] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState('');
-  const itemsPerPage = 9;
+  const itemsPerPage = 12;
 
   useEffect(() => {
     dispatch(fetchServices());
@@ -210,13 +210,13 @@ export default function AdminServices() {
             )}
           </AnimatePresence>
 
-          <div className="grid grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
             <div className="space-y-4">
               <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2 ">Duration (Min)</label>
               <input
                 type="number"
                 {...formik.getFieldProps('duration')}
-                className="w-full bg-secondary/50 border border-white/10 focus:border-primary/50 rounded-xl md:rounded-2xl px-4 md:px-6 py-4 md:py-5 text-[10px] md:text-[11px] font-black uppercase tracking-[0.3em] outline-none text-white shadow-2xl transition-all"
+                className="w-full bg-secondary/50 border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.3em] outline-none text-white shadow-2xl transition-all"
               />
             </div>
             <div className="space-y-4">
@@ -224,7 +224,7 @@ export default function AdminServices() {
               <input
                 type="number"
                 {...formik.getFieldProps('price')}
-                className="w-full bg-secondary/50 border border-white/10 focus:border-primary/50 rounded-xl md:rounded-2xl px-4 md:px-6 py-4 md:py-5 text-[10px] md:text-[11px] font-black uppercase tracking-[0.3em] outline-none text-white shadow-2xl transition-all font-luxury"
+                className="w-full bg-secondary/50 border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.3em] outline-none text-white shadow-2xl transition-all font-luxury"
               />
             </div>
           </div>
@@ -278,19 +278,19 @@ export default function AdminServices() {
       </Modal>
 
       <AdminHeader
-        title="Service Portfolio"
-        subtitle="Manage available salon services"
+        title="Ritual Catalog"
+        subtitle="Operational Portfolio & Service Archives"
         icon={Scissors}
         rightContent={
-          <div className="flex flex-col sm:flex-row gap-6 w-full lg:w-auto items-center">
-            <div className="bg-secondary/40 backdrop-blur-md px-8 py-5 rounded-2xl border border-white/5 shadow-3xl flex items-center gap-5 w-full sm:w-96 group focus-within:border-primary/40 transition-all duration-500">
-              <Search size={20} className="text-primary/40 group-focus-within:text-primary transition-colors" />
+          <div className="flex flex-col md:flex-row gap-5 w-full lg:w-auto items-center">
+            <div className="bg-secondary/40 backdrop-blur-md px-6 md:px-8 py-4 md:py-5 rounded-2xl border border-white/5 shadow-3xl flex items-center gap-4 w-full md:w-96 group focus-within:border-primary/40 transition-all duration-500">
+              <Search size={18} className="text-primary/40 group-focus-within:text-primary transition-colors" />
               <input
                 type="text"
-                placeholder="SEARCH SERVICES..."
+                placeholder="SEARCH ARCHIVES..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="bg-transparent border-none outline-none text-[11px] font-black text-white tracking-[0.2em] w-full placeholder:text-white/5 uppercase"
+                className="bg-transparent border-none outline-none text-[10px] md:text-[11px] font-black text-white tracking-[0.2em] w-full placeholder:text-white/5 uppercase"
               />
             </div>
             <button
@@ -301,16 +301,16 @@ export default function AdminServices() {
                 setImageFile(null);
                 setShowForm(true);
               }}
-              className="w-full sm:w-auto flex items-center justify-center gap-4 px-10 py-5 bg-primary text-secondary rounded-2xl font-black text-[11px] uppercase tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury "
+              className="w-full lg:w-auto flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury"
             >
-              <Plus size={22} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
-              ADD NEW SERVICE
+              <Plus size={18} md:size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
+              <span className="whitespace-nowrap">INDuct NEW Ritual</span>
             </button>
           </div>
         }
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         <AnimatePresence mode="popLayout">
           {currentItems.map((service, index) => (
             <motion.div

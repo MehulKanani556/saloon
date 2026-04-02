@@ -15,8 +15,10 @@ import {
     AlertCircle,
     ChevronDown,
     Truck,
-    User
+    User,
+    Plus
 } from 'lucide-react';
+import AdminHeader from '../components/ui/AdminHeader';
 import api from '../utils/api';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
@@ -208,9 +210,10 @@ export default function AdminOrders() {
                                 <button 
                                     onClick={() => updateStatus(selectedOrder._id, 'Shipped')}
                                     disabled={selectedOrder.status === 'Shipped' || selectedOrder.status === 'Delivered'}
-                                    className="flex-1 py-4 bg-primary text-secondary rounded-xl font-black text-[10px] uppercase tracking-[0.3em] hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:hover:scale-100"
+                                    className="flex-1 flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury disabled:opacity-50 disabled:hover:scale-100"
                                 >
-                                    Initiate Deployment
+                                    <Truck size={18} className="group-hover:translate-x-1 transition-transform" />
+                                    <span className="whitespace-nowrap">Initiate Deployment</span>
                                 </button>
                                 <button className="px-8 py-4 bg-white/5 border border-white/10 rounded-xl text-white font-black text-[10px] uppercase tracking-[0.3em] hover:bg-white/10 transition-all">
                                     Download Manifest
@@ -221,23 +224,17 @@ export default function AdminOrders() {
                 )}
             </AnimatePresence>
 
-            {/* Header Section */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                <div className="space-y-2">
-                    <h1 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight leading-[1.1] font-luxury">
-                        Order <span className="text-primary/50">Ledger</span>
-                    </h1>
-                    <p className="text-muted/60 text-[10px] font-black uppercase tracking-[0.4em]">Monitor and manage architectural asset acquisitions.</p>
-                </div>
-                <div className="flex items-center gap-3">
-                    {/* <button className="p-4 bg-dark-card border border-white/5 rounded-xl text-muted hover:text-white transition-all hover:border-white/10 group">
-                        <Download size={18} className="group-hover:scale-110 transition-transform" />
-                    </button> */}
-                    <button className="px-8 py-4 bg-luxury-gradient text-secondary rounded-xl font-black text-[10px] uppercase tracking-[0.3em] shadow-lg hover:scale-105 active:scale-95 transition-all">
-                        Create Manual Order
+            <AdminHeader 
+                title="Order Ledger"
+                subtitle="Acquisition Manifest & Asset Fulfillment"
+                icon={Package}
+                rightContent={
+                    <button className="w-full md:w-auto flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury">
+                        <Plus size={18} md:size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
+                        <span className="whitespace-nowrap">Create Manual Order</span>
                     </button>
-                </div>
-            </div>
+                }
+            />
 
             {/* Metrics Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

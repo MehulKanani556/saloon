@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Search, ShoppingBag, Pencil, Trash2, Package, Star, Filter, X, Image as ImageIcon, Sparkles, Layers, Target, Activity, Zap, Upload } from 'lucide-react';
+import { Plus, Search, ShoppingBag, Pencil, Trash2, Package, Star, Filter, X, Image as ImageIcon, Sparkles, Layers, Target, Activity, Zap, Upload, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts, createProduct, updateProduct, deleteProduct } from '../redux/slices/productSlice';
@@ -203,9 +203,13 @@ export default function AdminProducts() {
           <button
             type="submit"
             disabled={formik.isSubmitting}
-            className="w-full py-6 bg-primary text-secondary rounded-2xl font-black text-[11px] uppercase tracking-[0.5em] shadow-2xl hover:bg-primary/90 transition-all flex items-center justify-center gap-4 active:scale-[0.98] disabled:opacity-50 font-luxury"
+            className="w-full flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury disabled:opacity-50"
           >
-            {formik.isSubmitting ? 'SAVING...' : (editingProduct ? 'SAVE CHANGES' : 'ADD PRODUCT')}
+            {formik.isSubmitting ? (
+              <span className="flex items-center gap-3"><Loader2 className="animate-spin" size={16} /> SAVING...</span>
+            ) : (
+                <span className="whitespace-nowrap">{editingProduct ? 'SAVE CHANGES' : 'ADD PRODUCT'}</span>
+            )}
           </button>
         </form>
       </Modal>
@@ -261,10 +265,10 @@ export default function AdminProducts() {
                 setImageFile(null);
                 setShowForm(true);
               }}
-              className="w-full sm:w-auto flex items-center justify-center gap-4 px-10 py-5 bg-primary text-secondary rounded-2xl font-black text-[11px] uppercase tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury"
+              className="w-full lg:w-auto flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury"
             >
-              <Plus size={22} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
-              ADD NEW PRODUCT
+              <Plus size={18} md:size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
+              <span className="whitespace-nowrap">ADD NEW PRODUCT</span>
             </button>
           </div>
         }

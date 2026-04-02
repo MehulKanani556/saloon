@@ -104,11 +104,11 @@ export default function StaffSettings() {
                     isEditing && (
                         <button
                             onClick={profileFormik.handleSubmit}
-                            className="flex items-center gap-3 px-6 py-3 lg:px-10 lg:py-5 bg-primary text-secondary lg:rounded-2xl rounded-xl font-black uppercase text-xs tracking-[0.2em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group"
+                            className="flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury disabled:opacity-50"
                             disabled={updating}
                         >
-                            {updating ? <Loader2 size={18} className="animate-spin" /> : <Save size={20} />}
-                            Sync Identity
+                            {updating ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} md:size={20} strokeWidth={3} className="group-hover:rotate-12 transition-transform duration-300" />}
+                            <span className="whitespace-nowrap">Sync Identity</span>
                         </button>
                     )
                 }

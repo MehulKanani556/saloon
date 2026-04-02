@@ -142,10 +142,10 @@ const InvoiceDetailModal = ({ appointment, onClose }) => {
               <div className="flex items-center justify-center">
                 <button
                   onClick={handleExportPDF}
-                  className="w-full md:w-auto flex items-center justify-center gap-2 md:gap-3 px-4 md:px-8 py-3 md:py-4 bg-secondary text-primary rounded-lg md:rounded-xl font-black text-[8px] md:text-[9px] uppercase tracking-[0.2em] md:tracking-[0.3em] hover:bg-primary hover:text-secondary transition-all active:scale-95 shadow-2xl border border-primary/20 font-luxury"
+                  className="w-full md:w-auto flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury"
                 >
-                  <Download size={12} md:size={14} />
-                  AUTHORIZE PDF EXPORT
+                  <Download size={18} md:size={20} strokeWidth={3} className="group-hover:translate-y-1 transition-transform" />
+                  <span className="whitespace-nowrap">AUTHORIZE PDF EXPORT</span>
                 </button>
               </div>
             </div>

@@ -63,10 +63,10 @@ export default function Sales() {
         rightContent={
           <button
             onClick={() => setIsWithdrawModalOpen(true)}
-            className="flex items-center gap-3 px-6 py-3 lg:px-10 lg:py-5 bg-primary text-secondary lg:rounded-2xl rounded-xl font-black uppercase text-xs tracking-[0.2em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group"
+            className="flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury"
           >
-            <Plus size={20} />
-            Withdrawal Protocol
+            <Plus size={18} md:size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
+            <span className="whitespace-nowrap">Withdrawal Protocol</span>
           </button>
         }
       />
@@ -240,10 +240,10 @@ export default function Sales() {
 
             <button
               type="submit" disabled={loading}
-              className="w-full py-5 bg-primary text-secondary rounded-xl text-[10px] font-black uppercase tracking-[0.3em] hover:bg-primary/90 transition-all shadow-xl active:scale-95 disabled:opacity-50 flex items-center justify-center gap-3"
+              className="w-full flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury disabled:opacity-50"
             >
-              Confirm Extraction
-              <ChevronRight size={16} />
+              <span className="whitespace-nowrap">Confirm Extraction</span>
+              <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </button>
           </form>
         </div>

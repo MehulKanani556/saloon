@@ -135,10 +135,10 @@ export default function Leaves() {
                         {!isAdmin && (
                             <button
                                 onClick={() => setIsModalOpen(true)}
-                                className="flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-4 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[9px] md:text-xs tracking-[0.2em] md:tracking-[0.3em] shadow-xl hover:scale-[1.05] transition-all whitespace-nowrap"
+                                className="flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury"
                             >
-                                <Plus size={16} md:size={20} />
-                                Add Leave
+                                <Plus size={16} md:size={18} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
+                                <span className="whitespace-nowrap">Add Leave Request</span>
                             </button>
                         )}
                         <div className="relative group min-w-0 md:min-w-[300px] w-full">
@@ -331,9 +331,9 @@ export default function Leaves() {
                     <div className="pt-4 flex flex-col md:flex-row items-stretch md:items-center gap-4 md:gap-6">
                         <button
                             type="submit"
-                            className="flex-1 px-8 md:px-10 py-4 md:py-5 bg-primary text-secondary rounded-xl font-black uppercase text-[10px] md:text-[11px] tracking-[0.2em] md:tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.02] md:hover:scale-[1.05] transition-all active:scale-95 font-luxury"
+                            className="flex-1 flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury"
                         >
-                            Save Ritual
+                            Authorize Absence
                         </button>
                         <button
                             type="button"

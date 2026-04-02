@@ -22,83 +22,110 @@ export default function Wishlist() {
 
     return (
         <UserPanelLayout title="Wishlist" hideSidebar={true}>
-            <div className="flex flex-col gap-8 min-h-[70vh]">
+            <div className="flex flex-col gap-10 md:gap-14 min-h-[75vh]">
                 {/* Header Section */}
-                <div className="flex items-center justify-between border-b border-white/5 pb-8">
-                    <div className="space-y-1">
-                        <h1 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight uppercase leading-none">Your <span className="text-primary italic">Wishlist</span></h1>
-                        <p className="text-muted/40 text-[11px] font-bold uppercase tracking-widest">{wishlistItems.length} {wishlistItems.length === 1 ? 'Item' : 'Items'} saved for later</p>
+                <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 border-b border-white/5 pb-10">
+                    <div className="space-y-3">
+                        <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight uppercase leading-none font-luxury">
+                            Your <span className="text-primary italic">Wishlist</span>
+                        </h1>
+                        <div className="flex items-center gap-3">
+                            <span className="w-8 h-px bg-primary/30" />
+                            <p className="text-muted/60 text-[10px] md:text-[11px] font-black uppercase tracking-[0.3em]">
+                                {wishlistItems.length} {wishlistItems.length === 1 ? 'Ritual' : 'Rituals'} saved for later
+                            </p>
+                        </div>
                     </div>
-                    <Link to="/shop" className="hidden sm:flex items-center gap-2 text-[10px] font-bold text-muted hover:text-primary uppercase tracking-widest transition-colors">
-                        <ArrowLeft size={14} /> Continue Shopping
+                    <Link 
+                        to="/shop" 
+                        className="flex items-center gap-3 px-6 py-3 bg-white/5 rounded-xl text-[10px] font-black text-muted hover:text-primary hover:bg-primary/5 uppercase tracking-[0.2em] transition-all border border-white/5"
+                    >
+                        <ArrowLeft size={16} /> Continue Selection
                     </Link>
                 </div>
 
                 {wishlistItems.length === 0 ? (
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="bg-secondary/30 border border-white/5 rounded-3xl p-12 md:p-20 text-center space-y-6 md:space-y-8 flex flex-col items-center"
+                        className="bg-secondary/40 backdrop-blur-xl border border-white/5 rounded-[2.5rem] p-12 md:p-32 text-center space-y-8 md:space-y-12 flex flex-col items-center shadow-3xl"
                     >
-                        <div className="w-20 h-20 bg-primary/5 rounded-full flex items-center justify-center border border-primary/10 text-primary/30">
-                            <Heart size={32} />
+                        <div className="relative group">
+                            <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full group-hover:bg-primary/40 transition-all duration-700" />
+                            <div className="relative w-24 h-24 md:w-32 md:h-32 bg-background border border-white/10 rounded-full flex items-center justify-center text-primary/40 shadow-premium">
+                                <Heart size={40} md:size={56} strokeWidth={1} />
+                            </div>
                         </div>
-                        <div className="space-y-3">
-                            <h3 className="text-xl md:text-2xl font-bold text-white uppercase tracking-tight">Your wishlist is empty</h3>
-                            <p className="text-muted/40 text-[12px] font-medium max-w-sm mx-auto leading-relaxed">Save your favorite professional grooming products and tools to purchase them later.</p>
+                        <div className="space-y-4">
+                            <h3 className="text-2xl md:text-4xl font-black text-white uppercase tracking-tight font-luxury">The Archive is Empty</h3>
+                            <p className="text-muted/40 text-[11px] md:text-[13px] font-bold max-w-sm mx-auto leading-relaxed uppercase tracking-widest px-4">
+                                Curate your collection of professional grooming rituals and archives for future execution.
+                            </p>
                         </div>
-                        <Link to="/shop" className="bg-primary text-secondary px-10 py-4 rounded-full text-[11px] font-bold uppercase tracking-[0.2em] shadow-xl hover:scale-105 transition-all flex items-center gap-3">
-                            Explore Archives <ArrowRight size={14} />
+                        <Link 
+                            to="/shop" 
+                            className="bg-primary text-secondary px-12 py-5 rounded-2xl text-[11px] font-black uppercase tracking-[0.4em] shadow-2xl shadow-primary/20 hover:scale-[1.05] active:scale-95 transition-all flex items-center gap-4 font-luxury"
+                        >
+                            Explore Artifacts <ArrowRight size={16} strokeWidth={3} />
                         </Link>
                     </motion.div>
                 ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 md:gap-12">
                         <AnimatePresence mode="popLayout">
                             {wishlistItems.map((item, index) => (
                                 <motion.div
                                     key={item._id}
                                     layout
-                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    initial={{ opacity: 0, scale: 0.9 }}
                                     animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 0, scale: 0.95 }}
-                                    transition={{ delay: index * 0.05 }}
-                                    className="group relative bg-secondary/40 backdrop-blur-3xl rounded-2xl p-4 border border-white/5 shadow-xl hover:border-primary/20 transition-all duration-500 overflow-hidden"
+                                    exit={{ opacity: 0, scale: 0.9 }}
+                                    transition={{ delay: index * 0.05, type: 'spring', damping: 25 }}
+                                    className="group relative bg-secondary/50 backdrop-blur-3xl rounded-3xl p-5 border border-white/5 shadow-2xl hover:border-primary/30 transition-all duration-700 overflow-hidden flex flex-col h-full"
                                 >
-                                    <div className="relative aspect-square rounded-xl overflow-hidden mb-5 bg-background border border-white/5">
+                                    <div className="relative aspect-square rounded-2xl overflow-hidden mb-6 bg-background border border-white/10 shadow-inner">
                                         <img
                                             src={item.image?.startsWith('/uploads') ? `${IMAGE_URL}${item.image}` : item.image}
                                             alt={item.name}
-                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                            className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110 group-hover:rotate-2 grayscale group-hover:grayscale-0"
                                         />
-                                        <div className="absolute top-2 right-2">
+                                        <div className="absolute top-4 right-4 translate-x-12 group-hover:translate-x-0 transition-transform duration-500">
                                             <button 
-                                                onClick={() => dispatch(removeFromWishlist(item._id))}
-                                                className="p-2 bg-black/40 border border-white/10 rounded-lg text-white/40 hover:text-red-500 transition-all backdrop-blur-md"
+                                                onClick={() => {
+                                                    dispatch(removeFromWishlist(item._id));
+                                                    toast.success('Artifact removed from archives');
+                                                }}
+                                                className="p-3 bg-background/80 hover:bg-rose-500 border border-white/10 rounded-xl text-muted hover:text-white transition-all backdrop-blur-md shadow-xl"
+                                                title="Remove from Archive"
                                             >
-                                                <Trash2 size={14} />
+                                                <Trash2 size={16} />
                                             </button>
                                         </div>
-                                        <div className="absolute top-2 left-2 px-2.5 py-1 bg-black/60 backdrop-blur-md rounded-lg text-[8px] font-bold text-primary uppercase tracking-widest border border-white/5">
-                                            {item.category}
+                                        <div className="absolute top-4 left-4 px-3 py-1.5 bg-background/80 backdrop-blur-md rounded-xl text-[8px] font-black text-primary uppercase tracking-[0.3em] border border-white/5 shadow-lg">
+                                            {item.category || "Professional"}
                                         </div>
                                     </div>
 
-                                    <div className="space-y-4">
+                                    <div className="space-y-6 flex-grow flex flex-col">
                                         <div className="flex justify-between items-start gap-4">
                                             <div className="min-w-0 flex-1">
-                                                <h3 className="text-[13px] font-bold text-white uppercase tracking-tight truncate mb-1">{item.name}</h3>
-                                                <div className="flex items-center gap-1 text-primary">
-                                                    {[...Array(5)].map((_, i) => <Star key={i} size={8} fill="currentColor" />)}
+                                                <h3 className="text-base md:text-lg font-black text-white uppercase tracking-tight truncate mb-2 font-luxury leading-tight group-hover:text-primary transition-colors">
+                                                    {item.name}
+                                                </h3>
+                                                <div className="flex items-center gap-1.5 text-primary/40">
+                                                    {[...Array(5)].map((_, i) => <Star key={i} size={10} fill="currentColor" stroke="none" className="group-hover:text-primary transition-colors duration-500" />)}
                                                 </div>
                                             </div>
-                                            <span className="text-base font-bold text-primary tracking-tighter shrink-0">${item.price}</span>
+                                            <div className="text-right shrink-0">
+                                                <span className="text-xl md:text-2xl font-black text-primary tracking-tighter block leading-none">${item.price}</span>
+                                                <span className="text-[8px] font-black text-muted uppercase tracking-[0.2em] mt-1 block opacity-40">Artifact Value</span>
+                                            </div>
                                         </div>
 
                                         <button 
                                             onClick={() => handleAddToCart(item)}
-                                            className="w-full py-4 bg-white/5 hover:bg-primary border border-white/10 hover:border-primary text-white/80 hover:text-secondary rounded-xl font-bold text-[10px] uppercase tracking-[0.2em] shadow-lg transition-all flex items-center justify-center gap-2 group/btn"
+                                            className="w-full mt-auto py-5 bg-background hover:bg-primary border border-white/5 hover:border-primary text-white/50 hover:text-secondary rounded-2xl font-black text-[10px] uppercase tracking-[0.4em] shadow-xl transition-all flex items-center justify-center gap-4 group/btn active:scale-95"
                                         >
-                                            <ShoppingBag size={14} className="group-hover/btn:rotate-12 transition-transform" /> Move to Bag
+                                            <ShoppingBag size={18} className="group-hover/btn:rotate-12 transition-transform" /> Move to Bag
                                         </button>
                                     </div>
                                 </motion.div>

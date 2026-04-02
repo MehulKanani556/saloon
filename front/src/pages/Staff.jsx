@@ -137,15 +137,15 @@ export default function Staff() {
         rightContent={
           <button
             onClick={() => setIsDrawerOpen(true)}
-            className="flex items-center gap-4 px-10 py-5 bg-primary text-secondary rounded-2xl font-black uppercase text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury "
+            className="w-full lg:w-auto flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury"
           >
-            <Plus size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
-            INDuct NEW ARTISAN
+            <Plus size={18} md:size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
+            <span className="whitespace-nowrap">INDuct NEW ARTISAN</span>
           </button>
         }
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 md:gap-8">
         <AnimatePresence mode="popLayout">
           {staff.map((member, index) => (
             <motion.div
@@ -154,47 +154,47 @@ export default function Staff() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ delay: index * 0.05, type: 'spring', damping: 20 }}
-              className="group relative bg-secondary rounded-2xl p-4 border border-white/5 shadow-3xl transition-all duration-500 hover:border-primary/20"
+              className="group relative bg-secondary rounded-[2rem] p-5 border border-white/5 shadow-3xl transition-all duration-700 hover:border-primary/30 flex flex-col h-full"
             >
-              <div className="relative overflow-hidden rounded-2xl aspect-[4/3] mb-6 shadow-inner bg-background">
+              <div className="relative overflow-hidden rounded-2xl aspect-[4/5] mb-6 shadow-inner bg-background border border-white/5">
                 <img
                   src={member.profileImage ? (member.profileImage.startsWith('http') ? member.profileImage : `${IMAGE_URL}${member.profileImage}`) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${member.name}`}
                   alt={member.name}
-                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110"
+                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110"
                 />
-                <div className="absolute top-4 right-4 px-3 py-1 bg-background/90 backdrop-blur-md rounded-full text-[9px] font-black text-primary uppercase tracking-widest shadow-lg">
+                <div className="absolute top-4 right-4 px-3 py-1.5 bg-background/90 backdrop-blur-md rounded-xl text-[8px] font-black text-primary uppercase tracking-[0.2em] shadow-lg border border-white/5">
                   {member.role || "Artisan"}
                 </div>
 
                 {/* Admin Actions Overlay */}
-                <div className="absolute top-4 left-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-x-[-10px] group-hover:translate-x-0">
+                <div className="absolute bottom-4 right-4 flex gap-2 translate-y-12 group-hover:translate-y-0 transition-all duration-500">
                   <button
                     onClick={() => handleEdit(member)}
-                    className="p-3 bg-background/80 border border-white/5 rounded-xl text-muted hover:text-primary transition-all shadow-xl backdrop-blur-md"
+                    className="p-3.5 bg-background/95 border border-white/10 rounded-xl text-muted hover:text-primary transition-all shadow-xl backdrop-blur-md"
                   >
                     <Pencil size={14} />
                   </button>
                   <button
                     onClick={() => handleDeleteClick(member)}
-                    className="p-3 bg-background/80 border border-rose-500/10 rounded-xl text-muted hover:text-rose-500 transition-all shadow-xl backdrop-blur-md"
+                    className="p-3.5 bg-background/95 border border-rose-500/20 rounded-xl text-muted hover:text-rose-500 transition-all shadow-xl backdrop-blur-md"
                   >
                     <Trash2 size={14} />
                   </button>
                 </div>
               </div>
 
-              <div className="px-2 pb-2">
-                <div className="mb-4">
-                  <h3 className="text-lg font-black text-white uppercase tracking-tight line-clamp-1 font-luxury  leading-none">{member.name}</h3>
-                  <div className="flex items-center gap-2 mt-2">
-                    <Mail size={10} className="text-primary/40" />
-                    <span className="text-[9px] font-black text-muted uppercase tracking-widest truncate max-w-[150px]">{member.email}</span>
+              <div className="flex-grow flex flex-col px-1 pb-2">
+                <div className="mb-6">
+                  <h3 className="text-xl font-black text-white uppercase tracking-tight line-clamp-1 font-luxury leading-none group-hover:text-primary transition-colors">{member.name}</h3>
+                  <div className="flex items-center gap-2 mt-3 opacity-40">
+                    <Mail size={10} className="text-primary" />
+                    <span className="text-[8px] font-black text-white uppercase tracking-[0.2em] truncate">{member.email}</span>
                   </div>
                 </div>
 
-                <div className="flex flex-wrap gap-1.5 mb-6 h-12 overflow-y-auto no-scrollbar">
+                <div className="flex flex-wrap gap-1.5 mb-8 h-12 overflow-y-auto no-scrollbar mask-gradient">
                   {member.services.map(s => (
-                    <span key={s._id} className="px-2 py-1 bg-primary/5 text-primary text-[7px] font-black uppercase tracking-widest rounded-2xl border border-primary/10 whitespace-nowrap ">
+                    <span key={s._id} className="px-2.5 py-1.5 bg-background text-primary/60 text-[7px] font-black uppercase tracking-[0.2em] rounded-lg border border-white/5 whitespace-nowrap group-hover:border-primary/20 transition-all">
                       {s.name}
                     </span>
                   ))}
@@ -202,9 +202,9 @@ export default function Staff() {
 
                 <button
                   onClick={() => { setProfileExpert(member); setIsProfileOpen(true); }}
-                  className="w-full py-3.5 rounded-xl bg-background text-[10px] font-black uppercase tracking-[0.2em] text-white hover:bg-primary hover:text-secondary transition-all shadow-sm group-hover:shadow-primary/20"
+                  className="w-full mt-auto py-4 rounded-xl bg-background border border-white/5 text-[9px] font-black uppercase tracking-[0.3em] text-muted hover:bg-primary hover:text-secondary hover:border-primary transition-all shadow-sm active:scale-95 group-hover:shadow-primary/10"
                 >
-                  Induct Ritual
+                  View Dossier
                 </button>
               </div>
             </motion.div>
@@ -341,21 +341,21 @@ export default function Staff() {
         )}
       >
         {profileExpert && (
-          <div className="space-y-12 p-2">
-            <div className="grid grid-cols-2 gap-6">
-              <div className="p-6 bg-secondary/50 rounded-2xl border border-white/5 shadow-inner group">
-                <div className="flex items-center gap-3 text-primary mb-4 ">
+          <div className="space-y-8 md:space-y-12 p-1 md:p-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+              <div className="p-5 md:p-6 bg-secondary/50 rounded-2xl border border-white/5 shadow-inner group">
+                <div className="flex items-center gap-3 text-primary mb-3 md:mb-4">
                   <Phone size={14} strokeWidth={2.5} />
-                  <span className="text-[9px] font-black uppercase tracking-[0.3em]">Signal</span>
+                  <span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em]">Signal</span>
                 </div>
-                <div className="text-xs font-black text-white  tracking-widest break-all group-hover:text-primary transition-colors">{profileExpert.phone || 'NO TETHER'}</div>
+                <div className="text-[11px] md:text-xs font-black text-white tracking-widest break-all group-hover:text-primary transition-colors">{profileExpert.phone || 'NO TETHER'}</div>
               </div>
-              <div className="p-6 bg-secondary/50 rounded-2xl border border-white/5 shadow-inner group">
-                <div className="flex items-center gap-3 text-primary mb-4 ">
+              <div className="p-5 md:p-6 bg-secondary/50 rounded-2xl border border-white/5 shadow-inner group">
+                <div className="flex items-center gap-3 text-primary mb-3 md:mb-4">
                   <Mail size={14} strokeWidth={2.5} />
-                  <span className="text-[9px] font-black uppercase tracking-[0.3em]">Beacon</span>
+                  <span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em]">Beacon</span>
                 </div>
-                <div className="text-xs font-black text-white  tracking-widest break-all group-hover:text-primary transition-colors">{profileExpert.email || 'NO BEACON'}</div>
+                <div className="text-[11px] md:text-xs font-black text-white tracking-widest break-all group-hover:text-primary transition-colors">{profileExpert.email || 'NO BEACON'}</div>
               </div>
             </div>
 
@@ -363,16 +363,16 @@ export default function Staff() {
               <div className="flex items-center justify-between px-2">
                 <div className="flex items-center gap-4">
                   <Award size={16} className="text-primary" />
-                  <span className="text-[10px] font-black text-white uppercase tracking-[0.4em]  leading-none">Service Masteries</span>
+                  <span className="text-[10px] font-black text-white uppercase tracking-[0.4em] leading-none">Service Masteries</span>
                 </div>
-                <span className="h-[1px] flex-1 bg-white/5 mx-6" />
+                <span className="h-[1px] flex-1 bg-white/5 mx-6 hidden sm:block" />
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-[300px] overflow-y-auto custom-scrollbar pr-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-[350px] overflow-y-auto custom-scrollbar pr-2 pb-4">
                 {profileExpert.services.map(s => (
-                  <div key={s._id} className="p-6 bg-background rounded-2xl border border-white/5 shadow-3xl hover:border-primary/20 transition-all group/skill">
-                    <div className="text-[11px] font-black text-white uppercase tracking-tighter  font-luxury leading-none transition-all group-hover/skill:text-primary">{s.name}</div>
+                  <div key={s._id} className="p-5 md:p-6 bg-background rounded-2xl border border-white/5 shadow-3xl hover:border-primary/20 transition-all group/skill">
+                    <div className="text-[10px] md:text-[11px] font-black text-white uppercase tracking-tighter font-luxury leading-none transition-all group-hover/skill:text-primary">{s.name}</div>
                     <div className="flex items-center justify-between mt-4">
-                      <div className="text-[8px] font-black text-primary uppercase tracking-[0.3em]  opacity-60">Elite Professional</div>
+                      <div className="text-[7px] md:text-[8px] font-black text-primary uppercase tracking-[0.3em] opacity-60">Elite Professional</div>
                       <Sparkles size={12} className="text-primary opacity-0 group-hover/skill:opacity-100 transition-opacity" />
                     </div>
                   </div>

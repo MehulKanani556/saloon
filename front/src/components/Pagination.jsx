@@ -24,30 +24,30 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   };
 
   return (
-    <div className="flex items-center justify-center gap-2 mt-16 pb-5">
+    <div className="flex items-center justify-center gap-1.5 md:gap-4 mt-12 md:mt-20 pb-5">
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="w-12 h-12 flex items-center justify-center rounded-2xl bg-secondary border border-white/5 text-muted hover:text-primary hover:border-primary/30 disabled:opacity-20 disabled:hover:border-white/5 transition-all shadow-premium group"
+        className="w-10 h-10 md:w-14 md:h-14 flex items-center justify-center rounded-xl md:rounded-2xl bg-secondary border border-white/5 text-muted hover:text-primary hover:border-primary/30 disabled:opacity-20 disabled:hover:border-white/5 transition-all shadow-premium group shrink-0"
       >
-        <ChevronLeft size={20} strokeWidth={2.5} className="group-hover:-translate-x-0.5 transition-transform" />
+        <ChevronLeft size={18} md:size={24} strokeWidth={2.5} className="group-hover:-translate-x-0.5 transition-transform" />
       </button>
 
-      <div className="flex items-center gap-2 px-4 py-2 bg-secondary/40 rounded-2xl border border-white/5 shadow-inner">
+      <div className="flex items-center gap-1 md:gap-2 px-2 md:px-5 py-2 bg-secondary/40 backdrop-blur-md rounded-xl md:rounded-2xl border border-white/5 shadow-inner overflow-hidden">
         {getPageNumbers().map((page, index) => (
           <React.Fragment key={index}>
             {page === '...' ? (
-              <div className="w-10 flex items-center justify-center text-muted/30">
-                <MoreHorizontal size={16} />
+              <div className="w-8 md:w-12 flex items-center justify-center text-muted/20">
+                <MoreHorizontal size={14} md:size={18} />
               </div>
             ) : (
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={() => onPageChange(page)}
                 className={`
-                  w-10 h-10 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all duration-300 flex items-center justify-center
+                  w-8 h-8 md:w-12 md:h-12 rounded-lg md:rounded-xl font-black text-[9px] md:text-[11px] uppercase tracking-widest transition-all duration-300 flex items-center justify-center shrink-0
                   ${currentPage === page 
-                    ? 'bg-primary text-secondary shadow-xl shadow-primary/20 scale-110' 
+                    ? 'bg-primary text-secondary shadow-xl shadow-primary/20 md:scale-110' 
                     : 'text-muted hover:text-white hover:bg-white/5'}
                 `}
               >
@@ -61,9 +61,9 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="w-12 h-12 flex items-center justify-center rounded-2xl bg-secondary border border-white/5 text-muted hover:text-primary hover:border-primary/30 disabled:opacity-20 disabled:hover:border-white/5 transition-all shadow-premium group"
+        className="w-10 h-10 md:w-14 md:h-14 flex items-center justify-center rounded-xl md:rounded-2xl bg-secondary border border-white/5 text-muted hover:text-primary hover:border-primary/30 disabled:opacity-20 disabled:hover:border-white/5 transition-all shadow-premium group shrink-0"
       >
-        <ChevronRight size={20} strokeWidth={2.5} className="group-hover:translate-x-0.5 transition-transform" />
+        <ChevronRight size={18} md:size={24} strokeWidth={2.5} className="group-hover:translate-x-0.5 transition-transform" />
       </button>
     </div>
   );

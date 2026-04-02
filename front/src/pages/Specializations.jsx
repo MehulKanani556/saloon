@@ -159,10 +159,10 @@ export default function Specializations() {
                             <button
                                 onClick={() => setIsStaffAddModalOpen(true)}
                                 disabled={hasPendingRequest}
-                                className={`flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3.5 md:py-5 rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] md:tracking-[0.4em] shadow-xl transition-all group font-luxury ${hasPendingRequest ? 'bg-secondary text-muted cursor-not-allowed border border-white/5' : 'bg-primary text-secondary shadow-primary/20 hover:scale-[1.05]'}`}
+                                className={`flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl transition-all group font-luxury ${hasPendingRequest ? 'bg-secondary text-muted cursor-not-allowed border border-white/5' : 'bg-primary text-secondary shadow-primary/20 hover:scale-[1.05]'}`}
                             >
-                                <Plus size={16} md:size={18} strokeWidth={3} />
-                                {hasPendingRequest ? 'PENDING VALIDATION' : 'ADD SERVICE ALIGNMENT'}
+                                <Plus size={16} md:size={18} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
+                                <span className="whitespace-nowrap">{hasPendingRequest ? 'PENDING VALIDATION' : 'ADD SERVICE ALIGNMENT'}</span>
                             </button>
                         )}
                         <div className="relative group w-full lg:min-w-[300px]">
@@ -390,10 +390,10 @@ export default function Specializations() {
                         <div className="pt-6 md:pt-10 border-t border-white/5 mt-auto shrink-0">
                             <button 
                                 onClick={handleCommit}
-                                className="w-full py-5 md:py-6 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-[11px] tracking-[0.3em] md:tracking-[0.5em] shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all font-luxury group"
+                                className="w-full flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury"
                             > 
-                                COMMIT SYNCHRONIZATION
-                                <Sparkles size={16} md:size={18} className="inline ml-3 md:ml-4 group-hover:rotate-12" />
+                                <span className="whitespace-nowrap">COMMIT SYNCHRONIZATION</span>
+                                <Sparkles size={16} md:size={18} className="group-hover:rotate-12 transition-transform" />
                             </button>
                         </div>
                     </motion.div>
