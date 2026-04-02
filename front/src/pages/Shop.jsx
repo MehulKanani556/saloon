@@ -21,70 +21,82 @@ const LuxuryItem = ({ name, price, category, image, _id, delay, item }) => {
     e.stopPropagation();
     if (isWishlisted) {
       dispatch(removeFromWishlist(_id));
-      toast.success('Asset de-cataloged from vault');
+      toast.success('Asset de-cataloged');
     } else {
       dispatch(addToWishlist(item));
-      toast.success('Asset cataloged in vault');
+      toast.success('Asset cataloged');
     }
   };
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
     dispatch(addToCart(item));
-    toast.success(`${name} inducted into Cart Matrix`);
+    toast.success(`${name} Induction Complete`);
   };
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ delay, duration: 0.8 }}
+      initial={{ opacity: 0, scale: 0.95 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      whileHover={{ y: -8 }}
+      transition={{ delay, duration: 0.4 }}
       viewport={{ once: true }}
       onClick={() => navigate(`/product/${_id}`)}
-      className="group relative bg-dark-card border border-white/5 rounded-3xl overflow-hidden hover:border-primary/30 transition-all duration-700 shadow-2xl cursor-pointer"
+      className="group relative bg-dark-card rounded-2xl p-5 border border-white/[0.05] hover:border-primary/20 transition-all duration-500 shadow-2xl cursor-pointer"
     >
-      <div className="aspect-[4/5] overflow-hidden relative">
+      <div className="relative overflow-hidden rounded-2xl aspect-[4/5] mb-6 shadow-2xl">
         <img
           src={image?.startsWith('/uploads') ? `${IMAGE_URL}${image}` : image}
           alt={name}
           className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-secondary via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
-
-        {/* Category Tag */}
-        <div className="absolute top-6 left-6 px-4 py-1.5 bg-background/40 backdrop-blur-md border border-white/10 rounded-full">
-          <span className="text-[10px] font-black text-white uppercase tracking-[0.2em] font-luxury">{category}</span>
-        </div>
-
+        
         {/* Wishlist Toggle */}
         <button
           onClick={handleWishlist}
-          className="absolute top-6 right-6 p-3 bg-background/40 backdrop-blur-md border border-white/10 rounded-full text-white hover:text-primary transition-all active:scale-95"
+          className="absolute top-2 left-0 p-2.5 bg-background/60 backdrop-blur-md border border-white/10 rounded-xl text-white hover:text-primary transition-all z-20"
         >
           <Heart size={14} className={isWishlisted ? 'fill-primary text-primary' : ''} />
         </button>
 
-        {/* Quick Action */}
-        <div className="absolute bottom-0 left-0 right-0 p-8 translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-luxury">
-          <button
-            onClick={handleAddToCart}
-            className="w-full py-4 bg-primary text-secondary rounded-xl text-[10px] font-black uppercase tracking-[0.3em] flex items-center justify-center gap-3 shadow-3xl hover:bg-primary/90 transition-all active:scale-95"
-          >
-            <ShoppingBag size={14} /> Add To Cart
-          </button>
+        {/* Category Tag */}
+        <div className="absolute top-2 right-0 px-4 py-2 bg-background/90 backdrop-blur-md rounded-full text-[9px] font-black text-primary uppercase tracking-widest shadow-xl border border-white/10 z-20">
+          {category || "Essence"}
         </div>
       </div>
 
-      <div className="p-8 space-y-4">
-        <div className="flex justify-between items-start gap-4">
-          <div>
-            <h3 className="text-lg font-black text-white uppercase tracking-tight font-luxury leading-none mb-2">{name}</h3>
-            <div className="flex items-center gap-1 text-primary">
+      <div className="px-1">
+        <div className="flex justify-between items-start mb-3">
+          <div className="space-y-1">
+            <h3 className="text-lg font-black text-white uppercase tracking-tight line-clamp-1 font-luxury leading-none">
+              {name}
+            </h3>
+            <div className="flex items-center gap-0.5 text-primary">
               {[...Array(5)].map((_, i) => <Star key={i} size={10} fill="currentColor" />)}
             </div>
           </div>
-          <span className="text-xl font-black text-primary font-luxury">${price}</span>
+          <span className="text-xl font-black text-primary drop-shadow-[0_0_10px_rgba(201,162,39,0.3)]">
+            ${price}
+          </span>
         </div>
+
+        <div className="flex items-center gap-4 text-muted text-[9px] font-bold uppercase tracking-widest mb-8">
+          <span className="flex items-center gap-2">
+            <Package size={12} className="text-primary" /> Curated
+          </span>
+          <span className="w-1 h-1 bg-white/10 rounded-full" />
+          <span className="flex items-center gap-2">
+            <ShieldCheck size={12} className="text-primary" /> Verified
+          </span>
+        </div>
+
+        <button
+          onClick={handleAddToCart}
+          className="w-full py-4 rounded-2xl bg-white/[0.03] border border-white/5 text-[10px] font-black uppercase tracking-[0.2em] text-white hover:bg-primary hover:text-secondary hover:border-primary transition-all duration-300 shadow-lg group-hover:shadow-primary/10 flex items-center justify-center gap-2"
+        >
+          <ShoppingBag size={14} />
+          Induct To Matrix
+        </button>
       </div>
     </motion.div>
   );
@@ -227,7 +239,7 @@ export default function Shop() {
           </div>
 
           {/* Global Footer Banner */}
-          <div className="bg-luxury-gradient rounded-3xl p-10 md:p-20 relative overflow-hidden group">
+          {/* <div className="bg-luxury-gradient rounded-3xl p-10 md:p-20 relative overflow-hidden group">
             <div className="absolute top-0 right-0 p-20 opacity-10 group-hover:scale-150 transition-transform duration-1000 rotate-12">
               <ShoppingBag size={200} />
             </div>
@@ -253,7 +265,7 @@ export default function Shop() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
         </div>
       </main>
