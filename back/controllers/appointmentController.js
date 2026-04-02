@@ -165,8 +165,31 @@ const getAppointments = async (req, res) => {
 };
 
 const deleteAppointment = async (req, res) => {
-    const appointment = await Appointment.findById(req.params.id);
-    if (appointment) {
+    try {
+        const appointment = await Appointment.findById(req.params.id);
+        if (!appointment) {
+            return res.status(404).json({ message: 'Appointment not found' });
+        }
+
+        // Logic specifically for Users
+        if (req.user.role === 'User') {
+            // Check Ownership
+            if (appointment.client.toString() !== req.user._id.toString()) {
+                return res.status(403).json({ message: 'Not authorized to dissolve this reservation' });
+            }
+
+            // Status Restriction: Only Pending appointments are dissolvable by Users
+            if (appointment.status !== 'Pending') {
+                return res.status(400).json({ message: 'Only Pending appointments can be cancelled by clients' });
+            }
+
+            // Instead of deleting from DB, mark as Cancelled (for history)
+            appointment.status = 'Cancelled';
+            await appointment.save();
+            return res.json({ message: 'Appointment cancelled successfully', status: 'Cancelled' });
+        }
+
+        // Logic for Admin/Staff (Maintained existing physical delete for administrative cleanup)
         if (appointment.client) {
             await User.findByIdAndUpdate(appointment.client, {
                 $pull: { bookingHistory: appointment._id }
@@ -174,8 +197,9 @@ const deleteAppointment = async (req, res) => {
         }
         await appointment.deleteOne();
         res.json({ message: 'Appointment dissolved, client profile preserved.' });
-    } else {
-        res.status(404).json({ message: 'Appointment not found' });
+    } catch (error) {
+        console.error('Dissolution Error:', error);
+        res.status(500).json({ message: 'System error during dissolution: ' + error.message });
     }
 };
 

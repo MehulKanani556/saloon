@@ -297,7 +297,7 @@ export default function MyAppointments() {
                       >
                         Close Details
                       </button>
-                      {(selectedApp.status === 'Pending' || selectedApp.status === 'Confirmed') && (
+                      {selectedApp.status === 'Pending' && (
                         <button 
                           onClick={handleCancelClick}
                           className="flex-1 py-4 bg-red-400/5 hover:bg-red-400 text-red-400 hover:text-secondary border border-red-400/20 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 group focus:outline-none"

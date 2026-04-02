@@ -43,7 +43,7 @@ router.get('/appointments', protect, authorize('Admin', 'Staff'), appointmentCon
 router.get('/appointments/occupied-slots', appointmentController.getOccupiedSlots);
 router.post('/appointments', appointmentController.createAppointment);
 router.put('/appointments/:id', protect, authorize('Admin', 'Staff'), appointmentController.updateAppointment);
-router.delete('/appointments/:id', protect, authorize('Admin', 'Staff'), appointmentController.deleteAppointment);
+router.delete('/appointments/:id', protect, authorize('Admin', 'Staff', 'User'), appointmentController.deleteAppointment);
 router.put('/appointments/:id/status', protect, authorize('Admin', 'Staff'), appointmentController.updateAppointmentStatus);
 
 // ==========================================
