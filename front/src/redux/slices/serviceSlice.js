@@ -2,8 +2,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../utils/api';
 import toast from 'react-hot-toast';
 
-export const fetchServices = createAsyncThunk('services/fetchAll', async () => {
-    const { data } = await api.get('/services');
+export const fetchServices = createAsyncThunk('services/fetchAll', async (userPanel = false) => {
+    const { data } = await api.get('/services', { params: { userPanel } });
     return data;
 });
 

@@ -149,7 +149,7 @@ const ServicesPreview = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(fetchServices());
+    dispatch(fetchServices(true));
   }, [dispatch]);
 
   const [displayCount, setDisplayCount] = useState(8);
@@ -410,7 +410,7 @@ const RitualMenu = () => {
 
   useEffect(() => {
     dispatch(fetchCategories());
-    dispatch(fetchServices());
+    dispatch(fetchServices(true));
   }, [dispatch]);
 
   useEffect(() => {

@@ -3,15 +3,21 @@ const { deleteFromS3 } = require('../utils/s3Utils');
 
 const getServices = async (req, res) => {
     const User = require('../models/User');
-    const services = await Service.find({}).populate('category').sort({ createdAt: -1 }).lean();
+    const { userPanel } = req.query;
+    
+    let services = await Service.find({}).populate('category').sort({ createdAt: -1 }).lean();
     const staff = await User.find({ role: 'Staff', isActive: true });
 
-    const servicesWithStaffCount = services.map(service => {
+    let servicesWithStaffCount = services.map(service => {
         return {
             ...service,
             staffCount: staff.filter(s => s.services.some(sid => sid.toString() === service._id.toString())).length
         };
     });
+
+    if (userPanel === 'true') {
+        servicesWithStaffCount = servicesWithStaffCount.filter(s => s.staffCount > 0);
+    }
     
     res.json(servicesWithStaffCount);
 };

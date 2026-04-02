@@ -79,7 +79,7 @@ export default function PublicServices() {
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    dispatch(fetchServices());
+    dispatch(fetchServices(true));
     dispatch(fetchCategories());
   }, [dispatch]);
 

@@ -131,7 +131,7 @@ export default function BookAppointment() {
   }, [location.state, services]);
 
   useEffect(() => {
-    dispatch(fetchServices());
+    dispatch(fetchServices(true));
     dispatch(fetchStaff());
 
     // Load persisted state
