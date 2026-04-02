@@ -5,12 +5,14 @@ const {
     getProductById, 
     createProduct, 
     updateProduct, 
-    deleteProduct 
+    deleteProduct,
+    createProductReview
 } = require('../controllers/productController');
 const { protect, authorize } = require('../middleware/authMiddleware');
 
 router.get('/', getProducts);
 router.get('/:id', getProductById);
+router.post('/:id/reviews', protect, createProductReview);
 
 router.post('/', protect, authorize('Admin'), createProduct);
 router.put('/:id', protect, authorize('Admin'), updateProduct);

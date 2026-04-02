@@ -71,8 +71,11 @@ const LuxuryItem = ({ name, price, category, image, _id, delay, item }) => {
             <h3 className="text-lg font-black text-white uppercase tracking-tight line-clamp-1 font-luxury leading-none">
               {name}
             </h3>
-            <div className="flex items-center gap-0.5 text-primary">
-              {[...Array(5)].map((_, i) => <Star key={i} size={10} fill="currentColor" />)}
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-0.5 text-primary">
+                {[...Array(5)].map((_, i) => <Star key={i} size={10} fill={i < Math.round(item?.rating || 0) ? "currentColor" : "none"} className={i < Math.round(item?.rating || 0) ? "text-primary" : "text-white/20"} />)}
+              </div>
+              <span className="text-[8px] font-black text-muted uppercase tracking-widest">({item?.numReviews || 0})</span>
             </div>
           </div>
           <span className="text-xl font-black text-primary drop-shadow-[0_0_10px_rgba(201,162,39,0.3)]">

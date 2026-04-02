@@ -141,9 +141,9 @@ export default function ProductDetail() {
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <div className="flex text-primary">
-                                            {[...Array(5)].map((_, i) => <Star key={i} size={12} fill="currentColor" />)}
+                                            {[...Array(5)].map((_, i) => <Star key={i} size={12} fill={i < Math.round(product.rating || 0) ? "currentColor" : "none"} />)}
                                         </div>
-                                        <span className="text-[10px] font-black text-muted uppercase tracking-widest">(48 Reviews)</span>
+                                        <span className="text-[10px] font-black text-muted uppercase tracking-widest">({product.numReviews || 0} REVIEWS)</span>
                                     </div>
                                 </div>
 

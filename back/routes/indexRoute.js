@@ -126,6 +126,7 @@ router.put('/specializations/requests/:id', protect, authorize('Admin'), special
 // ==========================================
 router.get('/products', productController.getProducts);
 router.get('/products/:id', productController.getProductById);
+router.post('/products/:id/reviews', protect, productController.createProductReview);
 router.post('/products', protect, authorize('Admin'), upload.single('image'), processAndStoreImage('products'), productController.createProduct);
 router.put('/products/:id', protect, authorize('Admin'), upload.single('image'), processAndStoreImage('products'), productController.updateProduct);
 router.delete('/products/:id', protect, authorize('Admin'), productController.deleteProduct);

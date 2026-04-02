@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Package, User, Sparkles, Clock, ChevronRight, Hash, CreditCard, X } from 'lucide-react';
+import { Package, User, Sparkles, Clock, ChevronRight, Hash, CreditCard, X, Star, MessageSquare } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
+import toast from 'react-hot-toast';
+import api from '../utils/api';
 import UserPanelLayout from '../components/public/UserPanelLayout';
 import { fetchMyOrders } from '../redux/slices/orderSlice';
 
@@ -12,10 +14,15 @@ export default function MyOrders() {
   const navigate = useNavigate();
   const { orders = [], loading } = useSelector((state) => state.orders || {});
 
-  const [selectedOrder, setSelectedOrder] = React.useState(null);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [reviewModalProduct, setReviewModalProduct] = useState(null);
+  const [productData, setProductData] = useState(null);
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState('');
+  const [reviewLoading, setReviewLoading] = useState(false);
 
   useEffect(() => {
-    if (selectedOrder) {
+    if (selectedOrder || reviewModalProduct) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
@@ -23,7 +30,37 @@ export default function MyOrders() {
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, [selectedOrder]);
+  }, [selectedOrder, reviewModalProduct]);
+
+  const handleOpenReview = async (productId) => {
+    setReviewModalProduct(productId);
+    setRating(5);
+    setComment('');
+    setProductData(null);
+    try {
+      const res = await api.get(`/products/${productId}`);
+      setProductData(res.data);
+    } catch (err) {
+      toast.error('Failed to load product details');
+    }
+  };
+
+  const submitReview = async () => {
+    if (!comment.trim()) return toast.error('Please add a comment');
+    try {
+      setReviewLoading(true);
+      await api.post(`/products/${reviewModalProduct}/reviews`, { rating, comment });
+      toast.success('Review submitted successfully!');
+      const res = await api.get(`/products/${reviewModalProduct}`);
+      setProductData(res.data);
+      setRating(5);
+      setComment('');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to submit review');
+    } finally {
+      setReviewLoading(false);
+    }
+  };
 
   useEffect(() => {
     dispatch(fetchMyOrders());
@@ -140,11 +177,21 @@ export default function MyOrders() {
                         </h4>
                         <div className="space-y-2">
                           {order.items?.slice(0, 2).map((item, i) => (
-                            <div key={i} className="flex items-center justify-between text-[10px] font-black uppercase tracking-wide">
-                              <span className="text-white/60 truncate max-w-[140px]">
-                                {item.name || item.product?.name || 'Aesthetic Good'}
-                              </span>
-                              <span className="text-muted/30 tabular-nums">QTY: 0{item.qty}</span>
+                            <div key={i} className="flex items-center justify-between text-[10px] font-black uppercase tracking-wide border-b border-white/[0.02] last:border-0 pb-2 last:pb-0">
+                              <div className="flex flex-col">
+                                <span className="text-white/60 truncate max-w-[130px]">
+                                  {item.name || item.product?.name || 'Aesthetic Good'}
+                                </span>
+                                {item.product && (
+                                  <button 
+                                    onClick={(e) => { e.stopPropagation(); handleOpenReview(item.product._id || item.product); }}
+                                    className="text-[12px] font-bold text-primary/60 hover:text-primary uppercase tracking-widest underline decoration-primary/30 transition-colors text-left mt-1"
+                                  >
+                                    Add Review
+                                  </button>
+                                )}
+                              </div>
+                              <span className="text-muted/30 tabular-nums self-start">QTY: 0{item.qty}</span>
                             </div>
                           ))}
                           {order.items?.length > 2 && (
@@ -250,9 +297,19 @@ export default function MyOrders() {
                               </p>
                             </div>
                           </div>
-                          <span className="text-[12px] font-black text-primary tabular-nums">
-                            ${(item.price * item.qty).toFixed(2)}
-                          </span>
+                          <div className="flex flex-col items-end gap-1">
+                            <span className="text-[12px] font-black text-primary tabular-nums">
+                              ${(item.price * item.qty).toFixed(2)}
+                            </span>
+                            {item.product && (
+                                <button 
+                                  onClick={(e) => { e.stopPropagation(); handleOpenReview(item.product._id || item.product); }}
+                                  className="text-[8px] font-bold text-primary/60 hover:text-primary uppercase tracking-widest underline decoration-primary/30 transition-colors"
+                                >
+                                  Leave Review
+                                </button>
+                            )}
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -295,6 +352,134 @@ export default function MyOrders() {
                   </div>
 
                 </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Review Modal - Pro Interface */}
+      <AnimatePresence>
+        {reviewModalProduct && (
+          <div className="fixed inset-0 z-[120] flex items-center justify-center p-3 md:p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setReviewModalProduct(null)}
+              className="absolute inset-0 bg-background/95 backdrop-blur-md"
+            />
+            
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-xl bg-[#1A1A1A] border border-white/[0.05] rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]"
+            >
+              <div className="p-5 sm:p-8 md:p-10 flex-shrink-0">
+                {/* Modal Header */}
+                <div className="flex justify-between items-start pb-6 border-b border-white/[0.05]">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="w-8 h-px bg-primary" />
+                      <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Product Feedback</p>
+                    </div>
+                    <h2 className="text-xl sm:text-3xl font-black text-white uppercase tracking-tight font-luxury">
+                      {productData ? productData.name : 'Loading...'}
+                    </h2>
+                  </div>
+                  <button 
+                    onClick={() => setReviewModalProduct(null)}
+                    className="p-2.5 bg-white/[0.02] border border-white/5 rounded-xl text-muted hover:text-white transition-all focus:outline-none"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+              </div>
+
+              {/* Scrollable Content inside Modal */}
+              <div className="px-5 sm:px-8 md:px-10 pb-5 sm:pb-8 md:pb-10 overflow-y-auto scrollbar-hide flex-1 space-y-8">
+                
+                {/* Write Review Form */}
+                <div className="space-y-5 bg-white/[0.02] p-6 lg:p-8 rounded-3xl border border-white/[0.03]">
+                  <h4 className="text-[10px] font-black text-primary uppercase tracking-[0.3em] flex items-center gap-3">
+                    <MessageSquare size={14} /> Submit Your Ledger
+                  </h4>
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                       <label className="text-[9px] font-black text-white/20 uppercase tracking-widest">Aesthetic Rating</label>
+                       <div className="flex items-center gap-2">
+                         {[1, 2, 3, 4, 5].map((star) => (
+                           <button
+                             key={star}
+                             onClick={() => setRating(star)}
+                             className="focus:outline-none transition-transform hover:scale-110 active:scale-95"
+                           >
+                             <Star 
+                               size={24} 
+                               className={star <= rating ? "text-primary fill-primary drop-shadow-primary-sm" : "text-white/10"} 
+                             />
+                           </button>
+                         ))}
+                       </div>
+                    </div>
+                    <div className="space-y-2">
+                       <label className="text-[9px] font-black text-white/20 uppercase tracking-widest">Chronicle Details</label>
+                       <textarea
+                         value={comment}
+                         onChange={(e) => setComment(e.target.value)}
+                         rows={3}
+                         placeholder="Describe your acquisition experience..."
+                         className="w-full bg-[#111111] border border-white/10 focus:border-primary/40 p-4 rounded-xl outline-none text-[12px] font-bold text-white transition-all resize-none placeholder:text-white/10 uppercase tracking-wide"
+                       />
+                    </div>
+                    <button 
+                      onClick={submitReview}
+                      disabled={reviewLoading || !productData}
+                      className="w-full py-4 bg-primary text-secondary hover:bg-white hover:text-primary rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg active:scale-[0.98] disabled:opacity-50"
+                    >
+                      {reviewLoading ? 'Transmitting...' : 'Commit Review'}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Existing Reviews */}
+                <div className="space-y-5">
+                  <h4 className="text-[10px] font-black text-primary uppercase tracking-[0.3em] flex items-center gap-3">
+                    <Star size={14} /> Historical Testimonials
+                  </h4>
+                  {!productData ? (
+                    <div className="py-8 text-center text-[10px] uppercase tracking-widest text-white/20 font-black animate-pulse">Loading Logs...</div>
+                  ) : productData.reviews && productData.reviews.length > 0 ? (
+                    <div className="space-y-4">
+                      {productData.reviews.map((rev, index) => (
+                        <div key={index} className="bg-[#111111] p-5 rounded-2xl border border-white/[0.03] space-y-3">
+                          <div className="flex justify-between items-start">
+                             <div className="space-y-1">
+                               <p className="text-[11px] font-black text-white uppercase tracking-wider">{rev.name}</p>
+                               <p className="text-[8px] font-bold text-white/20 uppercase tracking-widest">
+                                 {format(new Date(rev.createdAt), 'MMM dd, yyyy')}
+                               </p>
+                             </div>
+                             <div className="flex gap-1">
+                               {[...Array(5)].map((_, i) => (
+                                 <Star key={i} size={10} className={i < rev.rating ? "text-primary fill-primary" : "text-white/10"} />
+                               ))}
+                             </div>
+                          </div>
+                          <p className="text-[10px] font-medium text-muted/60 leading-relaxed italic tracking-wide">
+                            "{rev.comment}"
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="py-8 text-center text-[10px] uppercase tracking-widest text-white/20 font-black">
+                      No chronicles discovered. Be the first to add to the matrix.
+                    </div>
+                  )}
+                </div>
+
               </div>
             </motion.div>
           </div>
