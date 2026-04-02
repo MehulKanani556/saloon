@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Lock, Sparkles, ArrowRight, AlertCircle, Phone, Key, ShieldCheck } from 'lucide-react';
+import { Mail, Lock, Sparkles, ArrowRight, AlertCircle, Phone, Key, ShieldCheck, Eye, EyeOff } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser, sendOTP } from '../redux/slices/authSlice';
 import { useNavigate, Link } from 'react-router-dom';
@@ -28,6 +28,7 @@ export default function Login() {
   const { userInfo, loading } = useSelector((state) => state.auth);
   const [otpSent, setOtpSent] = useState(false);
   const [timer, setTimer] = useState(0);
+  const [showPassword, setShowPassword] = useState(false);
   const otpInputRef = useRef(null);
 
   useEffect(() => {
@@ -216,11 +217,18 @@ export default function Login() {
                   </div>
                   <input
                     name="password"
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     {...formik.getFieldProps('password')}
                     placeholder="••••••••"
                     className={`w-full bg-background border p-4 pl-16 rounded-2xl outline-none focus:bg-background transition-all font-bold text-white ${formik.touched.password && formik.errors.password ? 'border-red-500/50 focus:border-red-500' : 'border-white/5 focus:border-primary/20'}`}
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-muted/30 hover:text-primary transition-colors focus:outline-none"
+                  >
+                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
                 </div>
                 {formik.touched.password && formik.errors.password && (
                   <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-1.5 text-red-500 text-[9px] font-black uppercase tracking-widest pl-1 mt-1">

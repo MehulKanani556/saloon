@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Lock, User, Sparkles, ArrowRight, AlertCircle } from 'lucide-react';
+import { Mail, Lock, User, Sparkles, ArrowRight, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { signupUser } from '../redux/slices/authSlice';
 import { useNavigate, Link } from 'react-router-dom';
@@ -22,6 +22,7 @@ export default function Signup() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { userInfo, loading } = useSelector((state) => state.auth);
+    const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
         if (userInfo) {
@@ -104,11 +105,18 @@ export default function Signup() {
                             <Lock size={16} className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors ${formik.touched.password && formik.errors.password ? 'text-red-400' : 'text-primary/40 group-focus-within:text-primary'}`} />
                             <input
                                 name="password"
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 {...formik.getFieldProps('password')}
                                 placeholder="••••••••"
-                                className={`w-full bg-background border p-3.5 pl-11 rounded-2xl outline-none transition-all font-bold text-white ${formik.touched.password && formik.errors.password ? 'border-red-500/50' : 'border-white/5 focus:border-primary/20'}`}
+                                className={`w-full bg-background border p-3.5 pl-11 pr-11 rounded-2xl outline-none transition-all font-bold text-white ${formik.touched.password && formik.errors.password ? 'border-red-500/50' : 'border-white/5 focus:border-primary/20'}`}
                             />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-4 top-1/2 -translate-y-1/2 text-muted/30 hover:text-primary transition-colors focus:outline-none"
+                            >
+                                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                            </button>
                         </div>
                         {formik.touched.password && formik.errors.password && (
                             <div className="flex items-center gap-1.5 text-red-400 text-[8px] font-black uppercase tracking-widest pl-1 mt-1">
