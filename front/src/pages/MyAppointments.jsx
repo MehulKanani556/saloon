@@ -1,30 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, Clock, MapPin, User, ChevronRight, Hash, AlertTriangle, RefreshCw, Sparkles, Filter, Package } from 'lucide-react';
+import { Calendar, Clock, MapPin, User, ChevronRight, Hash, AlertTriangle, RefreshCw, Sparkles, Filter, Package, Scissors, CreditCard, Receipt, Trash2 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
 import UserPanelLayout from '../components/public/UserPanelLayout';
-import { fetchMyOrders } from '../redux/slices/orderSlice';
+import { fetchMyAppointments, deleteAppointment } from '../redux/slices/appointmentSlice';
+import Modal from '../components/ui/Modal';
 
 export default function MyAppointments() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { orders, loading } = useSelector((state) => state.orders);
+  const { appointments = [], loading } = useSelector((state) => state.appointments || {});
+
+  const [selectedApp, setSelectedApp] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchMyOrders());
+    dispatch(fetchMyAppointments());
   }, [dispatch]);
 
-  const fetchOrders = () => {
-    dispatch(fetchMyOrders());
-  };
-
   const statusColors = {
-    'Processing': 'bg-amber-500/10 text-amber-500 border-amber-500/20',
-    'Shipped': 'bg-primary/10 text-primary border-primary/20',
-    'Delivered': 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20',
+    'Pending': 'bg-amber-500/10 text-amber-500 border-amber-500/20',
+    'Confirmed': 'bg-primary/10 text-primary border-primary/20',
+    'Completed': 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20',
     'Cancelled': 'bg-red-500/10 text-red-500 border-red-500/20',
   };
 
@@ -81,12 +81,12 @@ export default function MyAppointments() {
                 className="w-14 h-14 md:w-16 md:h-16 border-t-2 border-primary rounded-full absolute top-3 left-3 md:top-4 md:left-4" 
               />
               <div className="absolute inset-0 flex items-center justify-center">
-                <Scissors className="text-primary/40 animate-pulse" size={20} md:size={24} />
+                <Scissors className="text-primary/40 animate-pulse" size={20} />
               </div>
             </div>
             <p className="text-[10px] md:text-[11px] font-bold uppercase tracking-[0.4em] md:tracking-[0.6em] text-muted/60">Retrieving Portfolio...</p>
           </div>
-        ) : orders && orders.length === 0 ? (
+        ) : appointments.length === 0 ? (
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -97,34 +97,35 @@ export default function MyAppointments() {
             </div>
             <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-white uppercase tracking-[-0.05em] mb-4 md:mb-6 font-luxury leading-none">Archive <span className="text-muted/20">Null</span></h3>
             <p className="text-muted/40 text-[10px] md:text-[12px] font-black tracking-[0.2em] max-w-xs md:max-w-sm mx-auto mb-10 md:mb-16 leading-relaxed">Your chronological records contain zero active acquisitions in the current branch.</p>
-            <button onClick={() => navigate('/shop')} className="px-8 py-5 md:px-12 md:py-7 bg-luxury-gradient text-secondary rounded-2xl flex items-center gap-4 md:gap-5 mx-auto font-black text-[10px] md:text-[12px] uppercase tracking-[0.2em] shadow-3xl hover:scale-105 active:scale-95 transition-all font-luxury">
-              <Sparkles className="w-4 h-4 md:w-5 md:h-5" /> Visit Archives
+            <button onClick={() => navigate('/book')} className="px-8 py-5 md:px-12 md:py-7 bg-luxury-gradient text-secondary rounded-2xl flex items-center gap-4 md:gap-5 mx-auto font-black text-[10px] md:text-[12px] uppercase tracking-[0.2em] shadow-3xl hover:scale-105 active:scale-95 transition-all font-luxury">
+              <Sparkles className="w-4 h-4 md:w-5 md:h-5" /> Book Session
             </button>
           </motion.div>
         ) : (
           <div className="flex flex-col gap-6 md:gap-8 pb-32">
             <AnimatePresence mode="popLayout">
-              {orders && orders.map((order, index) => (
+              {appointments.map((app, index) => (
                 <motion.div
-                  key={order._id}
+                  key={app._id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1, duration: 0.5 }}
-                  className="bg-dark-card border border-white/10 p-6 md:p-8 rounded-3xl hover:border-primary/30 transition-all flex flex-col gap-6 shadow-xl"
+                  className="bg-dark-card border border-white/10 p-6 md:p-8 rounded-3xl hover:border-primary/30 transition-all flex flex-col gap-6 shadow-xl cursor-pointer"
+                  onClick={() => handleOpenDetail(app)}
                 >
                   {/* Header */}
                   <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 pb-6 border-b border-white/5">
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20 shrink-0">
-                        <Package size={20} className="text-primary" />
+                        <Calendar size={20} className="text-primary" />
                       </div>
                       <div>
-                        <p className="text-[10px] font-black text-muted/60 uppercase tracking-widest mb-1">Order Ref: {order.orderId}</p>
-                        <p className="text-sm font-bold text-white tracking-wide">{format(new Date(order.createdAt), 'MMMM dd, yyyy - HH:mm')}</p>
+                        <p className="text-[10px] font-black text-muted/60 uppercase tracking-widest mb-1">Reservation Ref: {app._id.substring(0, 8)}</p>
+                        <p className="text-sm font-bold text-white tracking-wide">{format(new Date(app.appointmentDate), 'MMMM dd, yyyy - HH:mm')}</p>
                       </div>
                     </div>
-                    <div className={`px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border shadow-inner self-start sm:self-auto ${statusColors[order.status]}`}>
-                      {order.status}
+                    <div className={`px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border shadow-inner self-start sm:self-auto ${statusColors[app.status] || statusColors['Pending']}`}>
+                      {app.status}
                     </div>
                   </div>
 
@@ -132,15 +133,15 @@ export default function MyAppointments() {
                   <div className="flex flex-col gap-8">
                     {/* Items */}
                     <div className="space-y-4">
-                      <h4 className="text-[10px] font-black text-muted/60 uppercase tracking-widest ml-2">Purchased Items</h4>
+                      <h4 className="text-[10px] font-black text-muted/60 uppercase tracking-widest ml-2">Bespoke Rituals</h4>
                       <div className="bg-background/40 rounded-2xl border border-white/5 overflow-hidden shadow-inner flex flex-col">
-                        {order.items.map((item, i) => (
-                          <div key={i} className={`flex flex-col gap-3 p-5 ${i !== order.items.length - 1 ? 'border-b border-white/5' : ''}`}>
+                        {app.assignments && app.assignments.map((asm, i) => (
+                          <div key={i} className={`flex flex-col gap-3 p-5 ${i !== app.assignments.length - 1 ? 'border-b border-white/5' : ''}`}>
                             <div className="flex items-center gap-4">
                               <div className="w-2 h-2 rounded-full bg-primary/30" />
-                              <span className="text-[11px] font-black text-white/90 uppercase tracking-wider">{item.name}</span>
+                              <span className="text-[11px] font-black text-white/90 uppercase tracking-wider">{asm.service?.name}</span>
                             </div>
-                            <span className="text-[11px] font-black text-muted uppercase tracking-widest pl-6">Qty: {item.qty}</span>
+                            <span className="text-[11px] font-black text-muted uppercase tracking-widest pl-6">Artisan: {asm.staff?.name || 'Assigned'}</span>
                           </div>
                         ))}
                       </div>
@@ -149,29 +150,8 @@ export default function MyAppointments() {
                     {/* Summary */}
                     <div className="flex flex-col gap-6 bg-background/40 p-6 rounded-2xl border border-white/5 shadow-inner">
                       <div className="flex flex-col gap-2">
-                        <p className="text-[9px] font-black text-muted/60 uppercase tracking-widest">Recipient</p>
-                        <p className="text-[11px] font-black text-white uppercase tracking-wider flex items-center gap-2">
-                          <User size={12} className="text-primary/50" /> {order.shippingAddress?.fullName || 'N/A'}
-                        </p>
-                      </div>
-                      
-                      <div className="h-px bg-white/5" />
-                      
-                      <div className="flex flex-col gap-2">
-                        <p className="text-[9px] font-black text-muted/60 uppercase tracking-widest">Payment Status</p>
-                        <div className="flex items-center gap-2">
-                          <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${order.paymentStatus === 'Paid' ? 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)]' : 'bg-primary shadow-[0_0_10px_rgba(201,162,39,0.8)]'}`} />
-                          <p className={`text-[11px] font-black uppercase tracking-wider ${order.paymentStatus === 'Paid' ? 'text-emerald-400' : 'text-primary'}`}>
-                            {order.paymentStatus}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="h-px bg-white/5" />
-                      
-                      <div className="flex flex-col gap-2">
-                        <p className="text-[9px] font-black text-muted/60 uppercase tracking-widest">Total Amount</p>
-                        <p className="text-2xl font-black text-primary font-luxury">${order.totalAmount?.toFixed(2)}</p>
+                        <p className="text-[9px] font-black text-muted/60 uppercase tracking-widest">Total Investment</p>
+                        <p className="text-2xl font-black text-primary font-luxury">${app.totalPrice?.toFixed(2)}</p>
                       </div>
                     </div>
                   </div>
@@ -179,11 +159,10 @@ export default function MyAppointments() {
               ))}
             </AnimatePresence>
           </div>
-        )
-        }
+        )}
       </div>
 
-      {/* Reservation Detail Modal (Balanced and Responsive) */}
+      {/* Reservation Detail Modal */}
       <Modal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)}
@@ -205,7 +184,7 @@ export default function MyAppointments() {
                    </p>
                 </div>
               </div>
-              <div className={`self-start sm:self-center px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] border ${statusColors[selectedApp.status]}`}>
+              <div className={`self-start sm:self-center px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] border ${statusColors[selectedApp.status] || statusColors['Pending']}`}>
                 {selectedApp.status}
               </div>
             </div>
@@ -217,7 +196,7 @@ export default function MyAppointments() {
                 <div className="h-[1px] flex-1 bg-white/5 ml-6" />
               </div>
               <div className="space-y-3">
-                {selectedApp.assignments.map((asm, i) => (
+                {selectedApp.assignments && selectedApp.assignments.map((asm, i) => (
                   <div key={i} className="flex items-center justify-between p-4 md:p-5 bg-white/[0.03] border border-white/5 rounded-2xl group hover:border-primary/20 transition-all duration-500">
                     <div className="flex items-center gap-4">
                       <div className="w-9 h-9 rounded-xl bg-background flex items-center justify-center text-muted/30 group-hover:text-primary transition-colors">

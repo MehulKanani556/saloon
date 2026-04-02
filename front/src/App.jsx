@@ -39,6 +39,7 @@ import MyAppointments from './pages/MyAppointments'
 import ChangePassword from './pages/ChangePassword'
 import DeleteAccount from './pages/DeleteAccount'
 import ProductDetail from './pages/ProductDetail'
+import MyOrders from './pages/MyOrders'
 
 const WrappedLayout = ({ children, isAuthPage, isLandingPage }) => {
   if (isAuthPage || isLandingPage) return <>{children}</>;
@@ -51,7 +52,7 @@ const AppContent = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const isAuthPage = ['/login', '/signup'].includes(location.pathname);
-  const isLandingPage = ['/', '/services', '/shop', '/about', '/book', '/contact', '/profile', '/my-appointments', '/change-password', '/delete-account', '/cart', '/wishlist', '/checkout'].some(path => location.pathname === path || location.pathname.startsWith('/product/'));
+  const isLandingPage = ['/', '/services', '/shop', '/about', '/book', '/contact', '/profile', '/my-appointments', '/my-orders', '/change-password', '/delete-account', '/cart', '/wishlist', '/checkout'].some(path => location.pathname === path || location.pathname.startsWith('/product/'));
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
@@ -103,6 +104,7 @@ const AppContent = () => {
         <Route path="/wishlist" element={<PrivateRoute roles={['User', 'Admin', 'Staff']}><Wishlist /></PrivateRoute>} />
         <Route path="/checkout" element={<PrivateRoute roles={['User', 'Admin', 'Staff']}><Checkout /></PrivateRoute>} />
         <Route path="/my-appointments" element={<PrivateRoute roles={['User', 'Admin', 'Staff']}><MyAppointments /></PrivateRoute>} />
+        <Route path="/my-orders" element={<PrivateRoute roles={['User', 'Admin', 'Staff']}><MyOrders /></PrivateRoute>} />
         <Route path="/change-password" element={<PrivateRoute roles={['User', 'Admin', 'Staff']}><ChangePassword /></PrivateRoute>} />
         <Route path="/delete-account" element={<PrivateRoute roles={['User', 'Admin', 'Staff']}><DeleteAccount /></PrivateRoute>} />
       </Routes>

@@ -11,8 +11,7 @@ import PublicFooter from './PublicFooter';
 
 const menuItems = [
   { icon: UserCircle, label: 'My Profile', path: '/profile' },
-  { icon: Heart, label: 'Wishlist', path: '/wishlist' },
-  { icon: ShoppingBag, label: 'My Cart', path: '/cart' },
+  { icon: ShoppingBag, label: 'Order History', path: '/my-orders' },
   { icon: Calendar, label: 'Reservations', path: '/my-appointments' },
   { icon: ShieldCheck, label: 'Change Password', path: '/change-password' },
   { icon: Trash2, label: 'Delete Account', path: '/delete-account' },
