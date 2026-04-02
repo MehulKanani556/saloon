@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-    Package, 
-    Search, 
-    Filter, 
-    Download, 
-    Eye, 
-    Clock, 
-    CheckCircle2, 
+import {
+    Package,
+    Search,
+    Download,
+    Eye,
+    Clock,
+    CheckCircle2,
     XCircle,
     ShoppingBag,
     MoreVertical,
@@ -16,12 +15,15 @@ import {
     ChevronDown,
     Truck,
     User,
-    Plus
+    Plus,
+    X,
+    Filter
 } from 'lucide-react';
 import AdminHeader from '../components/ui/AdminHeader';
 import api from '../utils/api';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
+import Pagination from '../components/Pagination';
 
 export default function AdminOrders() {
     const [orders, setOrders] = useState([]);
@@ -32,6 +34,8 @@ export default function AdminOrders() {
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
     useEffect(() => {
         const handleClickOutside = () => setActiveDropdown(null);
@@ -78,48 +82,52 @@ export default function AdminOrders() {
         }
     };
 
-    const filteredOrders = orders.filter(order => 
-        (order.orderId?.toLowerCase().includes(searchTerm.toLowerCase()) || 
-         order.user?.name?.toLowerCase().includes(searchTerm.toLowerCase())) &&
+    const filteredOrders = orders.filter(order =>
+        (order.orderId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            order.user?.name?.toLowerCase().includes(searchTerm.toLowerCase())) &&
         (filterStatus === 'All' || order.status === filterStatus)
     );
+
+    const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
+    const currentItems = filteredOrders.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
     const stats = [
         { label: 'Active Acquisitions', value: orders.filter(o => o.status === 'Processing').length, icon: Clock, color: 'text-primary' },
         { label: 'Completed Fulfillment', value: orders.filter(o => o.status === 'Delivered').length, icon: CheckCircle2, color: 'text-emerald-500' },
-        { label: 'Asset Magnitude ($)', value: `$${orders.reduce((sum, o) => sum + o.totalAmount, 0).toLocaleString()}`, icon: ShoppingBag, color: 'text-white' }
+        { label: 'Asset Magnitude', value: `$${orders.reduce((sum, o) => sum + o.totalAmount, 0).toLocaleString()}`, icon: ShoppingBag, color: 'text-white' }
     ];
 
     return (
-        <div className="space-y-10">
+        <div className="space-y-12">
             {/* Order Details Modal */}
             <AnimatePresence>
                 {isModalOpen && selectedOrder && (
                     <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-10">
-                        <motion.div 
+                        <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setIsModalOpen(false)}
-                            className="absolute inset-0 bg-black/60 backdrop-blur-xl"
+                            className="absolute inset-0 bg-black/80 backdrop-blur-xl"
                         />
-                        <motion.div 
+                        <motion.div
                             initial={{ opacity: 0, scale: 0.9, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 20 }}
                             className="bg-[#0A0A0A] w-full max-w-4xl max-h-[90vh] rounded-3xl border border-white/10 shadow-3xl relative z-10 overflow-hidden flex flex-col"
                         >
                             {/* Modal Header */}
-                            <div className="p-8 border-b border-white/5 flex items-center justify-between bg-white/5">
+                            <div className="p-8 border-b border-white/5 flex items-center justify-between bg-white/5 relative">
+                                <div className="absolute top-0 left-0 w-full h-[1px] bg-luxury-gradient opacity-20" />
                                 <div>
                                     <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em] mb-2">Acquisition Manifest</p>
                                     <h2 className="text-2xl font-black text-white uppercase tracking-tighter font-luxury">{selectedOrder.orderId}</h2>
                                 </div>
-                                <button 
+                                <button
                                     onClick={() => setIsModalOpen(false)}
                                     className="p-4 bg-white/5 hover:bg-white/10 rounded-2xl text-muted hover:text-white transition-all transform hover:rotate-90"
                                 >
-                                    <XCircle size={20} />
+                                    <X size={20} />
                                 </button>
                             </div>
 
@@ -169,10 +177,10 @@ export default function AdminOrders() {
                                         </div>
                                         <div className="p-8 bg-luxury-gradient rounded-2xl text-secondary flex items-center justify-between shadow-2xl">
                                             <div>
-                                                <p className="text-[10px] font-black uppercase tracking-[0.4em] mb-1 opacity-60">Revenue Magnitude</p>
-                                                <p className="text-4xl font-black font-luxury">${selectedOrder.totalAmount?.toFixed(2)}</p>
+                                                <p className="text-[10px] font-black uppercase tracking-[0.4em] mb-1 opacity-60 text-secondary/60">Revenue Magnitude</p>
+                                                <p className="text-4xl font-black font-luxury text-secondary">${selectedOrder.totalAmount?.toFixed(2)}</p>
                                             </div>
-                                            <Package size={40} className="opacity-20" />
+                                            <Package size={40} className="opacity-20 text-secondary" strokeWidth={1} />
                                         </div>
                                     </div>
                                 </div>
@@ -183,7 +191,7 @@ export default function AdminOrders() {
                                     <div className="border border-white/5 rounded-2xl overflow-hidden bg-white/5 backdrop-blur-sm">
                                         <table className="w-full text-left">
                                             <thead>
-                                                <tr className="bg-white/5 text-[9px] font-black uppercase tracking-[0.3em] text-muted/40">
+                                                <tr className="bg-white/5 text-[9px] font-black uppercase tracking-[0.3em] text-primary">
                                                     <th className="px-6 py-4">Asset Name</th>
                                                     <th className="px-6 py-4">Quantity</th>
                                                     <th className="px-6 py-4">Unit Value</th>
@@ -207,7 +215,7 @@ export default function AdminOrders() {
 
                             {/* Modal Footer */}
                             <div className="p-8 border-t border-white/5 bg-white/5 flex gap-4">
-                                <button 
+                                <button
                                     onClick={() => updateStatus(selectedOrder._id, 'Shipped')}
                                     disabled={selectedOrder.status === 'Shipped' || selectedOrder.status === 'Delivered'}
                                     className="flex-1 flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury disabled:opacity-50 disabled:hover:scale-100"
@@ -224,187 +232,202 @@ export default function AdminOrders() {
                 )}
             </AnimatePresence>
 
-            <AdminHeader 
+            <AdminHeader
                 title="Order Ledger"
                 subtitle="Acquisition Manifest & Asset Fulfillment"
                 icon={Package}
                 rightContent={
-                    <button className="w-full md:w-auto flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury">
-                        <Plus size={18} md:size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
-                        <span className="whitespace-nowrap">Create Manual Order</span>
-                    </button>
+                    <div className="flex flex-col md:flex-row gap-5 w-full lg:w-auto items-center">
+                        <div className="bg-secondary/40 backdrop-blur-md px-6 md:px-8 py-4 md:py-5 rounded-2xl border border-white/5 shadow-3xl flex items-center gap-4 w-full md:w-96 group focus-within:border-primary/40 transition-all duration-500">
+                            <Search size={18} className="text-primary/40 group-focus-within:text-primary transition-colors" />
+                            <input
+                                type="text"
+                                placeholder="SEARCH ARCHIVES..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="bg-transparent border-none outline-none text-[10px] md:text-[11px] font-black text-white tracking-[0.2em] w-full placeholder:text-white/5 uppercase"
+                            />
+                        </div>
+                        <button className="w-full lg:w-auto flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury">
+                            <Plus size={18} md:size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
+                            <span className="whitespace-nowrap">Create Manual Order</span>
+                        </button>
+                    </div>
                 }
             />
 
             {/* Metrics Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {stats.map((stat, i) => (
-                    <motion.div 
+                    <motion.div
                         key={i}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.1 }}
-                        className="bg-dark-card border border-white/10 rounded-2xl p-6 flex items-center justify-between group hover:border-primary/20 transition-all shadow-xl"
+                        className="bg-secondary/20 backdrop-blur-sm border border-white/5 rounded-2xl p-8 flex items-center justify-between group hover:border-primary/20 transition-all shadow-3xl relative overflow-hidden"
                     >
-                        <div className="space-y-1">
-                            <p className="text-[9px] font-black text-muted/40 uppercase tracking-[0.3em]">{stat.label}</p>
-                            <p className={`text-2xl font-black ${stat.color} font-luxury`}>{stat.value}</p>
+                        <div className="absolute top-0 left-0 w-[2px] h-full bg-luxury-gradient opacity-20" />
+                        <div className="space-y-3">
+                            <p className="text-[9px] font-black text-muted uppercase tracking-[0.4em]">{stat.label}</p>
+                            <p className={`text-4xl font-black ${stat.color} font-luxury tracking-tighter`}>{stat.value}</p>
                         </div>
-                        <div className={`p-4 rounded-xl bg-white/5 ${stat.color} group-hover:scale-110 transition-transform`}>
-                            <stat.icon size={20} />
+                        <div className={`p-5 rounded-2xl bg-background/50 border border-white/5 ${stat.color} group-hover:scale-110 transition-transform shadow-inner`}>
+                            <stat.icon size={24} strokeWidth={1} />
                         </div>
                     </motion.div>
                 ))}
             </div>
 
-            {/* Main Content Area */}
-            <div className="bg-dark-card border border-white/10 rounded-2xl overflow-hidden shadow-2xl relative z-10">
-                {/* Search & Filter Bar */}
-                <div className="p-6 border-b border-white/5 flex flex-col md:flex-row justify-between gap-6">
-                    <div className="relative flex-1 max-w-md group">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-primary transition-colors" size={18} />
-                        <input 
-                            type="text"
-                            placeholder="SEARCH BY ORDER ID OR CUSTOMER..."
-                            className="w-full bg-background/50 border border-white/5 focus:border-primary/40 px-12 py-4 rounded-xl outline-none text-[10px] font-black uppercase tracking-widest text-white transition-all font-sans"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                    </div>
-                    <div className="flex items-center gap-4">
-                        <div className="flex bg-white/5 p-1.5 rounded-xl border border-white/5">
-                            {['All', 'Processing', 'Shipped', 'Delivered'].map((st) => (
-                                <button
-                                    key={st}
-                                    onClick={() => setFilterStatus(st)}
-                                    className={`px-4 py-2.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${filterStatus === st ? 'bg-primary text-secondary' : 'text-muted hover:text-white'}`}
-                                >
-                                    {st}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
+            {/* Table Container */}
+            <div className="space-y-6">
+                <div className="flex bg-secondary/30 p-1.5 rounded-2xl border border-white/5 backdrop-blur-md w-fit shadow-2xl">
+                    {['All', 'Processing', 'Shipped', 'Delivered'].map((st) => (
+                        <button
+                            key={st}
+                            onClick={() => { setFilterStatus(st); setCurrentPage(1); }}
+                            className={`px-6 py-3 rounded-xl text-[9px] font-black uppercase tracking-[0.3em] transition-all font-luxury ${filterStatus === st ? 'bg-primary text-secondary shadow-lg' : 'text-muted hover:text-white'}`}
+                        >
+                            {st}
+                        </button>
+                    ))}
                 </div>
 
-                {/* Orders Table */}
-                <div className="overflow-x-auto custom-scrollbar min-h-[400px] relative">
-                    {loading ? (
-                        <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-background/20 backdrop-blur-sm z-20">
-                            <Loader2 className="w-10 h-10 text-primary animate-spin" strokeWidth={1} />
-                            <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em]">Synchronizing Ledger...</p>
-                        </div>
-                    ) : error ? (
-                        <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-background/20 backdrop-blur-sm z-20">
-                            <AlertCircle className="w-10 h-10 text-rose-500" />
-                            <p className="text-[10px] font-black text-rose-500 uppercase tracking-[0.4em]">{error}</p>
-                            <button onClick={fetchOrders} className="mt-4 px-8 py-3 bg-white/5 border border-white/5 rounded-xl text-[9px] font-black uppercase tracking-widest text-white hover:bg-white/10 transition-all">Retry Sync</button>
-                        </div>
-                    ) : filteredOrders.length === 0 ? (
-                        <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-background/20 backdrop-blur-sm z-20">
-                            <Package className="w-10 h-10 text-muted/20" />
-                            <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em]">No acquisition records found.</p>
-                        </div>
-                    ) : (
-                        <table className="w-full text-left border-collapse">
-                            <thead>
-                                <tr className="bg-white/5">
-                                    <th className="px-8 py-5 text-[9px] font-black uppercase tracking-[0.3em] text-muted/40 border-b border-white/5">Order ID</th>
-                                    <th className="px-8 py-5 text-[9px] font-black uppercase tracking-[0.3em] text-muted/40 border-b border-white/5">Customer</th>
-                                    <th className="px-8 py-5 text-[9px] font-black uppercase tracking-[0.3em] text-muted/40 border-b border-white/5">Date</th>
-                                    <th className="px-8 py-5 text-[9px] font-black uppercase tracking-[0.3em] text-muted/40 border-b border-white/5">Magnitude ($)</th>
-                                    <th className="px-8 py-5 text-[9px] font-black uppercase tracking-[0.3em] text-muted/40 border-b border-white/5">Status</th>
-                                    <th className="px-8 py-5 text-[9px] font-black uppercase tracking-[0.3em] text-muted/40 border-b border-white/5 text-right">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-white/5">
-                                {filteredOrders.map((order) => (
-                                    <tr key={order._id} className="group hover:bg-white/[0.02] transition-colors">
-                                        <td className="px-8 py-6">
-                                            <p className="text-[10px] font-black text-white uppercase tracking-widest group-hover:text-primary transition-colors">{order.orderId}</p>
-                                        </td>
-                                        <td className="px-8 py-6">
-                                            <p className="text-[10px] font-black text-white uppercase tracking-widest">{order.user?.name || 'Unknown Protocol'}</p>
-                                            <p className="text-[8px] font-black text-muted/40 uppercase tracking-widest">{order.items?.length || 0} Assets</p>
-                                        </td>
-                                        <td className="px-8 py-6 text-[10px] font-black text-muted/60 uppercase tracking-widest">
-                                            {format(new Date(order.createdAt), 'MMM dd, yyyy')}
-                                        </td>
-                                        <td className="px-8 py-6">
-                                            <p className="text-sm font-black text-white font-luxury">${order.totalAmount?.toFixed(2)}</p>
-                                        </td>
-                                        <td className="px-8 py-6">
-                                            <div className="relative h-full">
-                                                <div 
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        setActiveDropdown(activeDropdown === order._id ? null : order._id);
-                                                    }}
-                                                    className={`flex items-center gap-3 px-4 py-2 rounded-full border text-[8px] font-black uppercase tracking-widest ${getStatusColor(order.status)} shadow-inner cursor-pointer hover:border-white/20 transition-all`}
-                                                >
-                                                    {order.status}
-                                                    <ChevronDown size={10} className={`transition-transform duration-300 ${activeDropdown === order._id ? 'rotate-180' : ''}`} />
-                                                </div>
-                                                
-                                                {/* Dropdown Menu */}
-                                                <AnimatePresence>
-                                                    {activeDropdown === order._id && (
-                                                        <motion.div 
-                                                            initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                                                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                                                            exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                                            className="absolute top-full left-0 mt-2 w-48 bg-[#1A1A1A] border border-white/10 rounded-2xl shadow-3xl z-[100] p-2 overflow-hidden"
-                                                        >
-                                                            {['Processing', 'Shipped', 'Delivered', 'Cancelled'].map((st) => (
-                                                                <button
-                                                                    key={st}
-                                                                    onClick={(e) => {
-                                                                        e.stopPropagation();
-                                                                        updateStatus(order._id, st);
-                                                                        setActiveDropdown(null);
-                                                                    }}
-                                                                    className="w-full text-left p-3 rounded-xl hover:bg-white/5 text-[9px] font-black uppercase tracking-widest text-muted hover:text-white transition-colors flex items-center gap-3"
-                                                                >
-                                                                    <div className={`w-1.5 h-1.5 rounded-full ${getStatusColor(st).split(' ')[0]}`} />
-                                                                    {st}
-                                                                </button>
-                                                            ))}
-                                                        </motion.div>
-                                                    )}
-                                                </AnimatePresence>
-                                            </div>
-                                        </td>
-                                        <td className="px-8 py-6 text-right">
-                                            <div className="flex items-center justify-end gap-2">
-                                                <button 
-                                                    onClick={() => {
-                                                        setSelectedOrder(order);
-                                                        setIsModalOpen(true);
-                                                    }}
-                                                    className="p-2.5 bg-white/5 hover:bg-white/10 rounded-lg text-muted hover:text-white transition-all"
-                                                >
-                                                    <Eye size={14} />
-                                                </button>
-                                                <button className="p-2.5 bg-white/5 hover:bg-white/10 rounded-lg text-muted hover:text-white transition-all">
-                                                    <MoreVertical size={14} />
-                                                </button>
-                                            </div>
-                                        </td>
+                <div className="bg-secondary/30 backdrop-blur-sm rounded-2xl overflow-hidden shadow-3xl border border-white/5 relative">
+                    <div className="absolute top-0 left-0 w-full h-[1px] bg-luxury-gradient opacity-10" />
+                    <div className="overflow-x-auto custom-scrollbar min-h-[400px]">
+                        {loading ? (
+                            <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 z-20">
+                                <Loader2 className="w-12 h-12 text-primary animate-spin" strokeWidth={1} />
+                                <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em]">Synchronizing Ledger...</p>
+                            </div>
+                        ) : error ? (
+                            <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 z-20">
+                                <AlertCircle className="w-12 h-12 text-rose-500" />
+                                <p className="text-[10px] font-black text-rose-500 uppercase tracking-[0.4em]">{error}</p>
+                                <button onClick={fetchOrders} className="mt-4 px-8 py-3 bg-secondary border border-white/5 rounded-xl text-[9px] font-black uppercase tracking-widest text-white hover:text-primary transition-all">Retry Sync</button>
+                            </div>
+                        ) : filteredOrders.length === 0 ? (
+                            <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 z-20 opacity-40">
+                                <Package size={64} strokeWidth={0.5} className="text-muted" />
+                                <p className="text-[10px] font-black text-muted uppercase tracking-[0.5em]">No acquisition records found.</p>
+                            </div>
+                        ) : (
+                            <table className="w-full text-left border-collapse">
+                                <thead>
+                                    <tr className="bg-background/80">
+                                        <th className="px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Order Manifest</th>
+                                        <th className="px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Customer Entity</th>
+                                        <th className="px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Timestamp</th>
+                                        <th className="px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Magnitude</th>
+                                        <th className="px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Protocol Status</th>
+                                        <th className="px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap text-right">Actions</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    )}
-                </div>
+                                </thead>
+                                <tbody className="divide-y divide-white/5">
+                                    <AnimatePresence mode="popLayout">
+                                        {currentItems.map((order, index) => (
+                                            <motion.tr
+                                                key={order._id}
+                                                initial={{ opacity: 0, x: -20 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                exit={{ opacity: 0, x: 20 }}
+                                                transition={{ delay: index * 0.02, ease: "easeOut" }}
+                                                className="group hover:bg-white/[0.03] transition-all"
+                                            >
+                                                <td className="px-8 py-6">
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="w-10 h-10 rounded-xl bg-background border border-white/5 flex items-center justify-center text-primary/40 group-hover:text-primary transition-colors">
+                                                            <Package size={18} strokeWidth={1.5} />
+                                                        </div>
+                                                        <p className="text-[11px] font-black text-white uppercase tracking-widest font-luxury">{order.orderId}</p>
+                                                    </div>
+                                                </td>
+                                                <td className="px-8 py-6">
+                                                    <p className="text-[11px] font-black text-white uppercase tracking-widest mb-1">{order.user?.name || 'Unknown Protocol'}</p>
+                                                    <p className="text-[8px] font-black text-muted uppercase tracking-[0.2em]">{order.items?.length || 0} ARCHIVED ASSETS</p>
+                                                </td>
+                                                <td className="px-8 py-6">
+                                                    <p className="text-[10px] font-black text-muted uppercase tracking-[0.3em]">
+                                                        {format(new Date(order.createdAt), 'MMM dd, yyyy')}
+                                                    </p>
+                                                </td>
+                                                <td className="px-8 py-6">
+                                                    <p className="text-base font-black text-white font-luxury tracking-tighter">${order.totalAmount?.toLocaleString()}</p>
+                                                </td>
+                                                <td className="px-8 py-6">
+                                                    <div className="relative">
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setActiveDropdown(activeDropdown === order._id ? null : order._id);
+                                                            }}
+                                                            className={`flex items-center gap-3 px-5 py-2.5 rounded-full border text-[8px] font-black uppercase tracking-widest transition-all ${getStatusColor(order.status)} shadow-lg scale-100 hover:scale-[1.02] active:scale-95`}
+                                                        >
+                                                            {order.status}
+                                                            <ChevronDown size={10} className={`transition-transform duration-500 ${activeDropdown === order._id ? 'rotate-180' : ''}`} />
+                                                        </button>
 
-                {/* Footer Pagination Placeholder */}
-                <div className="p-6 border-t border-white/5 flex items-center justify-between">
-                    <p className="text-[9px] font-black text-muted/40 uppercase tracking-widest ">Viewing {filteredOrders.length} of {orders.length} acquisitions</p>
-                    <div className="flex items-center gap-2">
-                        <button className="px-4 py-2 border border-white/5 rounded-lg text-[9px] font-black text-muted hover:text-white transition-all">Previous</button>
-                        <button className="px-4 py-2 bg-white/5 rounded-lg text-[9px] font-black text-white">1</button>
-                        <button className="px-4 py-2 border border-white/5 rounded-lg text-[9px] font-black text-muted hover:text-white transition-all">Next</button>
+                                                        <AnimatePresence>
+                                                            {activeDropdown === order._id && (
+                                                                <motion.div
+                                                                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                                    className="absolute top-full left-0 mt-3 w-56 bg-[#0F0F0F] border border-white/10 rounded-2xl shadow-3xl z-[150] p-2 overflow-hidden backdrop-blur-2xl"
+                                                                >
+                                                                    {['Processing', 'Shipped', 'Delivered', 'Cancelled'].map((st) => (
+                                                                        <button
+                                                                            key={st}
+                                                                            onClick={(e) => {
+                                                                                e.stopPropagation();
+                                                                                updateStatus(order._id, st);
+                                                                                setActiveDropdown(null);
+                                                                            }}
+                                                                            className="w-full text-left p-3.5 rounded-xl hover:bg-white/5 text-[9px] font-black uppercase tracking-widest text-muted hover:text-primary transition-all flex items-center gap-4 group/item"
+                                                                        >
+                                                                            <div className={`w-1.5 h-1.5 rounded-full transition-transform group-hover/item:scale-150 ${getStatusColor(st).split(' ')[0]}`} />
+                                                                            {st}
+                                                                        </button>
+                                                                    ))}
+                                                                </motion.div>
+                                                            )}
+                                                        </AnimatePresence>
+                                                    </div>
+                                                </td>
+                                                <td className="px-8 py-6 text-right">
+                                                    <div className="flex items-center justify-end gap-3">
+                                                        <button
+                                                            onClick={() => {
+                                                                setSelectedOrder(order);
+                                                                setIsModalOpen(true);
+                                                            }}
+                                                            className="p-3 bg-background border border-white/5 rounded-xl text-muted hover:text-primary hover:border-primary/30 transition-all shadow-xl"
+                                                            title="Inspect Manifest"
+                                                        >
+                                                            <Eye size={16} />
+                                                        </button>
+                                                        <button className="p-3 bg-background border border-white/5 rounded-xl text-muted hover:text-white transition-all shadow-xl">
+                                                            <MoreVertical size={16} />
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </motion.tr>
+                                        ))}
+                                    </AnimatePresence>
+                                </tbody>
+                            </table>
+                        )}
                     </div>
                 </div>
+
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={(page) => {
+                        setCurrentPage(page);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                />
             </div>
         </div>
     );

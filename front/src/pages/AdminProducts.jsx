@@ -246,15 +246,15 @@ export default function AdminProducts() {
         subtitle="Manage your product catalog"
         icon={Package}
         rightContent={
-          <div className="flex flex-col sm:flex-row gap-6 w-full lg:w-auto items-center">
-            <div className="bg-secondary/40 backdrop-blur-md px-8 py-5 rounded-2xl border border-white/5 shadow-3xl flex items-center gap-5 w-full sm:w-96 group focus-within:border-primary/40 transition-all duration-500">
-              <Search size={20} className="text-primary/40 group-focus-within:text-primary transition-colors" />
+          <div className="flex flex-col md:flex-row gap-5 w-full lg:w-auto items-center">
+            <div className="bg-secondary/40 backdrop-blur-md px-6 md:px-8 py-4 md:py-5 rounded-2xl border border-white/5 shadow-3xl flex items-center gap-4 w-full md:w-96 group focus-within:border-primary/40 transition-all duration-500">
+              <Search size={18} className="text-primary/40 group-focus-within:text-primary transition-colors" />
               <input
                 type="text"
                 placeholder="SEARCH PRODUCTS..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="bg-transparent border-none outline-none text-[11px] font-black text-white tracking-[0.2em] w-full placeholder:text-white/5 uppercase"
+                className="bg-transparent border-none outline-none text-[10px] md:text-[11px] font-black text-white tracking-[0.2em] w-full placeholder:text-white/5 uppercase"
               />
             </div>
             <button
@@ -274,7 +274,7 @@ export default function AdminProducts() {
         }
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         <AnimatePresence mode="popLayout">
           {currentItems.map((product, index) => (
             <motion.div
@@ -285,7 +285,7 @@ export default function AdminProducts() {
               transition={{ delay: index * 0.05, type: 'spring', damping: 20 }}
               className="group relative bg-secondary rounded-2xl p-4 border border-white/5 shadow-3xl transition-all duration-500 hover:border-primary/20"
             >
-              <div className="relative overflow-hidden rounded-2xl aspect-square mb-6 shadow-inner bg-background">
+              <div className="relative overflow-hidden rounded-2xl aspect-[4/3] mb-6 shadow-inner bg-background">
                 <img
                   src={product.image?.startsWith('/uploads') ? `${IMAGE_URL}${product.image}` : product.image}
                   alt={product.name}
@@ -321,8 +321,8 @@ export default function AdminProducts() {
 
               <div className="px-2 pb-2">
                 <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-sm font-black text-white uppercase tracking-tight line-clamp-1 font-luxury leading-none">{product.name}</h3>
-                  <span className="text-lg font-black text-primary leading-none">${product.price}</span>
+                  <h3 className="text-lg font-black text-white uppercase tracking-tight line-clamp-1 font-luxury leading-none">{product.name}</h3>
+                  <span className="text-xl font-black text-primary leading-none">${product.price.toLocaleString()}</span>
                 </div>
 
                 <div className="flex items-center gap-3 text-muted text-[9px] font-black uppercase tracking-widest mb-6">
@@ -335,8 +335,14 @@ export default function AdminProducts() {
                   </span>
                 </div>
 
-                <div className="pt-2 border-t border-white/5 mt-auto">
+                <div className="pt-4 border-t border-white/5 mt-auto flex items-center justify-between">
                    <p className="text-[8px] font-black text-muted/30 uppercase tracking-[0.4em] truncate">PROD-{product._id.slice(-8).toUpperCase()}</p>
+                   {product.stock > 0 && product.stock <= 5 && (
+                    <div className="flex items-center gap-2 px-2 py-1 bg-amber-500/10 border border-amber-500/20 rounded-lg animate-pulse">
+                      <Zap size={10} className="text-amber-500" />
+                      <span className="text-[7px] font-black text-amber-500 uppercase tracking-widest">LOW STOCK</span>
+                    </div>
+                   )}
                 </div>
               </div>
             </motion.div>

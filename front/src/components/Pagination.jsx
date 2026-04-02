@@ -46,8 +46,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
                 onClick={() => onPageChange(page)}
                 className={`
                   w-8 h-8 md:w-12 md:h-12 rounded-lg md:rounded-xl font-black text-[9px] md:text-[11px] uppercase tracking-widest transition-all duration-300 flex items-center justify-center shrink-0
-                  ${currentPage === page 
-                    ? 'bg-primary text-secondary shadow-xl shadow-primary/20 md:scale-110' 
+                  ${currentPage === page
+                    ? 'bg-primary text-secondary shadow-xl shadow-primary/20 md:scale-110'
                     : 'text-muted hover:text-white hover:bg-white/5'}
                 `}
               >
