@@ -61,10 +61,10 @@ const getDashboardInsights = async (req, res) => {
             });
         }
 
-        const totalCategoriesCount = isStaff 
+        const totalCategoriesCount = isStaff
             ? appointments.reduce((acc, app) => acc + app.assignments.filter(as => as.staff._id.toString() === staffId.toString()).length, 0)
             : services.length;
-            
+
         const serviceData = Object.keys(categories).map((cat, i) => ({
             name: cat,
             value: totalCategoriesCount > 0 ? Math.round((categories[cat] / totalCategoriesCount) * 100) : 0,
@@ -88,8 +88,8 @@ const getDashboardInsights = async (req, res) => {
         // 5. Immediate Rituals (Upcoming Today)
         const today = moment().startOf('day');
         const upcomingRituals = appointments
-            .filter(app => 
-                moment(app.appointmentDate).isSame(today, 'day') && 
+            .filter(app =>
+                moment(app.appointmentDate).isSame(today, 'day') &&
                 ['Pending', 'Confirmed'].includes(app.status)
             )
             .sort((a, b) => new Date(a.appointmentDate) - new Date(b.appointmentDate))

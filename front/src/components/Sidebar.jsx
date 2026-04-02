@@ -29,9 +29,9 @@ const adminItems = [
   { icon: CalendarCheck2, label: 'Bookings', path: '/admin/appointments' },
   { icon: Scissors, label: 'Service List', path: '/admin/services' },
   { icon: LayoutGrid, label: 'Category', path: '/admin/categories' },
-  { 
-    icon: ShoppingBag, 
-    label: 'Inventory', 
+  {
+    icon: ShoppingBag,
+    label: 'Inventory',
     path: '/admin/inventory',
     children: [
       { label: 'Products', path: '/admin/products' },
@@ -149,10 +149,10 @@ export default function Sidebar({ isOpen, setIsOpen }) {
   const [isDrawerMode, setIsDrawerMode] = useState(window.innerWidth < 1280);
   const { userInfo } = useSelector((state) => state.auth);
 
-  const sidebarItems = 
-    userInfo?.role === 'Admin' ? adminItems : 
-    userInfo?.role === 'Staff' ? staffItems : 
-    userItems;
+  const sidebarItems =
+    userInfo?.role === 'Admin' ? adminItems :
+      userInfo?.role === 'Staff' ? staffItems :
+        userItems;
 
   useEffect(() => {
     const handleResize = () => setIsDrawerMode(window.innerWidth < 1280);

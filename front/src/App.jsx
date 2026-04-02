@@ -63,10 +63,10 @@ const AppContent = () => {
   useEffect(() => {
     if (localStorage.getItem('token')) {
       dispatch(fetchCurrentUser());
-      
+
       const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
       const wishlistItems = JSON.parse(localStorage.getItem('wishlistItems') || '[]');
-      
+
       if (cartItems?.length) dispatch(syncCart(cartItems));
       if (wishlistItems?.length) dispatch(syncWishlist(wishlistItems));
     }
@@ -100,7 +100,7 @@ const AppContent = () => {
         <Route path="/admin/leaves" element={<PrivateRoute roles={['Admin']}><Leaves /></PrivateRoute>} />
         <Route path="/admin/expertise-approvals" element={<PrivateRoute roles={['Admin']}><Specializations /></PrivateRoute>} />
         <Route path="/admin/settings" element={<PrivateRoute roles={['Admin']}><Settings /></PrivateRoute>} />
-        
+
         {/* Staff Routes */}
         <Route path="/staff/dashboard" element={<PrivateRoute roles={['Staff']}><StaffDashboard /></PrivateRoute>} />
         <Route path="/staff/appointments" element={<PrivateRoute roles={['Staff']}><Appointments /></PrivateRoute>} />
@@ -108,7 +108,7 @@ const AppContent = () => {
         <Route path="/staff/invoices" element={<PrivateRoute roles={['Staff']}><Invoices /></PrivateRoute>} />
         <Route path="/staff/leaves" element={<PrivateRoute roles={['Staff']}><Leaves /></PrivateRoute>} />
         <Route path="/staff/settings" element={<PrivateRoute roles={['Staff']}><StaffSettings /></PrivateRoute>} />
-        
+
 
         {/* Client/General Auth Routes */}
         <Route path="/profile" element={<PrivateRoute roles={['User', 'Admin', 'Staff']}><Profile /></PrivateRoute>} />
