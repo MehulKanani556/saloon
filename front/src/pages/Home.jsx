@@ -179,7 +179,7 @@ const ServicesPreview = () => {
             viewport={{ once: true }}
             className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white uppercase tracking-wide leading-[1.1] text-center"
           >
-            Our Signature <span className="text-primary font-luxury">Services</span>
+            Professional <span className="text-primary font-luxury">Services</span>
           </motion.h2>
           {/* <motion.div
             initial={{ width: 0 }}
@@ -312,8 +312,8 @@ const WhyChooseUs = () => {
                 <span className="text-[10px] font-black text-white uppercase tracking-[0.4em]">Our Vision</span>
               </div>
               <h2 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-4 lg:mb-8 text-center lg:text-left">
-                Where <span className="text-transparent bg-clip-text bg-luxury-gradient">Excellence</span> <br />
-                Becomes Habit
+                Where <span className="text-transparent bg-clip-text bg-luxury-gradient">Quality</span> <br />
+                Meets Standard
               </h2>
               <p className="text-muted text-sm lg:text-base font-medium leading-relaxed tracking-wider max-w-full lg:max-w-lg mb-5 lg:mb-10">
                 We go beyond the traditional salon experience. Every appointment is a carefully planned experience focused on your transformation and comfort.
@@ -381,7 +381,7 @@ const WhyChooseUs = () => {
                 <span className="text-4xl md:text-7xl font-black text-transparent bg-clip-text bg-luxury-gradient tracking-tighter ">12+</span>
                 <p className="text-[8px] md:text-[10px] font-medium md:font-black text-white uppercase tracking-[0.4em] mt-2 md:mt-4 mb-2">Years of Mastery</p>
                 <div className="h-px w-12 bg-primary mx-auto" />
-                <p className="text-[8px] text-muted font-medium md:font-bold uppercase tracking-widest mt-2 md:mt-4">Pioneering the future of beauty since 2012.</p>
+                <p className="text-[8px] text-muted font-medium md:font-bold uppercase tracking-widest mt-2 md:mt-4">Quality services since 2012.</p>
               </div>
             </motion.div>
 
@@ -402,7 +402,7 @@ const WhyChooseUs = () => {
   );
 };
 
-const RitualMenu = () => {
+const ServiceMenu = () => {
   const dispatch = useDispatch();
   const { categories } = useSelector(state => state.categories);
   const { services } = useSelector(state => state.services);
@@ -432,7 +432,7 @@ const RitualMenu = () => {
             whileInView={{ opacity: 1, y: 0 }}
             className="text-primary font-extrabold uppercase tracking-[0.4em] text-[10px] mb-4"
           >
-            The Ultimate Collection
+            Our Service List
           </motion.p>
           <h2 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white uppercase tracking-wide leading-[1.1] mb-4 md:mb-8">
             Service <span className="text-primary font-luxury">Menu</span>
@@ -528,14 +528,14 @@ const TeamPreview = () => {
             whileInView={{ opacity: 1 }}
             className="text-primary font-luxury font-black uppercase tracking-[0.3em] text-[10px] mb-4"
           >
-            Expert Stylists
+            Our Specialists
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             className="text-lg sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white uppercase tracking-wide leading-[1.1]"
           >
-            Meet Our <span className="text-primary">Experts</span>
+            Meet Our <span className="text-primary">Specialists</span>
           </motion.h2>
         </div>
 
@@ -569,7 +569,7 @@ const TeamPreview = () => {
                 <div className="px-2 pb-2">
                   <div className="mb-4">
                     <h4 className="text-lg font-black text-white uppercase tracking-tight line-clamp-1 font-luxury  leading-none">{artist.name}</h4>
-                    <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mt-2 mb-1 opacity-80 ">Senior Artisan</p>
+                    <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mt-2 mb-1 opacity-80 ">Senior Specialist</p>
                   </div>
 
                   <div className="flex items-center gap-3 text-muted text-[9px] font-black uppercase tracking-widest mb-6">
@@ -578,7 +578,7 @@ const TeamPreview = () => {
                     </span>
                     <span className="h-1 w-1 bg-white/10 rounded-full" />
                     <span className="flex items-center gap-1.5">
-                      Mastery v3.0
+                      Certified Pro
                     </span>
                   </div>
 
@@ -768,7 +768,7 @@ export default function Home() {
         <StatsBanner />
         <ServicesPreview />
         <WhyChooseUs />
-        <RitualMenu />
+        <ServiceMenu />
         <TeamPreview />
         <Testimonials />
         <FAQ />

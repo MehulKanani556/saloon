@@ -58,7 +58,7 @@ const PageHero = () => {
           transition={{ delay: 1 }}
           className="mt-4 md:mt-8 flex items-center justify-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-muted"
         >
-          <Link to="/" className="hover:text-primary transition-colors">Home Base</Link>
+          <Link to="/" className="hover:text-primary transition-colors">Home</Link>
           <span className="w-1.5 h-px bg-white/20" />
           <span className="text-primary ">Our Services</span>
         </motion.div>

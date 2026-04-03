@@ -31,12 +31,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDashboardInsights } from '../redux/slices/dashboardSlice';
 import { updateAppointmentStatus } from '../redux/slices/appointmentSlice';
+import Modal from '../components/ui/Modal';
+import AdminHeader from '../components/ui/AdminHeader';
 import toast from 'react-hot-toast';
 import { IMAGE_URL } from '../utils/BASE_URL';
 import { format, formatDistanceToNow, isToday } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 
-import AdminHeader from '../components/ui/AdminHeader';
 
 export default function StaffDashboard() {
   const dispatch = useDispatch();
@@ -87,7 +88,7 @@ export default function StaffDashboard() {
         rightContent={
           <div className="flex items-center gap-4 md:gap-8 bg-secondary/40 backdrop-blur-md px-6 md:px-10 py-4 md:py-6 rounded-xl md:rounded-2xl border border-white/5 shadow-3xl group hover:border-primary/20 transition-all duration-500">
             <div className="text-left">
-              <p className="text-[8px] md:text-[10px] font-black text-primary uppercase tracking-[0.4em] leading-none mb-2 md:mb-3 ">Total Earnings</p>
+              <p className="text-[8px] md:text-[10px] font-black text-primary uppercase tracking-[0.4em] leading-none mb-2 md:mb-3 ">My Earnings</p>
               <p className="text-2xl md:text-4xl font-black text-white tracking-tighter font-luxury leading-none group-hover:scale-105 transition-transform duration-500">
                 $ {data.stats.totalRevenue.toLocaleString()}
               </p>
@@ -99,10 +100,10 @@ export default function StaffDashboard() {
       {/* Statistics Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {[
-          { label: 'Total Clients', value: data.stats.totalClients, icon: Users, trend: 'Managed' },
-          { label: 'Appointments Completed', value: data.stats.totalAppointments, icon: CalendarCheck2, trend: 'Historical' },
-          { label: 'Today\'s Sales', value: `$${data.stats.todayRevenue.toLocaleString()}`, icon: DollarSign, trend: 'Active' },
-          { label: 'Leave Requests', value: data.stats.pendingLeaves || 0, icon: CalendarClock, trend: 'Pending' },
+          { label: 'My Clients', value: data.stats.totalClients, icon: Users, trend: 'Managed' },
+          { label: 'Completed Appointments', value: data.stats.totalAppointments, icon: CalendarCheck2, trend: 'History' },
+          { label: 'Today\'s Revenue', value: `$${data.stats.todayRevenue.toLocaleString()}`, icon: DollarSign, trend: 'Live' },
+          { label: 'Leave Requests', value: data.stats.pendingLeaves || 0, icon: CalendarClock, trend: 'Status' },
         ].map((stat, i) => (
           <motion.div
             key={i}
@@ -146,7 +147,7 @@ export default function StaffDashboard() {
                 <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
                   <TrendingUp size={18} md:size={24} />
                 </div>
-                Revenue Growth
+                My Revenue
               </h3>
               <p className="text-[8px] md:text-[10px] font-black text-muted uppercase tracking-[0.3em] md:tracking-[0.4em]  opacity-60">Your revenue contribution over the last 7 days</p>
             </div>
@@ -178,7 +179,7 @@ export default function StaffDashboard() {
         <div className="bg-secondary/30 backdrop-blur-sm p-6 md:p-10 rounded-xl md:rounded-2xl border border-white/5 shadow-3xl relative flex flex-col">
           <h3 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase mb-8 md:mb-12  font-luxury flex items-center gap-3 md:gap-4">
             <Star className="text-primary shrink-0" size={20} md:size={24} />
-            My Specializations
+            My Services
           </h3>
           <div className="space-y-6 flex-1 max-h-[300px] overflow-y-auto custom-scrollbar pr-2">
             {data.specializationData.map((service, i) => (
@@ -213,8 +214,8 @@ export default function StaffDashboard() {
         <div className="bg-secondary/30 backdrop-blur-md p-6 md:p-10 rounded-xl md:rounded-2xl border border-white/5 shadow-3xl relative overflow-hidden group">
           <div className="flex items-center justify-between gap-4 md:gap-6 mb-8 md:mb-12 relative z-10 leading-none">
             <div>
-              <h3 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase mb-2 md:mb-3  font-luxury">Recent Clients</h3>
-              <p className="text-[8px] md:text-[10px] font-black text-muted uppercase tracking-[0.3em] md:tracking-[0.4em]  opacity-60">History of your recent appointments</p>
+              <h3 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase mb-2 md:mb-3  font-luxury">Previous Appointments</h3>
+              <p className="text-[8px] md:text-[10px] font-black text-muted uppercase tracking-[0.3em] md:tracking-[0.4em]  opacity-60">Record of your recent work</p>
             </div>
             <div className="w-10 h-10 md:w-12 md:h-12 bg-primary/10 rounded-xl md:rounded-2xl flex items-center justify-center text-primary shrink-0">
               <CalendarCheck2 size={20} md:size={24} />
@@ -348,6 +349,36 @@ export default function StaffDashboard() {
           </ResponsiveContainer>
         </div>
       </div>
+
+      <Modal
+        isOpen={confirmModal.isOpen}
+        onClose={() => setConfirmModal({ isOpen: false, appointmentId: null })}
+        title="Complete Appointment?"
+        subtitle="Finalize Service"
+      >
+        <div className="text-center p-6 space-y-8">
+          <div className="w-24 h-24 bg-emerald-500/10 border border-emerald-500/20 rounded-3xl flex items-center justify-center mx-auto text-emerald-500 shadow-2xl">
+            <CheckCircle2 size={48} strokeWidth={1.5} />
+          </div>
+          <p className="text-muted font-black text-[11px] uppercase tracking-[0.3em] leading-relaxed">
+            Are you sure you want to mark this appointment as <span className="text-emerald-500">COMPLETED</span>?
+          </p>
+          <div className="flex flex-col gap-4">
+            <button
+              onClick={() => handleQuickStatusUpdate(confirmModal.appointmentId, 'Completed')}
+              className="w-full py-5 bg-emerald-500 text-white rounded-2xl font-black uppercase text-[10px] tracking-[0.5em] shadow-xl hover:bg-emerald-600 transition-all font-luxury"
+            >
+              YES, MARK COMPLETED
+            </button>
+            <button
+              onClick={() => setConfirmModal({ isOpen: false, appointmentId: null })}
+              className="w-full py-5 bg-white/5 text-muted rounded-2xl font-black uppercase text-[10px] tracking-[0.5em] hover:text-white transition-all font-luxury"
+            >
+              GO BACK
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

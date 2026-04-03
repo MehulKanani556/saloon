@@ -38,6 +38,8 @@ const userSchema = new mongoose.Schema({
     },
     otp: { type: String },
     otpExpires: { type: Date },
+    rating: { type: Number, default: 0 },
+    numReviews: { type: Number, default: 0 },
     isDeleted: { type: Boolean, default: false },
     deletedAt: { type: Date }
 }, { timestamps: true });

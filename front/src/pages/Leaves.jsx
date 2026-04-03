@@ -8,19 +8,18 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { format, differenceInHours } from 'date-fns';
 import toast from 'react-hot-toast';
-import api from '../utils/api';
-import { BASE_URL } from '../utils/BASE_URL';
 import Modal from '../components/ui/Modal';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { fetchLeaves, requestLeave, updateLeaveStatus } from '../redux/slices/leaveSlice';
 
 import AdminHeader from '../components/ui/AdminHeader';
 
 export default function Leaves() {
     const { userInfo } = useSelector((state) => state.auth);
     const isAdmin = userInfo?.role === 'Admin';
-    const [leaves, setLeaves] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const dispatch = useDispatch();
+    const { leaves, loading } = useSelector((state) => state.leaves);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedLeave, setSelectedLeave] = useState(null);
     const [isActionModalOpen, setIsActionModalOpen] = useState(false);
@@ -30,22 +29,9 @@ export default function Leaves() {
     const startTimeRef = useRef(null);
     const endTimeRef = useRef(null);
 
-    const fetchLeaves = async () => {
-        try {
-            setLoading(true);
-            const endpoint = isAdmin ? '/leaves' : '/leaves/my';
-            const { data } = await api.get(endpoint);
-            setLeaves(data);
-        } catch (error) {
-            toast.error(error.response?.data?.message || 'Failed to load leave requests');
-        } finally {
-            setLoading(false);
-        }
-    };
-
     useEffect(() => {
-        fetchLeaves();
-    }, [isAdmin]);
+        dispatch(fetchLeaves(isAdmin));
+    }, [isAdmin, dispatch]);
 
     const formik = useFormik({
         initialValues: {
@@ -66,13 +52,12 @@ export default function Leaves() {
         }),
         onSubmit: async (values, { resetForm }) => {
             try {
-                await api.post('/leaves', values);
+                await dispatch(requestLeave(values)).unwrap();
                 toast.success('Leave request submitted successfully');
                 setIsModalOpen(false);
                 resetForm();
-                fetchLeaves();
             } catch (error) {
-                toast.error(error.response?.data?.message || 'Submission failed');
+                toast.error(error || 'Submission failed');
             }
         }
     });
@@ -101,12 +86,11 @@ export default function Leaves() {
 
     const handleUpdateStatus = async (status) => {
         try {
-            await api.put(`/leaves/${selectedLeave._id}`, { status });
+            await dispatch(updateLeaveStatus({ id: selectedLeave._id, status })).unwrap();
             toast.success(`Request ${status}`);
             setIsActionModalOpen(false);
-            fetchLeaves();
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Failed to update leave status');
+            toast.error(error || 'Failed to update leave status');
         }
     };
 

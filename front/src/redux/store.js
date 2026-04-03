@@ -14,6 +14,8 @@ import wishlistReducer from './slices/wishlistSlice';
 import orderReducer from './slices/orderSlice';
 import reportReducer from './slices/reportSlice';
 import reviewReducer from './slices/reviewSlice';
+import leaveReducer from './slices/leaveSlice';
+import specializationReducer from './slices/specializationSlice';
 
 export const store = configureStore({
     reducer: {
@@ -31,7 +33,9 @@ export const store = configureStore({
         wishlist: wishlistReducer,
         orders: orderReducer,
         reports: reportReducer,
-        reviews: reviewReducer
+        reviews: reviewReducer,
+        leaves: leaveReducer,
+        specializations: specializationReducer
     },
 });
 

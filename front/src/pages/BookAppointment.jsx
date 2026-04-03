@@ -302,7 +302,7 @@ export default function BookAppointment() {
           <div className="absolute inset-0 z-0">
             <img
               src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?q=80&w=2070&auto=format&fit=crop"
-              alt="Luxury Sanctuary"
+              alt="Glow & Elegance"
               className="w-full h-full object-cover opacity-30 scale-105"
             />
           </div>
@@ -356,8 +356,8 @@ export default function BookAppointment() {
             <div className="flex items-center justify-between mb-8 md:mb-16 relative  max-w-4xl mx-auto">
                 
                 {/* Precision Connection System */}
-                <div className="absolute top-[28px] md:top-[32px] left-7 md:left-8 right-7 md:right-8 h-[1px] bg-white/10 z-0">
-                  {/* Ritual Progress Pipe */}
+                <div className="absolute top-[28px] md:top-[32px] left-7 md:left-8 right-7 md:right-8 h-[1px] bg-white/10 z-0 text-white ">
+                  {/* Booking Progress */}
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{
@@ -835,7 +835,7 @@ export default function BookAppointment() {
               <div className="bg-secondary rounded-2xl p-10 border border-white/5 shadow-xl">
                 <div className="flex items-center gap-4 mb-10 pb-6 border-b border-white/5">
                   <ShoppingBag className="text-primary" />
-                  <h3 className="text-xl font-black uppercase tracking-tighter  font-luxury text-white">Your Rituals</h3>
+                  <h3 className="text-xl font-black uppercase tracking-tighter  font-luxury text-white">Your Selection</h3>
                 </div>
 
                 <AnimatePresence>
@@ -865,18 +865,18 @@ export default function BookAppointment() {
                   ) : (
                     <div className="py-12 text-center">
                       <Sparkles size={32} className="text-white/5 mx-auto mb-4" />
-                      <p className="text-[9px] font-black text-white/20 uppercase tracking-widest">No rituals selected yet.</p>
+                      <p className="text-[9px] font-black text-white/20 uppercase tracking-widest">No services selected yet.</p>
                     </div>
                   )}
                 </AnimatePresence>
 
                 <div className="pt-10 border-t border-white/5 space-y-6">
                   <div className="flex justify-between items-center text-muted">
-                    <span className="text-[9px] font-black uppercase tracking-[0.3em]">Total Rituals</span>
+                    <span className="text-[9px] font-black uppercase tracking-[0.3em]">Total Services</span>
                     <span className="text-sm font-bold">{selectedServices.length}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-[9px] font-black text-muted uppercase tracking-[0.3em]">Total Investment</span>
+                    <span className="text-[9px] font-black text-muted uppercase tracking-[0.3em]">Total Price</span>
                     <span className="text-3xl font-black text-primary tracking-tighter  font-luxury">${totalPrice}</span>
                   </div>
                 </div>
@@ -889,7 +889,7 @@ export default function BookAppointment() {
                       disabled={selectedServices.length === 0}
                       className="w-full py-5 bg-primary text-secondary rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-all flex items-center justify-center gap-3 group"
                     >
-                      Next Chapter
+                      Next Step
                       <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
                     </button>
                   )}
@@ -913,7 +913,7 @@ export default function BookAppointment() {
                         <Loader2 size={24} className="animate-spin" />
                       ) : (
                         <>
-                          Establish Protocol
+                          Complete Booking
                           <Check size={20} />
                         </>
                       )}
@@ -928,7 +928,7 @@ export default function BookAppointment() {
                   {[...Array(5)].map((_, i) => <Star key={i} size={12} className="text-primary fill-primary" />)}
                 </div>
                 <p className="text-[9px] font-black text-white/60 uppercase tracking-widest leading-relaxed  font-luxury">
-                  Trusted by over 5,000 clients for <br /> premium luxury transformations.
+                  Trusted by over 5,000 clients for <br /> exceptional beauty results.
                 </p>
               </div>
             </div>

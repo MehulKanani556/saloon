@@ -19,16 +19,16 @@ import {
     X,
     Filter
 } from 'lucide-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAllOrders, updateOrderStatus } from '../redux/slices/orderSlice';
 import AdminHeader from '../components/ui/AdminHeader';
-import api from '../utils/api';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 import Pagination from '../components/Pagination';
 
 export default function AdminOrders() {
-    const [orders, setOrders] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const dispatch = useDispatch();
+    const { orders, loading, error } = useSelector(state => state.orders);
     const [searchTerm, setSearchTerm] = useState('');
     const [filterStatus, setFilterStatus] = useState('All');
     const [selectedOrder, setSelectedOrder] = useState(null);
@@ -44,31 +44,18 @@ export default function AdminOrders() {
     }, []);
 
     useEffect(() => {
-        fetchOrders();
-    }, []);
+        dispatch(fetchAllOrders());
+    }, [dispatch]);
 
-    const fetchOrders = async () => {
+    const updateStatus = async (id, status) => {
         try {
-            setLoading(true);
-            const { data } = await api.get('/orders');
-            setOrders(data);
-            setLoading(false);
-        } catch (err) {
-            setError(err.response?.data?.message || 'Failed to load orders');
-            setLoading(false);
-        }
-    };
-
-    const updateStatus = async (orderId, newStatus) => {
-        try {
-            await api.put(`/orders/${orderId}/status`, { status: newStatus });
-            toast.success(`Order status updated to ${newStatus}`);
-            if (selectedOrder && selectedOrder._id === orderId) {
-                setSelectedOrder({ ...selectedOrder, status: newStatus });
+            await dispatch(updateOrderStatus({ id, status })).unwrap();
+            toast.success(`Order status updated to ${status}`);
+            if (selectedOrder && selectedOrder._id === id) {
+                setSelectedOrder({ ...selectedOrder, status });
             }
-            fetchOrders();
         } catch (err) {
-            toast.error('Failed to update order status');
+            toast.error(err || 'Failed to update order status');
         }
     };
 
@@ -304,7 +291,7 @@ export default function AdminOrders() {
                             <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 z-20">
                                 <AlertCircle className="w-12 h-12 text-rose-500" />
                                 <p className="text-[10px] font-black text-rose-500 uppercase tracking-[0.4em]">{error}</p>
-                                <button onClick={fetchOrders} className="mt-4 px-8 py-3 bg-secondary border border-white/5 rounded-xl text-[9px] font-black uppercase tracking-widest text-white hover:text-primary transition-all">Retry Sync</button>
+                                <button onClick={() => dispatch(fetchAllOrders())} className="mt-4 px-8 py-3 bg-secondary border border-white/5 rounded-xl text-[9px] font-black uppercase tracking-widest text-white hover:text-primary transition-all">Retry Sync</button>
                             </div>
                         ) : filteredOrders.length === 0 ? (
                             <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 z-20 opacity-40">

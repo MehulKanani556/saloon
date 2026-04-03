@@ -4,23 +4,22 @@ import { Package, User, Sparkles, Clock, ChevronRight, Hash, CreditCard, X, Star
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import toast from 'react-hot-toast';
-import api from '../utils/api';
 import UserPanelLayout from '../components/public/UserPanelLayout';
 import { fetchMyOrders, cancelOrder } from '../redux/slices/orderSlice';
+import { fetchProductById, submitProductReview } from '../redux/slices/productSlice';
 
 export default function MyOrders() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { orders = [], loading } = useSelector((state) => state.orders || {});
   const { userInfo } = useSelector((state) => state.auth || {});
+  const { product: productData, reviewLoading } = useSelector((state) => state.products || {});
 
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [reviewModalProduct, setReviewModalProduct] = useState(null);
-  const [productData, setProductData] = useState(null);
-  const [rating, setRating] = useState(5);
-  const [comment, setComment] = useState('');
-  const [reviewLoading, setReviewLoading] = useState(false);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [orderToCancel, setOrderToCancel] = useState(null);
 
@@ -30,24 +29,46 @@ export default function MyOrders() {
     } else {
       document.body.style.overflow = 'unset';
     }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [selectedOrder, reviewModalProduct]);
+  }, [selectedOrder, reviewModalProduct, isCancelModalOpen]);
+
+  // Formik for Review
+  const reviewFormik = useFormik({
+    initialValues: {
+      rating: 5,
+      comment: ''
+    },
+    validationSchema: Yup.object({
+      rating: Yup.number().min(1).max(5).required('Rating is required'),
+      comment: Yup.string().min(5, 'Review is too short').required('Please share your thoughts'),
+    }),
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        await dispatch(submitProductReview({ 
+          id: reviewModalProduct, 
+          reviewData: values 
+        })).unwrap();
+        toast.success('Feedback submitted successfully');
+        resetForm();
+        setReviewModalProduct(null);
+        dispatch(fetchMyOrders());
+      } catch (err) {
+        toast.error(err || 'Failed to submit feedback');
+      }
+    }
+  });
 
   const handleOpenReview = async (productId) => {
     setReviewModalProduct(productId);
-    setRating(5);
-    setComment('');
-    setProductData(null);
+    reviewFormik.resetForm();
     try {
-      const res = await api.get(`/products/${productId}`);
-      setProductData(res.data);
-      if (res.data.reviews && userInfo) {
-        const myReview = res.data.reviews.find(r => r.user?.toString() === userInfo._id?.toString());
+      const product = await dispatch(fetchProductById(productId)).unwrap();
+      if (product.reviews && userInfo) {
+        const myReview = product.reviews.find(r => r.user?.toString() === userInfo._id?.toString());
         if (myReview) {
-          setRating(myReview.rating);
-          setComment(myReview.comment);
+          reviewFormik.setValues({
+            rating: myReview.rating,
+            comment: myReview.comment
+          });
         }
       }
     } catch (err) {
@@ -55,37 +76,16 @@ export default function MyOrders() {
     }
   };
 
-  const submitReview = async () => {
-    if (!comment.trim()) return toast.error('Please add a comment');
-    try {
-      setReviewLoading(true);
-      await api.post(`/products/${reviewModalProduct}/reviews`, { rating, comment });
-      toast.success('Review saved perfectly!');
-      const res = await api.get(`/products/${reviewModalProduct}`);
-      setProductData(res.data);
-      dispatch(fetchMyOrders());
-    } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to submit review');
-    } finally {
-      setReviewLoading(false);
-    }
-  };
-
-  const handleCancelOrder = (order) => {
-    setOrderToCancel(order);
-    setIsCancelModalOpen(true);
-  };
-
   const confirmCancel = async () => {
     if (!orderToCancel) return;
     try {
       await dispatch(cancelOrder(orderToCancel._id)).unwrap();
-      toast.success('Order successfully dissolved.');
+      toast.success('Order cancelled');
       setIsCancelModalOpen(false);
       setOrderToCancel(null);
       setSelectedOrder(null);
     } catch (err) {
-      toast.error(err || 'Failed to dissolve order');
+      toast.error(err || 'Could not cancel order');
     }
   };
 
@@ -103,30 +103,28 @@ export default function MyOrders() {
   return (
     <UserPanelLayout title="Orders">
       <div className="flex flex-col gap-6 lg:gap-8 min-h-[70vh]">
-
-        {/* Compact Ledger Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 py-4 border-b border-white/[0.05]">
           <div className="space-y-1 text-center md:text-left">
             <div className="flex items-center justify-center md:justify-start gap-2">
               <span className="w-8 h-px bg-primary/30" />
-              <p className="text-[9px] font-black text-primary uppercase tracking-[0.4em]">Order History</p>
+              <p className="text-[9px] font-black text-primary uppercase tracking-[0.4em]">Transaction History</p>
             </div>
             <h1 className="text-xl md:text-2xl font-black text-white uppercase tracking-wide font-luxury">
-              Your <span className="text-primary">Orders</span>
+              Your <span className="text-primary">Purchases</span>
             </h1>
           </div>
           <button
             onClick={() => navigate('/shop')}
             className="group px-6 py-3 w-full md:w-fit bg-white/[0.03] border border-white/5 text-white hover:bg-primary hover:text-secondary hover:border-primary rounded-xl flex items-center justify-center md:justify-start gap-3 text-[10px] font-black uppercase tracking-widest transition-all shadow-lg"
           >
-            <Sparkles size={14} /> Back to Shop
+            <Sparkles size={14} /> Shop Store
           </button>
         </div>
 
         {loading && orders.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-32 gap-6">
             <div className="w-16 h-16 border-2 border-white/5 border-t-primary rounded-full animate-spin" />
-            <p className="text-[9px] font-black uppercase tracking-[0.5em] text-muted/40">Loading orders...</p>
+            <p className="text-[9px] font-black uppercase tracking-[0.5em] text-muted/40">Syncing data...</p>
           </div>
         ) : orders.length === 0 ? (
           <motion.div
@@ -137,10 +135,10 @@ export default function MyOrders() {
             <div className="w-16 h-16 bg-white/[0.02] rounded-2xl flex items-center justify-center text-white/5 mb-8">
               <Package size={32} />
             </div>
-            <h3 className="text-xl font-black text-white uppercase tracking-tight mb-3 font-luxury">No orders found</h3>
-            <p className="text-[10px] font-bold text-muted/40 uppercase tracking-[0.2em] mb-8">You haven't placed any orders yet.</p>
+            <h3 className="text-xl font-black text-white uppercase tracking-tight mb-3 font-luxury">No Records Found</h3>
+            <p className="text-[10px] font-bold text-muted/40 uppercase tracking-[0.2em] mb-8">You haven't made any purchases yet.</p>
             <button onClick={() => navigate('/shop')} className="px-8 py-4 bg-primary text-secondary rounded-xl font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all">
-              Shop Now
+              Go to Store
             </button>
           </motion.div>
         ) : (
@@ -155,8 +153,6 @@ export default function MyOrders() {
                   className="group relative bg-[#1A1A1A] border border-white/[0.05] hover:border-primary/20 transition-all duration-300 rounded-2xl overflow-hidden shadow-2xl"
                 >
                   <div className="flex flex-col lg:flex-row divide-y lg:divide-y-0 lg:divide-x divide-white/[0.03]">
-
-                    {/* Primary Info (Left) */}
                     <div className="flex-1 p-5 md:p-8 space-y-5">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div className="flex items-center gap-3">
@@ -177,7 +173,7 @@ export default function MyOrders() {
 
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-6 pt-2">
                         <div className="space-y-0.5">
-                          <p className="text-[8px] font-black text-white/20 uppercase tracking-widest">Total Price</p>
+                          <p className="text-[8px] font-black text-white/20 uppercase tracking-widest">Amount</p>
                           <p className="text-xl font-black text-primary font-luxury drop-shadow-primary-sm">${order.totalAmount?.toFixed(2)}</p>
                         </div>
                         <div className="space-y-0.5">
@@ -190,39 +186,38 @@ export default function MyOrders() {
                           <p className="text-[8px] font-black text-white/20 uppercase tracking-widest">Payment</p>
                           <div className="flex items-center gap-2">
                             <span className={`w-1.5 h-1.5 rounded-full ${order.paymentStatus === 'Paid' ? 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]' : 'bg-primary/40'}`} />
-                            <p className={`text-[10px] font-black uppercase tracking-widest ${order.paymentStatus === 'Paid' ? 'text-emerald-400' : 'text-primary/60'}`}>{order.paymentStatus || 'Awaiting'}</p>
+                            <p className={`text-[10px] font-black uppercase tracking-widest ${order.paymentStatus === 'Paid' ? 'text-emerald-400' : 'text-primary/60'}`}>{order.paymentStatus || 'Pending'}</p>
                           </div>
                         </div>
                       </div>
                     </div>
 
-                    {/* Order Summary (Right) */}
                     <div className="w-full lg:w-72 xl:w-80 p-5 md:p-8 bg-white/[0.01] flex flex-col justify-between gap-6">
                       <div className="space-y-3">
                         <h4 className="text-[9px] font-black text-white/20 uppercase tracking-widest flex items-center gap-2">
-                          <Package size={12} /> Order Items
+                          <Package size={12} /> Items
                         </h4>
                         <div className="space-y-2">
                           {order.items?.slice(0, 2).map((item, i) => (
                             <div key={i} className="flex items-center justify-between text-[10px] font-black uppercase tracking-wide border-b border-white/[0.02] last:border-0 pb-2 last:pb-0">
                               <div className="flex flex-col">
                                 <span className="text-white/60 truncate max-w-[130px]">
-                                  {item.name || item.product?.name || 'Aesthetic Good'}
+                                  {item.name || item.product?.name || 'Store Item'}
                                 </span>
                                 {item.product && (
                                   <button
                                     onClick={(e) => { e.stopPropagation(); handleOpenReview(item.product._id || item.product); }}
                                     className="text-[12px] font-bold text-primary/60 hover:text-primary uppercase tracking-widest underline decoration-primary/30 transition-colors text-left mt-1"
                                   >
-                                    {item.product?.reviews?.some(r => r.user?.toString() === userInfo?._id?.toString()) ? 'Edit Review' : 'Add Review'}
+                                    {item.product?.reviews?.some(r => r.user?.toString() === userInfo?._id?.toString()) ? 'Edit Review' : 'Add Feedback'}
                                   </button>
                                 )}
                               </div>
-                              <span className="text-muted/30 tabular-nums self-start">QTY: 0{item.qty}</span>
+                              <span className="text-muted/30 tabular-nums self-start">x{item.qty}</span>
                             </div>
                           ))}
                           {order.items?.length > 2 && (
-                            <p className="text-[9px] font-black text-primary/40 italic tracking-widest">+{order.items.length - 2} More Items</p>
+                            <p className="text-[9px] font-black text-primary/40 italic tracking-widest">+{order.items.length - 2} more</p>
                           )}
                         </div>
                       </div>
@@ -231,10 +226,9 @@ export default function MyOrders() {
                         onClick={() => setSelectedOrder(order)}
                         className="w-full py-3.5 bg-white/[0.03] border border-white/5 text-[9px] font-black uppercase tracking-widest text-white hover:bg-primary hover:text-secondary hover:border-primary transition-all duration-300 rounded-xl flex items-center justify-center gap-2 group/btn shadow-lg"
                       >
-                        View Details <ChevronRight size={12} className="group-hover/btn:translate-x-0.5 transition-transform" />
+                        Details <ChevronRight size={12} className="group-hover/btn:translate-x-0.5 transition-transform" />
                       </button>
                     </div>
-
                   </div>
                 </motion.div>
               ))}
@@ -244,7 +238,7 @@ export default function MyOrders() {
         }
       </div >
 
-      {/* Order Details Modal - Pro Interface */}
+      {/* Order Details Modal */}
       <AnimatePresence>
         {selectedOrder && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 md:p-4">
@@ -255,7 +249,6 @@ export default function MyOrders() {
               onClick={() => setSelectedOrder(null)}
               className="absolute inset-0 bg-background/95 backdrop-blur-md"
             />
-
             <motion.div
               layoutId={`order-card-${selectedOrder._id}`}
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -264,33 +257,24 @@ export default function MyOrders() {
               className="relative w-full max-w-2xl bg-[#1A1A1A] border border-white/[0.05] rounded-2xl overflow-hidden shadow-2xl"
             >
               <div className="p-5 sm:p-8 md:p-10">
-                {/* Modal Header */}
                 <div className="flex justify-between items-start mb-6 md:mb-10 pb-6 border-b border-white/[0.05]">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
                       <span className="w-8 h-px bg-primary" />
-                      <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Order Summary</p>
+                      <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Details</p>
                     </div>
-                    <h2 className="text-xl sm:text-3xl font-black text-white uppercase tracking-tight font-luxury">Order Detail</h2>
-                    <p className="text-[9px] font-black text-muted/40 uppercase tracking-widest truncate max-w-[200px] sm:max-w-none">
-                      ORDER ID: {selectedOrder._id}
+                    <h2 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight font-luxury">Order Info</h2>
+                    <p className="text-[9px] font-black text-muted/40 uppercase tracking-widest">
+                      ID: {selectedOrder._id}
                     </p>
                   </div>
-                  <button
-                    onClick={() => setSelectedOrder(null)}
-                    className="p-2.5 bg-white/[0.02] border border-white/5 rounded-xl text-muted hover:text-white transition-all focus:outline-none"
-                  >
-                    <X size={18} />
-                  </button>
+                  <button onClick={() => setSelectedOrder(null)} className="p-2.5 bg-white/[0.02] border border-white/5 rounded-xl text-muted hover:text-white transition-all"><X size={18} /></button>
                 </div>
 
-                {/* Modal Body */}
-                <div className="space-y-8 md:space-y-10 max-h-[65vh] overflow-y-auto scrollbar-hide pr-1 md:pr-2">
-
-                  {/* Status & Date */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-8 bg-white/[0.02] p-5 md:p-6 rounded-2xl md:rounded-3xl border border-white/[0.03]">
+                <div className="space-y-8 md:space-y-10 max-h-[65vh] overflow-y-auto pr-1 md:pr-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-8 bg-white/[0.02] p-5 md:p-6 rounded-2xl border border-white/[0.03]">
                     <div className="space-y-1.5">
-                      <p className="text-[9px] font-black text-white/20 uppercase tracking-widest">Order Date</p>
+                      <p className="text-[9px] font-black text-white/20 uppercase tracking-widest">Date</p>
                       <p className="text-[10px] sm:text-[11px] font-black text-white uppercase tracking-widest flex items-center gap-2">
                         <Clock size={12} className="text-primary" /> {format(new Date(selectedOrder.createdAt), 'MMM dd, yyyy @ HH:mm')}
                       </p>
@@ -305,10 +289,9 @@ export default function MyOrders() {
                     </div>
                   </div>
 
-                  {/* Items Breakdown */}
                   <div className="space-y-5">
                     <h4 className="text-[10px] font-black text-primary uppercase tracking-[0.3em] flex items-center gap-3">
-                      <Package size={14} /> Item Details
+                      <Package size={14} /> Item List
                     </h4>
                     <div className="space-y-2">
                       {selectedOrder.items?.map((item, i) => (
@@ -316,24 +299,18 @@ export default function MyOrders() {
                           <div className="flex items-center gap-3">
                             <div className="w-1 h-1 bg-primary/40 rounded-full group-hover:bg-primary transition-colors" />
                             <div className="space-y-0.5">
-                              <p className="text-[11px] font-black text-white uppercase tracking-wide truncate max-w-[150px] sm:max-w-xs">
-                                {item.name || item.product?.name || 'Aesthetic Goods'}
-                              </p>
-                              <p className="text-[9px] font-bold text-muted/30 uppercase tracking-widest">
-                                QUANTITY: 0{item.qty}
-                              </p>
+                              <p className="text-[11px] font-black text-white uppercase tracking-wide truncate max-w-[150px] sm:max-w-xs">{item.name || item.product?.name}</p>
+                              <p className="text-[9px] font-bold text-muted/30 uppercase tracking-widest">x0{item.qty}</p>
                             </div>
                           </div>
                           <div className="flex flex-col items-end gap-1">
-                            <span className="text-[12px] font-black text-primary tabular-nums">
-                              ${(item.price * item.qty).toFixed(2)}
-                            </span>
+                            <span className="text-[12px] font-black text-primary tabular-nums">${(item.price * item.qty).toFixed(2)}</span>
                             {item.product && (
                               <button
                                 onClick={(e) => { e.stopPropagation(); handleOpenReview(item.product._id || item.product); }}
                                 className="text-[8px] font-bold text-primary/60 hover:text-primary uppercase tracking-widest underline decoration-primary/30 transition-colors"
                               >
-                                {item.product?.reviews?.some(r => r.user?.toString() === userInfo?._id?.toString()) ? 'Edit Review' : 'Leave Review'}
+                                {item.product?.reviews?.some(r => r.user?.toString() === userInfo?._id?.toString()) ? 'Edit Feedback' : 'Add Feedback'}
                               </button>
                             )}
                           </div>
@@ -342,52 +319,48 @@ export default function MyOrders() {
                     </div>
                   </div>
 
-                  {/* Logistics & Payment */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                     <div className="space-y-4">
                       <h4 className="text-[10px] font-black text-primary uppercase tracking-[0.3em] flex items-center gap-3">
-                        <User size={14} /> Logistics Recipient
+                        <User size={14} /> Shipping
                       </h4>
                       <div className="bg-white/[0.02] p-5 md:p-6 rounded-2xl md:rounded-3xl border border-white/[0.03] space-y-3">
                         <p className="text-[11px] font-black text-white uppercase tracking-wider">{selectedOrder.shippingAddress?.fullName}</p>
                         <p className="text-[10px] font-bold text-muted uppercase tracking-widest opacity-60 leading-relaxed">
                           {selectedOrder.shippingAddress?.address}<br />
-                          {selectedOrder.shippingAddress?.city}, {selectedOrder.shippingAddress?.postalCode}<br />
-                          {selectedOrder.shippingAddress?.phone}
+                          {selectedOrder.shippingAddress?.city}, {selectedOrder.shippingAddress?.postalCode}
                         </p>
                       </div>
                     </div>
 
                     <div className="space-y-4">
                       <h4 className="text-[10px] font-black text-primary uppercase tracking-[0.3em] flex items-center gap-3">
-                        <CreditCard size={14} /> Settlement Summary
+                        <CreditCard size={14} /> Total
                       </h4>
                       <div className="bg-white/[0.02] p-5 md:p-6 rounded-2xl md:rounded-3xl border border-white/[0.03] space-y-4">
                         <div className="flex justify-between items-center text-[10px] font-bold">
-                          <span className="text-muted/30 uppercase tracking-widest">Payment Status</span>
+                          <span className="text-muted/30 uppercase tracking-widest">Payment</span>
                           <span className={`px-2 py-0.5 rounded border ${selectedOrder.paymentStatus === 'Paid' ? 'text-emerald-400 border-emerald-400/20 bg-emerald-400/5' : 'text-primary border-primary/20 bg-primary/5'}`}>
                             {selectedOrder.paymentStatus?.toUpperCase() || 'PENDING'}
                           </span>
                         </div>
                         <div className="h-px bg-white/[0.05]" />
                         <div className="flex justify-between items-baseline pt-2">
-                          <span className="text-[10px] font-black text-muted/30 uppercase tracking-widest">Grand Total</span>
+                          <span className="text-[10px] font-black text-muted/30 uppercase tracking-widest">Price</span>
                           <span className="text-2xl sm:text-3xl font-black text-primary font-luxury drop-shadow-primary-sm">${selectedOrder.totalAmount?.toFixed(2)}</span>
                         </div>
                       </div>
 
-                      {/* Cancel Order Action */}
                       {(selectedOrder.status === 'Processing' || selectedOrder.status === 'Pending') && (
                         <button
-                          onClick={() => handleCancelOrder(selectedOrder)}
+                          onClick={() => { setOrderToCancel(selectedOrder); setIsCancelModalOpen(true); }}
                           className="w-full py-4 mt-2 bg-red-500/5 border border-red-500/20 text-red-500 hover:bg-red-500 hover:text-white transition-all rounded-xl text-[10px] font-black uppercase tracking-[0.2em] shadow-lg active:scale-[0.98]"
                         >
-                          Dissolve Order
+                          Cancel Order
                         </button>
                       )}
                     </div>
                   </div>
-
                 </div>
               </div>
             </motion.div>
@@ -395,7 +368,7 @@ export default function MyOrders() {
         )}
       </AnimatePresence>
 
-      {/* Review Modal - Pro Interface */}
+      {/* Review Modal */}
       <AnimatePresence>
         {reviewModalProduct && (
           <div className="fixed inset-0 z-[120] flex items-center justify-center p-3 md:p-4">
@@ -406,7 +379,6 @@ export default function MyOrders() {
               onClick={() => setReviewModalProduct(null)}
               className="absolute inset-0 bg-background/95 backdrop-blur-md"
             />
-
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -414,76 +386,59 @@ export default function MyOrders() {
               className="relative w-full max-w-xl bg-[#1A1A1A] border border-white/[0.05] rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]"
             >
               <div className="p-5 sm:p-8 md:p-10 flex-shrink-0">
-                {/* Modal Header */}
                 <div className="flex justify-between items-start pb-6 border-b border-white/[0.05]">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
                       <span className="w-8 h-px bg-primary" />
-                      <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Product Feedback</p>
+                      <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Feedback</p>
                     </div>
-                    <h2 className="text-xl sm:text-3xl font-black text-white uppercase tracking-tight font-luxury">
+                    <h2 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight font-luxury">
                       {productData ? productData.name : 'Loading...'}
                     </h2>
                   </div>
-                  <button
-                    onClick={() => setReviewModalProduct(null)}
-                    className="p-2.5 bg-white/[0.02] border border-white/5 rounded-xl text-muted hover:text-white transition-all focus:outline-none"
-                  >
-                    <X size={18} />
-                  </button>
+                  <button onClick={() => setReviewModalProduct(null)} className="p-2.5 bg-white/[0.02] border border-white/5 rounded-xl text-muted hover:text-white transition-all"><X size={18} /></button>
                 </div>
               </div>
 
-              {/* Scrollable Content inside Modal */}
-              <div className="px-5 sm:px-8 md:px-10 pb-5 sm:pb-8 md:pb-10 overflow-y-auto scrollbar-hide flex-1 space-y-8">
-
-                {/* Write Review Form */}
+              <div className="px-5 sm:px-8 md:px-10 pb-5 sm:pb-8 md:pb-10 overflow-y-auto flex-1 space-y-8 scrollbar-hide">
                 <div className="space-y-5 bg-white/[0.02] p-6 lg:p-8 rounded-3xl border border-white/[0.03]">
                   <h4 className="text-[10px] font-black text-primary uppercase tracking-[0.3em] flex items-center gap-3">
-                    <MessageSquare size={14} /> Submit Your Ledger
+                    <MessageSquare size={14} /> Add Your Feedback
                   </h4>
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <label className="text-[9px] font-black text-white/20 uppercase tracking-widest">Aesthetic Rating</label>
+                      <label className="text-[9px] font-black text-white/20 uppercase tracking-widest">Rating</label>
                       <div className="flex items-center gap-2">
                         {[1, 2, 3, 4, 5].map((star) => (
-                          <button
-                            key={star}
-                            onClick={() => setRating(star)}
-                            className="focus:outline-none transition-transform hover:scale-110 active:scale-95"
-                          >
-                            <Star
-                              size={24}
-                              className={star <= rating ? "text-primary fill-primary drop-shadow-primary-sm" : "text-white/10"}
-                            />
+                          <button key={star} onClick={() => reviewFormik.setFieldValue('rating', star)} className="focus:outline-none transition-transform hover:scale-110 active:scale-95">
+                            <Star size={24} className={star <= reviewFormik.values.rating ? "text-primary fill-primary drop-shadow-primary-sm" : "text-white/10"} />
                           </button>
                         ))}
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <label className="text-[9px] font-black text-white/20 uppercase tracking-widest">Chronicle Details</label>
+                      <label className="text-[9px] font-black text-white/20 uppercase tracking-widest">Review</label>
                       <textarea
-                        value={comment}
-                        onChange={(e) => setComment(e.target.value)}
+                        {...reviewFormik.getFieldProps('comment')}
                         rows={3}
-                        placeholder="Describe your acquisition experience..."
-                        className="w-full bg-[#111111] border border-white/10 focus:border-primary/40 p-4 rounded-xl outline-none text-[12px] font-bold text-white transition-all resize-none placeholder:text-white/10 uppercase tracking-wide"
+                        placeholder="Tell us what you think..."
+                        className="w-full bg-[#111111] border border-white/10 focus:border-primary/40 p-4 rounded-xl outline-none text-[12px] font-bold text-white transition-all resize-none placeholder:text-white/10"
                       />
+                      {reviewFormik.touched.comment && reviewFormik.errors.comment && <p className="text-primary text-[8px] font-black uppercase tracking-widest">{reviewFormik.errors.comment}</p>}
                     </div>
                     <button
-                      onClick={submitReview}
+                      onClick={reviewFormik.handleSubmit}
                       disabled={reviewLoading || !productData}
                       className="w-full py-4 bg-primary text-secondary hover:bg-white hover:text-primary rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg active:scale-[0.98] disabled:opacity-50"
                     >
-                      {reviewLoading ? 'Transmitting...' : 'Commit Review'}
+                      {reviewLoading ? 'Sending...' : 'Post Feedback'}
                     </button>
                   </div>
                 </div>
 
-                {/* Existing Reviews */}
                 <div className="space-y-5">
                   <h4 className="text-[10px] font-black text-primary uppercase tracking-[0.3em] flex items-center gap-3">
-                    <Star size={14} /> Historical Testimonials
+                    <Star size={14} /> Previous Feedback
                   </h4>
                   {!productData ? (
                     <div className="py-8 text-center text-[10px] uppercase tracking-widest text-white/20 font-black animate-pulse">Loading Logs...</div>
@@ -512,59 +467,33 @@ export default function MyOrders() {
                     </div>
                   ) : (
                     <div className="py-8 text-center text-[10px] uppercase tracking-widest text-white/20 font-black">
-                      No chronicles discovered. Be the first to add to the matrix.
+                      No feedback yet.
                     </div>
                   )}
                 </div>
-
               </div>
             </motion.div>
           </div>
         )}
       </AnimatePresence>
-      {/* Cancellation Confirmation Modal */}
+
       <AnimatePresence>
         {isCancelModalOpen && (
           <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsCancelModalOpen(false)}
-              className="absolute inset-0 bg-background/95 backdrop-blur-md"
-            />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-sm bg-[#1A1A1A] border border-white/5 p-8 rounded-3xl shadow-2xl text-center"
-            >
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsCancelModalOpen(false)} className="absolute inset-0 bg-background/95 backdrop-blur-md" />
+            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative w-full max-w-sm bg-[#1A1A1A] border border-white/5 p-8 rounded-3xl shadow-2xl text-center" >
               <div className="w-20 h-20 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center justify-center mx-auto text-red-500 mb-8 shadow-2xl shadow-red-500/20">
                 <X size={40} strokeWidth={1.5} />
               </div>
-              
               <div className="space-y-2 mb-10">
-                <h3 className="text-xl font-black text-white uppercase tracking-tight font-luxury">Dissolve Order?</h3>
+                <h3 className="text-xl font-black text-white uppercase tracking-tight font-luxury">Cancel?</h3>
                 <p className="text-[10px] font-bold text-muted/40 uppercase tracking-[0.2em] leading-relaxed">
-                   Are you certain you wish to dissolve order <br/>
-                   <span className="text-red-500 underline underline-offset-4 tracking-normal font-luxury">#{orderToCancel?._id.substring(orderToCancel?._id.length - 8)}</span>? <br/>
-                   This action is irreversible.
+                   Are you sure you want to cancel? <br/>
                 </p>
               </div>
-
               <div className="flex flex-col gap-3">
-                <button
-                  onClick={confirmCancel}
-                  className="w-full py-5 bg-red-500 text-white rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] shadow-xl shadow-red-500/20 active:scale-95 hover:bg-red-600 transition-all font-luxury"
-                >
-                  CONFIRM DISSOLUTION
-                </button>
-                <button
-                  onClick={() => setIsCancelModalOpen(false)}
-                  className="w-full py-5 bg-white/5 text-muted rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:text-white transition-all font-luxury"
-                >
-                  ABANDON ACTION
-                </button>
+                <button onClick={confirmCancel} className="w-full py-5 bg-red-500 text-white rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] shadow-xl shadow-red-500/20 active:scale-95 hover:bg-red-600 transition-all font-luxury" > CONFIRM </button>
+                <button onClick={() => setIsCancelModalOpen(false)} className="w-full py-5 bg-white/5 text-muted rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:text-white transition-all font-luxury" > BACK </button>
               </div>
             </motion.div>
           </div>
@@ -573,4 +502,3 @@ export default function MyOrders() {
     </UserPanelLayout>
   );
 }
-

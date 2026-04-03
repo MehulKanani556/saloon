@@ -11,18 +11,25 @@ import { Link } from 'react-router-dom';
 
 
 export default function Contact() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required('Name is required'),
+    email: Yup.string().email('Invalid email').required('Email is required'),
+    subject: Yup.string().required('Subject is required'),
+    message: Yup.string().required('Message is required'),
+  });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
-      toast.success("Message sent to our salon!");
-      e.target.reset();
-    }, 1500);
-  };
+  const formik = useFormik({
+    initialValues: { name: '', email: '', subject: '', message: '' },
+    validationSchema,
+    onSubmit: (values, { resetForm, setSubmitting }) => {
+      // Simulate API call
+      setTimeout(() => {
+        setSubmitting(false);
+        toast.success("Message sent to our salon!");
+        resetForm();
+      }, 1500);
+    },
+  });
 
   return (
     <div className="relative selection:bg-primary/30 selection:text-white bg-background font-sans min-h-screen">
@@ -34,7 +41,7 @@ export default function Contact() {
           <div className="absolute inset-0 z-0">
             <img
               src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?q=80&w=2070&auto=format&fit=crop"
-              alt="Luxury Sanctuary"
+              alt="Glow & Elegance"
               className="w-full h-full object-cover opacity-30 scale-105"
             />
           </div>
@@ -141,33 +148,56 @@ export default function Contact() {
                   <h3 className="text-lg md:text-2xl font-black text-white uppercase tracking-wide mb-2">Send a Message</h3>
                   <p className="text-muted font-bold text-[10px] uppercase tracking-widest mb-12">We'll reply within 24 hours.</p>
 
-                  <form onSubmit={handleSubmit} className="space-y-3 md:space-y-8">
+                  <form onSubmit={formik.handleSubmit} className="space-y-3 md:space-y-8">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                       <div className="space-y-1 md:space-y-3">
                         <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Your Name</label>
-                        <input required placeholder="Your Name" className="w-full bg-background border-2 border-transparent focus:border-primary/20 rounded-2xl px-6 py-4 text-sm font-bold outline-none transition-all text-white" />
+                        <input
+                          {...formik.getFieldProps('name')}
+                          placeholder="Your Name"
+                          className={`w-full bg-background border-2 ${formik.touched.name && formik.errors.name ? 'border-red-500/50' : 'border-transparent'} focus:border-primary/20 rounded-2xl px-6 py-4 text-sm font-bold outline-none transition-all text-white`}
+                        />
+                        {formik.touched.name && formik.errors.name && <p className="text-[8px] text-red-500 font-black uppercase tracking-widest ml-2">{formik.errors.name}</p>}
                       </div>
                       <div className="space-y-1 md:space-y-3">
                         <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Email Address</label>
-                        <input required type="email" placeholder="Email Address" className="w-full bg-background border-2 border-transparent focus:border-primary/20 rounded-2xl px-6 py-4 text-sm font-bold outline-none transition-all text-white" />
+                        <input
+                          {...formik.getFieldProps('email')}
+                          type="email"
+                          placeholder="Email Address"
+                          className={`w-full bg-background border-2 ${formik.touched.email && formik.errors.email ? 'border-red-500/50' : 'border-transparent'} focus:border-primary/20 rounded-2xl px-6 py-4 text-sm font-bold outline-none transition-all text-white`}
+                        />
+                        {formik.touched.email && formik.errors.email && <p className="text-[8px] text-red-500 font-black uppercase tracking-widest ml-2">{formik.errors.email}</p>}
                       </div>
                     </div>
 
                     <div className="space-y-1 md:space-y-3">
                       <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Subject</label>
-                      <input placeholder="e.g. Bridal Packages" className="w-full bg-background border-2 border-transparent focus:border-primary/20 rounded-2xl px-6 py-4 text-sm font-bold outline-none transition-all text-white" />
+                      <input
+                        {...formik.getFieldProps('subject')}
+                        placeholder="e.g. Bridal Packages"
+                        className={`w-full bg-background border-2 ${formik.touched.subject && formik.errors.subject ? 'border-red-500/50' : 'border-transparent'} focus:border-primary/20 rounded-2xl px-6 py-4 text-sm font-bold outline-none transition-all text-white`}
+                      />
+                      {formik.touched.subject && formik.errors.subject && <p className="text-[8px] text-red-500 font-black uppercase tracking-widest ml-2">{formik.errors.subject}</p>}
                     </div>
 
                     <div className="space-y-1 md:space-y-3">
                       <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Your Message</label>
-                      <textarea required rows={5} placeholder="Tell us what you need..." className="w-full bg-background border-2 border-transparent focus:border-primary/20 rounded-2xl px-6 py-4 text-sm font-bold outline-none transition-all text-white resize-none" />
+                      <textarea
+                        {...formik.getFieldProps('message')}
+                        rows={5}
+                        placeholder="Tell us what you need..."
+                        className={`w-full bg-background border-2 ${formik.touched.message && formik.errors.message ? 'border-red-500/50' : 'border-transparent'} focus:border-primary/20 rounded-2xl px-6 py-4 text-sm font-bold outline-none transition-all text-white resize-none`}
+                      />
+                      {formik.touched.message && formik.errors.message && <p className="text-[8px] text-red-500 font-black uppercase tracking-widest ml-2">{formik.errors.message}</p>}
                     </div>
 
                     <button
-                      disabled={isSubmitting}
+                      type="submit"
+                      disabled={formik.isSubmitting}
                       className="w-full py-6 bg-primary text-secondary rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl hover:bg-primary/90 transition-all flex items-center justify-center gap-4 active:scale-95 disabled:opacity-50"
                     >
-                      {isSubmitting ? (
+                      {formik.isSubmitting ? (
                         <div className="w-6 h-6 border-2 border-secondary/30 border-t-secondary rounded-full animate-spin" />
                       ) : (
                         <>
@@ -186,7 +216,7 @@ export default function Contact() {
         {/* Map Placeholder */}
         <section className="h-[400px] bg-secondary relative">
           <iframe
-            title="Sanctuary Map"
+            title="Salon Map"
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15082.946399999998!2d72.825!3d19.05!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c92f9e42d7bb%3A0x690e7a277717616!2sBandra%20West%2C%20Mumbai%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1625060000000!5m2!1sen!2sin"
             className="w-full h-full border-none contrast-125 opacity-60"
             allowFullScreen=""

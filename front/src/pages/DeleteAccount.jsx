@@ -11,17 +11,21 @@ import { deleteAccount } from '../redux/slices/authSlice';
 export default function DeleteAccount() {
   const [loading, setLoading] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [password, setPassword] = useState('');
   const dispatch = useDispatch();
-
-  const handleDissolve = async () => {
-    setLoading(true);
-    const result = await dispatch(deleteAccount({ password }));
-    setLoading(false);
-    if (!result.error) {
-      window.location.href = '/';
-    }
-  };
+  const formik = useFormik({
+    initialValues: { password: '' },
+    validationSchema: Yup.object({
+      password: Yup.string().required('Security password is required for dissolution'),
+    }),
+    onSubmit: async (values) => {
+      setLoading(true);
+      const result = await dispatch(deleteAccount({ password: values.password }));
+      setLoading(false);
+      if (!result.error) {
+        window.location.href = '/';
+      }
+    },
+  });
 
   return (
     <UserPanelLayout title="Delete Account">
@@ -92,6 +96,7 @@ export default function DeleteAccount() {
                 <div className="absolute -top-24 -right-24 w-64 h-64 bg-red-500/10 rounded-full blur-[100px] pointer-events-none" />
 
                 <button
+                  type="button"
                   onClick={() => setShowConfirm(false)}
                   className="absolute right-6 top-6 p-2 bg-white/5 border border-white/10 rounded-xl text-muted hover:text-white transition-all hover:rotate-90"
                 >
@@ -110,40 +115,44 @@ export default function DeleteAccount() {
                     </p>
                   </div>
 
-                  <div className="space-y-8 text-left">
+                  <form onSubmit={formik.handleSubmit} className="space-y-8 text-left">
                     <div className="space-y-3">
                       <label className="text-[10px] font-bold text-muted/30 uppercase tracking-[0.2em] ml-2">Password</label>
                       <input
+                        {...formik.getFieldProps('password')}
                         type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
                         placeholder="Enter your password"
-                        className="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-red-500/40 focus:ring-4 focus:ring-red-500/5 transition-all font-bold text-lg text-red-500 text-center tracking-widest uppercase"
+                        className={`w-full bg-white/5 border ${formik.touched.password && formik.errors.password ? 'border-red-500/50' : 'border-white/10'} p-5 rounded-2xl outline-none focus:border-red-500/40 focus:ring-4 focus:ring-red-500/5 transition-all font-bold text-lg text-red-500 text-center tracking-widest uppercase`}
                       />
+                      {formik.touched.password && formik.errors.password && (
+                        <p className="text-[8px] text-red-500 font-black uppercase tracking-widest ml-2 text-center">{formik.errors.password}</p>
+                      )}
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-4 pt-6">
                       <button
+                        type="button"
                         onClick={() => setShowConfirm(false)}
                         className="flex-1 px-8 py-4 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-white/10 text-muted hover:text-white transition-all"
                       >
                         Cancel
                       </button>
                       <button
-                        onClick={handleDissolve}
-                        disabled={loading || !password}
+                        type="submit"
+                        disabled={loading || !formik.values.password}
                         className="flex-1 px-8 py-4 bg-red-600 text-white rounded-2xl text-[10px] font-bold uppercase tracking-[0.2em] shadow-xl shadow-red-600/20 disabled:opacity-30 flex items-center justify-center gap-3 transition-all hover:scale-[1.02] active:scale-[0.98]"
                       >
                         {loading ? <Loader2 className="animate-spin" size={18} /> : <Trash2 size={18} />}
                         Delete Account
                       </button>
                     </div>
-                  </div>
+                  </form>
                 </div>
               </motion.div>
             </div>
           )}
         </AnimatePresence>
+
       </div>
     </UserPanelLayout>
   );

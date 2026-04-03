@@ -12,7 +12,7 @@ const createSpecializationRequest = async (req, res) => {
         // Check if there's already a pending request
         const pendingRequest = await SpecializationRequest.findOne({ staff: req.user._id, status: 'Pending' });
         if (pendingRequest) {
-            return res.status(400).json({ message: 'A pending expertise synchronization is already active. Please wait for validation.' });
+            return res.status(400).json({ message: 'A pending specialization request is already active. Please wait for approval.' });
         }
 
         const newRequest = await SpecializationRequest.create({
@@ -81,7 +81,7 @@ const updateSpecializationRequestStatus = async (req, res) => {
         const request = await SpecializationRequest.findById(req.params.id);
 
         if (!request) {
-            return res.status(404).json({ message: 'Expertise request not found' });
+            return res.status(404).json({ message: 'Specialization request not found' });
         }
 
         request.status = status;

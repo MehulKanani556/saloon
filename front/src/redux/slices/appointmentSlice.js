@@ -32,7 +32,7 @@ export const updateAppointment = createAsyncThunk('appointments/update', async (
 export const updateAppointmentStatus = createAsyncThunk('appointments/updateStatus', async ({ id, status }, { rejectWithValue }) => {
     try {
         const { data } = await api.put(`/appointments/${id}/status`, { status });
-        toast.success(`Ritual marked as ${status}`);
+        toast.success(`Appointment marked as ${status}`);
         return data;
     } catch (err) {
         toast.error('Status update failed');

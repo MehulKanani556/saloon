@@ -40,13 +40,13 @@ const dashboardSlice = createSlice({
         const payload = action.payload;
         state.data = {
           stats: payload.stats || {},
-          revenueData: payload.financialVelocity || [],
-          categoryData: payload.serviceHierarchy || [],
-          specializationData: payload.serviceHierarchy || [],
-          topStaff: payload.eliteTalent || [],
-          recentAppointments: payload.recentBookings || [],
-          occupancyData: payload.occupancyTrends || [],
-          upcomingAppointments: payload.upcomingRituals || []
+          revenueData: payload.revenueTrend || [],
+          categoryData: payload.categoryDistribution || [],
+          specializationData: payload.categoryDistribution || [],
+          topStaff: payload.topStaff || [],
+          recentAppointments: payload.recentAppointments || [],
+          occupancyData: payload.occupancyData || [],
+          upcomingAppointments: payload.upcomingAppointments || []
         };
       })
       .addCase(fetchDashboardInsights.rejected, (state, action) => {

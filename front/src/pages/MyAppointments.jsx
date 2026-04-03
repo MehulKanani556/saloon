@@ -73,7 +73,7 @@ export default function MyAppointments() {
         rating,
         comment
       })).unwrap();
-      toast.success('Your feedback has been immortalized.');
+      toast.success('Thank you for your feedback.');
       setReviewTarget(null);
       setComment('');
       setRating(5);
@@ -289,7 +289,7 @@ export default function MyAppointments() {
                             <div className="space-y-0.5">
                               <p className="text-[12px] font-black text-white uppercase tracking-tight">{asm.service?.name}</p>
                               <p className="text-[9px] font-bold text-muted/30 uppercase tracking-widest">
-                                Artisan: <span className="text-primary/60">{asm.staff?.name || 'Assigned Specialist'}</span>
+                                Staff: <span className="text-primary/60">{asm.staff?.name || 'Assigned Specialist'}</span>
                               </p>
                             </div>
                           </div>
@@ -310,7 +310,7 @@ export default function MyAppointments() {
                                       onClick={(e) => { e.stopPropagation(); setReviewTarget({ id: asm.staff?._id || asm.staff, type: 'Staff', name: asm.staff?.name }); }}
                                       className="text-[8px] font-bold text-primary/60 hover:text-primary uppercase tracking-widest underline decoration-primary/30 transition-colors"
                                     >
-                                      Review Artisan
+                                      Review Staff
                                     </button>
                                   )}
                                 </div>
@@ -450,7 +450,7 @@ export default function MyAppointments() {
 
                 <div className="space-y-6">
                   <div className="space-y-3">
-                    <label className="text-[9px] font-black text-white/20 uppercase tracking-widest text-center block">Artisan Grade</label>
+                    <label className="text-[9px] font-black text-white/20 uppercase tracking-widest text-center block">Rating</label>
                     <div className="flex justify-center gap-3">
                       {[1, 2, 3, 4, 5].map((star) => (
                         <button
@@ -468,12 +468,12 @@ export default function MyAppointments() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-[9px] font-black text-white/20 uppercase tracking-widest">Chronicle Details</label>
+                    <label className="text-[9px] font-black text-white/20 uppercase tracking-widest">Review Details</label>
                     <textarea
                       value={comment}
                       onChange={(e) => setComment(e.target.value)}
                       rows={4}
-                      placeholder="Describe your ritual experience..."
+                      placeholder="Write your review..."
                       className="w-full bg-[#111111] border border-white/10 focus:border-primary/40 p-4 rounded-xl outline-none text-[12px] font-bold text-white transition-all resize-none placeholder:text-white/5 uppercase tracking-wide"
                     />
                   </div>
@@ -483,7 +483,7 @@ export default function MyAppointments() {
                     disabled={reviewLoading}
                     className="w-full py-4 bg-primary text-secondary hover:bg-white hover:text-primary rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg active:scale-[0.98] disabled:opacity-50"
                   >
-                    {reviewLoading ? 'Transmitting...' : 'Commit Review'}
+                    {reviewLoading ? 'Submitting...' : 'Submit Review'}
                   </button>
                 </div>
               </div>

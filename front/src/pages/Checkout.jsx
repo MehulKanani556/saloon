@@ -19,8 +19,8 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import UserPanelLayout from '../components/public/UserPanelLayout';
 import { clearCart } from '../redux/slices/cartSlice';
+import { createOrder, createPaymentIntent } from '../redux/slices/orderSlice';
 import toast from 'react-hot-toast';
-import api from '../utils/api';
 import { loadStripe } from '@stripe/stripe-js';
 import { 
     Elements, 
@@ -69,10 +69,8 @@ const PaymentForm = ({ formik, total, cartItems, setStep, dispatch, isProcessing
         try {
             setIsProcessing(true);
 
-            // 1. Create Payment Intent on backend
-            const { data: { clientSecret } } = await api.post('/payment/create-payment-intent', {
-                amount: total
-            });
+            // 1. Create Payment Intent on backend via Redux
+            const { clientSecret } = await dispatch(createPaymentIntent(total)).unwrap();
 
             // 2. Confirm payment on frontend
             const result = await stripe.confirmCardPayment(clientSecret, {
@@ -86,7 +84,7 @@ const PaymentForm = ({ formik, total, cartItems, setStep, dispatch, isProcessing
                             line1: formik.values.address,
                             city: formik.values.city,
                             postal_code: formik.values.zipCode,
-                            country: 'IN' // Or formik.values.country if you have it
+                            country: 'IN'
                         }
                     },
                 },
@@ -97,7 +95,7 @@ const PaymentForm = ({ formik, total, cartItems, setStep, dispatch, isProcessing
                 setIsProcessing(false);
             } else {
                 if (result.paymentIntent.status === 'succeeded') {
-                    // 3. Create order on backend
+                    // 3. Create order on backend via Redux
                     const orderData = {
                         items: cartItems.map(item => ({
                             _id: item._id,
@@ -118,7 +116,7 @@ const PaymentForm = ({ formik, total, cartItems, setStep, dispatch, isProcessing
                         paymentIntentId: result.paymentIntent.id
                     };
 
-                    await api.post('/orders', orderData);
+                    await dispatch(createOrder(orderData)).unwrap();
                     
                     setIsProcessing(false);
                     setStep(3);
@@ -128,7 +126,7 @@ const PaymentForm = ({ formik, total, cartItems, setStep, dispatch, isProcessing
             }
         } catch (err) {
             setIsProcessing(false);
-            toast.error(err.response?.data?.message || 'Payment failed');
+            toast.error(err || 'Payment failed');
         }
     };
 

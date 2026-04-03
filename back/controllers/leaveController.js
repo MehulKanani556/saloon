@@ -8,7 +8,7 @@ const applyLeave = async (req, res) => {
     const { startDate, endDate, reason, startTime, endTime, totalHours, type } = req.body;
     try {
         if (!startDate || !endDate || !reason) {
-            return res.status(400).json({ message: 'Deployment details (Dates and Reason) required' });
+            return res.status(400).json({ message: 'Dates and reason are required' });
         }
 
         const leave = new Leave({
@@ -26,7 +26,7 @@ const applyLeave = async (req, res) => {
         const populatedLeave = await Leave.findById(createdLeave._id).populate('staff', 'name profileImage');
         res.status(201).json(populatedLeave);
     } catch (error) {
-        res.status(500).json({ message: 'Temporal extraction failed', error: error.message });
+        res.status(500).json({ message: 'Failed to apply for leave', error: error.message });
     }
 };
 
@@ -38,7 +38,7 @@ const getMyLeaves = async (req, res) => {
         const leaves = await Leave.find({ staff: req.user._id }).sort({ createdAt: -1 });
         res.json(leaves);
     } catch (error) {
-        res.status(500).json({ message: 'History retrieval failed', error: error.message });
+        res.status(500).json({ message: 'Failed to retrieve leave history', error: error.message });
     }
 };
 
@@ -50,7 +50,7 @@ const getAllLeaves = async (req, res) => {
         const leaves = await Leave.find().populate('staff', 'name email profileImage phone').sort({ createdAt: -1 });
         res.json(leaves);
     } catch (error) {
-        res.status(500).json({ message: 'Collective extraction failed', error: error.message });
+        res.status(500).json({ message: 'Failed to retrieve all leaves', error: error.message });
     }
 };
 
@@ -110,7 +110,7 @@ const updateLeaveStatus = async (req, res) => {
 
             if (actualConflicts.length > 0) {
                 return res.status(400).json({ 
-                    message: `Personnel deployment detected: ${actualConflicts.length} active service commitments during this range. Please reschedule appointments before approving departure.` 
+                    message: `Conflict detected: There are ${actualConflicts.length} appointments scheduled during this time. Please reschedule them before approving the leave.` 
                 });
             }
 
@@ -124,7 +124,7 @@ const updateLeaveStatus = async (req, res) => {
         const populatedLeave = await Leave.findById(leave._id).populate('staff', 'name email profileImage phone');
         res.json(populatedLeave);
     } catch (error) {
-        res.status(500).json({ message: 'Record mutation failed', error: error.message });
+        res.status(500).json({ message: 'Failed to update leave status', error: error.message });
     }
 };
 

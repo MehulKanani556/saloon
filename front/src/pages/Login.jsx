@@ -16,11 +16,11 @@ const validationSchema = Yup.object().shape({
   method: Yup.string().oneOf(['password', 'otp']).required(),
   password: Yup.string().when('method', {
     is: 'password',
-    then: (schema) => schema.min(6, 'Passkey must be at least 6 characters').required('Authorization passkey is required'),
+    then: (schema) => schema.min(6, 'Password must be at least 6 characters').required('Password is required'),
   }),
   otp: Yup.string().when('method', {
     is: 'otp',
-    then: (schema) => schema.length(6, 'OTP must be 6 digits').required('Verification code is required'),
+    then: (schema) => schema.length(6, 'OTP must be 6 digits').required('OTP code is required'),
   }),
 });
 
@@ -157,14 +157,14 @@ export default function Login() {
             }}
             className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all relative z-10 ${formik.values.method === 'password' ? 'text-secondary' : 'text-primary/40 hover:text-primary transition-colors'}`}
           >
-            Passkey Login
+            Password Login
           </button>
           <button
             type="button"
             onClick={() => formik.setFieldValue('method', 'otp')}
             className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all relative z-10 ${formik.values.method === 'otp' ? 'text-secondary' : 'text-primary/40 hover:text-primary transition-colors'}`}
           >
-            Code Login
+            OTP Login
           </button>
           <motion.div
             animate={{ x: formik.values.method === 'password' ? '0%' : '100%' }}
@@ -178,7 +178,7 @@ export default function Login() {
           <div className="space-y-3">
             <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-1 flex justify-between">
               <span>Email or Phone</span>
-              <span className="text-[9px] lowercase font-medium ">your login</span>
+              <span className="text-[9px] lowercase font-medium ">Login Details</span>
             </label>
             <div className={`relative flex items-center bg-background border rounded-2xl overflow-hidden transition-all duration-300 ${formik.touched.identity && formik.errors.identity ? 'border-red-500/50 shadow-[0_0_0_1px_rgba(239,68,68,0.1)]' : 'border-white/5 shadow-premium'}`}>
 
@@ -260,16 +260,16 @@ export default function Login() {
                     animate={{ opacity: 1 }}
                     className="py-6 border-y border-white/5 flex flex-col items-center gap-2"
                   >
-                    <p className="text-[9px] font-black text-muted/30 uppercase tracking-[0.3em]">Identity Verification Req.</p>
+                    <p className="text-[9px] font-black text-muted/30 uppercase tracking-[0.3em]">Verification Required</p>
                   </motion.div>
                 ) : (
                   <div className="space-y-2">
                     <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-1 flex justify-between">
-                      <span>Verification Code</span>
+                      <span>OTP Code</span>
                       {timer > 0 ? (
                         <span className="text-muted font-medium">Resend in {timer}s</span>
                       ) : (
-                        <button type="button" onClick={handleSendOTP} className="text-primary font-black hover:underline transition-all">Resend Code</button>
+                        <button type="button" onClick={handleSendOTP} className="text-primary font-black hover:underline transition-all">Resend OTP</button>
                       )}
                     </label>
                     <div className="relative group">

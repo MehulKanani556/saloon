@@ -18,9 +18,12 @@ import {
     User
 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
+import { fetchProductById, submitProductReview, fetchProducts } from '../redux/slices/productSlice';
 import { addToCart } from '../redux/slices/cartSlice';
 import { addToWishlist, removeFromWishlist } from '../redux/slices/wishlistSlice';
 import toast from 'react-hot-toast';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import api from '../utils/api';
 import PublicNavbar from '../components/public/PublicNavbar';
 import PublicFooter from '../components/public/PublicFooter';
@@ -32,40 +35,46 @@ export default function ProductDetail() {
     const dispatch = useDispatch();
     const { wishlistItems } = useSelector(state => state.wishlist);
 
-    const [product, setProduct] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [quantity, setQuantity] = useState(1);
-    const [activeTab, setActiveTab] = useState('description');
-    const [relatedProducts, setRelatedProducts] = useState([]);
+    const { product, loading, reviewLoading, products: allProducts } = useSelector(state => state.products);
+    const userInfo = useSelector(state => state.auth.userInfo);
     
-    // Review States
-    const { userInfo } = useSelector(state => state.auth);
-    const [rating, setRating] = useState(5);
-    const [comment, setComment] = useState('');
-    const [reviewLoading, setReviewLoading] = useState(false);
+    const [quantity, setQuantity] = useState(1);
+    const [relatedProducts, setRelatedProducts] = useState([]);
+
+    const reviewFormik = useFormik({
+        initialValues: {
+            rating: 5,
+            comment: ''
+        },
+        validationSchema: Yup.object({
+            rating: Yup.number().min(1, 'Please select a rating').max(5).required('Required'),
+            comment: Yup.string().min(5, 'Review must be at least 5 characters').required('Required')
+        }),
+        onSubmit: async (values, { resetForm }) => {
+            if (!userInfo) return toast.error('Please login to leave a review');
+            try {
+                await dispatch(submitProductReview({ id, reviewData: values })).unwrap();
+                toast.success('Review submitted successfully');
+                resetForm();
+            } catch (err) {
+                toast.error(err || 'Failed to submit review');
+            }
+        }
+    });
 
     const isWishlisted = wishlistItems.some(item => item._id === id);
 
     useEffect(() => {
-        fetchProductData();
+        dispatch(fetchProductById(id));
+        if (allProducts.length === 0) dispatch(fetchProducts());
         window.scrollTo(0, 0);
-    }, [id]);
+    }, [id, dispatch]);
 
-    const fetchProductData = async () => {
-        try {
-            setLoading(true);
-            const { data } = await api.get(`/products/${id}`);
-            setProduct(data);
-
-            const { data: allProducts } = await api.get('/products');
-            setRelatedProducts(allProducts.filter(p => p.category === data.category && p._id !== id).slice(0, 4));
-
-            setLoading(false);
-        } catch (err) {
-            toast.error('Failed to load product');
-            setLoading(false);
+    useEffect(() => {
+        if (product && allProducts.length > 0) {
+            setRelatedProducts(allProducts.filter(p => p.category === product.category && p._id !== id).slice(0, 4));
         }
-    };
+    }, [product, allProducts, id]);
 
     const handleAddToCart = () => {
         dispatch(addToCart({ ...product, qty: quantity }));
@@ -82,24 +91,6 @@ export default function ProductDetail() {
         }
     };
 
-    const submitReview = async (e) => {
-        e.preventDefault();
-        if (!userInfo) return toast.error('Please login to leave a review');
-        if (!comment.trim()) return toast.error('Please enter a comment');
-
-        try {
-            setReviewLoading(true);
-            await api.post(`/products/${id}/reviews`, { rating, comment });
-            toast.success('Review submitted successfully');
-            setComment('');
-            setRating(5);
-            fetchProductData();
-        } catch (err) {
-            toast.error(err.response?.data?.message || 'Failed to submit review');
-        } finally {
-            setReviewLoading(false);
-        }
-    };
 
     if (loading) {
         return (
@@ -265,45 +256,57 @@ export default function ProductDetail() {
 
                                 {/* Review Form */}
                                 {userInfo && (
-                                    <motion.div 
+                                    <motion.div
                                         initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         className="bg-white/[0.02] p-6 rounded-2xl border border-white/[0.04] space-y-6"
                                     >
                                         <div className="space-y-1">
-                                            <h4 className="text-[11px] font-black text-white uppercase tracking-wider">Leave a Legacy</h4>
-                                            <p className="text-[8px] font-bold text-muted/30 uppercase tracking-widest">Share your aesthetic experience with the community</p>
+                                            <h4 className="text-[11px] font-black text-white uppercase tracking-wider">Leave a Review</h4>
+                                            <p className="text-[8px] font-bold text-muted/30 uppercase tracking-widest">Share your thoughts about this product</p>
                                         </div>
 
-                                        <form onSubmit={submitReview} className="space-y-4">
+                                        <form onSubmit={(e) => { e.preventDefault(); reviewFormik.handleSubmit(); }} className="space-y-4">
                                             <div className="flex items-center gap-2">
                                                 {[1, 2, 3, 4, 5].map((star) => (
                                                     <button
                                                         key={star}
                                                         type="button"
-                                                        onClick={() => setRating(star)}
+                                                        onClick={() => reviewFormik.setFieldValue('rating', star)}
                                                         className="focus:outline-none transition-transform hover:scale-110"
                                                     >
-                                                        <Star 
-                                                            size={18} 
-                                                            className={star <= rating ? "text-primary fill-primary" : "text-white/10"} 
+                                                        <Star
+                                                            size={18}
+                                                            className={star <= reviewFormik.values.rating ? "text-primary fill-primary" : "text-white/10"}
                                                         />
                                                     </button>
                                                 ))}
                                             </div>
-                                            <textarea
-                                                value={comment}
-                                                onChange={(e) => setComment(e.target.value)}
-                                                placeholder="Your testimonial..."
-                                                rows={3}
-                                                className="w-full bg-white/[0.02] border border-white/5 rounded-xl p-4 text-[11px] font-medium text-white focus:border-primary/40 outline-none transition-all resize-none"
-                                            />
+                                            {reviewFormik.touched.rating && reviewFormik.errors.rating && (
+                                                <p className="text-rose-500 text-[9px] font-black uppercase tracking-widest">{reviewFormik.errors.rating}</p>
+                                            )}
+                                            
+                                            <div className="space-y-2">
+                                                <textarea
+                                                    name="comment"
+                                                    value={reviewFormik.values.comment}
+                                                    onChange={reviewFormik.handleChange}
+                                                    onBlur={reviewFormik.handleBlur}
+                                                    placeholder="Write your review..."
+                                                    rows={3}
+                                                    className={`w-full bg-white/[0.02] border ${reviewFormik.touched.comment && reviewFormik.errors.comment ? 'border-rose-500/50' : 'border-white/5'} rounded-xl p-4 text-[11px] font-medium text-white focus:border-primary/40 outline-none transition-all resize-none`}
+                                                />
+                                                {reviewFormik.touched.comment && reviewFormik.errors.comment && (
+                                                    <p className="text-rose-500 text-[9px] font-black uppercase tracking-widest">{reviewFormik.errors.comment}</p>
+                                                )}
+                                            </div>
+
                                             <button
                                                 type="submit"
                                                 disabled={reviewLoading}
                                                 className="w-full py-4 bg-primary/10 border border-primary/20 text-primary hover:bg-primary hover:text-secondary transition-all rounded-xl text-[9px] font-black uppercase tracking-widest disabled:opacity-50"
                                             >
-                                                {reviewLoading ? 'Transmitting...' : 'Commit Review'}
+                                                {reviewLoading ? 'Submitting...' : 'Submit Review'}
                                             </button>
                                         </form>
                                     </motion.div>

@@ -12,10 +12,10 @@ const validationSchema = Yup.object().shape({
     name: Yup.string().required('Full name is required'),
     email: Yup.string()
         .email('Please enter a valid email')
-        .required('Email identity is strictly required'),
+        .required('Email address is required'),
     password: Yup.string()
-        .min(6, 'Passkey must be at least 6 characters')
-        .required('Authorization passkey is required'),
+        .min(6, 'Password must be at least 6 characters')
+        .required('Password is required'),
 });
 
 export default function Signup() {
@@ -55,7 +55,7 @@ export default function Signup() {
                         <img src={Logo} alt="Glow Saloon" className="h-16 w-auto object-contain brightness-0 invert" />
                     </div>
                     <h1 className="text-2xl font-black text-white tracking-tight leading-none uppercase font-luxury">Create <span className="text-primary ">Account</span></h1>
-                    <p className="text-muted text-[9px] font-bold uppercase tracking-[0.2em] mt-3 underline decoration-primary/30 underline-offset-4 decoration-2 text-center">Sign Up for Glow Saloon</p>
+                    <p className="text-muted text-[9px] font-bold uppercase tracking-[0.2em] mt-3 underline decoration-primary/30 underline-offset-4 decoration-2 text-center">Create your account</p>
                 </div>
 
                 <form onSubmit={formik.handleSubmit} className="grid grid-cols-1 gap-5">
@@ -67,7 +67,7 @@ export default function Signup() {
                                 name="name"
                                 type="text"
                                 {...formik.getFieldProps('name')}
-                                placeholder="Glow Customer Name"
+                                placeholder="Enter your name"
                                 className={`w-full bg-background border p-3.5 pl-11 rounded-2xl outline-none transition-all font-bold text-white placeholder:text-muted/30 ${formik.touched.name && formik.errors.name ? 'border-red-500/50' : 'border-white/5 focus:border-primary/30'}`}
                             />
                         </div>

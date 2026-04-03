@@ -57,8 +57,8 @@ export default function Sales() {
   return (
     <div className="space-y-10">
       <AdminHeader 
-        title="Financial Overview"
-        subtitle="Real-time tracking of your salon's revenue and growth"
+        title="Financial Reports"
+        subtitle="Revenue analysis"
         icon={Wallet}
         rightContent={
           <button

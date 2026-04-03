@@ -26,9 +26,21 @@ const createReview = async (req, res) => {
             comment
         });
 
+        // Aggregation logic: Recalculate average rating for the target (Staff or Service)
+        const TargetModel = targetType === 'Service' ? require('../models/Service') : require('../models/User');
+        const targetDoc = await TargetModel.findById(target);
+        
+        if (targetDoc) {
+            const allReviews = await Review.find({ target, targetType });
+            const totalRating = allReviews.reduce((acc, item) => item.rating + acc, 0);
+            targetDoc.numReviews = allReviews.length;
+            targetDoc.rating = totalRating / allReviews.length;
+            await targetDoc.save();
+        }
+
         res.status(201).json(review);
     } catch (error) {
-        res.status(500).json({ message: 'Feedback propagation failed', error: error.message });
+        res.status(500).json({ message: 'Failed to submit review', error: error.message });
     }
 };
 
@@ -41,7 +53,7 @@ const getReviews = async (req, res) => {
             .sort({ createdAt: -1 });
         res.json(reviews);
     } catch (error) {
-        res.status(500).json({ message: 'History extraction failed', error: error.message });
+        res.status(500).json({ message: 'Failed to retrieve reviews', error: error.message });
     }
 };
 

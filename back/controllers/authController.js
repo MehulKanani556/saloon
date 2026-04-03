@@ -68,26 +68,26 @@ const sendOTP = async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // Generate a 100% random 6-digit code for maximum security
-        const otp = "123456";
-        // const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        // Generate a cryptographically secure random 6-digit code
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
         user.otp = otp;
         user.otpExpires = Date.now() + 10 * 60 * 1000; // 10 minutes window
         await user.save();
 
         // Dispatch OTP through appropriate relay (Email or SMS)
-        // if (isEmail) {
-        //     await sendEmailOTP(user.email, otp);
-        // } else {
-        //     // Note: phone number must start with + for Twilio (e.g., +91, +1)
-        //     const formattedPhone = user.phone.startsWith('+') ? user.phone : `+${user.phone}`;
-        //     await sendSMSOTP(formattedPhone, otp);
-        // }
+        isEmail = identity.includes('@');
+        if (isEmail) {
+            await sendEmailOTP(user.email, otp);
+        } else {
+            // Note: phone number must start with + for Twilio (e.g., +91, +1)
+            const formattedPhone = user.phone.startsWith('+') ? user.phone : `+${user.phone}`;
+            await sendSMSOTP(formattedPhone, otp);
+        }
 
-        res.status(200).json({ message: 'A secure verification code has been dispatched. Authenticate within 10 minutes.' });
+        res.status(200).json({ message: 'Verification code sent. Valid for 10 minutes.' });
     } catch (error) {
         console.error('OTP Dispatch Error:', error);
-        res.status(500).json({ message: 'System failed to relay code: ' + (error.message || 'Verification relay failed.') });
+        res.status(500).json({ message: 'Failed to send verification code' });
     }
 };
 
@@ -106,7 +106,7 @@ const loginUser = async (req, res) => {
         }
 
         if (user.isDeleted) {
-            return res.status(401).json({ message: 'This identity has been dissolved. Access denied.' });
+            return res.status(401).json({ message: 'Account has been deleted. Access denied.' });
         }
 
         let isAuth = false;
@@ -173,7 +173,7 @@ const refresh = async (req, res) => {
             if (err) return res.status(403).json({ message: 'Forbidden' });
 
             const user = await User.findById(decoded.id);
-            if (!user || user.isDeleted) return res.status(401).json({ message: 'Identity dissolved. Unauthorized access.' });
+            if (!user || user.isDeleted) return res.status(401).json({ message: 'Account not found or deleted.' });
 
             const accessToken = generateAccessToken(user._id);
             res.json({ accessToken });
@@ -250,7 +250,7 @@ const updateUserProfile = async (req, res) => {
                 accessToken: generateAccessToken(populatedUser._id)
             });
         } else {
-            res.status(404).json({ message: 'Identity not found' });
+            res.status(404).json({ message: 'User not found' });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -274,7 +274,7 @@ const changePassword = async (req, res) => {
 
         user.password = newPassword;
         await user.save();
-        res.json({ message: 'Security credentials synchronized successfully' });
+        res.json({ message: 'Password updated successfully' });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -298,7 +298,7 @@ const softDeleteUser = async (req, res) => {
             secure: process.env.NODE_ENV === 'production'
         });
 
-        res.json({ message: 'Identity dissolved successfully' });
+        res.json({ message: 'Account deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

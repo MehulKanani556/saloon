@@ -104,12 +104,12 @@ const getDashboardInsights = async (req, res) => {
                 activeServices,
                 pendingLeaves
             },
-            financialVelocity: last7Days,
-            serviceHierarchy: serviceData,
-            recentBookings: appointments.sort((a, b) => new Date(b.appointmentDate) - new Date(a.appointmentDate)).slice(0, 5),
-            occupancyTrends,
-            upcomingRituals,
-            eliteTalent: isStaff ? [] : staff,
+            revenueTrend: last7Days,
+            categoryDistribution: serviceData,
+            recentAppointments: appointments.sort((a, b) => new Date(b.appointmentDate) - new Date(a.appointmentDate)).slice(0, 5),
+            occupancyData: occupancyTrends,
+            upcomingAppointments: upcomingRituals,
+            topStaff: isStaff ? [] : staff,
         });
     } catch (err) {
         res.status(500).json({ message: 'Insight retrieval failed', error: err.message });

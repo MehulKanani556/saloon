@@ -190,7 +190,7 @@ const ProtocolSection = () => {
     {
       id: "03",
       title: "Longevity",
-      desc: "We provide tailored aftercare protocols to ensure your ritual's brilliance remains eternal.",
+      desc: "We provide tailored aftercare protocols to ensure your service's results remains eternal.",
       icon: <Activity className="text-primary" size={28} strokeWidth={1} />
     }
   ];

@@ -3,7 +3,10 @@ import api from '../../utils/api';
 
 const initialState = {
     products: [],
+    product: null,
     loading: false,
+    reviewLoading: false,
+    reviewSuccess: false,
     error: null,
     success: false,
 };
@@ -13,7 +16,16 @@ export const fetchProducts = createAsyncThunk('products/fetchProducts', async (_
         const response = await api.get('/products');
         return response.data;
     } catch (error) {
-        return rejectWithValue(error.response.data.message);
+        return rejectWithValue(error.response?.data?.message || 'Failed to fetch products');
+    }
+});
+
+export const fetchProductById = createAsyncThunk('products/fetchProductById', async (id, { rejectWithValue }) => {
+    try {
+        const response = await api.get(`/products/${id}`);
+        return response.data;
+    } catch (error) {
+        return rejectWithValue(error.response?.data?.message || 'Failed to fetch product details');
     }
 });
 
@@ -40,7 +52,16 @@ export const deleteProduct = createAsyncThunk('products/deleteProduct', async (i
         await api.delete(`/products/${id}`);
         return id;
     } catch (error) {
-        return rejectWithValue(error.response.data.message);
+        return rejectWithValue(error.response?.data?.message || 'Failed to delete product');
+    }
+});
+
+export const submitProductReview = createAsyncThunk('products/submitReview', async ({ id, reviewData }, { rejectWithValue }) => {
+    try {
+        const response = await api.post(`/products/${id}/reviews`, reviewData);
+        return response.data;
+    } catch (error) {
+        return rejectWithValue(error.response?.data?.message || 'Failed to submit review');
     }
 });
 
@@ -92,6 +113,29 @@ const productSlice = createSlice({
             })
             .addCase(updateProduct.rejected, (state, action) => {
                 state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(fetchProductById.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(fetchProductById.fulfilled, (state, action) => {
+                state.loading = false;
+                state.product = action.payload;
+            })
+            .addCase(fetchProductById.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(submitProductReview.pending, (state) => {
+                state.reviewLoading = true;
+            })
+            .addCase(submitProductReview.fulfilled, (state, action) => {
+                state.reviewLoading = false;
+                state.product = action.payload;
+                state.reviewSuccess = true;
+            })
+            .addCase(submitProductReview.rejected, (state, action) => {
+                state.reviewLoading = false;
                 state.error = action.payload;
             })
             .addCase(deleteProduct.fulfilled, (state, action) => {

@@ -29,22 +29,22 @@ export default function Categories() {
       description: editingCategory?.description || '',
     },
     validationSchema: Yup.object({
-      name: Yup.string().required('Nomenclature required').min(2, 'Too short'),
-      description: Yup.string().max(500, 'Description excessive'),
+      name: Yup.string().required('Name required').min(2, 'Too short'),
+      description: Yup.string().max(500, 'Description too long'),
     }),
     onSubmit: async (values) => {
       try {
         if (editingCategory?._id) {
           await dispatch(updateCategory({ id: editingCategory._id, categoryData: values })).unwrap();
-          toast.success('Taxonomy refined successfully');
+          toast.success('Category updated successfully');
         } else {
           await dispatch(addCategory(values)).unwrap();
-          toast.success('New taxonomy curated');
+          toast.success('New category added');
         }
         setShowForm(false);
         setEditingCategory(null);
       } catch (err) {
-        toast.error(err.message || 'Matrix failure');
+        toast.error(err.message || 'System error');
       }
     },
   });
@@ -57,10 +57,10 @@ export default function Categories() {
     if (!deletingCategory) return;
     try {
       await dispatch(deleteCategory(deletingCategory._id)).unwrap();
-      toast.success('Taxonomy purged');
+      toast.success('Category deleted');
       setDeletingCategory(null);
     } catch (err) {
-      toast.error('Purge failure');
+      toast.error('Deletion failed');
     }
   };
 
@@ -76,7 +76,7 @@ export default function Categories() {
               <Search size={18} className="text-muted group-focus-within:text-primary transition-colors" />
               <input
                 type="text"
-                placeholder="SEARCH NOMENCLATURE..."
+                placeholder="SEARCH CATEGORIES..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="bg-transparent border-none outline-none text-[10px] md:text-[11px] w-full font-black uppercase tracking-widest text-white placeholder:text-white/10"
@@ -87,7 +87,7 @@ export default function Categories() {
               className="w-full lg:w-auto flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury"
             >
               <Plus size={18} md:size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
-              <span className="whitespace-nowrap">INDuct NEW CATEGORY</span>
+              <span className="whitespace-nowrap">ADD NEW CATEGORY</span>
             </button>
           </div>
         }
@@ -129,7 +129,7 @@ export default function Categories() {
                     </td>
                     <td className="px-3 lg:px-5 py-3 lg:py-5">
                       <p className="text-[11px] font-bold text-muted line-clamp-1 group-hover:text-white/60 transition-colors max-w-xs xl:max-w-md uppercase tracking-wider">
-                        {cat.description || 'No conceptual context defined in metadata.'}
+                        {cat.description || 'No description provided.'}
                       </p>
                     </td>
                     <td className="px-3 lg:px-5 py-3 lg:py-5">
@@ -182,7 +182,7 @@ export default function Categories() {
       >
         <form onSubmit={formik.handleSubmit} className="space-y-10 p-2">
           <div className="space-y-4">
-            <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2  underline decoration-primary/30 underline-offset-8">Category Nomenclature</label>
+            <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2  underline decoration-primary/30 underline-offset-8">Category Name</label>
             <input
               {...formik.getFieldProps('name')}
               placeholder="e.g. MAGNUM SKINCARE"
@@ -197,10 +197,10 @@ export default function Categories() {
           </div>
 
           <div className="space-y-4">
-            <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2  underline decoration-primary/30 underline-offset-8">Institutional Context</label>
+            <label className="text-[10px] font-black text-muted uppercase tracking-[0.4em] ml-2  underline decoration-primary/30 underline-offset-8">Category Description</label>
             <textarea
               {...formik.getFieldProps('description')}
-              placeholder="Describe the conceptual scope of this classification protocol..."
+              placeholder="Enter category description..."
               className="w-full bg-secondary/50 border border-white/10 focus:border-primary/50 p-6 rounded-2xl outline-none font-black text-[11px] text-white shadow-2xl transition-all min-h-[160px] tracking-[0.2em] placeholder:text-white/5 "
             />
           </div>
@@ -227,13 +227,13 @@ export default function Categories() {
             <Trash2 size={40} strokeWidth={1} />
           </div>
           <p className="text-muted font-black text-[10px] uppercase tracking-[0.3em] leading-relaxed mb-10 px-2 ">
-            Eliding <br /><span className="text-rose-500 text-lg font-luxury font-black  underline decoration-rose-500/30 decoration-2 underline-offset-8">"{deletingCategory?.name}"</span> <br /> from institutional matrix.
+            Are you sure you want to delete <br /><span className="text-rose-500 text-lg font-luxury font-black  underline decoration-rose-500/30 decoration-2 underline-offset-8">"{deletingCategory?.name}"</span>?
           </p>
           <div className="flex flex-col gap-4">
             <button
               onClick={handleDelete}
               className="w-full py-5 bg-rose-500 text-white rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] shadow-xl active:scale-95 transition-all font-luxury "
-            >CONFIRM PURGE</button>
+            >CONFIRM DELETE</button>
             <button onClick={() => setDeletingCategory(null)} className="w-full py-5 bg-secondary text-muted rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] border border-white/10 hover:text-white transition-all font-luxury ">CANCEL</button>
           </div>
         </div>
