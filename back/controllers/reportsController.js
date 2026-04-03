@@ -7,9 +7,20 @@ const moment = require('moment');
 // @route GET /reports/intel
 // @access Private/Admin
 const getReportIntel = async (req, res) => {
+    const { startDate, endDate } = req.query;
+    let appointmentFilter = {};
+    if (startDate && endDate) {
+        appointmentFilter = {
+            appointmentDate: {
+                $gte: moment(startDate).startOf('day').toDate(),
+                $lte: moment(endDate).endOf('day').toDate()
+            }
+        };
+    }
+
     try {
         const [appointments, clients, services, staff] = await Promise.all([
-            Appointment.find().populate('client assignments.service'),
+            Appointment.find(appointmentFilter).populate('client assignments.service'),
             User.countDocuments({ role: 'User' }),
             Service.countDocuments({ isActive: true }),
             User.countDocuments({ role: 'Staff' })

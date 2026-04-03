@@ -18,13 +18,24 @@ export const addAppointment = createAsyncThunk('appointments/add', async (appoin
     }
 });
 
-export const updateAppointment = createAsyncThunk('appointments/update', async ({ id, appointment }, { rejectWithValue }) => {
+export const updateAppointment = createAsyncThunk('appointments/update', async ({ id, appointmentData }, { rejectWithValue }) => {
     try {
-        const { data } = await api.put(`/appointments/${id}`, appointment);
+        const { data } = await api.put(`/appointments/${id}`, appointmentData);
         toast.success('Appointment updated successfully!');
         return data;
     } catch (err) {
         toast.error('Update failed');
+        return rejectWithValue(err.response.data);
+    }
+});
+
+export const updateAppointmentStatus = createAsyncThunk('appointments/updateStatus', async ({ id, status }, { rejectWithValue }) => {
+    try {
+        const { data } = await api.put(`/appointments/${id}/status`, { status });
+        toast.success(`Ritual marked as ${status}`);
+        return data;
+    } catch (err) {
+        toast.error('Status update failed');
         return rejectWithValue(err.response.data);
     }
 });
@@ -104,6 +115,10 @@ const appointmentSlice = createSlice({
             })
             // Update
             .addCase(updateAppointment.fulfilled, (state, action) => {
+                const index = state.appointments.findIndex(a => a._id === action.payload._id);
+                if (index !== -1) state.appointments[index] = action.payload;
+            })
+            .addCase(updateAppointmentStatus.fulfilled, (state, action) => {
                 const index = state.appointments.findIndex(a => a._id === action.payload._id);
                 if (index !== -1) state.appointments[index] = action.payload;
             })

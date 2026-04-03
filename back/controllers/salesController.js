@@ -7,7 +7,7 @@ const getFinancialMatrix = async (req, res) => {
     try {
         const appointments = await Appointment.find({ status: 'Completed', paymentStatus: 'Paid' })
             .populate({
-                path: 'services',
+                path: 'assignments.service',
                 populate: { path: 'category', select: 'name' }
             });
 
@@ -16,9 +16,10 @@ const getFinancialMatrix = async (req, res) => {
 
         const categoryDataRaw = {};
         appointments.forEach(app => {
-            if (app.services && Array.isArray(app.services)) {
-                app.services.forEach(service => {
-                    if (service.category) {
+            if (app.assignments && Array.isArray(app.assignments)) {
+                app.assignments.forEach(assignment => {
+                    const service = assignment.service;
+                    if (service && service.category) {
                         const catName = service.category.name || 'Unknown Protocol';
                         if (!categoryDataRaw[catName]) {
                             categoryDataRaw[catName] = { value: 0, count: 0 };

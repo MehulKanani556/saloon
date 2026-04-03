@@ -122,7 +122,7 @@ const loginUser = async (req, res) => {
             }
         }
         // console.log(isAuth,user,"isAuth");
-        
+
 
         if (isAuth) {
             const accessToken = generateAccessToken(user._id);
@@ -232,7 +232,7 @@ const updateUserProfile = async (req, res) => {
                     user.bio = req.body.bio;
                 }
             }
-            
+
             const updatedUser = await user.save();
             const populatedUser = await User.findById(updatedUser._id).populate('services');
             res.json({
@@ -314,7 +314,7 @@ const getMe = async (req, res) => {
 
         const user = userDoc.toObject();
         const hasPassword = !!user.password;
-        
+
         // Security protocol: Remove sensitive fields before transmission
         delete user.password;
         user.hasPassword = hasPassword;

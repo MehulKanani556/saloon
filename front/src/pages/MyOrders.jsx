@@ -7,7 +7,7 @@ import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
 import UserPanelLayout from '../components/public/UserPanelLayout';
-import { fetchMyOrders } from '../redux/slices/orderSlice';
+import { fetchMyOrders, cancelOrder } from '../redux/slices/orderSlice';
 
 export default function MyOrders() {
   const dispatch = useDispatch();
@@ -21,9 +21,11 @@ export default function MyOrders() {
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
   const [reviewLoading, setReviewLoading] = useState(false);
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [orderToCancel, setOrderToCancel] = useState(null);
 
   useEffect(() => {
-    if (selectedOrder || reviewModalProduct) {
+    if (selectedOrder || reviewModalProduct || isCancelModalOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
@@ -66,6 +68,24 @@ export default function MyOrders() {
       toast.error(err.response?.data?.message || 'Failed to submit review');
     } finally {
       setReviewLoading(false);
+    }
+  };
+
+  const handleCancelOrder = (order) => {
+    setOrderToCancel(order);
+    setIsCancelModalOpen(true);
+  };
+
+  const confirmCancel = async () => {
+    if (!orderToCancel) return;
+    try {
+      await dispatch(cancelOrder(orderToCancel._id)).unwrap();
+      toast.success('Order successfully dissolved.');
+      setIsCancelModalOpen(false);
+      setOrderToCancel(null);
+      setSelectedOrder(null);
+    } catch (err) {
+      toast.error(err || 'Failed to dissolve order');
     }
   };
 
@@ -355,6 +375,16 @@ export default function MyOrders() {
                           <span className="text-2xl sm:text-3xl font-black text-primary font-luxury drop-shadow-primary-sm">${selectedOrder.totalAmount?.toFixed(2)}</span>
                         </div>
                       </div>
+
+                      {/* Cancel Order Action */}
+                      {(selectedOrder.status === 'Processing' || selectedOrder.status === 'Pending') && (
+                        <button
+                          onClick={() => handleCancelOrder(selectedOrder)}
+                          className="w-full py-4 mt-2 bg-red-500/5 border border-red-500/20 text-red-500 hover:bg-red-500 hover:text-white transition-all rounded-xl text-[10px] font-black uppercase tracking-[0.2em] shadow-lg active:scale-[0.98]"
+                        >
+                          Dissolve Order
+                        </button>
+                      )}
                     </div>
                   </div>
 
@@ -487,6 +517,54 @@ export default function MyOrders() {
                   )}
                 </div>
 
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+      {/* Cancellation Confirmation Modal */}
+      <AnimatePresence>
+        {isCancelModalOpen && (
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsCancelModalOpen(false)}
+              className="absolute inset-0 bg-background/95 backdrop-blur-md"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-sm bg-[#1A1A1A] border border-white/5 p-8 rounded-3xl shadow-2xl text-center"
+            >
+              <div className="w-20 h-20 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center justify-center mx-auto text-red-500 mb-8 shadow-2xl shadow-red-500/20">
+                <X size={40} strokeWidth={1.5} />
+              </div>
+              
+              <div className="space-y-2 mb-10">
+                <h3 className="text-xl font-black text-white uppercase tracking-tight font-luxury">Dissolve Order?</h3>
+                <p className="text-[10px] font-bold text-muted/40 uppercase tracking-[0.2em] leading-relaxed">
+                   Are you certain you wish to dissolve order <br/>
+                   <span className="text-red-500 underline underline-offset-4 tracking-normal font-luxury">#{orderToCancel?._id.substring(orderToCancel?._id.length - 8)}</span>? <br/>
+                   This action is irreversible.
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-3">
+                <button
+                  onClick={confirmCancel}
+                  className="w-full py-5 bg-red-500 text-white rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] shadow-xl shadow-red-500/20 active:scale-95 hover:bg-red-600 transition-all font-luxury"
+                >
+                  CONFIRM DISSOLUTION
+                </button>
+                <button
+                  onClick={() => setIsCancelModalOpen(false)}
+                  className="w-full py-5 bg-white/5 text-muted rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:text-white transition-all font-luxury"
+                >
+                  ABANDON ACTION
+                </button>
               </div>
             </motion.div>
           </div>

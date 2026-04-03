@@ -3,9 +3,9 @@ import api from '../../utils/api';
 
 export const fetchReports = createAsyncThunk(
   'reports/fetchReports',
-  async (_, { rejectWithValue }) => {
+  async (params = {}, { rejectWithValue }) => {
     try {
-      const { data } = await api.get('/reports/intel');
+      const { data } = await api.get('/reports/intel', { params });
       return data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || 'Failed to fetch business reports');

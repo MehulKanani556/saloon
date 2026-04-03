@@ -39,6 +39,38 @@ const handleStripeWebhook = async (req, res) => {
             await appointment.save();
             console.log(`Appointment ${appointment._id} marked as Paid/Confirmed.`);
         }
+    } else if (event.type === 'payment_intent.payment_failed') {
+        const paymentIntent = event.data.object;
+        const paymentIntentId = paymentIntent.id;
+
+        const order = await Order.findOne({ paymentIntentId });
+        if (order) {
+            order.paymentStatus = 'Failed';
+            await order.save();
+        }
+
+        const appointment = await Appointment.findOne({ paymentIntentId });
+        if (appointment) {
+            appointment.paymentStatus = 'Failed';
+            await appointment.save();
+        }
+    } else if (event.type === 'payment_intent.canceled') {
+        const paymentIntent = event.data.object;
+        const paymentIntentId = paymentIntent.id;
+
+        const order = await Order.findOne({ paymentIntentId });
+        if (order) {
+            order.paymentStatus = 'Cancelled';
+            order.status = 'Cancelled';
+            await order.save();
+        }
+
+        const appointment = await Appointment.findOne({ paymentIntentId });
+        if (appointment) {
+            appointment.paymentStatus = 'Cancelled';
+            appointment.status = 'Cancelled';
+            await appointment.save();
+        }
     }
 
     res.json({ received: true });

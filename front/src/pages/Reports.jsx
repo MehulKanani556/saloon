@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchReports } from '../redux/slices/reportSlice';
-import { format } from 'date-fns';
+import { format, subDays } from 'date-fns';
 import AdminHeader from '../components/ui/AdminHeader';
 
 
@@ -12,9 +12,42 @@ export default function Reports() {
   const dispatch = useDispatch();
   const { reportData, loading, error } = useSelector(state => state.reports);
 
+  const [startDate, setStartDate] = useState(format(subDays(new Date(), 30), 'yyyy-MM-dd'));
+  const [endDate, setEndDate] = useState(format(new Date(), 'yyyy-MM-dd'));
+
   useEffect(() => {
-    dispatch(fetchReports());
+    dispatch(fetchReports({ startDate, endDate }));
   }, [dispatch]);
+
+  const handleFilter = () => {
+    dispatch(fetchReports({ startDate, endDate }));
+  };
+
+  const exportToCSV = () => {
+    if (!reportData.recentLogs || reportData.recentLogs.length === 0) return;
+    
+    const headers = ['Ref ID', 'Title', 'Services', 'Amount', 'Status', 'Date'];
+    const rows = reportData.recentLogs.map(log => [
+      log.id,
+      log.title,
+      log.description,
+      log.amount,
+      log.status,
+      format(new Date(log.date), 'yyyy-MM-dd')
+    ]);
+
+    const csvContent = "data:text/csv;charset=utf-8," 
+      + headers.join(",") + "\n"
+      + rows.map(r => r.join(",")).join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `business_report_${startDate}_to_${endDate}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   if (loading) return (
     <div className="flex items-center justify-center h-[60vh]">
@@ -36,11 +69,42 @@ export default function Reports() {
 
   return (
     <div className="space-y-12">
-      <AdminHeader 
-        title="Business Reports"
-        subtitle="View your business performance and analytics"
-        icon={TrendingUp}
-      />
+      <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-6 pb-2 border-b border-white/[0.05]">
+        <AdminHeader 
+          title="Business Reports"
+          subtitle="View your business performance and analytics"
+          icon={TrendingUp}
+        />
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="flex items-center gap-3 bg-secondary p-2 rounded-xl border border-white/5">
+            <input 
+              type="date" 
+              value={startDate} 
+              onChange={(e) => setStartDate(e.target.value)}
+              className="bg-background border-0 text-[10px] font-black p-2 rounded-lg text-white outline-none focus:ring-1 focus:ring-primary/40 uppercase tracking-widest"
+            />
+            <span className="text-white/20 font-black text-[9px] uppercase tracking-widest">To</span>
+            <input 
+              type="date" 
+              value={endDate} 
+              onChange={(e) => setEndDate(e.target.value)}
+              className="bg-background border-0 text-[10px] font-black p-2 rounded-lg text-white outline-none focus:ring-1 focus:ring-primary/40 uppercase tracking-widest"
+            />
+            <button 
+              onClick={handleFilter}
+              className="px-4 py-2 bg-primary text-secondary rounded-lg text-[9px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg active:scale-95"
+            >
+              Analyze
+            </button>
+          </div>
+          <button 
+            onClick={exportToCSV}
+            className="group px-6 py-3 bg-white/[0.03] border border-white/5 text-white hover:bg-primary hover:text-secondary hover:border-primary rounded-xl flex items-center gap-3 text-[10px] font-black uppercase tracking-widest transition-all shadow-lg"
+          >
+            <Download size={14} className="group-hover:translate-y-0.5 transition-transform" /> Export Ledger
+          </button>
+        </div>
+      </div>
 
 
       {/* Stat Cards */}

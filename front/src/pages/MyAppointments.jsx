@@ -5,8 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import UserPanelLayout from '../components/public/UserPanelLayout';
 import { fetchMyAppointments, deleteAppointment } from '../redux/slices/appointmentSlice';
+import { submitReview } from '../redux/slices/reviewSlice';
 
 export default function MyAppointments() {
   const dispatch = useDispatch();
@@ -15,6 +17,12 @@ export default function MyAppointments() {
 
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const [selectedApp, setSelectedApp] = useState(null);
+
+  // Review System States
+  const [reviewTarget, setReviewTarget] = useState(null); // { id, type, name }
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState('');
+  const [reviewLoading, setReviewLoading] = useState(false);
 
   useEffect(() => {
     if (selectedApp || showCancelConfirm) {
@@ -52,6 +60,27 @@ export default function MyAppointments() {
       setShowCancelConfirm(false);
       setSelectedApp(null);
       dispatch(fetchMyAppointments());
+    }
+  };
+
+  const handleReviewSubmit = async () => {
+    if (!comment.trim()) return toast.error('Please add your thoughts.');
+    try {
+      setReviewLoading(true);
+      const res = await dispatch(submitReview({
+        target: reviewTarget.id,
+        targetType: reviewTarget.type,
+        rating,
+        comment
+      })).unwrap();
+      toast.success('Your feedback has been immortalized.');
+      setReviewTarget(null);
+      setComment('');
+      setRating(5);
+    } catch (err) {
+      toast.error(err || 'Transmission failure.');
+    } finally {
+      setReviewLoading(false);
     }
   };
 
@@ -264,14 +293,33 @@ export default function MyAppointments() {
                               </p>
                             </div>
                           </div>
-                          <div className="sm:text-right border-t sm:border-0 border-white/[0.03] pt-3 sm:pt-0">
-                            <p className="text-base font-black text-white font-luxury tabular-nums">${asm.service?.price}</p>
-                            <p className="text-[8px] font-bold text-muted/20 uppercase tracking-widest tabular-nums">{asm.service?.duration} Mins Service</p>
+                            <div className="sm:text-right border-t sm:border-0 border-white/[0.03] pt-3 sm:pt-0">
+                              <p className="text-base font-black text-white font-luxury tabular-nums">${asm.service?.price}</p>
+                              <p className="text-[8px] font-bold text-muted/20 uppercase tracking-widest tabular-nums">{asm.service?.duration} Mins Service</p>
+                              
+                              {selectedApp.status?.toLowerCase() === 'completed' && (
+                                <div className="flex flex-col sm:items-end gap-1 mt-2">
+                                  <button 
+                                    onClick={(e) => { e.stopPropagation(); setReviewTarget({ id: asm.service?._id || asm.service, type: 'Service', name: asm.service?.name }); }}
+                                    className="text-[8px] font-bold text-primary/60 hover:text-primary uppercase tracking-widest underline decoration-primary/30 transition-colors"
+                                  >
+                                    Review Service
+                                  </button>
+                                  {asm.staff && (
+                                    <button 
+                                      onClick={(e) => { e.stopPropagation(); setReviewTarget({ id: asm.staff?._id || asm.staff, type: 'Staff', name: asm.staff?.name }); }}
+                                      className="text-[8px] font-bold text-primary/60 hover:text-primary uppercase tracking-widest underline decoration-primary/30 transition-colors"
+                                    >
+                                      Review Artisan
+                                    </button>
+                                  )}
+                                </div>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
-                  </div>
 
                   {/* Investment & Actions */}
                   <div className="bg-white/[0.02] p-5 md:p-6 rounded-2xl md:rounded-3xl border border-white/[0.03] space-y-6">
@@ -356,6 +404,86 @@ export default function MyAppointments() {
                     className="w-full py-3.5 bg-white/[0.02] border border-white/[0.05] text-white/30 hover:text-white rounded-xl text-[9px] font-black uppercase tracking-[0.3em] transition-all"
                   >
                     Keep Appointment
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+      {/* Review Modal - Pro Interface */}
+      <AnimatePresence>
+        {reviewTarget && (
+          <div className="fixed inset-0 z-[120] flex items-center justify-center p-3 md:p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setReviewTarget(null)}
+              className="absolute inset-0 bg-background/95 backdrop-blur-md"
+            />
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-lg bg-[#1A1A1A] border border-white/[0.05] rounded-2xl overflow-hidden shadow-2xl"
+            >
+              <div className="p-6 md:p-8">
+                <div className="flex justify-between items-start mb-8 pb-6 border-b border-white/[0.05]">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="w-8 h-px bg-primary" />
+                      <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">{reviewTarget.type} Feedback</p>
+                    </div>
+                    <h2 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight font-luxury">
+                      {reviewTarget.name}
+                    </h2>
+                  </div>
+                  <button 
+                    onClick={() => setReviewTarget(null)}
+                    className="p-2 bg-white/[0.02] border border-white/5 rounded-xl text-muted hover:text-white transition-all"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+
+                <div className="space-y-6">
+                  <div className="space-y-3">
+                    <label className="text-[9px] font-black text-white/20 uppercase tracking-widest text-center block">Artisan Grade</label>
+                    <div className="flex justify-center gap-3">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button
+                          key={star}
+                          onClick={() => setRating(star)}
+                          className="focus:outline-none transition-transform hover:scale-110 active:scale-95"
+                        >
+                          <Star 
+                            size={28} 
+                            className={star <= rating ? "text-primary fill-primary drop-shadow-primary-sm" : "text-white/10"} 
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-[9px] font-black text-white/20 uppercase tracking-widest">Chronicle Details</label>
+                    <textarea
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
+                      rows={4}
+                      placeholder="Describe your ritual experience..."
+                      className="w-full bg-[#111111] border border-white/10 focus:border-primary/40 p-4 rounded-xl outline-none text-[12px] font-bold text-white transition-all resize-none placeholder:text-white/5 uppercase tracking-wide"
+                    />
+                  </div>
+
+                  <button 
+                    onClick={handleReviewSubmit}
+                    disabled={reviewLoading}
+                    className="w-full py-4 bg-primary text-secondary hover:bg-white hover:text-primary rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg active:scale-[0.98] disabled:opacity-50"
+                  >
+                    {reviewLoading ? 'Transmitting...' : 'Commit Review'}
                   </button>
                 </div>
               </div>

@@ -1,5 +1,6 @@
 const SpecializationRequest = require('../models/SpecializationRequest');
 const User = require('../models/User');
+const Service = require('../models/Service');
 
 // @desc Create a specialization update request
 // @route POST /api/specialization/request
@@ -89,12 +90,15 @@ const updateSpecializationRequestStatus = async (req, res) => {
         if (status === 'Approved') {
             const user = await User.findById(request.staff);
             if (user) {
-                // ADDITIVE LOGIC: Merge new services with existing ones without duplicates
+                // Validate that requested services still exist in the database
+                const validServices = await Service.find({ _id: { $in: request.services } }).select('_id');
+                const validServiceIds = validServices.map(s => s._id.toString());
+                
+                // ADDITIVE LOGIC: Merge valid brand new services with existing ones without duplicates
                 const currentServiceIds = user.services.map(s => s._id?.toString() || s.toString());
-                const requestedServiceIds = request.services.map(s => s.toString());
                 
                 // Combine and unique
-                user.services = Array.from(new Set([...currentServiceIds, ...requestedServiceIds]));
+                user.services = Array.from(new Set([...currentServiceIds, ...validServiceIds]));
                 
                 // Merge specializations/keywords
                 const currentSpecs = user.specialization || [];

@@ -37,6 +37,12 @@ export default function ProductDetail() {
     const [quantity, setQuantity] = useState(1);
     const [activeTab, setActiveTab] = useState('description');
     const [relatedProducts, setRelatedProducts] = useState([]);
+    
+    // Review States
+    const { userInfo } = useSelector(state => state.auth);
+    const [rating, setRating] = useState(5);
+    const [comment, setComment] = useState('');
+    const [reviewLoading, setReviewLoading] = useState(false);
 
     const isWishlisted = wishlistItems.some(item => item._id === id);
 
@@ -73,6 +79,25 @@ export default function ProductDetail() {
         } else {
             dispatch(addToWishlist(product));
             toast.success('Added to wishlist');
+        }
+    };
+
+    const submitReview = async (e) => {
+        e.preventDefault();
+        if (!userInfo) return toast.error('Please login to leave a review');
+        if (!comment.trim()) return toast.error('Please enter a comment');
+
+        try {
+            setReviewLoading(true);
+            await api.post(`/products/${id}/reviews`, { rating, comment });
+            toast.success('Review submitted successfully');
+            setComment('');
+            setRating(5);
+            fetchProductData();
+        } catch (err) {
+            toast.error(err.response?.data?.message || 'Failed to submit review');
+        } finally {
+            setReviewLoading(false);
         }
     };
 
@@ -237,6 +262,52 @@ export default function ProductDetail() {
                                         </span>
                                     </div>
                                 </div>
+
+                                {/* Review Form */}
+                                {userInfo && (
+                                    <motion.div 
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="bg-white/[0.02] p-6 rounded-2xl border border-white/[0.04] space-y-6"
+                                    >
+                                        <div className="space-y-1">
+                                            <h4 className="text-[11px] font-black text-white uppercase tracking-wider">Leave a Legacy</h4>
+                                            <p className="text-[8px] font-bold text-muted/30 uppercase tracking-widest">Share your aesthetic experience with the community</p>
+                                        </div>
+
+                                        <form onSubmit={submitReview} className="space-y-4">
+                                            <div className="flex items-center gap-2">
+                                                {[1, 2, 3, 4, 5].map((star) => (
+                                                    <button
+                                                        key={star}
+                                                        type="button"
+                                                        onClick={() => setRating(star)}
+                                                        className="focus:outline-none transition-transform hover:scale-110"
+                                                    >
+                                                        <Star 
+                                                            size={18} 
+                                                            className={star <= rating ? "text-primary fill-primary" : "text-white/10"} 
+                                                        />
+                                                    </button>
+                                                ))}
+                                            </div>
+                                            <textarea
+                                                value={comment}
+                                                onChange={(e) => setComment(e.target.value)}
+                                                placeholder="Your testimonial..."
+                                                rows={3}
+                                                className="w-full bg-white/[0.02] border border-white/5 rounded-xl p-4 text-[11px] font-medium text-white focus:border-primary/40 outline-none transition-all resize-none"
+                                            />
+                                            <button
+                                                type="submit"
+                                                disabled={reviewLoading}
+                                                className="w-full py-4 bg-primary/10 border border-primary/20 text-primary hover:bg-primary hover:text-secondary transition-all rounded-xl text-[9px] font-black uppercase tracking-widest disabled:opacity-50"
+                                            >
+                                                {reviewLoading ? 'Transmitting...' : 'Commit Review'}
+                                            </button>
+                                        </form>
+                                    </motion.div>
+                                )}
 
                                 {product.reviews && product.reviews.length > 0 ? (
                                     <div className="space-y-4">

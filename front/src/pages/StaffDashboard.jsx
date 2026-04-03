@@ -30,6 +30,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDashboardInsights } from '../redux/slices/dashboardSlice';
+import { updateAppointmentStatus } from '../redux/slices/appointmentSlice';
 import toast from 'react-hot-toast';
 import { IMAGE_URL } from '../utils/BASE_URL';
 import { format, formatDistanceToNow, isToday } from 'date-fns';
@@ -50,6 +51,18 @@ export default function StaffDashboard() {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, [dispatch]);
+
+  const [confirmModal, setConfirmModal] = useState({ isOpen: false, appointmentId: null });
+
+  const handleQuickStatusUpdate = async (id, status) => {
+    try {
+      await dispatch(updateAppointmentStatus({ id, status })).unwrap();
+      dispatch(fetchDashboardInsights());
+      setConfirmModal({ isOpen: false, appointmentId: null });
+    } catch (err) {
+      toast.error(err || 'Failed to update status');
+    }
+  };
 
   const mobileBarSize = windowWidth < 426 ? 6 : (windowWidth < 768 ? 12 : 28);
   const areaStrokeWidth = windowWidth < 1024 ? 3 : 6;
@@ -256,7 +269,6 @@ export default function StaffDashboard() {
                 <motion.div
                   key={app._id}
                   whileHover={{ scale: 1.02, x: 10 }}
-                  onClick={() => navigate('/staff/appointments')}
                   className="flex items-center justify-between p-4 md:p-8 rounded-xl md:rounded-2xl bg-primary text-secondary shadow-2xl relative overflow-hidden group/appointment cursor-pointer"
                 >
                   <div className="absolute inset-0 bg-white/10 opacity-0 group-hover/appointment:opacity-100 transition-opacity duration-500" />
@@ -274,7 +286,15 @@ export default function StaffDashboard() {
                       <p className="text-[7px] md:text-[9px] font-black uppercase tracking-[0.4em] opacity-40  mb-1">Price</p>
                       <p className="text-lg md:text-2xl font-black  font-luxury tracking-tighter leading-none">${app.totalPrice}</p>
                     </div>
-                    <ArrowRight size={18} md:size={24} strokeWidth={2.5} className="opacity-20 group-hover/appointment:opacity-100 transition-all -translate-x-4 group-hover/appointment:translate-x-0 hidden sm:block" />
+                    <div className="flex items-center gap-2">
+                      <button 
+                        onClick={(e) => { e.stopPropagation(); setConfirmModal({ isOpen: true, appointmentId: app._id }); }}
+                        className="w-10 h-10 md:w-12 md:h-12 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-xl md:rounded-2xl flex items-center justify-center hover:bg-emerald-500 hover:text-white transition-all shadow-lg active:scale-95 group/check"
+                      >
+                        <CheckCircle2 size={16} md:size={18} strokeWidth={3} className="group-hover/check:scale-110 transition-transform" />
+                      </button>
+                      <ArrowRight size={18} md:size={24} strokeWidth={2.5} className="opacity-20 group-hover/appointment:opacity-100 transition-all -translate-x-4 group-hover/appointment:translate-x-0 hidden sm:block" />
+                    </div>
                   </div>
                 </motion.div>
             )) : (

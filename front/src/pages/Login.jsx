@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Lock, Sparkles, ArrowRight, AlertCircle, Phone, Key, ShieldCheck, Eye, EyeOff } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser, sendOTP } from '../redux/slices/authSlice';
+import { syncCart } from '../redux/slices/cartSlice';
+import { syncWishlist } from '../redux/slices/wishlistSlice';
 import { useNavigate, Link } from 'react-router-dom';
 import Logo from '../assets/logo.png';
 import { useFormik } from 'formik';
@@ -44,10 +46,17 @@ export default function Login() {
       } else if (userInfo.role === 'Staff') {
         navigate('/staff/dashboard');
       } else {
-        navigate('/'); // Regular user
+        // Regular user: Sync local storage data with server
+        const localCart = JSON.parse(localStorage.getItem('cartItems')) || [];
+        const localWishlist = JSON.parse(localStorage.getItem('wishlistItems')) || [];
+        
+        dispatch(syncCart(localCart));
+        dispatch(syncWishlist(localWishlist));
+        
+        navigate('/');
       }
     }
-  }, [userInfo, navigate]);
+  }, [userInfo, navigate, dispatch]);
 
   useEffect(() => {
     let interval;

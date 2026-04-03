@@ -81,21 +81,31 @@ const updateLeaveStatus = async (req, res) => {
                 appointmentDate: { $gte: start.toDate(), $lte: end.toDate() }
             });
 
-            // More precise check for partial day leaves
+            // Precise conflict analysis: Unified per-day window logic
             const actualConflicts = conflicts.filter(app => {
                 const appTime = moment(app.appointmentDate);
-                if (leave.startTime && leave.endTime) {
-                    const startFull = moment(leave.startDate).set({
-                        hour: parseInt(leave.startTime.split(':')[0]),
-                        minute: parseInt(leave.startTime.split(':')[1])
-                    });
-                    const endFull = moment(leave.endDate).set({
-                        hour: parseInt(leave.endTime.split(':')[0]),
-                        minute: parseInt(leave.endTime.split(':')[1])
-                    });
-                    return appTime.isBetween(startFull, endFull, null, '[]');
+                
+                // Determine the precise leave boundary for this specific appointment date
+                let windowStart, windowEnd;
+                
+                // Start Boundary: If this is the start day, use startTime (default to start of day)
+                if (appTime.isSame(leave.startDate, 'day') && leave.startTime) {
+                    const [h, m] = leave.startTime.split(':');
+                    windowStart = moment(app.appointmentDate).set({ hour: parseInt(h), minute: parseInt(m), second: 0 });
+                } else {
+                    windowStart = moment(app.appointmentDate).startOf('day');
                 }
-                return true; // Full day conflict
+                
+                // End Boundary: If this is the end day, use endTime (default to end of day)
+                if (appTime.isSame(leave.endDate, 'day') && leave.endTime) {
+                    const [h, m] = leave.endTime.split(':');
+                    windowEnd = moment(app.appointmentDate).set({ hour: parseInt(h), minute: parseInt(m), second: 0 });
+                } else {
+                    windowEnd = moment(app.appointmentDate).endOf('day');
+                }
+                
+                // Conflict exists if the appointment falls within the calculated daily window
+                return appTime.isBetween(windowStart, windowEnd, null, '[]');
             });
 
             if (actualConflicts.length > 0) {
