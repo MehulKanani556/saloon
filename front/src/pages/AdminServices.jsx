@@ -375,7 +375,7 @@ export default function AdminServices() {
                 </div>
 
                 <div className="pt-4 border-t border-white/5 mt-auto flex items-center justify-between">
-                  <p className="text-[8px] font-black text-muted/30 uppercase tracking-[0.4em]  truncate">PROD-{service._id.slice(-8).toUpperCase()}</p>
+                  <p className="text-[9px] font-black text-muted/30 uppercase tracking-[0.4em]  truncate">PROD-{service._id.slice(-8).toUpperCase()}</p>
                   {service.staffCount === 0 && (
                     <div className="flex items-center gap-2 px-2 py-1 bg-red-500/10 border border-red-500/20 rounded-lg animate-pulse">
                       <AlertCircle size={10} className="text-red-500" />

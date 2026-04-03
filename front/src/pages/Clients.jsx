@@ -385,30 +385,31 @@ export default function Clients() {
       >
         {profileClient && (
           <div className="space-y-12 p-2">
-            <div className="grid grid-cols-2 gap-6">
-              <div className="p-6 bg-secondary/50 rounded-2xl border border-white/5 shadow-inner">
-                <div className="flex items-center gap-3 text-primary mb-4 ">
-                  <ShoppingBag size={14} strokeWidth={2.5} />
-                  <span className="text-[9px] font-black uppercase tracking-[0.3em]">Appointments</span>
+            <div className="grid grid-cols-2 gap-3 sm:gap-6">
+              <div className="p-3 sm:p-6 bg-secondary/50 rounded-xl sm:rounded-2xl border border-white/5 shadow-inner">
+                <div className="flex items-center gap-2 sm:gap-3 text-primary mb-2 sm:mb-4">
+                  <ShoppingBag size={12} className="sm:w-[14px] sm:h-[14px]" strokeWidth={2.5} />
+                  <span className="text-[7px] sm:text-[9px] font-black uppercase tracking-[0.2em] sm:tracking-[0.3em]">Appointments</span>
                 </div>
-                <div className="text-3xl font-black text-white  font-luxury leading-none">{(profileClient.bookingHistory?.length || 0).toString().padStart(2, '0')}</div>
+                <div className="text-xl sm:text-3xl font-black text-white font-luxury leading-none">{(profileClient.bookingHistory?.length || 0).toString().padStart(2, '0')}</div>
               </div>
-              <div className="p-6 bg-secondary/50 rounded-2xl border border-white/5 shadow-inner">
-                <div className="flex items-center gap-3 text-primary mb-4 ">
-                  <Award size={14} strokeWidth={2.5} />
-                  <span className="text-[9px] font-black uppercase tracking-[0.3em]">Status</span>
+              <div className="p-3 sm:p-6 bg-secondary/50 rounded-xl sm:rounded-2xl border border-white/5 shadow-inner">
+                <div className="flex items-center gap-2 sm:gap-3 text-primary mb-2 sm:mb-4">
+                  <Award size={12} className="sm:w-[14px] sm:h-[14px]" strokeWidth={2.5} />
+                  <span className="text-[7px] sm:text-[9px] font-black uppercase tracking-[0.2em] sm:tracking-[0.3em]">Status</span>
                 </div>
-                <div className="text-sm font-black text-white  font-luxury leading-none uppercase tracking-tighter">PREMIUM</div>
+                <div className="text-xs sm:text-sm font-black text-white font-luxury leading-none uppercase tracking-tighter">PREMIUM</div>
               </div>
             </div>
 
-            <div className="p-8 bg-background/50 rounded-2xl border border-white/5 flex items-center justify-between group shadow-3xl hover:border-primary/20 transition-all duration-500">
-              <div className="space-y-4">
-                <p className="text-[9px] font-black text-muted uppercase tracking-[0.5em] ">Phone Number</p>
-                <p className="text-2xl font-black text-white tracking-tighter  font-luxury group-hover:text-primary transition-all">{profileClient.phone}</p>
+            <div className="p-4 sm:p-8 bg-background/50 rounded-xl sm:rounded-2xl border border-white/5 flex items-center justify-between gap-3 group shadow-3xl hover:border-primary/20 transition-all duration-500">
+              <div className="space-y-2 sm:space-y-4 min-w-0">
+                <p className="text-[7px] sm:text-[9px] font-black text-muted uppercase tracking-[0.3em] sm:tracking-[0.5em]">Phone Number</p>
+                <p className="text-base sm:text-2xl font-black text-white tracking-tighter font-luxury group-hover:text-primary transition-all truncate">{profileClient.phone}</p>
               </div>
-              <div className="w-16 h-16 bg-secondary rounded-2xl flex items-center justify-center text-muted group-hover:bg-primary group-hover:text-secondary transition-all duration-500 shadow-xl border border-white/5">
-                <Phone size={24} strokeWidth={2.5} />
+              <div className="w-10 h-10 sm:w-16 sm:h-16 bg-secondary rounded-xl sm:rounded-2xl flex items-center justify-center text-muted group-hover:bg-primary group-hover:text-secondary transition-all duration-500 shadow-xl border border-white/5 shrink-0">
+                <Phone size={16} className="sm:hidden" strokeWidth={2.5} />
+                <Phone size={24} className="hidden sm:block" strokeWidth={2.5} />
               </div>
             </div>
 

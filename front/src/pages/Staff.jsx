@@ -187,14 +187,14 @@ export default function Staff() {
                 <div className="mb-6">
                   <h3 className="text-xl font-black text-white uppercase tracking-tight line-clamp-1 font-luxury leading-none group-hover:text-primary transition-colors">{member.name}</h3>
                   <div className="flex items-center gap-2 mt-3 opacity-40">
-                    <Mail size={10} className="text-primary" />
-                    <span className="text-[8px] font-black text-white uppercase tracking-[0.2em] truncate">{member.email}</span>
+                    <Mail size={12} className="text-primary" />
+                    <span className="text-[9px] font-black text-white uppercase tracking-[0.2em] truncate">{member.email}</span>
                   </div>
                 </div>
 
                 <div className="flex flex-wrap gap-1.5 mb-8 h-12 overflow-y-auto no-scrollbar mask-gradient">
                   {member.services.map(s => (
-                    <span key={s._id} className="px-2.5 py-1.5 bg-background text-primary/60 text-[7px] font-black uppercase tracking-[0.2em] rounded-lg border border-white/5 whitespace-nowrap group-hover:border-primary/20 transition-all">
+                    <span key={s._id} className="px-2.5 py-1.5 bg-background text-primary/60 text-[9px] font-black uppercase tracking-[0.2em] rounded-lg border border-white/5 whitespace-nowrap group-hover:border-primary/20 transition-all">
                       {s.name}
                     </span>
                   ))}

@@ -211,7 +211,7 @@ export default function Appointments() {
 
             <div className="grid grid-cols-7 gap-1 md:gap-2 relative z-10">
               {['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map(day => (
-                <div key={day} className="text-center text-[8px] font-black text-muted/40 py-2 uppercase tracking-[0.3em] ">{day}</div>
+                <div key={day} className="text-center text-[10px] font-black text-muted/40 py-2 uppercase tracking-[0.3em] ">{day}</div>
               ))}
               {days.map((day, i) => {
                 const isSelected = isSameDay(day, selectedDate);
@@ -332,8 +332,8 @@ export default function Appointments() {
                       if (!s) return null;
                       return (
                         <div key={s._id || idx} className="flex items-center justify-between text-muted/60 group-hover:text-white transition-colors">
-                          <span className="text-[9px] font-black uppercase tracking-widest truncate max-w-[150px]">{s.name}</span>
-                          <span className="text-[8px] font-black  opacity-40">${s.price}</span>
+                          <span className="text-[12px] font-black uppercase tracking-widest truncate max-w-[150px]">{s.name}</span>
+                          <span className="text-[12px] font-black  opacity-40">${s.price}</span>
                         </div>
                       );
                     })}

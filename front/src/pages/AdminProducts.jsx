@@ -341,7 +341,7 @@ export default function AdminProducts() {
                 </div>
 
                 <div className="pt-4 border-t border-white/5 mt-auto flex items-center justify-between">
-                   <p className="text-[8px] font-black text-muted/30 uppercase tracking-[0.4em] truncate">PROD-{product._id.slice(-8).toUpperCase()}</p>
+                   <p className="text-[9px] font-black text-muted/30 uppercase tracking-[0.4em] truncate">PROD-{product._id.slice(-8).toUpperCase()}</p>
                    {product.stock > 0 && product.stock <= 5 && (
                     <div className="flex items-center gap-2 px-2 py-1 bg-amber-500/10 border border-amber-500/20 rounded-lg animate-pulse">
                       <Zap size={10} className="text-amber-500" />

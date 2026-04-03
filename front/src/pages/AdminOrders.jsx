@@ -406,9 +406,9 @@ export default function AdminOrders() {
                                                         >
                                                             <Eye size={16} />
                                                         </button>
-                                                        <button className="p-3 bg-background border border-white/5 rounded-xl text-muted hover:text-white transition-all shadow-xl">
+                                                        {/* <button className="p-3 bg-background border border-white/5 rounded-xl text-muted hover:text-white transition-all shadow-xl">
                                                             <MoreVertical size={16} />
-                                                        </button>
+                                                        </button> */}
                                                     </div>
                                                 </td>
                                             </motion.tr>
