@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { ShoppingBag, Star, ArrowRight, Sparkles, Diamond, Package, Clock, ShieldCheck, Search, Target, Heart } from 'lucide-react';
+import { ShoppingBag, Star, ArrowRight, Sparkles, Diamond, Package, Clock, ShieldCheck, Search, Target, Heart, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts } from '../redux/slices/productSlice';
 import { addToCart } from '../redux/slices/cartSlice';
@@ -110,6 +110,32 @@ export default function Shop() {
   const { products, loading } = useSelector((state) => state.products);
   const [activeCategory, setActiveCategory] = useState('All Items');
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 1;
+
+  // Generate Page Numbers Logic
+  const getPageNumbers = () => {
+    const pages = [];
+    const maxVisible = 5;
+
+    if (totalPages <= maxVisible) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else {
+      pages.push(1);
+      if (currentPage > 3) pages.push('...');
+
+      const start = Math.max(2, currentPage - 1);
+      const end = Math.min(totalPages - 1, currentPage + 1);
+
+      for (let i = start; i <= end; i++) {
+        if (!pages.includes(i)) pages.push(i);
+      }
+
+      if (currentPage < totalPages - 2) pages.push('...');
+      pages.push(totalPages);
+    }
+    return pages;
+  };
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -122,6 +148,17 @@ export default function Shop() {
     const matchesCategory = activeCategory === 'All Items' || product.category === activeCategory;
     return matchesSearch && matchesCategory;
   });
+
+  // Pagination Logic
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  const paginatedProducts = filteredProducts.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, activeCategory]);
 
   if (loading && !products.length) return (
     <div className="min-h-screen bg-background flex items-center justify-center">
@@ -177,7 +214,7 @@ export default function Shop() {
             </div>
 
             {/* Floating UI Elements */}
-            <div className="absolute top-10 right-10 bg-white/5 backdrop-blur-xl border border-white/10 p-6 rounded-2xl hidden lg:block">
+            {/* <div className="absolute top-10 right-10 bg-white/5 backdrop-blur-xl border border-white/10 p-6 rounded-2xl hidden lg:block">
               <p className="text-[10px] font-black text-white uppercase tracking-widest mb-4">Live Inventory</p>
               <div className="flex -space-x-3">
                 {[1, 2, 3, 4].map(i => (
@@ -189,7 +226,7 @@ export default function Shop() {
                   +42
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* Search & Categories Bar */}
@@ -221,8 +258,8 @@ export default function Shop() {
           </div>
 
           {/* Grid Setup */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
-            {filteredProducts.map((product, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+            {paginatedProducts.map((product, index) => (
               <LuxuryItem
                 key={product._id}
                 {...product}
@@ -240,6 +277,46 @@ export default function Shop() {
               </div>
             )}
           </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-1 md:gap-4 pt-12 border-t border-white/5">
+              <button
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className={`p-2.5 md:p-4 rounded-lg md:rounded-xl border border-white/10 transition-all ${currentPage === 1 ? 'opacity-20 cursor-not-allowed' : 'hover:border-primary/50 text-white active:scale-95'}`}
+              >
+                <ChevronLeft size={12} className="md:size-4" />
+              </button>
+
+              <div className="flex items-center gap-1 md:gap-3">
+                {getPageNumbers().map((page, i) => (
+                  <React.Fragment key={i}>
+                    {page === '...' ? (
+                      <span className="w-7 h-7 md:w-12 md:h-12 flex items-center justify-center text-white/20 text-[8px] md:text-[10px] font-black uppercase tracking-widest">
+                        ...
+                      </span>
+                    ) : (
+                      <button
+                        onClick={() => setCurrentPage(page)}
+                        className={`w-7 h-7 md:w-12 md:h-12 rounded-lg md:rounded-xl text-[8px] md:text-[10px] font-black uppercase tracking-widest transition-all ${currentPage === page ? 'bg-primary text-secondary' : 'bg-white/5 text-white/40 hover:bg-white/10 hover:text-white border border-white/5'}`}
+                      >
+                        {String(page).padStart(2, '0')}
+                      </button>
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
+
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className={`p-2.5 md:p-4 rounded-lg md:rounded-xl border border-white/10 transition-all ${currentPage === totalPages ? 'opacity-20 cursor-not-allowed' : 'hover:border-primary/50 text-white active:scale-95'}`}
+              >
+                <ChevronRight size={12} className="md:size-4" />
+              </button>
+            </div>
+          )}
 
           {/* Global Footer Banner */}
           {/* <div className="bg-luxury-gradient rounded-3xl p-10 md:p-20 relative overflow-hidden group">

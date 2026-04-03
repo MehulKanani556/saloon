@@ -89,7 +89,7 @@ export default function Dashboard() {
           { label: 'Total Clients', value: data.stats.totalClients, icon: Users, trend: '12.5%' },
           { label: 'Appointments', value: data.stats.totalAppointments, icon: CalendarCheck2, trend: '4.2%' },
           { label: 'Revenue Today', value: `$${data.stats.todayRevenue.toLocaleString()}`, icon: DollarSign, trend: '18.1%' },
-          { label: 'Staff on Leave', value: data.stats.pendingLeaves || 0, icon: CalendarClock, trend: 'Absence' },
+          { label: 'Pending Leave', value: data.stats.pendingLeaves || 0, icon: CalendarClock, trend: 'Absence' },
         ].map((stat, i) => (
           <motion.div
             key={i}
@@ -198,8 +198,8 @@ export default function Dashboard() {
             ))}
           </div>
           <div onClick={() => navigate('/admin/categories')} className="mt-6 md:mt-10 pt-6 md:pt-10 border-t border-white/5 mx-auto">
-            <button className="w-full flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury">
-              <span className="whitespace-nowrap">VIEW DETAILED REPORTS</span>
+            <button className="flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury">
+              <span className="whitespace-nowrap">VIEW REPORTS</span>
               <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </button>
           </div>

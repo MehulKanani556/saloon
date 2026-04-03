@@ -31,6 +31,19 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const { initSocket } = require('./helpers/socketHelper');
 
+// Swagger API Documentation
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./docs/swagger/swaggerConfig');
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+    customSiteTitle: 'Glow & Elegance Saloon API',
+    swaggerOptions: {
+        persistAuthorization: true,
+        docExpansion: 'none',
+        filter: true,
+        tagsSorter: 'alpha'
+    }
+}));
+
 // Routes (centralized in routes/indexRoute.js)
 app.use('/api', require('./routes/indexRoute'));
 
