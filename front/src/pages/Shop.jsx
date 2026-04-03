@@ -111,7 +111,7 @@ export default function Shop() {
   const [activeCategory, setActiveCategory] = useState('All Items');
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 1;
+  const itemsPerPage = 12;
 
   // Generate Page Numbers Logic
   const getPageNumbers = () => {
