@@ -13,8 +13,9 @@ export const addAppointment = createAsyncThunk('appointments/add', async (appoin
         toast.success('Appointment scheduled successfully!');
         return data;
     } catch (err) {
-        toast.error('Scheduling failed');
-        return rejectWithValue(err.response.data);
+        const message = err.response?.data?.message || 'Scheduling failed';
+        toast.error(message);
+        return rejectWithValue(err.response?.data || { message });
     }
 });
 

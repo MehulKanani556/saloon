@@ -20,12 +20,14 @@ import confetti from 'canvas-confetti';
 // --- Validation Schema ---
 const appointmentSchema = Yup.object().shape({
   clientName: Yup.string().required('Full name is required').min(3, 'At least 3 characters'),
-  clientEmail: Yup.string(),
+  clientEmail: Yup.string()
+    .email('Please enter a valid email address')
+    .required('Email is required'),
   clientPhone: Yup.string()
     .matches(/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/, 'Must be in 416-123-4567 format')
     .required('Phone is required'),
   date: Yup.date().min(new Date(new Date().setHours(0, 0, 0, 0)), 'Date cannot be in the past').required('Date is required'),
-  time: Yup.string().required('Time is required'),
+  time: Yup.string().required('Please select a time slot'),
 });
 
 // --- Components ---
@@ -245,6 +247,40 @@ export default function BookAppointment() {
     }
   }, [formik.values.date, selectedServices, staffAssignments, dispatch]);
 
+  useEffect(() => {
+    if (!selectedServices.length || !allStaff?.length) return;
+
+    setStaffAssignments((prev) => {
+      let changed = false;
+      const nextAssignments = { ...prev };
+
+      // Remove assignments for services no longer selected.
+      Object.keys(nextAssignments).forEach((serviceId) => {
+        const stillSelected = selectedServices.some((service) => service._id === serviceId);
+        if (!stillSelected) {
+          delete nextAssignments[serviceId];
+          changed = true;
+        }
+      });
+
+      // Auto-select first eligible staff for services without a selection.
+      selectedServices.forEach((service) => {
+        if (nextAssignments[service._id]) return;
+        const eligibleStaff = allStaff.filter((staffMember) =>
+          staffMember.services?.some((serv) =>
+            (typeof serv === 'string' ? serv === service._id : serv._id === service._id)
+          )
+        );
+        if (eligibleStaff.length > 0) {
+          nextAssignments[service._id] = eligibleStaff[0]._id;
+          changed = true;
+        }
+      });
+
+      return changed ? nextAssignments : prev;
+    });
+  }, [selectedServices, allStaff]);
+
   const handlePhoneChange = (e) => {
     let val = e.target.value.replace(/\D/g, '').substring(0, 10);
     // Format: XXX-XXX-XXXX
@@ -273,8 +309,32 @@ export default function BookAppointment() {
     ? availableServices
     : availableServices.filter(s => s.category?.name === selectedCategory);
 
-  const nextStep = () => {
+  const nextStep = async () => {
     if (step === 1 && selectedServices.length === 0) return;
+
+    if (step === 2) {
+      const stepTwoFields = ['clientName', 'clientEmail', 'clientPhone', 'date', 'time'];
+
+      // Validate first, then mark all fields touched only when there are issues.
+      const errors = await formik.validateForm();
+      const hasStepTwoErrors = stepTwoFields.some((field) => Boolean(errors[field]));
+
+      if (hasStepTwoErrors) {
+        formik.setTouched(
+          {
+            ...formik.touched,
+            clientName: true,
+            clientEmail: true,
+            clientPhone: true,
+            date: true,
+            time: true
+          },
+          true
+        );
+        return;
+      }
+    }
+
     setStep(prev => prev + 1);
   };
   const prevStep = () => setStep(prev => prev - 1);
@@ -532,7 +592,7 @@ export default function BookAppointment() {
                           <input
                             {...formik.getFieldProps('clientEmail')}
                             placeholder="your@email.com"
-                            className="w-full bg-background border-2 border-transparent focus:border-primary/20 rounded-2xl pl-14 pr-6 py-4 text-sm font-bold outline-none transition-all text-white"
+                            className={`w-full bg-background border-2 rounded-2xl pl-14 pr-6 py-4 text-sm font-bold outline-none transition-all text-white ${formik.touched.clientEmail && formik.errors.clientEmail ? 'border-red-500/30' : 'border-transparent focus:border-primary/20'}`}
                           />
                         </div>
                         {formik.touched.clientEmail && formik.errors.clientEmail && (
@@ -542,7 +602,7 @@ export default function BookAppointment() {
  
                       <div className="space-y-1 md:space-y-3">
                         <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-3">Phone Number</label>
-                        <div className="flex bg-background border-2 border-transparent focus-within:border-primary/20 rounded-2xl transition-all overflow-hidden shadow-inner">
+                        <div className={`flex bg-background border-2 rounded-2xl transition-all overflow-hidden shadow-inner ${formik.touched.clientPhone && formik.errors.clientPhone ? 'border-red-500/30' : 'border-transparent focus-within:border-primary/20'}`}>
                           <div className="flex items-center pl-4 md:pl-6 pr-4 border-r border-white/5 bg-white/5">
                             <span className="text-xs md:text-sm font-black text-muted leading-none">+1</span>
                           </div>
@@ -570,11 +630,13 @@ export default function BookAppointment() {
                             type="date"
                             {...formik.getFieldProps('date')}
                             min={new Date().toISOString().split('T')[0]}
-                            className="w-full bg-background border-2 border-transparent focus:border-primary/20 rounded-2xl pl-14 pr-6 py-4 text-sm font-bold outline-none transition-all text-white [color-scheme:dark]"
+                            className={`w-full bg-background border-2 rounded-2xl pl-14 pr-6 py-4 text-sm font-bold outline-none transition-all text-white [color-scheme:dark] ${formik.touched.date && formik.errors.date ? 'border-red-500/30' : 'border-transparent focus:border-primary/20'}`}
                           />
                         </div>
+                        {formik.touched.date && formik.errors.date && (
+                          <p className="text-[9px] text-red-500 font-bold uppercase ml-4">{formik.errors.date}</p>
+                        )}
                       </div>
-
 
                       {/* Staff Selection Section */}
                       <div className="md:col-span-2 space-y-4 pt-6 border-t border-white/5">
@@ -808,7 +870,7 @@ export default function BookAppointment() {
                   {step === 2 && (
                     <button
                       onClick={nextStep}
-                      disabled={!formik.isValid || !formik.values.clientName || !formik.values.time}
+                      disabled={!formik.isValid || !formik.values.clientName || !formik.values.clientPhone || !formik.values.date || !formik.values.time}
                       className="px-6 py-4 bg-primary text-secondary rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg flex items-center gap-2 disabled:opacity-50 transition-all active:scale-95"
                     >
                       Confirm <ChevronRight size={14} />
@@ -854,7 +916,7 @@ export default function BookAppointment() {
                             <span className="text-[8px] font-bold text-muted uppercase tracking-[0.2em]">{s.duration} Min</span>
                           </div>
                           <button
-                            onClick={() => toggleService(s)}
+                            onClick={() => { toggleService(s); if (selectedServices.length === 1) setStep(1); }}
                             className="text-red-400 opacity-100 group-hover:opacity-100 transition-opacity"
                           >
                             <Trash size={14} />
@@ -896,8 +958,7 @@ export default function BookAppointment() {
                   {step === 2 && (
                     <button
                       onClick={nextStep}
-                      disabled={!formik.isValid || !formik.values.clientName || !formik.values.time}
-                      className="w-full py-5 bg-primary text-secondary rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl disabled:opacity-50 hover:bg-primary/90 transition-all flex items-center justify-center gap-3 group"
+                      className="w-full py-5 bg-primary text-secondary rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl hover:bg-primary/90 transition-all flex items-center justify-center gap-3 group"
                     >
                       Confirm Details
                       <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
