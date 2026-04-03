@@ -7,6 +7,8 @@ import api from '../utils/api';
 import toast from 'react-hot-toast';
 import UserPanelLayout from '../components/public/UserPanelLayout';
 import { deleteAccount } from '../redux/slices/authSlice';
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
 
 export default function DeleteAccount() {
   const [loading, setLoading] = useState(false);
