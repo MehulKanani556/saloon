@@ -787,9 +787,9 @@ export default function BookAppointment() {
                     className="space-y-10"
                   >
                     <div className="bg-background rounded-2xl p-5 md:p-10 text-white shadow-2xl relative overflow-hidden border border-white/5">
-                      <div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none text-primary">
+                      {/* <div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none text-primary">
                         <CheckCircle2 size={150} strokeWidth={1} />
-                      </div>
+                      </div> */}
 
                       <div className="relative z-10 space-y-10">
                         <div>
