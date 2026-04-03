@@ -7,7 +7,7 @@ const PublicFooter = () => {
   return (
     <footer id="contact" className="bg-background py-6 md:py-12 border-t border-white/5">
       <div className="container mx-auto px-6">
-        <div className="grid grid-cols-4 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 xl:gap-12 mb-10 xl:mb-20 text-center md:text-left">
+        <div className="grid grid-cols-4 md:grid-cols-2 lg:grid-cols-4 gap-6 xl:gap-12 mb-10 xl:mb-20 text-center md:text-left">
           {/* Brand Column */}
           <div className="flex col-span-4 md:col-span-1 flex-col items-center md:items-start space-y-4 order-1">
             <Link to="/" className="flex flex-col items-center md:items-start gap-4 group">
