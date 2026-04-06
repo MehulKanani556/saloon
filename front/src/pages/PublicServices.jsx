@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Scissors, Clock, Sparkles, ChevronRight, ChevronLeft, Search, Target, LayoutGrid
@@ -77,6 +77,33 @@ export default function PublicServices() {
 
   const [activeCategory, setActiveCategory] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
+  const scrollRef = useRef(null);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (el) {
+      const onWheel = (e) => {
+        if (e.deltaY === 0) return;
+        e.preventDefault();
+        el.scrollLeft += e.deltaY;
+      };
+      el.addEventListener('wheel', onWheel, { passive: false });
+      return () => el.removeEventListener('wheel', onWheel);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      const activeElement = scrollRef.current.querySelector('[data-active="true"]');
+      if (activeElement) {
+        activeElement.scrollIntoView({
+          behavior: 'smooth',
+          inline: 'center',
+          block: 'nearest'
+        });
+      }
+    }
+  }, [activeCategory, categories]);
 
   useEffect(() => {
     dispatch(fetchServices(true));
@@ -114,11 +141,15 @@ export default function PublicServices() {
         {/* Pro-Calibration Filter Bar */}
         <section className="sticky top-[55px] md:top-[60px] z-[50] bg-background/95 backdrop-blur-xl border-b border-white/[0.05]">
           <div className="container mx-auto px-6 py-6 md:py-10">
-            <div className="flex items-center overflow-x-auto scrollbar-hide snap-x snap-mandatory">
+            <div 
+              ref={scrollRef}
+              className="flex items-center overflow-x-auto scrollbar-hide snap-x snap-mandatory"
+            >
               <div className="flex items-center gap-3 md:gap-4">
                 {/* "All" Rituals - Optimized Width */}
                 <button
                   onClick={() => handleCategoryChange("All")}
+                  data-active={activeCategory === "All"}
                   className={`group relative flex-shrink-0 flex items-center justify-center px-4 py-3 transition-all duration-300 snap-center ${activeCategory === "All" ? "text-primary" : "text-muted hover:text-white"
                     }`}
                 >
@@ -152,6 +183,7 @@ export default function PublicServices() {
                   <button
                     key={cat._id}
                     onClick={() => handleCategoryChange(cat._id)}
+                    data-active={activeCategory === cat._id}
                     className={`group relative flex-shrink-0 flex items-center justify-center px-4 py-3 transition-all duration-300 snap-center ${activeCategory === cat._id ? "text-primary" : "text-muted hover:text-white"
                       }`}
                   >

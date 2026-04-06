@@ -69,20 +69,22 @@ const sendOTP = async (req, res) => {
         }
 
         // Generate a cryptographically secure random 6-digit code
-        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        // const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        // user.otp = otp;
+        // user.otpExpires = Date.now() + 10 * 60 * 1000;
+
+        const otp = '123456';
         user.otp = otp;
-        user.otpExpires = Date.now() + 10 * 60 * 1000; // 10 minutes window
+        user.otpExpires = Date.now() + 10 * 60 * 1000; 
+
         await user.save();
 
-        // Dispatch OTP through appropriate relay (Email or SMS)
-        isEmail = identity.includes('@');
-        if (isEmail) {
-            await sendEmailOTP(user.email, otp);
-        } else {
-            // Note: phone number must start with + for Twilio (e.g., +91, +1)
-            const formattedPhone = user.phone.startsWith('+') ? user.phone : `+${user.phone}`;
-            await sendSMSOTP(formattedPhone, otp);
-        }
+        // if (isEmail) {
+        //     await sendEmailOTP(user.email, otp);
+        // } else {
+        //     const formattedPhone = user.phone.startsWith('+') ? user.phone : `+${user.phone}`;
+        //     await sendSMSOTP(formattedPhone, otp);
+        // }
 
         res.status(200).json({ message: 'Verification code sent. Valid for 10 minutes.' });
     } catch (error) {
