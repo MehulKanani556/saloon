@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
-import { Calendar as CalendarIcon, Clock, Filter, Search, Plus, MapPin, User, MoreVertical, X, Sparkles, StepForward, StepBack, Edit3, Trash2, AlertTriangle, FileText } from 'lucide-react';
+import { Calendar as CalendarIcon, Clock, Filter, Search, Plus, MapPin, User, MoreVertical, X, Sparkles, StepForward, StepBack, Edit3, Trash2, AlertTriangle, FileText, List } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isToday, addMonths, subMonths, isSameDay, startOfDay } from 'date-fns';
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isToday, addMonths, subMonths, isSameDay, startOfDay, parseISO } from 'date-fns';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
@@ -32,6 +32,8 @@ export default function Appointments() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [appointmentToDelete, setAppointmentToDelete] = useState(null);
   const [isNewClient, setIsNewClient] = useState(false);
+  const [viewMode, setViewMode] = useState('calendar'); // 'calendar' or 'list'
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
   useEffect(() => {
     if (isDrawerOpen) {
@@ -143,6 +145,26 @@ export default function Appointments() {
     (new Date(lv.startDate) <= selectedDate && new Date(lv.endDate) >= selectedDate)
   );
 
+  const groupAppointmentsByMonth = (apps) => {
+    const filteredByYear = apps.filter(app => new Date(app.appointmentDate).getFullYear() === selectedYear);
+    const sortedApps = [...filteredByYear].sort((a, b) => new Date(b.appointmentDate) - new Date(a.appointmentDate));
+    const groups = {};
+    sortedApps.forEach(app => {
+      const month = format(new Date(app.appointmentDate), 'MMMM yyyy');
+      if (!groups[month]) groups[month] = [];
+      groups[month].push(app);
+    });
+    return groups;
+  };
+
+  const groupedAppointments = groupAppointmentsByMonth(appointments || []);
+
+  const availableYears = Array.from(new Set((appointments || []).map(app => new Date(app.appointmentDate).getFullYear()))).sort((a, b) => b - a);
+  if (!availableYears.includes(new Date().getFullYear())) {
+    availableYears.unshift(new Date().getFullYear());
+    availableYears.sort((a, b) => b - a);
+  }
+
   const getStatusStyles = (status) => {
     switch (status) {
       case 'Completed': return 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20';
@@ -166,18 +188,36 @@ export default function Appointments() {
         subtitle="View and manage all customer appointments"
         icon={CalendarIcon}
         rightContent={
-          <button
-            onClick={() => {
-              setSelectedAppointment(null);
-              setIsNewClient(false);
-              formik.resetForm();
-              setIsDrawerOpen(true);
-            }}
-            className="flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury"
-          >
-            <Plus size={18} md:size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
-            <span className="whitespace-nowrap">Book Appointment</span>
-          </button>
+          <div className="flex items-center gap-4">
+            <div className="bg-secondary/40 p-1.5 rounded-2xl border border-white/5 backdrop-blur-md hidden sm:flex items-center gap-1">
+              <button
+                onClick={() => setViewMode('calendar')}
+                className={`p-2.5 rounded-xl transition-all ${viewMode === 'calendar' ? 'bg-primary text-secondary shadow-lg' : 'text-muted hover:text-white'}`}
+                title="Calendar View"
+              >
+                <CalendarIcon size={18} strokeWidth={2.5} />
+              </button>
+              <button
+                onClick={() => setViewMode('list')}
+                className={`p-2.5 rounded-xl transition-all ${viewMode === 'list' ? 'bg-primary text-secondary shadow-lg' : 'text-muted hover:text-white'}`}
+                title="List View"
+              >
+                <List size={18} strokeWidth={2.5} />
+              </button>
+            </div>
+            <button
+              onClick={() => {
+                setSelectedAppointment(null);
+                setIsNewClient(false);
+                formik.resetForm();
+                setIsDrawerOpen(true);
+              }}
+              className="flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury"
+            >
+              <Plus size={18} md:size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
+              <span className="whitespace-nowrap">Book Appointment</span>
+            </button>
+          </div>
         }
       />
 
@@ -185,71 +225,166 @@ export default function Appointments() {
       <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-12">
         {/* Calendar Column - Refactored for High Density */}
         <div className="lg:col-span-7 flex flex-col min-h-0">
-          <div className="bg-secondary/40 backdrop-blur-xl p-4 md:p-6 rounded-xl md:rounded-2xl border border-white/5 shadow-3xl relative overflow-hidden flex flex-col h-fit">
-            <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/5 blur-[120px] rounded-full" />
+          <AnimatePresence mode="wait">
+            {viewMode === 'calendar' ? (
+              <motion.div
+                key="calendar"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                className="bg-secondary/40 backdrop-blur-xl p-4 md:p-6 rounded-xl md:rounded-2xl border border-white/5 shadow-3xl relative overflow-hidden flex flex-col h-fit"
+              >
+                <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/5 blur-[120px] rounded-full" />
 
-            <div className="flex flex-row gap-4 sm:items-center justify-between mb-6 md:mb-8 relative z-10">
-              <div className="flex flex-col">
-                <span className="text-[8px] font-black text-primary uppercase tracking-[0.4em] leading-none mb-2 ">Calendar</span>
-                <h3 className="text-xl md:text-2xl font-black text-white uppercase tracking-tighter  font-luxury">{format(currentDate, 'MMMM yyyy')}</h3>
-              </div>
-              <div className="flex gap-3">
-                <button
-                  onClick={() => setCurrentDate(subMonths(currentDate, 1))}
-                  className="w-10 h-10 md:w-11 md:h-11 flex items-center justify-center bg-background border border-white/5 rounded-xl hover:bg-primary hover:text-secondary transition-all shadow-xl active:scale-95 group"
-                >
-                  <StepBack size={16} md:size={18} className="group-hover:-translate-x-0.5 transition-transform" />
-                </button>
-                <button
-                  onClick={() => setCurrentDate(addMonths(currentDate, 1))}
-                  className="w-10 h-10 md:w-11 md:h-11 flex items-center justify-center bg-background border border-white/5 rounded-xl hover:bg-primary hover:text-secondary transition-all shadow-xl active:scale-95 group"
-                >
-                  <StepForward size={16} md:size={18} className="group-hover:translate-x-0.5 transition-transform" />
-                </button>
-              </div>
-            </div>
+                <div className="flex flex-row gap-4 sm:items-center justify-between mb-6 md:mb-8 relative z-10">
+                  <div className="flex flex-col">
+                    <span className="text-[8px] font-black text-primary uppercase tracking-[0.4em] leading-none mb-2 ">Calendar</span>
+                    <h3 className="text-xl md:text-2xl font-black text-white uppercase tracking-tighter  font-luxury">{format(currentDate, 'MMMM yyyy')}</h3>
+                  </div>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => setCurrentDate(subMonths(currentDate, 1))}
+                      className="w-10 h-10 md:w-11 md:h-11 flex items-center justify-center bg-background border border-white/5 rounded-xl hover:bg-primary hover:text-secondary transition-all shadow-xl active:scale-95 group"
+                    >
+                      <StepBack size={16} md:size={18} className="group-hover:-translate-x-0.5 transition-transform" />
+                    </button>
+                    <button
+                      onClick={() => setCurrentDate(addMonths(currentDate, 1))}
+                      className="w-10 h-10 md:w-11 md:h-11 flex items-center justify-center bg-background border border-white/5 rounded-xl hover:bg-primary hover:text-secondary transition-all shadow-xl active:scale-95 group"
+                    >
+                      <StepForward size={16} md:size={18} className="group-hover:translate-x-0.5 transition-transform" />
+                    </button>
+                  </div>
+                </div>
 
-            <div className="grid grid-cols-7 gap-1 md:gap-2 relative z-10">
-              {['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map(day => (
-                <div key={day} className="text-center text-[10px] font-black text-muted/40 py-2 uppercase tracking-[0.3em] ">{day}</div>
-              ))}
-              {days.map((day, i) => {
-                const isSelected = isSameDay(day, selectedDate);
-                const hasApps = (appointments || []).some(a => isSameDay(new Date(a.appointmentDate), day));
-                const hasLeaves = (leaves || []).some(lv => 
-                  isSameDay(new Date(lv.startDate), day) || 
-                  isSameDay(new Date(lv.endDate), day) ||
-                  (new Date(lv.startDate) <= day && new Date(lv.endDate) >= day)
-                );
+                <div className="grid grid-cols-7 gap-1 md:gap-2 relative z-10">
+                  {['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map(day => (
+                    <div key={day} className="text-center text-[10px] font-black text-muted/40 py-2 uppercase tracking-[0.3em] ">{day}</div>
+                  ))}
+                  {days.map((day, i) => {
+                    const isSelected = isSameDay(day, selectedDate);
+                    const hasApps = (appointments || []).some(a => isSameDay(new Date(a.appointmentDate), day));
+                    const hasLeaves = (leaves || []).some(lv => 
+                      isSameDay(new Date(lv.startDate), day) || 
+                      isSameDay(new Date(lv.endDate), day) ||
+                      (new Date(lv.startDate) <= day && new Date(lv.endDate) >= day)
+                    );
 
-                return (
-                  <motion.div
-                    key={i}
-                    onClick={() => setSelectedDate(day)}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: i * 0.005 }}
-                    className={`
-                    aspect-square rounded-lg md:rounded-xl flex flex-col items-center justify-center relative cursor-pointer group transition-all duration-300
-                    ${isSelected ? 'bg-primary text-secondary shadow-lg scale-105 z-20' : 'bg-background/50 hover:bg-white/5 text-muted'}
-                    ${!isSameMonth(day, monthStart) ? 'opacity-5 hover:opacity-50' : ''}
-                    ${isToday(day) && !isSelected ? 'border-2 border-primary/20 shadow-inner' : 'border border-white/5'}
-                  `}
-                  >
-                    <span className={`text-base md:text-lg font-black tracking-tighter ${isSelected ? 'text-secondary' : 'text-white'}`}>{format(day, 'd')}</span>
-                    <div className="flex gap-1 absolute bottom-1.5 md:bottom-2">
-                      {hasApps && (
-                        <div className={`w-1 h-1 md:w-1.5 md:h-1.5 rounded-full ${isSelected ? 'bg-secondary' : 'bg-primary shadow-lg shadow-primary/40'}`} />
-                      )}
-                      {hasLeaves && (
-                        <div className={`w-1 h-1 md:w-1.5 md:h-1.5 rounded-full ${isSelected ? 'bg-secondary/40' : 'bg-rose-500 shadow-lg shadow-rose-500/40 animate-pulse'}`} />
-                      )}
+                    return (
+                      <motion.div
+                        key={i}
+                        onClick={() => setSelectedDate(day)}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: i * 0.005 }}
+                        className={`
+                        aspect-square rounded-lg md:rounded-xl flex flex-col items-center justify-center relative cursor-pointer group transition-all duration-300
+                        ${isSelected ? 'bg-primary text-secondary shadow-lg scale-105 z-20' : 'bg-background/50 hover:bg-white/5 text-muted'}
+                        ${!isSameMonth(day, monthStart) ? 'opacity-5 hover:opacity-50' : ''}
+                        ${isToday(day) && !isSelected ? 'border-2 border-primary/20 shadow-inner' : 'border border-white/5'}
+                      `}
+                      >
+                        <span className={`text-base md:text-lg font-black tracking-tighter ${isSelected ? 'text-secondary' : 'text-white'}`}>{format(day, 'd')}</span>
+                        <div className="flex gap-1 absolute bottom-1.5 md:bottom-2">
+                          {hasApps && (
+                            <div className={`w-1 h-1 md:w-1.5 md:h-1.5 rounded-full ${isSelected ? 'bg-secondary' : 'bg-primary shadow-lg shadow-primary/40'}`} />
+                          )}
+                          {hasLeaves && (
+                            <div className={`w-1 h-1 md:w-1.5 md:h-1.5 rounded-full ${isSelected ? 'bg-secondary/40' : 'bg-rose-500 shadow-lg shadow-rose-500/40 animate-pulse'}`} />
+                          )}
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="list"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                className="flex flex-col gap-8 h-full min-h-0"
+              >
+                {/* Year Selection Horizontal Bar */}
+                <div className="flex bg-secondary/30 p-1.5 rounded-2xl border border-white/5 backdrop-blur-md w-fit shadow-2xl mx-auto sm:mx-0">
+                  <div className="flex gap-1">
+                    {availableYears.map(year => (
+                      <button
+                        key={year}
+                        onClick={() => setSelectedYear(year)}
+                        className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] transition-all font-luxury ${selectedYear === year ? 'bg-primary text-secondary shadow-lg' : 'text-muted hover:text-white'}`}
+                      >
+                        {year}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex-1 overflow-y-auto pr-4 custom-scrollbar space-y-10 pb-20">
+                  {Object.entries(groupedAppointments).map(([month, apps]) => (
+                    <div key={month} className="space-y-6">
+                      <div className="flex items-center gap-6">
+                        <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-white/10" />
+                        <span className="text-[10px] font-black text-primary uppercase tracking-[0.5em] bg-secondary/50 px-6 py-2 rounded-full border border-white/5 backdrop-blur-md shadow-xl">
+                          {month}
+                        </span>
+                        <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-white/10" />
+                      </div>
+
+                      <div className="grid grid-cols-1 gap-4">
+                        {apps.map((app, idx) => (
+                          <motion.div
+                            key={app._id}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: idx * 0.05 }}
+                            onClick={() => setSelectedDate(new Date(app.appointmentDate))}
+                            className={`group bg-secondary/30 hover:bg-secondary/60 p-5 rounded-2xl border border-white/5 transition-all cursor-pointer flex items-center justify-between gap-6 relative overflow-hidden ${isSameDay(new Date(app.appointmentDate), selectedDate) ? 'border-primary/40 bg-secondary/80 shadow-2xl scale-[1.01]' : ''}`}
+                          >
+                            <div className="flex items-center gap-5 relative z-10">
+                              <div className="flex flex-col items-center justify-center w-14 h-14 bg-background rounded-xl border border-white/5 shrink-0">
+                                <span className="text-lg font-black text-white font-luxury">{format(new Date(app.appointmentDate), 'dd')}</span>
+                                <span className="text-[8px] font-black text-muted uppercase tracking-wider">{format(new Date(app.appointmentDate), 'EEE')}</span>
+                              </div>
+                              <div className="flex flex-col">
+                                <h4 className="text-sm font-black text-white uppercase tracking-widest mb-1 group-hover:text-primary transition-colors">{app.client?.name}</h4>
+                                <div className="flex items-center gap-3">
+                                  <span className="text-[9px] font-black text-muted uppercase flex items-center gap-1.5 underline decoration-white/10 underline-offset-4">
+                                    <Clock size={10} className="text-primary" />
+                                    {format(new Date(app.appointmentDate), 'HH:mm')}
+                                  </span>
+                                  <span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded-md border ${getStatusStyles(app.status)}`}>
+                                    {app.status}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="text-right shrink-0 relative z-10">
+                              <p className="text-xl font-black text-white font-luxury tracking-tighter">${app.totalPrice}</p>
+                              <p className="text-[8px] font-black text-muted uppercase tracking-[0.2em]">{app.assignments?.length} RITUALS</p>
+                            </div>
+
+                            {isSameDay(new Date(app.appointmentDate), selectedDate) && (
+                              <div className="absolute inset-0 bg-primary/5 pointer-events-none" />
+                            )}
+                          </motion.div>
+                        ))}
+                      </div>
                     </div>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </div>
+                  ))}
+                  
+                  {Object.keys(groupedAppointments).length === 0 && (
+                    <div className="h-full flex flex-col items-center justify-center p-20 text-center opacity-40">
+                      <CalendarIcon size={48} className="mb-6 opacity-20" />
+                      <p className="text-xs font-black uppercase tracking-[0.4em]">No bookings discovered in history</p>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Sidebar Column: Appointments Feed */}
