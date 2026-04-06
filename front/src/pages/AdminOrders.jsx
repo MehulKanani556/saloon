@@ -20,11 +20,12 @@ import {
     Filter
 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllOrders, updateOrderStatus } from '../redux/slices/orderSlice';
+import { fetchAllOrders, updateOrderStatus, exportOrderInvoicePDF } from '../redux/slices/orderSlice';
 import AdminHeader from '../components/ui/AdminHeader';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 import Pagination from '../components/Pagination';
+import Modal from '../components/ui/Modal';
 
 export default function AdminOrders() {
     const dispatch = useDispatch();
@@ -46,6 +47,29 @@ export default function AdminOrders() {
     useEffect(() => {
         dispatch(fetchAllOrders());
     }, [dispatch]);
+
+    const handleDownloadInvoice = async (order) => {
+        try {
+            const { _id, orderId, user, shippingAddress } = order;
+            const result = await dispatch(exportOrderInvoicePDF(_id)).unwrap();
+
+            const clientName = (shippingAddress?.fullName || user?.name || 'Client').split(' ').join('_');
+            const fileName = `Invoice-Order-${clientName}-${orderId}.pdf`;
+
+            const url = window.URL.createObjectURL(new Blob([result]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', fileName);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(url);
+
+            toast.success('Invoice exported successfully');
+        } catch (err) {
+            toast.error(err || 'Failed to download invoice');
+        }
+    };
 
     const updateStatus = async (id, status) => {
         try {
@@ -87,137 +111,117 @@ export default function AdminOrders() {
     return (
         <div className="space-y-12">
             {/* Order Details Modal */}
-            <AnimatePresence>
-                {isModalOpen && selectedOrder && (
-                    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-10">
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onClick={() => setIsModalOpen(false)}
-                            className="absolute inset-0 bg-black/80 backdrop-blur-xl"
-                        />
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                            className="bg-[#0A0A0A] w-full max-w-4xl max-h-[90vh] rounded-3xl border border-white/10 shadow-3xl relative z-10 overflow-hidden flex flex-col"
+            <Modal
+                isOpen={isModalOpen && !!selectedOrder}
+                onClose={() => setIsModalOpen(false)}
+                title={selectedOrder?.orderId}
+                subtitle="Full Order Reconstruction & Status"
+                maxWidth="max-w-4xl"
+                footer={
+                    <div className="flex flex-col sm:flex-row gap-4 w-full">
+                        <button
+                            onClick={() => updateStatus(selectedOrder._id, 'Shipped')}
+                            disabled={selectedOrder?.status === 'Shipped' || selectedOrder?.status === 'Delivered'}
+                            className="flex-1 flex items-center justify-center gap-3 px-6 py-4 bg-primary text-secondary rounded-2xl font-black uppercase text-[10px] tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100 font-luxury"
                         >
-                            {/* Modal Header */}
-                            <div className="p-8 border-b border-white/5 flex items-center justify-between bg-white/5 relative">
-                                <div className="absolute top-0 left-0 w-full h-[1px] bg-luxury-gradient opacity-20" />
-                                <div>
-                                    <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em] mb-2">Order Details</p>
-                                    <h2 className="text-2xl font-black text-white uppercase tracking-tighter font-luxury">{selectedOrder.orderId}</h2>
+                            <Truck size={18} />
+                            <span>Mark as Shipped</span>
+                        </button>
+                        <button
+                            onClick={() => handleDownloadInvoice(selectedOrder)}
+                            className="flex-1 px-8 py-4 bg-white/5 border border-white/10 rounded-2xl text-white font-black text-[10px] uppercase tracking-[0.3em] hover:bg-white/10 transition-all"
+                        >
+                            Download Invoice
+                        </button>
+                    </div>
+                }
+            >
+                {selectedOrder && (
+                    <div className="space-y-10">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
+                            {/* Customer & Shipping */}
+                            <div className="space-y-6 md:space-y-8">
+                                <div className="p-5 md:p-6 bg-white/[0.03] rounded-2xl border border-white/5 space-y-4">
+                                    <h3 className="text-[9px] md:text-[10px] font-black text-white uppercase tracking-[0.3em] flex items-center gap-3">
+                                        <User size={14} className="text-primary" /> Customer Info
+                                    </h3>
+                                    <div className="space-y-1">
+                                        <p className="text-sm md:text-base font-black text-white uppercase font-luxury">{selectedOrder.user?.name}</p>
+                                        <p className="text-[10px] font-black text-muted uppercase tracking-widest">{selectedOrder.user?.email}</p>
+                                    </div>
                                 </div>
-                                <button
-                                    onClick={() => setIsModalOpen(false)}
-                                    className="p-4 bg-white/5 hover:bg-white/10 rounded-2xl text-muted hover:text-white transition-all transform hover:rotate-90"
-                                >
-                                    <X size={20} />
-                                </button>
+                                <div className="p-5 md:p-6 bg-white/[0.03] rounded-2xl border border-white/5 space-y-4">
+                                    <h3 className="text-[9px] md:text-[10px] font-black text-white uppercase tracking-[0.3em] flex items-center gap-3">
+                                        <Truck size={14} className="text-primary" /> Shipping Address
+                                    </h3>
+                                    <div className="space-y-2">
+                                        <p className="text-[10px] md:text-[11px] font-black text-white uppercase tracking-widest leading-relaxed">
+                                            {selectedOrder.shippingAddress?.fullName}<br />
+                                            {selectedOrder.shippingAddress?.address}<br />
+                                            {selectedOrder.shippingAddress?.city}, {selectedOrder.shippingAddress?.zipCode}<br />
+                                            {selectedOrder.shippingAddress?.country}
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
 
-                            {/* Modal Content */}
-                            <div className="flex-1 overflow-y-auto custom-scrollbar p-8 space-y-10">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                                    {/* Customer & Shipping */}
-                                    <div className="space-y-8">
-                                        <div className="p-6 bg-white/5 rounded-2xl border border-white/5 space-y-4">
-                                            <h3 className="text-[10px] font-black text-white uppercase tracking-[0.3em] flex items-center gap-3">
-                                                <User size={14} className="text-primary" /> Customer Info
-                                            </h3>
-                                            <div className="space-y-1">
-                                                <p className="text-sm font-black text-white uppercase font-luxury">{selectedOrder.user?.name}</p>
-                                                <p className="text-[10px] font-black text-muted uppercase tracking-widest">{selectedOrder.user?.email}</p>
-                                            </div>
+                            {/* Financial Status */}
+                            <div className="space-y-6 md:space-y-8">
+                                <div className="p-5 md:p-6 bg-white/[0.03] rounded-2xl border border-white/5 space-y-4">
+                                    <h3 className="text-[9px] md:text-[10px] font-black text-white uppercase tracking-[0.3em] flex items-center gap-3">
+                                        <ShoppingBag size={14} className="text-primary" /> Order Status
+                                    </h3>
+                                    <div className="flex flex-wrap items-center gap-3 md:gap-4">
+                                        <div className={`px-4 md:px-5 py-2 rounded-full border text-[8px] font-black uppercase tracking-widest ${getStatusColor(selectedOrder.status)}`}>
+                                            {selectedOrder.status}
                                         </div>
-                                        <div className="p-6 bg-white/5 rounded-2xl border border-white/5 space-y-4">
-                                            <h3 className="text-[10px] font-black text-white uppercase tracking-[0.3em] flex items-center gap-3">
-                                                <Truck size={14} className="text-primary" /> Shipping Address
-                                            </h3>
-                                            <div className="space-y-2">
-                                                <p className="text-[11px] font-black text-white uppercase tracking-widest leading-relaxed">
-                                                    {selectedOrder.shippingAddress?.fullName}<br />
-                                                    {selectedOrder.shippingAddress?.address}<br />
-                                                    {selectedOrder.shippingAddress?.city}, {selectedOrder.shippingAddress?.zipCode}<br />
-                                                    {selectedOrder.shippingAddress?.country}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Financial Status */}
-                                    <div className="space-y-8">
-                                        <div className="p-6 bg-white/5 rounded-2xl border border-white/5 space-y-4">
-                                            <h3 className="text-[10px] font-black text-white uppercase tracking-[0.3em] flex items-center gap-3">
-                                                <ShoppingBag size={14} className="text-primary" /> Order Status
-                                            </h3>
-                                            <div className="flex items-center gap-4">
-                                                <div className={`px-5 py-2 rounded-full border text-[8px] font-black uppercase tracking-widest ${getStatusColor(selectedOrder.status)}`}>
-                                                    {selectedOrder.status}
-                                                </div>
-                                                <div className="px-5 py-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-500 text-[9px] font-black uppercase tracking-widest">
-                                                    Paid
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="p-8 bg-luxury-gradient rounded-2xl text-secondary flex items-center justify-between shadow-2xl">
-                                            <div>
-                                                <p className="text-[10px] font-black uppercase tracking-[0.4em] mb-1 opacity-60 text-secondary/60">Total Amount</p>
-                                                <p className="text-4xl font-black font-luxury text-secondary">${selectedOrder.totalAmount?.toFixed(2)}</p>
-                                            </div>
-                                            <Package size={40} className="opacity-20 text-secondary" strokeWidth={1} />
+                                        <div className="px-4 md:px-5 py-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-500 text-[8px] md:text-[9px] font-black uppercase tracking-widest">
+                                            Paid
                                         </div>
                                     </div>
                                 </div>
+                                <div className="p-6 md:p-8 bg-luxury-gradient rounded-2xl text-secondary flex items-center justify-between shadow-2xl relative overflow-hidden group">
+                                    <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    <div className="relative z-10">
+                                        <p className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.4em] mb-1 opacity-60">Total Amount</p>
+                                        <p className="text-3xl md:text-4xl font-black font-luxury">${selectedOrder.totalAmount?.toFixed(2)}</p>
+                                    </div>
+                                    <Package size={40} className="opacity-20 relative z-10" strokeWidth={1} />
+                                </div>
+                            </div>
+                        </div>
 
-                                {/* Order Items Table */}
-                                <div className="space-y-6">
-                                    <h3 className="text-[10px] font-black text-white uppercase tracking-[0.4em] px-2">Order Items</h3>
-                                    <div className="border border-white/5 rounded-2xl overflow-hidden bg-white/5 backdrop-blur-sm">
-                                        <table className="w-full text-left">
-                                            <thead>
-                                                <tr className="bg-white/5 text-[9px] font-black uppercase tracking-[0.3em] text-primary">
-                                                    <th className="px-6 py-4">Product Name</th>
-                                                    <th className="px-6 py-4">Quantity</th>
-                                                    <th className="px-6 py-4">Unit Price</th>
-                                                    <th className="px-6 py-4 text-right">Total</th>
+                        {/* Order Items Table */}
+                        <div className="space-y-6">
+                            <h3 className="text-[10px] font-black text-white uppercase tracking-[0.4em] px-2">Order Items</h3>
+                            <div className="border border-white/5 rounded-2xl overflow-hidden bg-white/[0.02] backdrop-blur-sm">
+                                <div className="overflow-x-auto custom-scrollbar">
+                                    <table className="w-full text-left min-w-[500px]">
+                                        <thead>
+                                            <tr className="bg-white/5 text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em] text-primary">
+                                                <th className="px-6 py-4">Product Name</th>
+                                                <th className="px-6 py-4">Quantity</th>
+                                                <th className="px-6 py-4">Unit Price</th>
+                                                <th className="px-6 py-4 text-right">Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-white/5">
+                                            {selectedOrder.items?.map((item, idx) => (
+                                                <tr key={idx} className="group hover:bg-white/[0.02] transition-colors">
+                                                    <td className="px-6 py-5 text-[10px] font-black text-white uppercase tracking-widest">{item.name}</td>
+                                                    <td className="px-6 py-5 text-[10px] font-black text-muted uppercase tracking-widest">{item.qty} UNITS</td>
+                                                    <td className="px-6 py-5 text-[10px] font-black text-muted uppercase tracking-widest">${item.price?.toFixed(2)}</td>
+                                                    <td className="px-6 py-5 text-right text-[10px] font-black text-primary font-luxury">${(item.price * item.qty).toFixed(2)}</td>
                                                 </tr>
-                                            </thead>
-                                            <tbody className="divide-y divide-white/5">
-                                                {selectedOrder.items?.map((item, idx) => (
-                                                    <tr key={idx} className="group">
-                                                        <td className="px-6 py-5 text-[10px] font-black text-white uppercase tracking-widest">{item.name}</td>
-                                                        <td className="px-6 py-5 text-[10px] font-black text-muted uppercase tracking-widest">{item.qty} UNITS</td>
-                                                        <td className="px-6 py-5 text-[10px] font-black text-muted uppercase tracking-widest">${item.price?.toFixed(2)}</td>
-                                                        <td className="px-6 py-5 text-right text-[10px] font-black text-primary font-luxury">${(item.price * item.qty).toFixed(2)}</td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                            ))}
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
-
-                            {/* Modal Footer */}
-                            <div className="p-8 border-t border-white/5 bg-white/5 flex gap-4">
-                                <button
-                                    onClick={() => updateStatus(selectedOrder._id, 'Shipped')}
-                                    disabled={selectedOrder.status === 'Shipped' || selectedOrder.status === 'Delivered'}
-                                    className="flex-1 flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury disabled:opacity-50 disabled:hover:scale-100"
-                                >
-                                    <Truck size={18} className="group-hover:translate-x-1 transition-transform" />
-                                    <span className="whitespace-nowrap">Mark as Shipped</span>
-                                </button>
-                                <button className="px-8 py-4 bg-white/5 border border-white/10 rounded-xl text-white font-black text-[10px] uppercase tracking-[0.3em] hover:bg-white/10 transition-all">
-                                    Download Invoice
-                                </button>
-                            </div>
-                        </motion.div>
+                        </div>
                     </div>
                 )}
-            </AnimatePresence>
+            </Modal>
 
             <AdminHeader
                 title="Order Management"
@@ -235,10 +239,10 @@ export default function AdminOrders() {
                                 className="bg-transparent border-none outline-none text-[10px] md:text-[11px] font-black text-white tracking-[0.2em] w-full placeholder:text-white/5 uppercase"
                             />
                         </div>
-                        <button className="w-full lg:w-auto flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury">
+                        {/* <button className="w-full lg:w-auto flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury">
                             <Plus size={18} md:size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
                             <span className="whitespace-nowrap">Create Manual Order</span>
-                        </button>
+                        </button> */}
                     </div>
                 }
             />
@@ -267,16 +271,18 @@ export default function AdminOrders() {
 
             {/* Table Container */}
             <div className="space-y-6">
-                <div className="flex bg-secondary/30 p-1.5 rounded-2xl border border-white/5 backdrop-blur-md w-fit shadow-2xl">
-                    {['All', 'Processing', 'Shipped', 'Delivered'].map((st) => (
-                        <button
-                            key={st}
-                            onClick={() => { setFilterStatus(st); setCurrentPage(1); }}
-                            className={`px-6 py-3 rounded-xl text-[9px] font-black uppercase tracking-[0.3em] transition-all font-luxury ${filterStatus === st ? 'bg-primary text-secondary shadow-lg' : 'text-muted hover:text-white'}`}
-                        >
-                            {st}
-                        </button>
-                    ))}
+                <div className="flex overflow-x-auto custom-scrollbar-hide bg-secondary/30 p-1 md:p-1.5 rounded-2xl border border-white/5 backdrop-blur-md w-full md:w-fit shadow-2xl">
+                    <div className="flex min-w-max gap-1">
+                        {['All', 'Processing', 'Shipped', 'Delivered'].map((st) => (
+                            <button
+                                key={st}
+                                onClick={() => { setFilterStatus(st); setCurrentPage(1); }}
+                                className={`px-4 md:px-6 py-2.5 md:py-3 rounded-xl text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] transition-all font-luxury ${filterStatus === st ? 'bg-primary text-secondary shadow-lg' : 'text-muted hover:text-white'}`}
+                            >
+                                {st}
+                            </button>
+                        ))}
+                    </div>
                 </div>
 
                 <div className="bg-secondary/30 backdrop-blur-sm rounded-2xl overflow-hidden shadow-3xl border border-white/5 relative">
@@ -302,12 +308,12 @@ export default function AdminOrders() {
                             <table className="w-full text-left border-collapse">
                                 <thead>
                                     <tr className="bg-background/80">
-                                        <th className="px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Order ID</th>
-                                        <th className="px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Customer</th>
-                                        <th className="px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Date</th>
-                                        <th className="px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Total</th>
-                                        <th className="px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Status</th>
-                                        <th className="px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap text-right">Actions</th>
+                                        <th className="px-4 md:px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Order ID</th>
+                                        <th className="px-4 md:px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Customer</th>
+                                        <th className="px-4 md:px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Date</th>
+                                        <th className="px-4 md:px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Total</th>
+                                        <th className="px-4 md:px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Status</th>
+                                        <th className="px-4 md:px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap text-right">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-white/5">
@@ -321,34 +327,34 @@ export default function AdminOrders() {
                                                 transition={{ delay: index * 0.02, ease: "easeOut" }}
                                                 className="group hover:bg-white/[0.03] transition-all"
                                             >
-                                                <td className="px-8 py-6">
+                                                <td className="px-4 md:px-8 py-6">
                                                     <div className="flex items-center gap-4">
-                                                        <div className="w-10 h-10 rounded-xl bg-background border border-white/5 flex items-center justify-center text-primary/40 group-hover:text-primary transition-colors">
+                                                        <div className="hidden sm:flex w-10 h-10 rounded-xl bg-background border border-white/5 items-center justify-center text-primary/40 group-hover:text-primary transition-colors shrink-0">
                                                             <Package size={18} strokeWidth={1.5} />
                                                         </div>
-                                                        <p className="text-[11px] font-black text-white uppercase tracking-widest font-luxury">{order.orderId}</p>
+                                                        <p className="text-[10px] md:text-[11px] font-black text-white uppercase tracking-widest font-luxury shrink-0">{order.orderId}</p>
                                                     </div>
                                                 </td>
-                                                <td className="px-8 py-6">
-                                                    <p className="text-[11px] font-black text-white uppercase tracking-widest mb-1">{order.user?.name || 'User'}</p>
-                                                    <p className="text-[8px] font-black text-muted uppercase tracking-[0.2em]">{order.items?.length || 0} ITEMS</p>
+                                                <td className="px-4 md:px-8 py-6">
+                                                    <p className="text-[10px] md:text-[11px] font-black text-white uppercase tracking-widest mb-1 truncate max-w-[120px]">{order.user?.name || 'User'}</p>
+                                                    <p className="text-[8px] font-black text-muted uppercase tracking-[0.2em] whitespace-nowrap">{order.items?.length || 0} ITEMS</p>
                                                 </td>
-                                                <td className="px-8 py-6">
-                                                    <p className="text-[10px] font-black text-muted uppercase tracking-[0.3em]">
+                                                <td className="px-4 md:px-8 py-6">
+                                                    <p className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-[0.3em] whitespace-nowrap">
                                                         {format(new Date(order.createdAt), 'MMM dd, yyyy')}
                                                     </p>
                                                 </td>
-                                                <td className="px-8 py-6">
-                                                    <p className="text-base font-black text-white font-luxury tracking-tighter">${order.totalAmount?.toLocaleString()}</p>
+                                                <td className="px-4 md:px-8 py-6">
+                                                    <p className="text-sm md:text-base font-black text-white font-luxury tracking-tighter">${order.totalAmount?.toLocaleString()}</p>
                                                 </td>
-                                                <td className="px-8 py-6">
+                                                <td className="px-4 md:px-8 py-6">
                                                     <div className="relative">
                                                         <button
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
                                                                 setActiveDropdown(activeDropdown === order._id ? null : order._id);
                                                             }}
-                                                            className={`flex items-center gap-3 px-5 py-2.5 rounded-full border text-[8px] font-black uppercase tracking-widest transition-all ${getStatusColor(order.status)} shadow-lg scale-100 hover:scale-[1.02] active:scale-95`}
+                                                            className={`flex items-center gap-3 px-4 md:px-5 py-2 md:py-2.5 rounded-full border text-[7px] md:text-[8px] font-black uppercase tracking-widest transition-all ${getStatusColor(order.status)} shadow-lg scale-100 hover:scale-[1.02] active:scale-95 whitespace-nowrap`}
                                                         >
                                                             {order.status}
                                                             <ChevronDown size={10} className={`transition-transform duration-500 ${activeDropdown === order._id ? 'rotate-180' : ''}`} />

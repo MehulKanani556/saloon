@@ -5,8 +5,13 @@ const protect = async (req, res, next) => {
     let token;
 
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+        token = req.headers.authorization.split(' ')[1];
+    } else if (req.query.token) {
+        token = req.query.token;
+    }
+
+    if (token) {
         try {
-            token = req.headers.authorization.split(' ')[1];
             const secret = process.env.JWT_ACCESS_SECRET || 'access_secret';
             const decoded = jwt.verify(token, secret);
             

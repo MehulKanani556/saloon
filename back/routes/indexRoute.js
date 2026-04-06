@@ -100,6 +100,7 @@ router.delete('/categories/:id', protect, authorize('Admin'), categoryController
 // INVOICE ROUTES
 // ==========================================
 router.get('/invoices/export-pdf/:id', protect, authorize('Admin', 'Staff'), invoiceController.generateInvoicePDF);
+router.get('/invoices/order-pdf/:id', protect, authorize('Admin', 'Staff'), invoiceController.generateOrderInvoicePDF);
 
 // ==========================================
 // REPORTS ROUTES

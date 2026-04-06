@@ -73,6 +73,20 @@ export const createPaymentIntent = createAsyncThunk(
     }
 );
 
+export const exportOrderInvoicePDF = createAsyncThunk(
+    'orders/exportPDF',
+    async (id, thunkAPI) => {
+        try {
+            const response = await api.get(`/invoices/order-pdf/${id}`, {
+                responseType: 'blob'
+            });
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response?.data?.message || 'Failed to download invoice');
+        }
+    }
+);
+
 const orderSlice = createSlice({
     name: 'orders',
     initialState: {
