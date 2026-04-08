@@ -105,7 +105,7 @@ const CustomSelect = ({
             exit={{ opacity: 0, y: 10, scale: 0.98 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             className={`
-              absolute z-[100] mt-3 w-full left-0
+              absolute z-[9999] mt-3 w-full left-0
               bg-secondary rounded-2xl shadow-3xl 
               border border-white/10 overflow-hidden
             `}

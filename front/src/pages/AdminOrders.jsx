@@ -26,6 +26,7 @@ import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 import Pagination from '../components/Pagination';
 import Modal from '../components/ui/Modal';
+import CustomSelect from '../components/CustomSelect';
 
 export default function AdminOrders() {
     const dispatch = useDispatch();
@@ -36,6 +37,8 @@ export default function AdminOrders() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
+    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+    const [selectedMonth, setSelectedMonth] = useState(null);
     const itemsPerPage = 10;
 
     useEffect(() => {
@@ -93,12 +96,24 @@ export default function AdminOrders() {
         }
     };
 
-    const filteredOrders = orders.filter(order =>
-        (order.orderId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    const availableYears = Array.from(new Set(orders.map(o => new Date(o.createdAt).getFullYear()))).sort((a, b) => b - a);
+    if (availableYears.length === 0 && !availableYears.includes(new Date().getFullYear())) {
+        availableYears.push(new Date().getFullYear());
+    }
+
+    const filteredOrders = orders.filter(order => {
+        const orderDate = new Date(order.createdAt);
+        const matchesSearch = (order.orderId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             order.user?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            order.shippingAddress?.phone?.includes(searchTerm)) &&
-        (filterStatus === 'All' || order.status === filterStatus)
-    );
+            order.shippingAddress?.phone?.includes(searchTerm));
+        const matchesStatus = (filterStatus === 'All' || order.status === filterStatus);
+        const matchesYear = orderDate.getFullYear() === Number(selectedYear);
+        const matchesMonth = selectedMonth === 'all' || selectedMonth === null 
+            ? true 
+            : orderDate.getMonth() === Number(selectedMonth);
+        
+        return matchesSearch && matchesStatus && matchesYear && matchesMonth;
+    });
 
     const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
     const currentItems = filteredOrders.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
@@ -270,19 +285,63 @@ export default function AdminOrders() {
                 ))}
             </div>
 
-            {/* Table Container */}
-            <div className="space-y-6">
-                <div className="flex overflow-x-auto custom-scrollbar-hide bg-secondary/30 p-1 md:p-1.5 rounded-2xl border border-white/5 backdrop-blur-md w-full md:w-fit shadow-2xl">
-                    <div className="flex min-w-max gap-1">
-                        {['All', 'Processing', 'Shipped', 'Delivered'].map((st) => (
-                            <button
-                                key={st}
-                                onClick={() => { setFilterStatus(st); setCurrentPage(1); }}
-                                className={`px-4 md:px-6 py-2.5 md:py-3 rounded-xl text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] transition-all font-luxury ${filterStatus === st ? 'bg-primary text-secondary shadow-lg' : 'text-muted hover:text-white'}`}
-                            >
-                                {st}
-                            </button>
-                        ))}
+            {/* Table Container & Filters */}
+            <div className="space-y-8">
+                <div className="flex flex-wrap items-end gap-4 md:gap-6 bg-secondary/20 p-4 md:p-6 rounded-2xl border border-white/5 backdrop-blur-md shadow-2xl relative z-[60]">
+                    <div className="w-full sm:w-48">
+                        <CustomSelect
+                            label="Select Year"
+                            value={selectedYear}
+                            onChange={(e) => {
+                                setSelectedYear(e.target.value);
+                                setCurrentPage(1);
+                            }}
+                            options={availableYears.map(y => ({ label: y.toString(), value: y }))}
+                        />
+                    </div>
+                    <div className="w-full sm:w-60">
+                        <CustomSelect
+                            label="Filter Month"
+                            value={selectedMonth === null ? 'all' : selectedMonth}
+                            onChange={(e) => {
+                                const val = e.target.value;
+                                setSelectedMonth(val === 'all' ? null : Number(val));
+                                setCurrentPage(1);
+                            }}
+                            options={[
+                                { label: 'ALL MONTHS', value: 'all' },
+                                { label: 'JANUARY', value: 0 },
+                                { label: 'FEBRUARY', value: 1 },
+                                { label: 'MARCH', value: 2 },
+                                { label: 'APRIL', value: 3 },
+                                { label: 'MAY', value: 4 },
+                                { label: 'JUNE', value: 5 },
+                                { label: 'JULY', value: 6 },
+                                { label: 'AUGUST', value: 7 },
+                                { label: 'SEPTEMBER', value: 8 },
+                                { label: 'OCTOBER', value: 9 },
+                                { label: 'NOVEMBER', value: 10 },
+                                { label: 'DECEMBER', value: 11 },
+                            ]}
+                            icon={Filter}
+                        />
+                    </div>
+
+                    <div className="flex-1 flex flex-col items-start lg:items-end justify-center min-w-full lg:min-w-[200px]">
+                        <p className="text-[10px] font-black text-muted uppercase tracking-[0.2em] mb-3 ml-2 lg:ml-0 lg:mb-2">Status Filter</p>
+                        <div className="flex bg-secondary/30 p-1 rounded-xl border border-white/5 backdrop-blur-md w-full sm:w-fit shadow-2xl overflow-x-auto no-scrollbar scrollbar-hide">
+                            <div className="flex gap-1">
+                                {['All', 'Processing', 'Shipped', 'Delivered'].map((st) => (
+                                    <button
+                                        key={st}
+                                        onClick={() => { setFilterStatus(st); setCurrentPage(1); }}
+                                        className={`px-4 lg:px-5 py-2.5 rounded-lg text-[8px] lg:text-[9px] font-black uppercase tracking-widest transition-all font-luxury whitespace-nowrap ${filterStatus === st ? 'bg-primary text-secondary shadow-lg' : 'text-muted hover:text-white'}`}
+                                    >
+                                        {st}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -306,112 +365,107 @@ export default function AdminOrders() {
                                 <p className="text-[10px] font-black text-muted uppercase tracking-[0.5em]">No orders found.</p>
                             </div>
                         ) : (
-                            <>
-                            <table className="w-full min-w-[920px] text-left border-collapse">
-                                <thead>
-                                    <tr className="bg-background/80">
-                                        <th className="px-4 md:px-5 lg:px-8 py-5 text-[8px] lg:text-[10px] font-black uppercase tracking-[0.25em] lg:tracking-[0.4em] text-primary whitespace-nowrap">Order ID</th>
-                                        <th className="px-4 md:px-5 lg:px-8 py-5 text-[8px] lg:text-[10px] font-black uppercase tracking-[0.25em] lg:tracking-[0.4em] text-primary whitespace-nowrap">Customer</th>
-                                        <th className="px-4 md:px-5 lg:px-8 py-5 text-[8px] lg:text-[10px] font-black uppercase tracking-[0.25em] lg:tracking-[0.4em] text-primary whitespace-nowrap">Date</th>
-                                        <th className="px-4 md:px-5 lg:px-8 py-5 text-[8px] lg:text-[10px] font-black uppercase tracking-[0.25em] lg:tracking-[0.4em] text-primary whitespace-nowrap">Total</th>
-                                        <th className="px-4 md:px-5 lg:px-8 py-5 text-[8px] lg:text-[10px] font-black uppercase tracking-[0.2em] lg:tracking-[0.4em] text-primary whitespace-nowrap">Status</th>
-                                        <th className="px-4 md:px-5 lg:px-8 py-5 text-[8px] lg:text-[10px] font-black uppercase tracking-[0.2em] lg:tracking-[0.4em] text-primary whitespace-nowrap text-right">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-white/5">
-                                    <AnimatePresence mode="popLayout">
-                                        {currentItems.map((order, index) => (
-                                            <motion.tr
-                                                key={order._id}
-                                                initial={{ opacity: 0, x: -20 }}
-                                                animate={{ opacity: 1, x: 0 }}
-                                                exit={{ opacity: 0, x: 20 }}
-                                                transition={{ delay: index * 0.02, ease: "easeOut" }}
-                                                className="group hover:bg-white/[0.03] transition-all"
-                                            >
-                                                <td className="px-4 md:px-5 lg:px-8 py-6">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="hidden lg:flex w-10 h-10 rounded-xl bg-background border border-white/5 items-center justify-center text-primary/40 group-hover:text-primary transition-colors shrink-0">
-                                                            <Package size={18} strokeWidth={1.5} />
+                                <table className="w-full min-w-[800px] text-left border-collapse">
+                                    <thead>
+                                        <tr className="bg-background/80">
+                                            <th className="px-4 lg:px-8 py-4 lg:py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.25em] lg:tracking-[0.4em] text-primary whitespace-nowrap">Order ID</th>
+                                            <th className="px-4 lg:px-8 py-4 lg:py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.25em] lg:tracking-[0.4em] text-primary whitespace-nowrap">Customer</th>
+                                            <th className="px-4 lg:px-8 py-4 lg:py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.25em] lg:tracking-[0.4em] text-primary whitespace-nowrap">Date</th>
+                                            <th className="px-4 lg:px-8 py-4 lg:py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.25em] lg:tracking-[0.4em] text-primary whitespace-nowrap">Total</th>
+                                            <th className="px-4 lg:px-8 py-4 lg:py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.2em] lg:tracking-[0.4em] text-primary whitespace-nowrap">Status</th>
+                                            <th className="px-4 lg:px-8 py-4 lg:py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.2em] lg:tracking-[0.4em] text-primary whitespace-nowrap text-right">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-white/5">
+                                        <AnimatePresence mode="popLayout">
+                                            {currentItems.map((order, index) => (
+                                                <motion.tr
+                                                    key={order._id}
+                                                    initial={{ opacity: 0, x: -20 }}
+                                                    animate={{ opacity: 1, x: 0 }}
+                                                    exit={{ opacity: 0, x: 20 }}
+                                                    transition={{ delay: index * 0.02, ease: "easeOut" }}
+                                                    className="group hover:bg-white/[0.03] transition-all"
+                                                >
+                                                    <td className="px-4 lg:px-8 py-4 lg:py-6">
+                                                        <div className="flex items-center gap-3">
+                                                            <div className="hidden xl:flex w-9 h-9 rounded-xl bg-background border border-white/5 items-center justify-center text-primary/40 group-hover:text-primary transition-colors shrink-0">
+                                                                <Package size={16} strokeWidth={1.5} />
+                                                            </div>
+                                                            <p className="text-[10px] lg:text-[11px] font-black text-white uppercase tracking-[0.06em] lg:tracking-widest font-luxury truncate">{order.orderId}</p>
                                                         </div>
-                                                        <p className="text-[9px] md:text-[10px] lg:text-[11px] font-black text-white uppercase tracking-[0.06em] lg:tracking-widest font-luxury truncate">{order.orderId}</p>
-                                                    </div>
-                                                </td>
-                                                <td className="px-4 md:px-5 lg:px-8 py-6">
-                                                    <p className="text-[9px] md:text-[10px] lg:text-[11px] font-black text-white uppercase tracking-[0.06em] lg:tracking-widest mb-1 truncate">{order.user?.name || 'User'}</p>
-                                                    <p className="text-[8px] font-black text-muted uppercase tracking-[0.2em] whitespace-nowrap">{order.items?.length || 0} ITEMS</p>
-                                                </td>
-                                                <td className="px-4 md:px-5 lg:px-8 py-6">
-                                                    <p className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-[0.3em] whitespace-nowrap">
-                                                        {format(new Date(order.createdAt), 'MMM dd, yyyy')}
-                                                    </p>
-                                                </td>
-                                                <td className="px-4 md:px-5 lg:px-8 py-6">
-                                                    <p className="text-sm md:text-base font-black text-white font-luxury tracking-tighter">${order.totalAmount?.toLocaleString()}</p>
-                                                </td>
-                                                <td className="px-4 md:px-5 lg:px-8 py-6">
-                                                    <div className="relative">
-                                                        <button
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                setActiveDropdown(activeDropdown === order._id ? null : order._id);
-                                                            }}
-                                                            className={`flex items-center gap-2 px-3 md:px-3.5 lg:px-5 py-1.5 md:py-2 rounded-full border text-[7px] md:text-[8px] font-black uppercase tracking-[0.05em] lg:tracking-widest transition-all ${getStatusColor(order.status)} shadow-lg scale-100 hover:scale-[1.02] active:scale-95 whitespace-nowrap`}
-                                                        >
-                                                            {order.status}
-                                                            <ChevronDown size={10} className={`transition-transform duration-500 ${activeDropdown === order._id ? 'rotate-180' : ''}`} />
-                                                        </button>
+                                                    </td>
+                                                    <td className="px-4 lg:px-8 py-4 lg:py-6">
+                                                        <p className="text-[10px] lg:text-[11px] font-black text-white uppercase tracking-[0.06em] lg:tracking-widest mb-1 truncate">{order.user?.name || 'User'}</p>
+                                                        <p className="text-[8px] font-black text-muted uppercase tracking-[0.2em] whitespace-nowrap">{order.items?.length || 0} ITEMS</p>
+                                                    </td>
+                                                    <td className="px-4 lg:px-8 py-4 lg:py-6">
+                                                        <p className="text-[9px] lg:text-[10px] font-black text-muted uppercase tracking-[0.3em] whitespace-nowrap">
+                                                            {format(new Date(order.createdAt), 'MMM dd, yyyy')}
+                                                        </p>
+                                                    </td>
+                                                    <td className="px-4 lg:px-8 py-4 lg:py-6">
+                                                        <p className="text-base lg:text-lg font-black text-white font-luxury tracking-tighter">${order.totalAmount?.toLocaleString()}</p>
+                                                    </td>
+                                                    <td className="px-4 lg:px-8 py-4 lg:py-6">
+                                                        <div className="relative">
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    setActiveDropdown(activeDropdown === order._id ? null : order._id);
+                                                                }}
+                                                                className={`flex items-center gap-2 px-3 lg:px-5 py-1.5 lg:py-2 rounded-full border text-[7px] lg:text-[8px] font-black uppercase tracking-[0.05em] lg:tracking-widest transition-all ${getStatusColor(order.status)} shadow-lg scale-100 hover:scale-[1.02] active:scale-95 whitespace-nowrap`}
+                                                            >
+                                                                {order.status}
+                                                                <ChevronDown size={10} className={`transition-transform duration-500 ${activeDropdown === order._id ? 'rotate-180' : ''}`} />
+                                                            </button>
 
-                                                        <AnimatePresence>
-                                                            {activeDropdown === order._id && (
-                                                                <motion.div
-                                                                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                                                                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                                                                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                                                    className="absolute top-full left-0 mt-3 w-56 bg-[#0F0F0F] border border-white/10 rounded-2xl shadow-3xl z-[150] p-2 overflow-hidden backdrop-blur-2xl"
-                                                                >
-                                                                    {['Processing', 'Shipped', 'Delivered', 'Cancelled'].map((st) => (
-                                                                        <button
-                                                                            key={st}
-                                                                            onClick={(e) => {
-                                                                                e.stopPropagation();
-                                                                                updateStatus(order._id, st);
-                                                                                setActiveDropdown(null);
-                                                                            }}
-                                                                            className="w-full text-left p-3.5 rounded-xl hover:bg-white/5 text-[9px] font-black uppercase tracking-widest text-muted hover:text-primary transition-all flex items-center gap-4 group/item"
-                                                                        >
-                                                                            <div className={`w-1.5 h-1.5 rounded-full transition-transform group-hover/item:scale-150 ${getStatusColor(st).split(' ')[0]}`} />
-                                                                            {st}
-                                                                        </button>
-                                                                    ))}
-                                                                </motion.div>
-                                                            )}
-                                                        </AnimatePresence>
-                                                    </div>
-                                                </td>
-                                                <td className="px-4 md:px-5 lg:px-8 py-6 text-right">
-                                                    <div className="flex items-center justify-end gap-3">
-                                                        <button
-                                                            onClick={() => {
-                                                                setSelectedOrder(order);
-                                                                setIsModalOpen(true);
-                                                            }}
-                                                            className="p-2.5 md:p-3 bg-background border border-white/5 rounded-xl text-muted hover:text-primary hover:border-primary/30 transition-all shadow-xl"
-                                                            title="View Details"
-                                                        >
-                                                            <Eye size={15} />
-                                                        </button>
-                                                        {/* <button className="p-3 bg-background border border-white/5 rounded-xl text-muted hover:text-white transition-all shadow-xl">
-                                                            <MoreVertical size={16} />
-                                                        </button> */}
-                                                    </div>
-                                                </td>
-                                            </motion.tr>
-                                        ))}
-                                    </AnimatePresence>
-                                </tbody>
-                            </table>
-                            </>
+                                                            <AnimatePresence>
+                                                                {activeDropdown === order._id && (
+                                                                    <motion.div
+                                                                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                                        className="absolute top-full left-0 mt-3 w-56 bg-[#0F0F0F] border border-white/10 rounded-2xl shadow-3xl z-[150] p-2 overflow-hidden backdrop-blur-2xl"
+                                                                    >
+                                                                        {['Processing', 'Shipped', 'Delivered', 'Cancelled'].map((st) => (
+                                                                            <button
+                                                                                key={st}
+                                                                                onClick={(e) => {
+                                                                                    e.stopPropagation();
+                                                                                    updateStatus(order._id, st);
+                                                                                    setActiveDropdown(null);
+                                                                                }}
+                                                                                className="w-full text-left p-3.5 rounded-xl hover:bg-white/5 text-[9px] font-black uppercase tracking-widest text-muted hover:text-primary transition-all flex items-center gap-4 group/item"
+                                                                            >
+                                                                                <div className={`w-1.5 h-1.5 rounded-full transition-transform group-hover/item:scale-150 ${getStatusColor(st).split(' ')[0]}`} />
+                                                                                {st}
+                                                                            </button>
+                                                                        ))}
+                                                                    </motion.div>
+                                                                )}
+                                                            </AnimatePresence>
+                                                        </div>
+                                                    </td>
+                                                    <td className="px-4 lg:px-8 py-4 lg:py-6 text-right">
+                                                        <div className="flex items-center justify-end gap-3">
+                                                            <button
+                                                                onClick={() => {
+                                                                    setSelectedOrder(order);
+                                                                    setIsModalOpen(true);
+                                                                }}
+                                                                className="p-2.5 lg:p-3 bg-background border border-white/5 rounded-xl text-muted hover:text-primary hover:border-primary/30 transition-all shadow-xl"
+                                                                title="View Details"
+                                                            >
+                                                                <Eye size={14} />
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </motion.tr>
+                                            ))}
+                                        </AnimatePresence>
+                                    </tbody>
+                                </table>
                         )}
                     </div>
                 </div>
