@@ -306,15 +306,16 @@ export default function AdminOrders() {
                                 <p className="text-[10px] font-black text-muted uppercase tracking-[0.5em]">No orders found.</p>
                             </div>
                         ) : (
-                            <table className="w-full text-left border-collapse">
+                            <>
+                            <table className="w-full min-w-[920px] text-left border-collapse">
                                 <thead>
                                     <tr className="bg-background/80">
-                                        <th className="px-4 md:px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Order ID</th>
-                                        <th className="px-4 md:px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Customer</th>
-                                        <th className="px-4 md:px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Date</th>
-                                        <th className="px-4 md:px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Total</th>
-                                        <th className="px-4 md:px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Status</th>
-                                        <th className="px-4 md:px-8 py-5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap text-right">Actions</th>
+                                        <th className="px-4 md:px-5 lg:px-8 py-5 text-[8px] lg:text-[10px] font-black uppercase tracking-[0.25em] lg:tracking-[0.4em] text-primary whitespace-nowrap">Order ID</th>
+                                        <th className="px-4 md:px-5 lg:px-8 py-5 text-[8px] lg:text-[10px] font-black uppercase tracking-[0.25em] lg:tracking-[0.4em] text-primary whitespace-nowrap">Customer</th>
+                                        <th className="px-4 md:px-5 lg:px-8 py-5 text-[8px] lg:text-[10px] font-black uppercase tracking-[0.25em] lg:tracking-[0.4em] text-primary whitespace-nowrap">Date</th>
+                                        <th className="px-4 md:px-5 lg:px-8 py-5 text-[8px] lg:text-[10px] font-black uppercase tracking-[0.25em] lg:tracking-[0.4em] text-primary whitespace-nowrap">Total</th>
+                                        <th className="px-4 md:px-5 lg:px-8 py-5 text-[8px] lg:text-[10px] font-black uppercase tracking-[0.2em] lg:tracking-[0.4em] text-primary whitespace-nowrap">Status</th>
+                                        <th className="px-4 md:px-5 lg:px-8 py-5 text-[8px] lg:text-[10px] font-black uppercase tracking-[0.2em] lg:tracking-[0.4em] text-primary whitespace-nowrap text-right">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-white/5">
@@ -328,34 +329,34 @@ export default function AdminOrders() {
                                                 transition={{ delay: index * 0.02, ease: "easeOut" }}
                                                 className="group hover:bg-white/[0.03] transition-all"
                                             >
-                                                <td className="px-4 md:px-8 py-6">
-                                                    <div className="flex items-center gap-4">
-                                                        <div className="hidden sm:flex w-10 h-10 rounded-xl bg-background border border-white/5 items-center justify-center text-primary/40 group-hover:text-primary transition-colors shrink-0">
+                                                <td className="px-4 md:px-5 lg:px-8 py-6">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="hidden lg:flex w-10 h-10 rounded-xl bg-background border border-white/5 items-center justify-center text-primary/40 group-hover:text-primary transition-colors shrink-0">
                                                             <Package size={18} strokeWidth={1.5} />
                                                         </div>
-                                                        <p className="text-[10px] md:text-[11px] font-black text-white uppercase tracking-widest font-luxury shrink-0">{order.orderId}</p>
+                                                        <p className="text-[9px] md:text-[10px] lg:text-[11px] font-black text-white uppercase tracking-[0.06em] lg:tracking-widest font-luxury truncate">{order.orderId}</p>
                                                     </div>
                                                 </td>
-                                                <td className="px-4 md:px-8 py-6">
-                                                    <p className="text-[10px] md:text-[11px] font-black text-white uppercase tracking-widest mb-1 truncate max-w-[120px]">{order.user?.name || 'User'}</p>
+                                                <td className="px-4 md:px-5 lg:px-8 py-6">
+                                                    <p className="text-[9px] md:text-[10px] lg:text-[11px] font-black text-white uppercase tracking-[0.06em] lg:tracking-widest mb-1 truncate">{order.user?.name || 'User'}</p>
                                                     <p className="text-[8px] font-black text-muted uppercase tracking-[0.2em] whitespace-nowrap">{order.items?.length || 0} ITEMS</p>
                                                 </td>
-                                                <td className="px-4 md:px-8 py-6">
+                                                <td className="px-4 md:px-5 lg:px-8 py-6">
                                                     <p className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-[0.3em] whitespace-nowrap">
                                                         {format(new Date(order.createdAt), 'MMM dd, yyyy')}
                                                     </p>
                                                 </td>
-                                                <td className="px-4 md:px-8 py-6">
+                                                <td className="px-4 md:px-5 lg:px-8 py-6">
                                                     <p className="text-sm md:text-base font-black text-white font-luxury tracking-tighter">${order.totalAmount?.toLocaleString()}</p>
                                                 </td>
-                                                <td className="px-4 md:px-8 py-6">
+                                                <td className="px-4 md:px-5 lg:px-8 py-6">
                                                     <div className="relative">
                                                         <button
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
                                                                 setActiveDropdown(activeDropdown === order._id ? null : order._id);
                                                             }}
-                                                            className={`flex items-center gap-3 px-4 md:px-5 py-2 md:py-2.5 rounded-full border text-[7px] md:text-[8px] font-black uppercase tracking-widest transition-all ${getStatusColor(order.status)} shadow-lg scale-100 hover:scale-[1.02] active:scale-95 whitespace-nowrap`}
+                                                            className={`flex items-center gap-2 px-3 md:px-3.5 lg:px-5 py-1.5 md:py-2 rounded-full border text-[7px] md:text-[8px] font-black uppercase tracking-[0.05em] lg:tracking-widest transition-all ${getStatusColor(order.status)} shadow-lg scale-100 hover:scale-[1.02] active:scale-95 whitespace-nowrap`}
                                                         >
                                                             {order.status}
                                                             <ChevronDown size={10} className={`transition-transform duration-500 ${activeDropdown === order._id ? 'rotate-180' : ''}`} />
@@ -388,17 +389,17 @@ export default function AdminOrders() {
                                                         </AnimatePresence>
                                                     </div>
                                                 </td>
-                                                <td className="px-8 py-6 text-right">
+                                                <td className="px-4 md:px-5 lg:px-8 py-6 text-right">
                                                     <div className="flex items-center justify-end gap-3">
                                                         <button
                                                             onClick={() => {
                                                                 setSelectedOrder(order);
                                                                 setIsModalOpen(true);
                                                             }}
-                                                            className="p-3 bg-background border border-white/5 rounded-xl text-muted hover:text-primary hover:border-primary/30 transition-all shadow-xl"
+                                                            className="p-2.5 md:p-3 bg-background border border-white/5 rounded-xl text-muted hover:text-primary hover:border-primary/30 transition-all shadow-xl"
                                                             title="View Details"
                                                         >
-                                                            <Eye size={16} />
+                                                            <Eye size={15} />
                                                         </button>
                                                         {/* <button className="p-3 bg-background border border-white/5 rounded-xl text-muted hover:text-white transition-all shadow-xl">
                                                             <MoreVertical size={16} />
@@ -410,6 +411,7 @@ export default function AdminOrders() {
                                     </AnimatePresence>
                                 </tbody>
                             </table>
+                            </>
                         )}
                     </div>
                 </div>

@@ -52,7 +52,7 @@ const staffItems = [
   { icon: CalendarCheck2, label: 'Appointments', path: '/staff/appointments' },
   { icon: Scissors, label: 'Expertise', path: '/staff/specialization' },
   { icon: FileText, label: 'Bills', path: '/staff/invoices' },
-  { icon: CalendarClock, label: 'My Leaves', path: '/staff/leaves' },
+  { icon: CalendarClock, label: 'My Leave', path: '/staff/leaves' },
   { icon: Settings, label: 'Settings', path: '/staff/settings' },
 ];
 

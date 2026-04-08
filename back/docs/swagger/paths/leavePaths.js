@@ -49,7 +49,7 @@ module.exports = {
     '/leaves/my': {
         get: {
             tags: ['Leaves – Staff'],
-            summary: 'Get my leaves (Staff)',
+            summary: 'Get my leave (Staff)',
             description: 'Returns the authenticated staff member\'s leave history sorted by newest first.',
             security: [{ BearerAuth: [] }],
             responses: {
