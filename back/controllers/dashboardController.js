@@ -4,6 +4,12 @@ const User = require('../models/User');
 const Leave = require('../models/Leave');
 const moment = require('moment');
 
+const pctChange = (current, previous) => {
+    if (previous === 0 && current === 0) return 0;
+    if (previous === 0) return current > 0 ? 100 : 0;
+    return Math.round(((current - previous) / previous) * 1000) / 10;
+};
+
 // @desc Get Dashboard Collective Intelligence
 const getDashboardInsights = async (req, res) => {
     try {
@@ -95,6 +101,51 @@ const getDashboardInsights = async (req, res) => {
             .sort((a, b) => new Date(a.appointmentDate) - new Date(b.appointmentDate))
             .slice(0, 5);
 
+        const now = moment();
+        const thisPeriodStart = now.clone().subtract(7, 'days').startOf('day');
+        const prevPeriodStart = now.clone().subtract(14, 'days').startOf('day');
+        const prevPeriodEnd = now.clone().subtract(7, 'days').endOf('day');
+
+        const apptsThisPeriod = appointments.filter(a =>
+            moment(a.createdAt).valueOf() >= thisPeriodStart.valueOf()
+        ).length;
+        const apptsPrevPeriod = appointments.filter(a => {
+            const t = moment(a.createdAt).valueOf();
+            return t >= prevPeriodStart.valueOf() && t <= prevPeriodEnd.valueOf();
+        }).length;
+
+        let clientsThisPeriod = 0;
+        let clientsPrevPeriod = 0;
+        if (!isStaff) {
+            [clientsThisPeriod, clientsPrevPeriod] = await Promise.all([
+                User.countDocuments({ role: 'User', createdAt: { $gte: thisPeriodStart.toDate() } }),
+                User.countDocuments({
+                    role: 'User',
+                    createdAt: { $gte: prevPeriodStart.toDate(), $lte: prevPeriodEnd.toDate() }
+                })
+            ]);
+        } else {
+            const uniqueClientsInRange = (startMs, endMs) => new Set(
+                appointments
+                    .filter(a => {
+                        const t = moment(a.createdAt).valueOf();
+                        return t >= startMs && t <= endMs;
+                    })
+                    .map(a => a.client?._id?.toString())
+                    .filter(Boolean)
+            ).size;
+            clientsThisPeriod = uniqueClientsInRange(thisPeriodStart.valueOf(), now.valueOf());
+            clientsPrevPeriod = uniqueClientsInRange(prevPeriodStart.valueOf(), prevPeriodEnd.valueOf());
+        }
+
+        const yesterdayRevenue = last7Days.length >= 2 ? last7Days[last7Days.length - 2].revenue : 0;
+
+        const trends = {
+            totalClients: pctChange(clientsThisPeriod, clientsPrevPeriod),
+            appointments: pctChange(apptsThisPeriod, apptsPrevPeriod),
+            revenueToday: pctChange(todayRevenue, yesterdayRevenue)
+        };
+
         res.json({
             stats: {
                 totalClients: isStaff ? [...new Set(appointments.map(a => a.client?._id.toString()))].length : clients,
@@ -104,6 +155,7 @@ const getDashboardInsights = async (req, res) => {
                 activeServices,
                 pendingLeaves
             },
+            trends,
             revenueTrend: last7Days,
             categoryDistribution: serviceData,
             recentAppointments: appointments.sort((a, b) => new Date(b.appointmentDate) - new Date(a.appointmentDate)).slice(0, 5),

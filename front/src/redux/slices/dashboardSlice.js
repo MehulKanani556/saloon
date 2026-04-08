@@ -18,6 +18,7 @@ const dashboardSlice = createSlice({
   initialState: {
     data: {
       stats: { totalClients: 0, totalAppointments: 0, totalRevenue: 0, todayRevenue: 0, activeServices: 0, pendingLeaves: 0 },
+      trends: { totalClients: 0, appointments: 0, revenueToday: 0 },
       revenueData: [],
       categoryData: [],
       specializationData: [],
@@ -40,6 +41,7 @@ const dashboardSlice = createSlice({
         const payload = action.payload;
         state.data = {
           stats: payload.stats || {},
+          trends: payload.trends || { totalClients: 0, appointments: 0, revenueToday: 0 },
           revenueData: payload.revenueTrend || [],
           categoryData: payload.categoryDistribution || [],
           specializationData: payload.categoryDistribution || [],

@@ -4,6 +4,8 @@ import {
   CalendarCheck2,
   DollarSign,
   TrendingUp,
+  TrendingDown,
+  Minus,
   Scissors,
   CheckCircle2,
   Clock,
@@ -36,6 +38,21 @@ import { format, formatDistanceToNow, isToday } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 
 import AdminHeader from '../components/ui/AdminHeader';
+
+/** Caps display so positive trends stay under 100%; down to -100%. */
+const clampTrendPct = (n) => {
+  if (n == null || Number.isNaN(n)) return null;
+  return Math.max(-100, Math.min(99, n));
+};
+
+const formatTrendPct = (n) => {
+  const capped = clampTrendPct(n);
+  if (capped === null) return '—';
+  const rounded = Math.round(capped * 10) / 10;
+  if (rounded === 0) return '0%';
+  const sign = rounded > 0 ? '+' : '';
+  return `${sign}${rounded}%`;
+};
 
 export default function Dashboard() {
   const dispatch = useDispatch();
@@ -86,11 +103,32 @@ export default function Dashboard() {
       {/* Statistics Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
         {[
-          { label: 'Total Clients', value: data.stats.totalClients, icon: Users, trend: '12.5%' },
-          { label: 'Appointments', value: data.stats.totalAppointments, icon: CalendarCheck2, trend: '4.2%' },
-          { label: 'Revenue Today', value: `$${data.stats.todayRevenue.toLocaleString()}`, icon: DollarSign, trend: '18.1%' },
-          { label: 'Pending Leave', value: data.stats.pendingLeaves || 0, icon: CalendarClock, trend: 'Absence' },
-        ].map((stat, i) => (
+          { label: 'Total Clients', value: data.stats.totalClients, icon: Users, trendKey: 'totalClients' },
+          { label: 'Appointments', value: data.stats.totalAppointments, icon: CalendarCheck2, trendKey: 'appointments' },
+          { label: 'Revenue Today', value: `$${data.stats.todayRevenue.toLocaleString()}`, icon: DollarSign, trendKey: 'revenueToday' },
+          {
+            label: 'Pending Leave',
+            value: data.stats.pendingLeaves || 0,
+            icon: CalendarClock,
+            trendKey: null,
+            trendCaption: 'Awaiting'
+          },
+        ].map((stat, i) => {
+          const rawTrend = stat.trendKey != null ? data.trends?.[stat.trendKey] : null;
+          const showPct = stat.trendKey != null && rawTrend != null && !Number.isNaN(rawTrend);
+          const cappedTrend = showPct ? clampTrendPct(rawTrend) : null;
+          const TrendIcon = showPct
+            ? (cappedTrend > 0 ? TrendingUp : cappedTrend < 0 ? TrendingDown : Minus)
+            : Clock;
+          const trendTone = showPct
+            ? cappedTrend > 0
+              ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/25'
+              : cappedTrend < 0
+                ? 'text-rose-400 bg-rose-500/10 border-rose-500/25'
+                : 'text-primary bg-primary/10 border-primary/20'
+            : 'text-muted bg-white/5 border-white/10';
+
+          return (
           <motion.div
             key={i}
             initial={{ opacity: 0, y: 30 }}
@@ -106,9 +144,20 @@ export default function Dashboard() {
               <div className="w-12 h-12 rounded-xl bg-background flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-secondary transition-all duration-500 shadow-premium border border-white/5">
                 <stat.icon size={22} strokeWidth={2.5} />
               </div>
-              <div className="flex items-center gap-2 text-[8px] md:text-[9px] font-black text-primary bg-primary/10 border border-primary/20 px-3 py-1.5 rounded-2xl uppercase tracking-[0.2em] ">
-                <TrendingUp size={12} strokeWidth={3} />
-                {stat.trend}
+              <div
+                title={
+                  showPct
+                    ? stat.trendKey === 'revenueToday'
+                      ? 'Change vs yesterday (paid revenue)'
+                      : 'Change vs prior 7 days (activity in period)'
+                    : undefined
+                }
+                className={`flex items-center gap-2 text-[8px] md:text-[9px] font-black px-3 py-1.5 rounded-2xl uppercase tracking-[0.2em] border ${trendTone}`}
+              >
+                <TrendIcon size={12} strokeWidth={3} className="shrink-0" />
+                <span className="whitespace-nowrap">
+                  {showPct ? formatTrendPct(rawTrend) : (stat.trendCaption || '—')}
+                </span>
               </div>
             </div>
 
@@ -121,7 +170,8 @@ export default function Dashboard() {
 
             <div className="absolute bottom-0 left-0 w-full h-[1px] bg-luxury-gradient opacity-0 group-hover:opacity-100 transition-opacity" />
           </motion.div>
-        ))}
+          );
+        })}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-10">
