@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-    CalendarClock, Plus, CheckCircle2, XCircle, Clock, Search, 
-    AlertCircle, FileText, User, Calendar, Trash2, Send, 
-    Edit3, LayoutGrid, Timer, X 
+import {
+    CalendarClock, Plus, CheckCircle2, XCircle, Clock, Search,
+    AlertCircle, FileText, User, Calendar, Trash2, Send,
+    Edit3, LayoutGrid, Timer, X
 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { format, differenceInHours } from 'date-fns';
@@ -78,7 +78,7 @@ export default function Leaves() {
             const start = new Date(`2000-01-01T${formik.values.startTime}`);
             const end = new Date(`2000-01-01T${formik.values.endTime}`);
             let hoursPerDay = (end - start) / (1000 * 60 * 60);
-            if (hoursPerDay < 0) hoursPerDay += 24; 
+            if (hoursPerDay < 0) hoursPerDay += 24;
 
             formik.setFieldValue('totalHours', (hoursPerDay * days).toFixed(1));
         }
@@ -102,7 +102,7 @@ export default function Leaves() {
         }
     };
 
-    const filteredLeaves = leaves.filter(l => 
+    const filteredLeaves = leaves.filter(l =>
         l.reason?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         l.staff?.name?.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -110,7 +110,7 @@ export default function Leaves() {
     return (
         <div className="space-y-12">
             {/* Standardized Header */}
-            <AdminHeader 
+            <AdminHeader
                 title="Leave Management"
                 subtitle="Manage staff leave and absences"
                 icon={CalendarClock}
@@ -125,14 +125,14 @@ export default function Leaves() {
                                 <span className="whitespace-nowrap">Add Leave Request</span>
                             </button>
                         )}
-                        <div className="relative group min-w-0 md:min-w-[300px] w-full">
-                            <Search className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 text-muted" size={16} md:size={20} />
+                        <div className="bg-secondary/40 backdrop-blur-md px-6 py-4 rounded-2xl border border-white/5 shadow-2xl flex items-center gap-4 w-full md:w-96 group focus-within:border-primary/40 transition-all duration-500">
+                            <Search size={18} className="text-muted group-focus-within:text-primary transition-colors" />
                             <input
                                 type="text"
-                                placeholder="Filter records..."
+                                placeholder={isAdmin ? "Filter by Staff Name or Reason..." : "Filter by Reason..."}
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full bg-secondary/40 backdrop-blur-md border border-white/5 rounded-xl md:rounded-2xl px-12 md:px-16 py-4 md:py-5 text-[9px] md:text-[11px] font-black uppercase tracking-[0.1em] md:tracking-[0.2em] outline-none text-white transition-all focus:border-primary/50 placeholder:text-white/20"
+                                className="bg-transparent border-none outline-none text-[10px] md:text-[11px] w-full font-black uppercase tracking-[0.2em] text-white placeholder:text-white/10"
                             />
                         </div>
                     </div>
@@ -149,12 +149,13 @@ export default function Leaves() {
                                 <th className="px-4 md:px-10 py-4 md:py-6 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Type</th>
                                 <th className="px-4 md:px-10 py-4 md:py-6 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Dates</th>
                                 <th className="px-4 md:px-10 py-4 md:py-6 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Hours</th>
+                                <th className="px-4 md:px-10 py-4 md:py-6 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Reason</th>
                                 <th className="px-4 md:px-10 py-4 md:py-6 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Status</th>
                                 <th className="px-4 md:px-10 py-4 md:py-6 text-center text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Action</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-white/5">
-                             {filteredLeaves.map((leave, idx) => (
+                            {filteredLeaves.map((leave, idx) => (
                                 <tr key={leave._id} className="group hover:bg-white/5 transition-all outline-none border-b border-white/5 last:border-0 ">
                                     {isAdmin && (
                                         <td className="px-4 md:px-10 py-4 md:py-8 text-white font-black uppercase tracking-[0.1em] md:tracking-widest text-[9px] md:text-[10px]">
@@ -171,6 +172,9 @@ export default function Leaves() {
                                     </td>
                                     <td className="px-4 md:px-10 py-4 md:py-8 text-[9px] md:text-[11px] font-black text-muted tracking-[0.1em] md:tracking-widest uppercase whitespace-nowrap">
                                         {leave.totalHours}H
+                                    </td>
+                                    <td className="px-4 md:px-10 py-4 md:py-8 text-[9px] md:text-[11px] font-black text-muted tracking-[0.1em] md:tracking-widest uppercase whitespace-nowrap">
+                                        {leave.reason}
                                     </td>
                                     <td className="px-4 md:px-10 py-4 md:py-8">
                                         <div className={`inline-flex items-center gap-2 px-2.5 md:px-4 py-1.5 md:py-2 rounded-lg md:rounded-xl border text-[7px] md:text-[9px] font-black uppercase tracking-[0.1em] md:tracking-[0.2em] whitespace-nowrap ${getStatusStyles(leave.status)}`}>
@@ -248,7 +252,7 @@ export default function Leaves() {
                     {/* Dates - Side by Side */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="relative group">
-                            <div 
+                            <div
                                 className="absolute left-5 top-1/2 -translate-y-1/2 text-muted/40 group-focus-within:text-primary transition-colors cursor-pointer z-10"
                                 onClick={() => startDateRef.current?.showPicker()}
                             >
@@ -263,7 +267,7 @@ export default function Leaves() {
                             />
                         </div>
                         <div className="relative group">
-                            <div 
+                            <div
                                 className="absolute left-5 top-1/2 -translate-y-1/2 text-muted/40 group-focus-within:text-primary transition-colors cursor-pointer z-10"
                                 onClick={() => endDateRef.current?.showPicker()}
                             >
@@ -282,7 +286,7 @@ export default function Leaves() {
                     {/* Times - Side by Side */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="relative group">
-                            <div 
+                            <div
                                 className="absolute left-5 top-1/2 -translate-y-1/2 text-muted/40 group-focus-within:text-primary transition-colors cursor-pointer z-10"
                                 onClick={() => startTimeRef.current?.showPicker()}
                             >
@@ -296,7 +300,7 @@ export default function Leaves() {
                             />
                         </div>
                         <div className="relative group">
-                            <div 
+                            <div
                                 className="absolute left-5 top-1/2 -translate-y-1/2 text-muted/40 group-focus-within:text-primary transition-colors cursor-pointer z-10"
                                 onClick={() => endTimeRef.current?.showPicker()}
                             >

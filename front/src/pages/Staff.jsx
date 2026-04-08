@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Star, Mail, Award, MoreVertical, Plus, X, Upload, Trash2, Sparkles, LayoutGrid, Phone, Pencil, UserCheck, Camera } from 'lucide-react';
+import { Star, Mail, Award, MoreVertical, Plus, X, Upload, Trash2, Sparkles, LayoutGrid, Phone, Pencil, UserCheck, Camera, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchStaff, addStaff, updateStaffMember, deleteStaffMember } from '../redux/slices/staffSlice';
@@ -22,11 +22,18 @@ export default function Staff() {
   const [imagePreview, setImagePreview] = useState(null);
   const [profileStaffMember, setProfileStaffMember] = useState(null);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     dispatch(fetchStaff());
     dispatch(fetchServices());
   }, [dispatch]);
+
+  const filteredStaff = staff.filter(member =>
+    member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    member.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    member.services.some(s => s.name.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
 
   useEffect(() => {
     if (isDrawerOpen || isProfileOpen || isDeleteModalOpen) {
@@ -135,19 +142,31 @@ export default function Staff() {
         subtitle="Manage your salon's professional staff"
         icon={LayoutGrid}
         rightContent={
-          <button
-            onClick={() => setIsDrawerOpen(true)}
-            className="w-full lg:w-auto flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury"
-          >
-            <Plus size={18} md:size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
-            <span className="whitespace-nowrap">ADD NEW STAFF</span>
-          </button>
+          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6 w-full lg:w-auto">
+            <div className="bg-secondary/40 backdrop-blur-md px-6 py-4 rounded-2xl border border-white/5 shadow-2xl flex items-center gap-4 w-full md:w-96 group focus-within:border-primary/40 transition-all duration-500">
+              <Search size={18} className="text-muted group-focus-within:text-primary transition-colors" />
+              <input
+                type="text"
+                placeholder="Search staff members..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="bg-transparent border-none outline-none text-[10px] md:text-[11px] w-full font-black uppercase tracking-[0.2em] text-white placeholder:text-white/10"
+              />
+            </div>
+            <button
+              onClick={() => setIsDrawerOpen(true)}
+              className="w-full lg:w-auto flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury"
+            >
+              <Plus size={18} md:size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
+              <span className="whitespace-nowrap">ADD NEW STAFF</span>
+            </button>
+          </div>
         }
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 2xl:grid-cols-4 gap-6 md:gap-8">
         <AnimatePresence mode="popLayout">
-          {staff.map((member, index) => (
+          {filteredStaff.map((member, index) => (
             <motion.div
               key={member._id}
               initial={{ opacity: 0, y: 30 }}

@@ -13,8 +13,6 @@ const generateInvoicePDF = async (req, res) => {
          return res.status(404).json({ message: 'Ritual session not found for invoice' });
       }
 
-      console.log(appointment,"appointment");
-
       const doc = new PDFDocument({
          margin: 50,
          size: 'A4'
@@ -178,7 +176,7 @@ const generateOrderInvoicePDF = async (req, res) => {
       }
 
       const doc = new PDFDocument({
-         margin: 50,
+         margins: { top: 40, bottom: 20, left: 50, right: 50 },
          size: 'A4'
       });
 
@@ -298,21 +296,15 @@ const generateOrderInvoicePDF = async (req, res) => {
          doc.fillColor(colors.brand).fontSize(12).font('Helvetica-BoldOblique')
             .text(`$${(item.price * item.qty).toLocaleString()}`, 0, currentY, { align: 'right' });
 
-         currentY += 40;
+         currentY += 30; // Further reduced spacing to fit more items
 
          if (idx < order.items.length - 1) {
-            doc.strokeColor(colors.stroke).dash(2, { space: 2 }).moveTo(50, currentY - 15).lineTo(550, currentY - 15).stroke().undash();
-         }
-
-         // Check if we need a new page
-         if (currentY > 700) {
-            doc.addPage();
-            currentY = 50;
+            doc.strokeColor(colors.stroke).dash(2, { space: 2 }).moveTo(50, currentY - 10).lineTo(550, currentY - 10).stroke().undash();
          }
       });
 
       // --- Financial Consolidation Sentinel ---
-      const totalY = Math.min(currentY + 40, 700);
+      const totalY = Math.min(currentY + 20, 680);
       doc.strokeColor(colors.brand).lineWidth(2).moveTo(300, totalY).lineTo(550, totalY).stroke();
 
       doc.fillColor(colors.neutral).fontSize(9).font('Helvetica-Bold')
@@ -322,7 +314,7 @@ const generateOrderInvoicePDF = async (req, res) => {
          .text(`$ ${order.totalAmount.toLocaleString()}`, 300, totalY + 30, { align: 'right', width: 250, characterSpacing: -1 });
 
       // --- Footer Protocol ---
-      const footerY = 780;
+      const footerY = 750;
       doc.fillColor(colors.neutral).fontSize(7).font('Helvetica-Bold')
          .text('VALIDATED PRODUCT INTELLIGENCE • LUXURY LOGISTICS', 50, footerY, { align: 'center', characterSpacing: 3 });
 

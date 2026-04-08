@@ -34,6 +34,7 @@ export default function Appointments() {
   const [isNewClient, setIsNewClient] = useState(false);
   const [viewMode, setViewMode] = useState('calendar'); // 'calendar' or 'list'
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     if (isDrawerOpen) {
@@ -135,7 +136,17 @@ export default function Appointments() {
   const monthEnd = endOfMonth(currentDate);
   const days = eachDayOfInterval({ start: monthStart, end: monthEnd });
 
-  const filteredAppointments = (appointments || []).filter(app =>
+  const searchedAppointments = (appointments || []).filter(app => {
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      app.client?.name?.toLowerCase().includes(searchLower) ||
+      app.assignments?.some(asm => asm.service?.name?.toLowerCase().includes(searchLower)) ||
+      app.appointmentId?.toLowerCase().includes(searchLower) ||
+      app._id?.toLowerCase().includes(searchLower)
+    );
+  });
+
+  const filteredAppointments = searchedAppointments.filter(app =>
     isSameDay(new Date(app.appointmentDate), selectedDate)
   );
 
@@ -157,7 +168,7 @@ export default function Appointments() {
     return groups;
   };
 
-  const groupedAppointments = groupAppointmentsByMonth(appointments || []);
+  const groupedAppointments = groupAppointmentsByMonth(searchedAppointments);
 
   const availableYears = Array.from(new Set((appointments || []).map(app => new Date(app.appointmentDate).getFullYear()))).sort((a, b) => b - a);
   if (!availableYears.includes(new Date().getFullYear())) {
@@ -188,7 +199,17 @@ export default function Appointments() {
         subtitle="View and manage all customer appointments"
         icon={CalendarIcon}
         rightContent={
-          <div className="flex items-center gap-4">
+          <>
+            <div className="bg-secondary/40 backdrop-blur-md px-6 md:px-8 py-4 md:py-4.5 rounded-2xl border border-white/5 shadow-3xl flex items-center gap-4 w-full md:w-96 group focus-within:border-primary/40 transition-all duration-500">
+              <Search size={18} className="text-muted group-focus-within:text-primary transition-colors" />
+              <input
+                type="text"
+                placeholder="SEARCH APPOINTMENTS..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="bg-transparent border-none outline-none text-[10px] md:text-[11px] font-black text-white tracking-[0.2em] w-full placeholder:text-white/5 uppercase"
+              />
+            </div>
             <div className="bg-secondary/40 p-1.5 rounded-2xl border border-white/5 backdrop-blur-md hidden sm:flex items-center gap-1">
               <button
                 onClick={() => setViewMode('calendar')}
@@ -217,7 +238,7 @@ export default function Appointments() {
               <Plus size={18} md:size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
               <span className="whitespace-nowrap">Book Appointment</span>
             </button>
-          </div>
+          </>
         }
       />
 
@@ -263,7 +284,7 @@ export default function Appointments() {
                   ))}
                   {days.map((day, i) => {
                     const isSelected = isSameDay(day, selectedDate);
-                    const hasApps = (appointments || []).some(a => isSameDay(new Date(a.appointmentDate), day));
+                    const hasApps = searchedAppointments.some(a => isSameDay(new Date(a.appointmentDate), day));
                     const hasLeaves = (leaves || []).some(lv => 
                       isSameDay(new Date(lv.startDate), day) || 
                       isSameDay(new Date(lv.endDate), day) ||
