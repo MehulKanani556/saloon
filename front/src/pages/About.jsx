@@ -347,7 +347,7 @@ const TeamSection = () => {
             [...Array(4)].map((_, i) => (
               <div key={i} className="h-80 bg-secondary rounded-2xl animate-pulse" />
             ))
-          ) : staff.map((member, i) => (
+          ) : staff?.slice(0, 8).map((member, i) => (
             <motion.div
               key={member._id}
               initial={{ opacity: 0, y: 30 }}
