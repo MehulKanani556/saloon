@@ -545,7 +545,7 @@ const TeamPreview = () => {
               <div key={i} className="h-80 bg-secondary rounded-2xl animate-pulse" />
             ))
           ) : (
-            staff.map((artist, i) => (
+            staff?.slice(0, 8).map((artist, i) => (
               <motion.div
                 key={artist._id}
                 initial={{ opacity: 0, y: 30 }}
