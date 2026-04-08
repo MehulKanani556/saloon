@@ -244,9 +244,8 @@ const updateAppointment = async (req, res) => {
             let client = await User.findOne({ 
                 $or: [
                     { phone: clientPhone },
-                    { email: clientEmail.trim() !== "" ? clientEmail : "no-email@provided.com" }
-                ], 
-                role: 'User' 
+                    { email: clientEmail && clientEmail.trim() !== "" ? clientEmail : "no-email@aura.com" }
+                ]
             });
 
             if (!client) {
@@ -280,6 +279,7 @@ const updateAppointment = async (req, res) => {
 
 const updateAppointmentStatus = async (req, res) => {
     const appointment = await Appointment.findById(req.params.id);
+    console.log(appointment,"appointment");
     if (appointment) {
         appointment.status = req.body.status || appointment.status;
         appointment.paymentStatus = req.body.paymentStatus || appointment.paymentStatus;
