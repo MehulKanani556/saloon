@@ -10,9 +10,14 @@ import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
+import { useDispatch, useSelector } from 'react-redux';
+import { submitContactMessage } from '../redux/slices/contactSlice';
 
 
 export default function Contact() {
+  const dispatch = useDispatch();
+  const { loading } = useSelector(state => state.contact);
+
   const validationSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
     email: Yup.string().email('Invalid email').required('Email is required'),
@@ -23,13 +28,13 @@ export default function Contact() {
   const formik = useFormik({
     initialValues: { name: '', email: '', subject: '', message: '' },
     validationSchema,
-    onSubmit: (values, { resetForm, setSubmitting }) => {
-      // Simulate API call
-      setTimeout(() => {
-        setSubmitting(false);
-        toast.success("Message sent to our salon!");
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        await dispatch(submitContactMessage(values)).unwrap();
         resetForm();
-      }, 1500);
+      } catch (err) {
+        // Error is handled by toast in the thunk
+      }
     },
   });
 
@@ -196,10 +201,10 @@ export default function Contact() {
 
                     <button
                       type="submit"
-                      disabled={formik.isSubmitting}
+                      disabled={loading}
                       className="w-full py-6 bg-primary text-secondary rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl hover:bg-primary/90 transition-all flex items-center justify-center gap-4 active:scale-95 disabled:opacity-50"
                     >
-                      {formik.isSubmitting ? (
+                      {loading ? (
                         <div className="w-6 h-6 border-2 border-secondary/30 border-t-secondary rounded-full animate-spin" />
                       ) : (
                         <>

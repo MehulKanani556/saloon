@@ -16,6 +16,7 @@ import reportReducer from './slices/reportSlice';
 import reviewReducer from './slices/reviewSlice';
 import leaveReducer from './slices/leaveSlice';
 import specializationReducer from './slices/specializationSlice';
+import contactReducer from './slices/contactSlice';
 
 export const store = configureStore({
     reducer: {
@@ -35,7 +36,8 @@ export const store = configureStore({
         reports: reportReducer,
         reviews: reviewReducer,
         leaves: leaveReducer,
-        specializations: specializationReducer
+        specializations: specializationReducer,
+        contact: contactReducer
     },
 });
 

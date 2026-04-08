@@ -17,6 +17,7 @@ const leaveController = require('../controllers/leaveController');
 const productController = require('../controllers/productController');
 const orderController = require('../controllers/orderController');
 const paymentController = require('../controllers/paymentController');
+const contactController = require('../controllers/contactController');
 
 // Middleware
 const { protect, authorize } = require('../middleware/authMiddleware');
@@ -168,5 +169,11 @@ router.get('/cart', protect, cartController.getCart);
 router.post('/cart/sync', protect, cartController.syncCart);
 router.get('/wishlist', protect, wishlistController.getWishlist);
 router.post('/wishlist/sync', protect, wishlistController.syncWishlist);
+
+// ==========================================
+// CONTACT ROUTES
+// ==========================================
+router.post('/contact', contactController.submitContactMessage);
+router.get('/contact', protect, authorize('Admin'), contactController.getContactMessages);
 
 module.exports = router;
