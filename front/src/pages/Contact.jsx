@@ -98,7 +98,7 @@ export default function Contact() {
                 <div className="space-y-8">
                   {[
                     { icon: <MapPin />, title: "Our Location", details: "123 Luxury Street, Bandra West, Mumbai, 400050" },
-                    { icon: <Phone />, title: "Phone", details: "+91 98765 43210" },
+                    { icon: <Phone />, title: "Phone", details: "+1 123-456-7890" },
                     { icon: <Mail />, title: "Email", details: "contact@glowelegance.com" },
                     { icon: <Clock />, title: "Opening Hours", details: "Mon - Sat: 9 AM - 9 PM" },
                   ].map((item, i) => (

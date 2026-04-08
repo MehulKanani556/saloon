@@ -13,7 +13,7 @@ const SettingsSchema = Yup.object().shape({
   salonName: Yup.string().required('Required'),
   tagline: Yup.string().required('Required'),
   email: Yup.string().email('Invalid email').required('Required'),
-  phone: Yup.string().required('Required'),
+  phone: Yup.string().matches(/^\d{3}-\d{3}-\d{4}$/, 'Must be 10 digits (XXX-XXX-XXXX)').required('Required'),
   address: Yup.string().required('Required'),
 });
 
@@ -28,7 +28,10 @@ export default function Settings() {
   }, [dispatch]);
 
   const formik = useFormik({
-    initialValues: settings || {
+    initialValues: settings ? {
+      ...settings,
+      phone: (settings.phone ? settings.phone.replace('+1 ', '') : '')
+    } : {
       salonName: '',
       tagline: '',
       email: '',
@@ -40,8 +43,12 @@ export default function Settings() {
     enableReinitialize: true,
     validationSchema: SettingsSchema,
     onSubmit: async (values) => {
+        const finalValues = {
+          ...values,
+          phone: values.phone.startsWith('+1 ') ? values.phone : `+1 ${values.phone}`
+        };
         toast.promise(
-        dispatch(updateSettings(values)).unwrap(),
+        dispatch(updateSettings(finalValues)).unwrap(),
         {
           loading: 'Saving settings...',
           success: 'Settings updated successfully',
@@ -50,6 +57,20 @@ export default function Settings() {
       );
     },
   });
+
+  const handleInputChange = (e, fieldName) => {
+    if (fieldName === 'phone') {
+      let val = e.target.value.replace(/\D/g, '').substring(0, 10);
+      if (val.length > 6) {
+        val = `${val.slice(0, 3)}-${val.slice(3, 6)}-${val.slice(6)}`;
+      } else if (val.length > 3) {
+        val = `${val.slice(0, 3)}-${val.slice(3)}`;
+      }
+      formik.setFieldValue('phone', val);
+    } else {
+      formik.handleChange(e);
+    }
+  };
 
   if (loading && !settings) return (
     <div className="flex items-center justify-center h-[60vh]">
@@ -103,14 +124,30 @@ export default function Settings() {
                     <field.icon size={12} className="text-primary" />
                     {field.label}
                   </label>
-                  <input
-                    name={field.name}
-                    type={field.type || 'text'}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values[field.name]}
-                    className={`w-full bg-background border-2 ${formik.touched[field.name] && formik.errors[field.name] ? 'border-red-500' : 'border-transparent focus:border-primary/30'} p-4 md:p-5 rounded-2xl outline-none font-bold text-white transition-all shadow-inner`}
-                  />
+                  {field.name === 'phone' ? (
+                    <div className={`flex bg-background border-2 ${formik.touched[field.name] && formik.errors[field.name] ? 'border-red-500' : 'border-transparent focus-within:border-primary/30'} rounded-2xl overflow-hidden transition-all shadow-inner`}>
+                      <div className="flex items-center px-4 bg-white/5 border-r border-white/10 shrink-0">
+                        <span className="text-[11px] font-black text-primary tracking-widest">+1</span>
+                      </div>
+                      <input
+                        name={field.name}
+                        type={field.type || 'text'}
+                        onChange={(e) => handleInputChange(e, field.name)}
+                        onBlur={formik.handleBlur}
+                        value={formik.values[field.name]}
+                        className="w-full bg-transparent p-4 md:p-5 outline-none font-bold text-white"
+                      />
+                    </div>
+                  ) : (
+                    <input
+                      name={field.name}
+                      type={field.type || 'text'}
+                      onChange={(e) => handleInputChange(e, field.name)}
+                      onBlur={formik.handleBlur}
+                      value={formik.values[field.name]}
+                      className={`w-full bg-background border-2 ${formik.touched[field.name] && formik.errors[field.name] ? 'border-red-500' : 'border-transparent focus:border-primary/30'} p-4 md:p-5 rounded-2xl outline-none font-bold text-white transition-all shadow-inner`}
+                    />
+                  )}
                   {formik.touched[field.name] && formik.errors[field.name] && (
                     <p className="text-[10px] font-black text-red-500 uppercase tracking-widest pl-2">{formik.errors[field.name]}</p>
                   )}

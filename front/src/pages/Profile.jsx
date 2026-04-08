@@ -26,15 +26,19 @@ export default function Profile() {
     initialValues: {
       name: user?.name || '',
       email: user?.email || '',
-      phone: user?.phone || '',
+      phone: (user?.phone ? user.phone.replace('+1 ', '') : '') || '',
     },
     validationSchema: Yup.object({
       name: Yup.string().required('Full Name is required'),
+      phone: Yup.string()
+        .matches(/^\d{3}-\d{3}-\d{4}$/, 'Must be 10 digits (XXX-XXX-XXXX)')
+        .required('Phone is required'),
     }),
     onSubmit: async (values) => {
       setUpdating(true);
       const formData = new FormData();
       formData.append('name', values.name);
+      formData.append('phone', `+1 ${values.phone}`);
       if (fileInputRef.current?.files[0]) {
         formData.append('image', fileInputRef.current.files[0]);
       }
@@ -47,6 +51,16 @@ export default function Profile() {
       }
     },
   });
+
+  const handlePhoneChange = (e) => {
+    let val = e.target.value.replace(/\D/g, '').substring(0, 10);
+    if (val.length > 6) {
+      val = `${val.slice(0, 3)}-${val.slice(3, 6)}-${val.slice(6)}`;
+    } else if (val.length > 3) {
+      val = `${val.slice(0, 3)}-${val.slice(3)}`;
+    }
+    formik.setFieldValue('phone', val);
+  };
 
   const handleImageClick = () => {
     if (isEditing) fileInputRef.current?.click();
@@ -174,16 +188,28 @@ export default function Profile() {
               {/* Phone */}
               <div className="space-y-3">
                 <label className="text-[10px] font-bold text-muted/40 uppercase tracking-[0.3em] ml-2">Phone Number</label>
-                <div className="relative">
-                  <div className="absolute left-5 top-1/2 -translate-y-1/2 text-muted/20">
-                    <Phone size={18} />
+                <div className={`flex bg-white/[0.03] border transition-all rounded-2xl overflow-hidden group/field ${isEditing ? 'border-primary/30' : 'border-transparent'}`}>
+                  <div className={`flex items-center px-4 bg-white/5 border-r transition-colors ${isEditing ? 'border-primary/20' : 'border-white/5'}`}>
+                    <span className={`text-xs font-bold ${isEditing ? 'text-primary' : 'text-muted/20'}`}>+1</span>
                   </div>
-                  <input
-                    value={user?.phone || ''}
-                    disabled
-                    className="w-full bg-white/[0.01] border border-transparent px-6 py-4 pl-12 rounded-2xl font-bold text-sm text-muted/40 cursor-not-allowed"
-                  />
+                  <div className="relative flex-1">
+                    <div className={`absolute left-5 top-1/2 -translate-y-1/2 transition-colors ${isEditing ? 'text-primary' : 'text-muted/20'}`}>
+                      <Phone size={18} />
+                    </div>
+                    <input
+                      name="phone"
+                      value={formik.values.phone}
+                      onChange={handlePhoneChange}
+                      onBlur={formik.handleBlur}
+                      disabled={!isEditing}
+                      className={`w-full bg-transparent px-6 py-4 pl-12 outline-none transition-all font-bold text-sm ${isEditing ? 'text-white' : 'text-muted/40 cursor-not-allowed'}`}
+                      placeholder="XXX-XXX-XXXX"
+                    />
+                  </div>
                 </div>
+                {formik.touched.phone && formik.errors.phone && (
+                  <p className="text-red-500/80 text-[9px] uppercase font-bold tracking-widest ml-4">{formik.errors.phone}</p>
+                )}
               </div>
             </div>
 

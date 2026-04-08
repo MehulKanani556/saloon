@@ -12,7 +12,14 @@ import * as Yup from 'yup';
 
 const validationSchema = Yup.object().shape({
   identity: Yup.string()
-    .required('Identity (Email or Phone) is required'),
+    .required('Identity (Email or Phone) is required')
+    .test('is-valid-identity', 'Enter valid Email or 10-digit Phone', function (value) {
+      if (!value) return false;
+      if (/^\d/.test(value) || value.includes('-')) {
+        return /^\d{3}-\d{3}-\d{4}$/.test(value);
+      }
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    }),
   method: Yup.string().oneOf(['password', 'otp']).required(),
   password: Yup.string().when('method', {
     is: 'password',

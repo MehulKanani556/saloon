@@ -34,17 +34,17 @@ export default function StaffSettings() {
         initialValues: {
             name: user?.name || '',
             email: user?.email || '',
-            phone: user?.phone || '',
+            phone: (user?.phone ? user.phone.replace('+1 ', '') : '') || '',
         },
         validationSchema: Yup.object({
             name: Yup.string().required('Full name is required'),
-            phone: Yup.string().required('Phone number is required'),
+            phone: Yup.string().matches(/^\d{3}-\d{3}-\d{4}$/, 'Must be 10 digits (XXX-XXX-XXXX)').required('Phone number is required'),
         }),
         onSubmit: async (values) => {
             setUpdating(true);
             const formData = new FormData();
             formData.append('name', values.name);
-            formData.append('phone', values.phone);
+            formData.append('phone', `+1 ${values.phone}`);
             if (fileInputRef.current?.files[0]) {
                 formData.append('image', fileInputRef.current.files[0]);
             }
@@ -58,6 +58,17 @@ export default function StaffSettings() {
             }
         },
     });
+
+    const handlePhoneChange = (e) => {
+        let val = e.target.value.replace(/\D/g, '').substring(0, 10);
+        if (val.length > 6) {
+            val = `${val.slice(0, 3)}-${val.slice(3, 6)}-${val.slice(6)}`;
+        } else if (val.length > 3) {
+            val = `${val.slice(0, 3)}-${val.slice(3)}`;
+        }
+        profileFormik.setFieldValue('phone', val);
+    };
+
 
     // Password Formik
     const passwordFormik = useFormik({
@@ -174,18 +185,34 @@ export default function StaffSettings() {
                             {[
                                 { name: 'name', label: 'Full Name', icon: User, editable: true },
                                 { name: 'email', label: 'Email Address', icon: Mail, editable: false },
-                                { name: 'phone', label: 'Phone Number', icon: Phone, editable: false }
+                                { name: 'phone', label: 'Phone Number', icon: Phone, editable: true }
                             ].map((field) => (
                                 <div key={field.name} className="space-y-3">
                                     <label className="text-[10px] font-black text-muted/40 uppercase tracking-[0.3em] pl-2 flex items-center gap-2 ">
                                         <field.icon size={12} className="text-primary/40" />
                                         {field.label}
                                     </label>
-                                    <input
-                                        {...profileFormik.getFieldProps(field.name)}
-                                        disabled={!isEditing || !field.editable}
-                                        className={`w-full bg-background border px-6 py-5 rounded-xl outline-none transition-all duration-500 font-black text-[11px] uppercase tracking-[0.1em] ${isEditing && field.editable ? 'border-primary/40 shadow-inner text-white' : 'border-white/5 cursor-not-allowed opacity-40 text-muted/60'}`}
-                                    />
+                                    
+                                    {field.name === 'phone' ? (
+                                        <div className={`flex bg-background border transition-all duration-500 rounded-xl overflow-hidden ${isEditing && field.editable ? 'border-primary/40 shadow-inner' : 'border-white/5 opacity-40'}`}>
+                                            <div className="flex items-center px-4 bg-white/5 border-r border-white/10 shrink-0">
+                                                <span className={`text-[11px] font-black tracking-widest ${isEditing ? 'text-primary' : 'text-muted/60'}`}>+1</span>
+                                            </div>
+                                            <input
+                                                {...profileFormik.getFieldProps(field.name)}
+                                                onChange={handlePhoneChange}
+                                                disabled={!isEditing || !field.editable}
+                                                className={`w-full bg-transparent px-6 py-5 outline-none font-black text-[11px] uppercase tracking-[0.1em] ${isEditing && field.editable ? 'text-white' : 'text-muted/60 cursor-not-allowed'}`}
+                                            />
+                                        </div>
+                                    ) : (
+                                        <input
+                                            {...profileFormik.getFieldProps(field.name)}
+                                            disabled={!isEditing || !field.editable}
+                                            className={`w-full bg-background border px-6 py-5 rounded-xl outline-none transition-all duration-500 font-black text-[11px] uppercase tracking-[0.1em] ${isEditing && field.editable ? 'border-primary/40 shadow-inner text-white' : 'border-white/5 cursor-not-allowed opacity-40 text-muted/60'}`}
+                                        />
+                                    )}
+
                                     {profileFormik.touched[field.name] && profileFormik.errors[field.name] && (
                                         <p className="text-primary/80 text-[8px] uppercase font-black tracking-widest pl-2">! Error: {profileFormik.errors[field.name]}</p>
                                     )}

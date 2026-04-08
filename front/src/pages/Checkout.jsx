@@ -79,7 +79,7 @@ const PaymentForm = ({ formik, total, cartItems, setStep, dispatch, isProcessing
                     billing_details: {
                         name: formik.values.fullName,
                         email: formik.values.email,
-                        phone: formik.values.phone,
+                        phone: `+1 ${formik.values.phone}`,
                         address: {
                             line1: formik.values.address,
                             city: formik.values.city,
@@ -107,7 +107,7 @@ const PaymentForm = ({ formik, total, cartItems, setStep, dispatch, isProcessing
                         shippingAddress: {
                             fullName: formik.values.fullName,
                             email: formik.values.email,
-                            phone: formik.values.phone,
+                            phone: `+1 ${formik.values.phone}`,
                             address: formik.values.address,
                             city: formik.values.city,
                             zipCode: formik.values.zipCode,
@@ -234,7 +234,7 @@ export default function Checkout() {
         validationSchema: Yup.object({
             fullName: Yup.string().required('Full Name is required'),
             email: Yup.string().email('Invalid email format').required('Email is required'),
-            phone: Yup.string().matches(/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/, 'Must be in 416-123-4567 format').required('Phone Number is required'),
+            phone: Yup.string().matches(/^\d{3}-\d{3}-\d{4}$/, 'Must be 10 digits (XXX-XXX-XXXX)').required('Phone Number is required'),
             address: Yup.string().required('Address is required'),
             city: Yup.string().required('City is required'),
             zipCode: Yup.string().required('ZIP Code is required'),
@@ -332,16 +332,21 @@ export default function Checkout() {
                                     </div>
                                     <div className="space-y-4">
                                         <label className="text-[9px] font-black text-muted/60 uppercase tracking-[0.4em] ml-2">Phone Number</label>
-                                        <div className="relative group">
-                                            <Phone size={16} className="absolute left-6 top-1/2 -translate-y-1/2 text-primary/40 group-focus-within:text-primary transition-colors" />
-                                            <input 
-                                                 name="phone"
-                                                 value={formik.values.phone}
-                                                 onChange={handlePhoneChange}
-                                                 onBlur={formik.handleBlur}
-                                                 className={`w-full bg-dark-card border ${formik.touched.phone && formik.errors.phone ? 'border-red-500/50' : 'border-white/10'} focus:border-primary/40 px-14 py-5 rounded-xl outline-none text-[11px] font-black uppercase tracking-widest text-white transition-all shadow-xl`}
-                                                 placeholder="416-123-4567"
-                                             />
+                                        <div className={`flex bg-dark-card border transition-all rounded-xl overflow-hidden ${formik.touched.phone && formik.errors.phone ? 'border-red-500/50' : 'border-white/10 focus-within:border-primary/40'} shadow-xl`}>
+                                            <div className="flex items-center px-4 bg-white/5 border-r border-white/10 shrink-0">
+                                                <span className="text-[10px] font-black text-primary tracking-widest">+1</span>
+                                            </div>
+                                            <div className="relative flex-1 group">
+                                                <Phone size={16} className="absolute left-6 top-1/2 -translate-y-1/2 text-primary/40 group-focus-within:text-primary transition-colors" />
+                                                <input 
+                                                    name="phone"
+                                                    value={formik.values.phone}
+                                                    onChange={handlePhoneChange}
+                                                    onBlur={formik.handleBlur}
+                                                    className="w-full bg-transparent px-14 py-5 outline-none text-[11px] font-black uppercase tracking-widest text-white"
+                                                    placeholder="XXX-XXX-XXXX"
+                                                />
+                                            </div>
                                         </div>
                                         {formik.touched.phone && formik.errors.phone && <p className="text-[8px] text-red-500 font-black uppercase tracking-widest ml-2">{formik.errors.phone}</p>}
                                     </div>

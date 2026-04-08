@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Lock, User, Sparkles, ArrowRight, AlertCircle, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, User, Sparkles, ArrowRight, AlertCircle, Eye, EyeOff, Phone } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { signupUser } from '../redux/slices/authSlice';
 import { useNavigate, Link } from 'react-router-dom';
@@ -16,6 +16,9 @@ const validationSchema = Yup.object().shape({
     password: Yup.string()
         .min(6, 'Password must be at least 6 characters')
         .required('Password is required'),
+    phone: Yup.string()
+        .matches(/^\d{3}-\d{3}-\d{4}$/, 'Must be 10 digits (XXX-XXX-XXXX)')
+        .required('Phone is required'),
 });
 
 export default function Signup() {
@@ -31,12 +34,26 @@ export default function Signup() {
     }, [userInfo, navigate]);
 
     const formik = useFormik({
-        initialValues: { name: '', email: '', password: '' },
+        initialValues: { name: '', email: '', password: '', phone: '' },
         validationSchema,
         onSubmit: (values) => {
-            dispatch(signupUser(values));
+            const finalValues = {
+                ...values,
+                phone: `+1 ${values.phone}`
+            };
+            dispatch(signupUser(finalValues));
         },
     });
+
+    const handlePhoneChange = (e) => {
+        let val = e.target.value.replace(/\D/g, '').substring(0, 10);
+        if (val.length > 6) {
+            val = `${val.slice(0, 3)}-${val.slice(3, 6)}-${val.slice(6)}`;
+        } else if (val.length > 3) {
+            val = `${val.slice(0, 3)}-${val.slice(3)}`;
+        }
+        formik.setFieldValue('phone', val);
+    };
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-background p-6">
@@ -95,6 +112,33 @@ export default function Signup() {
                             <div className="flex items-center gap-1.5 text-red-400 text-[8px] font-black uppercase tracking-widest pl-1 mt-1">
                                 <AlertCircle size={10} />
                                 {formik.errors.email}
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="space-y-1.5">
+                        <label className="text-[9px] font-black text-muted uppercase tracking-widest ml-1">Phone Number</label>
+                        <div className={`flex bg-background border p-1 rounded-2xl transition-all ${formik.touched.phone && formik.errors.phone ? 'border-red-500/50' : 'border-white/5 focus-within:border-primary/20'}`}>
+                            <div className="flex items-center px-4 border-r border-white/10 bg-white/5 rounded-l-xl">
+                                <span className="text-[10px] font-black text-muted tracking-widest">+1</span>
+                            </div>
+                            <div className="relative flex-1">
+                                <Phone size={16} className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors ${formik.touched.phone && formik.errors.phone ? 'text-red-400' : 'text-primary/40 group-focus-within:text-primary'}`} />
+                                <input
+                                    name="phone"
+                                    type="text"
+                                    value={formik.values.phone}
+                                    onChange={handlePhoneChange}
+                                    onBlur={formik.handleBlur}
+                                    placeholder="XXX-XXX-XXXX"
+                                    className="w-full bg-transparent p-3.5 pl-11 rounded-r-2xl outline-none font-bold text-white placeholder:text-muted/30"
+                                />
+                            </div>
+                        </div>
+                        {formik.touched.phone && formik.errors.phone && (
+                            <div className="flex items-center gap-1.5 text-red-400 text-[8px] font-black uppercase tracking-widest pl-1 mt-1">
+                                <AlertCircle size={10} />
+                                {formik.errors.phone}
                             </div>
                         )}
                     </div>

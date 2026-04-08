@@ -77,7 +77,7 @@ export default function Appointments() {
       }),
       clientPhone: Yup.string().when('clientId', {
         is: 'new',
-        then: (schema) => schema.required('Phone Required').matches(/^[0-9]{10}$/, 'Phone number must be 10 digits'),
+        then: (schema) => schema.required('Phone Required').matches(/^\d{3}-\d{3}-\d{4}$/, 'Must be 10 digits (XXX-XXX-XXXX)'),
         otherwise: (schema) => schema.notRequired()
       }),
       services: Yup.array().min(1, 'Select at least one service').required('Required'),
@@ -100,6 +100,16 @@ export default function Appointments() {
     }
   });
 
+  const handlePhoneChange = (e) => {
+    let val = e.target.value.replace(/\D/g, '').substring(0, 10);
+    if (val.length > 6) {
+      val = `${val.slice(0, 3)}-${val.slice(3, 6)}-${val.slice(6)}`;
+    } else if (val.length > 3) {
+      val = `${val.slice(0, 3)}-${val.slice(3)}`;
+    }
+    formik.setFieldValue('clientPhone', val);
+  };
+
   const handleEdit = (app) => {
     const appDate = new Date(app.appointmentDate);
     setIsNewClient(false);
@@ -108,7 +118,7 @@ export default function Appointments() {
       clientId: app.client?._id || '',
       clientName: app.client?.name || '',
       clientEmail: app.client?.email || '',
-      clientPhone: app.client?.phone || '',
+      clientPhone: (app.client?.phone ? app.client.phone.replace('+1 ', '') : '') || '',
       services: app.assignments?.map(a => (a.service?._id || a.service)) || [],
       date: format(appDate, "yyyy-MM-dd'T'HH:mm"),
       status: app.status || 'Pending',
@@ -140,6 +150,7 @@ export default function Appointments() {
     const searchLower = searchTerm.toLowerCase();
     return (
       app.client?.name?.toLowerCase().includes(searchLower) ||
+      app.client?.phone?.includes(searchTerm) ||
       app.assignments?.some(asm => asm.service?.name?.toLowerCase().includes(searchLower)) ||
       app.appointmentId?.toLowerCase().includes(searchLower) ||
       app._id?.toLowerCase().includes(searchLower)
@@ -590,11 +601,18 @@ export default function Appointments() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                   <div className="space-y-2 md:space-y-3">
                     <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-widest ml-2 ">Phone Number</label>
-                    <input
-                      name="clientPhone" onChange={formik.handleChange} value={formik.values.clientPhone}
-                      className="w-full bg-background border border-white/5 focus:border-primary/30 rounded-xl px-4 md:px-6 py-3 md:py-4 text-xs font-bold outline-none transition-all text-white shadow-inner placeholder:text-white/5"
-                      placeholder="Phone Number"
-                    />
+                    <div className="flex bg-background border border-white/5 focus-within:border-primary/30 rounded-xl overflow-hidden transition-all shadow-inner">
+                      <div className="flex items-center px-4 bg-white/5 border-r border-white/5 shrink-0">
+                        <span className="text-[10px] font-black text-primary tracking-widest">+1</span>
+                      </div>
+                      <input
+                        name="clientPhone" 
+                        onChange={handlePhoneChange} 
+                        value={formik.values.clientPhone}
+                        className="w-full bg-transparent px-6 py-4 text-xs font-bold outline-none text-white placeholder:text-white/5"
+                        placeholder="XXX-XXX-XXXX"
+                      />
+                    </div>
                   </div>
                   <div className="space-y-2 md:space-y-3">
                     <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-widest ml-2 ">Email Address</label>

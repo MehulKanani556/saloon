@@ -95,7 +95,8 @@ export default function AdminOrders() {
 
     const filteredOrders = orders.filter(order =>
         (order.orderId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            order.user?.name?.toLowerCase().includes(searchTerm.toLowerCase())) &&
+            order.user?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            order.shippingAddress?.phone?.includes(searchTerm)) &&
         (filterStatus === 'All' || order.status === filterStatus)
     );
 

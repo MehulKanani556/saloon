@@ -24,7 +24,7 @@ const appointmentSchema = Yup.object().shape({
     .email('Please enter a valid email address')
     .required('Email is required'),
   clientPhone: Yup.string()
-    .matches(/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/, 'Must be in 416-123-4567 format')
+    .matches(/^\d{3}-\d{3}-\d{4}$/, 'Must be 10 digits (XXX-XXX-XXXX)')
     .required('Phone is required'),
   date: Yup.date().min(new Date(new Date().setHours(0, 0, 0, 0)), 'Date cannot be in the past').required('Date is required'),
   time: Yup.string().required('Please select a time slot'),
@@ -612,7 +612,7 @@ export default function BookAppointment() {
                               value={formik.values.clientPhone}
                               onChange={handlePhoneChange}
                               onBlur={formik.handleBlur}
-                              placeholder="416-123-4567"
+                              placeholder="XXX-XXX-XXXX"
                               className="w-full bg-transparent px-4 md:px-6 py-4 text-sm font-bold outline-none dark:text-white"
                             />
                           </div>

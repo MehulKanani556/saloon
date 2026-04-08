@@ -178,6 +178,7 @@ export default function Invoices() {
 
   const filteredInvoices = appointments.filter(app =>
     app.client?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    app.client?.phone?.includes(searchTerm) ||
     app.services?.some(s => s.name?.toLowerCase().includes(searchTerm.toLowerCase())) ||
     app.appointmentId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     app._id?.toLowerCase().includes(searchTerm.toLowerCase())

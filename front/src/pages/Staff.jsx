@@ -56,14 +56,16 @@ export default function Staff() {
     validationSchema: Yup.object({
       name: Yup.string().required('Name is required'),
       email: Yup.string().email('Invalid email').required('Required'),
-      phone: Yup.string().required('Phone number is required'),
+      phone: Yup.string()
+        .matches(/^\d{3}-\d{3}-\d{4}$/, 'Must be 10 digits (XXX-XXX-XXXX)')
+        .required('Phone number is required'),
       services: Yup.array().min(1, 'Select at least one service'),
     }),
     onSubmit: async (values) => {
       const formData = new FormData();
       formData.append('name', values.name);
       formData.append('email', values.email);
-      formData.append('phone', values.phone);
+      formData.append('phone', `+1 ${values.phone}`);
 
       values.services.forEach(s => formData.append('services', s));
 
@@ -86,6 +88,16 @@ export default function Staff() {
     }
   });
 
+  const handlePhoneChange = (e) => {
+    let val = e.target.value.replace(/\D/g, '').substring(0, 10);
+    if (val.length > 6) {
+      val = `${val.slice(0, 3)}-${val.slice(3, 6)}-${val.slice(6)}`;
+    } else if (val.length > 3) {
+      val = `${val.slice(0, 3)}-${val.slice(3)}`;
+    }
+    formik.setFieldValue('phone', val);
+  };
+
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -100,7 +112,7 @@ export default function Staff() {
     formik.setValues({
       name: member.name,
       email: member.email,
-      phone: member.phone || '',
+      phone: (member.phone ? member.phone.replace('+1 ', '') : ''),
       services: member.services.map(s => s._id),
       profileImage: member.profileImage,
       imageFile: null
@@ -273,7 +285,7 @@ export default function Staff() {
             {formik.touched.name && formik.errors.name && <p className="text-rose-500 text-[8px] font-black ml-4 uppercase  tracking-widest">{formik.errors.name}</p>}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+          <div className="grid grid-cols-1 gap-4 md:gap-8">
             <div className="space-y-2 md:space-y-4">
               <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 ">Email Address</label>
               <input
@@ -288,13 +300,19 @@ export default function Staff() {
 
             <div className="space-y-2 md:space-y-4">
               <label className="text-[9px] md:text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 ">Phone Number</label>
-              <input
-                name="phone"
-                onChange={formik.handleChange}
-                value={formik.values.phone}
-                className="w-full bg-secondary border border-white/10 focus:border-primary/50 rounded-xl md:rounded-2xl px-4 md:px-6 py-4 md:py-5 text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5"
-                placeholder="+XX XXXXX XXXXX"
-              />
+              <div className={`flex bg-secondary border transition-all ${formik.touched.phone && formik.errors.phone ? 'border-rose-500/50' : 'border-white/10 focus-within:border-primary/50'} rounded-xl md:rounded-2xl overflow-hidden shadow-2xl`}>
+                <div className="flex items-center px-4 md:px-6 bg-white/5 border-r border-white/10">
+                  <span className="text-[10px] md:text-[11px] font-black text-muted tracking-widest">+1</span>
+                </div>
+                <input
+                  name="phone"
+                  onChange={handlePhoneChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.phone}
+                  className="w-full bg-transparent px-4 md:px-6 py-4 md:py-5 text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] outline-none text-white placeholder:text-white/5"
+                  placeholder="XXX-XXX-XXXX"
+                />
+              </div>
               {formik.touched.phone && formik.errors.phone && <p className="text-rose-500 text-[8px] font-black ml-4 uppercase  tracking-widest">{formik.errors.phone}</p>}
             </div>
           </div>
@@ -324,6 +342,7 @@ export default function Staff() {
                 </label>
               ))}
             </div>
+            {formik.touched.services && formik.errors.services && <p className="text-rose-500 text-[8px] font-black ml-4 uppercase  tracking-widest">{formik.errors.services}</p>}
           </div>
 
           <button

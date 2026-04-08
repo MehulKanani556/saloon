@@ -52,13 +52,15 @@ export default function Clients() {
     validationSchema: Yup.object({
       name: Yup.string().required('Full name is required').min(2, 'Name too short'),
       email: Yup.string().email('Invalid email address').required('Required'),
-      phone: Yup.string().required('Phone number is required')
+      phone: Yup.string()
+        .matches(/^\d{3}-\d{3}-\d{4}$/, 'Must be 10 digits (XXX-XXX-XXXX)')
+        .required('Phone number is required')
     }),
     onSubmit: (values) => {
       const formData = new FormData();
       formData.append('name', values.name);
       formData.append('email', values.email);
-      formData.append('phone', values.phone);
+      formData.append('phone', `+1 ${values.phone}`);
 
       if (values.imageFile) {
         formData.append('image', values.imageFile);
@@ -75,12 +77,22 @@ export default function Clients() {
     }
   });
 
+  const handlePhoneChange = (e) => {
+    let val = e.target.value.replace(/\D/g, '').substring(0, 10);
+    if (val.length > 6) {
+      val = `${val.slice(0, 3)}-${val.slice(3, 6)}-${val.slice(6)}`;
+    } else if (val.length > 3) {
+      val = `${val.slice(0, 3)}-${val.slice(3)}`;
+    }
+    formik.setFieldValue('phone', val);
+  };
+
   const handleEdit = (client) => {
     setSelectedClient(client);
     formik.setValues({
       name: client.name,
       email: client.email,
-      phone: client.phone,
+      phone: (client.phone ? client.phone.replace('+1 ', '') : ''),
       profileImage: client.profileImage || '',
       imageFile: null
     });
@@ -303,13 +315,19 @@ export default function Clients() {
 
             <div className="space-y-4">
               <label className="text-[10px] font-black text-muted uppercase tracking-[0.3em] ml-2 ">Phone Number</label>
-              <input
-                name="phone"
-                onChange={formik.handleChange}
-                value={formik.values.phone}
-                className="w-full bg-secondary border border-white/10 focus:border-primary/50 rounded-2xl px-6 py-5 text-[11px] font-black uppercase tracking-[0.2em] outline-none text-white shadow-2xl transition-all placeholder:text-white/5"
-                placeholder="+1 (555) 000-0000"
-              />
+              <div className={`flex bg-secondary border transition-all ${formik.touched.phone && formik.errors.phone ? 'border-rose-500/50' : 'border-white/10 focus-within:border-primary/50'} rounded-2xl overflow-hidden shadow-2xl`}>
+                <div className="flex items-center px-6 bg-white/5 border-r border-white/10">
+                  <span className="text-[11px] font-black text-muted tracking-widest">+1</span>
+                </div>
+                <input
+                  name="phone"
+                  onChange={handlePhoneChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.phone}
+                  className="w-full bg-transparent px-6 py-5 text-[11px] font-black uppercase tracking-[0.2em] outline-none text-white placeholder:text-white/5"
+                  placeholder="XXX-XXX-XXXX"
+                />
+              </div>
               {formik.touched.phone && formik.errors.phone && <p className="text-rose-500 text-[9px] font-black ml-4 uppercase  tracking-widest">{formik.errors.phone}</p>}
             </div>
           </div>
