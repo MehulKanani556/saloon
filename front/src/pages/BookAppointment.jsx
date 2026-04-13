@@ -128,6 +128,8 @@ export default function BookAppointment() {
         if (service.category?.name) {
           setSelectedCategory(service.category.name);
         }
+        // Redirect to Step 2 when a service is selected from outside
+        setStep(2);
       }
     }
   }, [location.state, services]);
@@ -169,13 +171,15 @@ export default function BookAppointment() {
     localStorage.setItem('booking_step', step.toString());
   }, [step]);
 
+
+
   const formik = useFormik({
     initialValues: {
       clientName: userInfo?.name || localStorage.getItem('guest_name') || '',
       clientEmail: userInfo?.email || localStorage.getItem('guest_email') || '',
       clientPhone: (userInfo?.phone ? userInfo.phone.replace('+1 ', '') : '') || localStorage.getItem('guest_phone') || '',
-      date: '',
-      time: '',
+      date: localStorage.getItem('booking_date') || '',
+      time: localStorage.getItem('booking_time') || '',
     },
     validationSchema: appointmentSchema,
     onSubmit: async (values) => {
@@ -209,6 +213,8 @@ export default function BookAppointment() {
         localStorage.removeItem('selected_services');
         localStorage.removeItem('staff_assignments');
         localStorage.removeItem('booking_step');
+        localStorage.removeItem('booking_date');
+        localStorage.removeItem('booking_time');
         setSelectedServices([]);
         setStaffAssignments({});
         setStep(1);
@@ -224,6 +230,11 @@ export default function BookAppointment() {
     },
   });
 
+  useEffect(() => {
+    localStorage.setItem('booking_date', formik.values.date);
+    localStorage.setItem('booking_time', formik.values.time);
+  }, [formik.values.date, formik.values.time]);
+
   // Watch for userInfo changes to refill if needed (e.g. login while on page)
   useEffect(() => {
     if (userInfo) {
@@ -234,6 +245,23 @@ export default function BookAppointment() {
       }
     }
   }, [userInfo]);
+
+  // Check if selected time becomes occupied
+  useEffect(() => {
+    if (formik.values.date && formik.values.time) {
+      const [timePart, ampm] = formik.values.time.split(' ');
+      let [hours, minutes] = timePart.split(':');
+      hours = parseInt(hours);
+      if (ampm === 'PM' && hours < 12) hours += 12;
+      if (ampm === 'AM' && hours === 12) hours = 0;
+      const timeIso = new Date(`${formik.values.date}T${hours.toString().padStart(2, '0')}:${minutes}:00`).toISOString();
+      
+      if (occupiedSlots.includes(timeIso)) {
+        formik.setFieldValue('time', '');
+        formik.setFieldTouched('time', true);
+      }
+    }
+  }, [occupiedSlots, formik.values.date]);
 
   useEffect(() => {
     if (formik.values.date && selectedServices.length > 0) {

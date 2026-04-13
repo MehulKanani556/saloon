@@ -115,7 +115,7 @@ const PublicFooter = () => {
           </p>
           <div className="hidden md:flex items-center gap-3 text-[9px] font-black text-muted tracking-[0.2em]">
             <span className="opacity-50">Crafted with</span>
-            <Heart size={12} className="text-red-500 fill-red-500 animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.4)]" />
+            <Heart size={12} className="text-red-500 fill-red-500 animate-pulse text-shadow-[0_0_10px_rgba(239,68,68,0.4)]" />
             <span className="opacity-50">with expert beauty specialists</span>
           </div>
         </div>
