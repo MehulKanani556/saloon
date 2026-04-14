@@ -348,7 +348,7 @@ export default function Staff() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-5 md:py-6 px-2 bg-primary text-secondary rounded-xl md:rounded-2xl text-[10px] md:text-[11px] uppercase tracking-[0.5em] hover:bg-primary/90 transition-all shadow-2xl active:scale-[0.98] disabled:opacity-50 font-luxury "
+            className="w-full py-5 md:py-6 px-2 bg-primary cursor-pointer font-black text-secondary rounded-xl md:rounded-2xl text-[10px] md:text-[11px] uppercase tracking-[0.5em] hover:bg-primary/90 transition-all shadow-2xl active:scale-[0.98] disabled:opacity-50 font-luxury "
           >
             {selectedStaffMember ? 'SAVE CHANGES' : 'ADD STAFF MEMBER'}
           </button>

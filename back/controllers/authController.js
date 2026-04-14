@@ -43,7 +43,8 @@ const registerUser = async (req, res) => {
                 email: user.email,
                 role: user.role,
                 salonInfo: user.salonInfo,
-                accessToken
+                accessToken,
+                hasPassword: user.password ? true : false
             });
         } else {
             res.status(400).json({ message: 'Invalid user data' });

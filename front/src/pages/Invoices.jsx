@@ -233,99 +233,103 @@ export default function Invoices() {
       <div className="bg-secondary/30 backdrop-blur-sm rounded-2xl overflow-hidden shadow-3xl border border-white/5 relative">
         <div className="absolute top-0 left-0 w-full h-[1px] bg-luxury-gradient opacity-10" />
         <div className="overflow-x-auto custom-scrollbar">
-          <table className="w-full text-left border-collapse">
+          <table className="w-full text-left border-separate border-spacing-y-2 px-4">
             <thead>
-              <tr className="bg-background/80">
-                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Invoice ID</th>
-                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Client</th>
-                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Service</th>
-                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Date & Time</th>
-                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Price</th>
-                <th className="px-5 py-5 text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Status</th>
-                <th className="px-5 py-5 text-center text-[10px] font-black uppercase tracking-[0.4em] text-primary whitespace-nowrap">Actions</th>
+              <tr className="text-primary">
+                <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] whitespace-nowrap">Invoice ID</th>
+                <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] whitespace-nowrap">Client</th>
+                <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] whitespace-nowrap">Service</th>
+                <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] whitespace-nowrap">Date & Time</th>
+                <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] whitespace-nowrap">Price</th>
+                <th className="px-6 py-4 text-[9px] font-black uppercase tracking-[0.2em] whitespace-nowrap">Status</th>
+                <th className="px-6 py-4 text-center text-[9px] font-black uppercase tracking-[0.2em] whitespace-nowrap">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="">
               <AnimatePresence mode="popLayout">
                 {filteredInvoices.map((invoice, idx) => (
                   <motion.tr
                     key={invoice._id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: idx * 0.02, ease: "easeOut" }}
-                    className="group border-b border-white/5 hover:bg-white/5 transition-all"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.03, ease: "easeOut" }}
+                    className="group bg-secondary/20 hover:bg-secondary/40 border border-white/5 transition-all duration-300 rounded-2xl overflow-hidden"
                   >
-                    <td className="px-4 md:px-10 py-4 md:py-8">
-                      <span className="text-[8px] md:text-[10px] font-black text-muted tracking-widest uppercase bg-background/50 px-2 md:px-3 py-1 md:py-1.5 rounded-xl md:rounded-2xl border border-white/5 shadow-inner whitespace-nowrap">
+                    <td className="first:rounded-l-2xl">
+                      <span className="text-[9px] font-black text-white/50 tracking-widest uppercase bg-white/5 px-3 py-1.5 rounded-xl border border-white/10 group-hover:border-primary/30 group-hover:text-primary transition-all shadow-inner whitespace-nowrap">
                         #{invoice.appointmentId || invoice._id.substring(18).toUpperCase()}
                       </span>
                     </td>
-                    <td className="px-4 md:px-5 py-4 md:py-5">
-                      <div className="flex items-center gap-3 md:gap-5">
-                        <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-background p-1 border border-white/10 group-hover:rotate-6 transition-all duration-500 shadow-2xl shrink-0">
+                    <td className="">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-xl bg-background p-1 border border-white/10 group-hover:scale-110 transition-all duration-500 shadow-2xl shrink-0 overflow-hidden">
                           <img
                             src={invoice.client?.profileImage ? (invoice.client.profileImage.startsWith('http') ? invoice.client.profileImage : `${IMAGE_URL}${invoice.client.profileImage}`) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${invoice.client?.name || 'Client'}`}
                             alt={invoice.client?.name || 'Client'}
-                            className="w-full h-full rounded-xl md:rounded-2xl object-cover grayscale transition-all duration-700 group-hover:grayscale-0"
+                            className="w-full h-full rounded-lg object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                           />
                         </div>
-                        <div className="min-w-0 pr-4">
-                          <p className="text-xs md:text-sm font-black text-white uppercase tracking-tighter font-luxury leading-none mb-1 md:mb-2 group-hover:text-primary transition-colors truncate md:whitespace-normal">{invoice.client?.name}</p>
-                          <p className="text-[8px] md:text-[9px] font-black text-muted uppercase tracking-[0.1em] md:tracking-[0.2em] whitespace-nowrap">{invoice.client?.phone}</p>
-                        </div >
-                      </div >
-                    </td >
-                    <td className="px-10 py-8">
-                      <p className="text-[11px] font-black text-muted uppercase tracking-[0.1em]  whitespace-nowrap group-hover:text-white transition-colors">{invoice.assignments?.map(a => a.service?.name).join(', ')}</p>
+                        <div className="min-w-0">
+                          <p className="text-sm font-black text-white uppercase tracking-tight font-luxury leading-tight group-hover:text-primary transition-colors truncate">{invoice.client?.name}</p>
+                          <p className="text-[8px] font-black text-muted uppercase tracking-[0.2em] mt-1">{invoice.client?.phone}</p>
+                        </div>
+                      </div>
                     </td>
-                    <td className="px-5 py-5">
-                      <div className="flex flex-col gap-1.5">
-                        <span className="text-xs font-black text-white  tracking-widest leading-none">{format(new Date(invoice.appointmentDate), 'MMM dd, yyyy')}</span>
-                        <span className="text-[9px] font-black text-muted uppercase tracking-[0.3em] opacity-0 group-hover:opacity-100 transition-all  leading-none">
+                    <td className=" max-w-[200px]">
+                      <p className="text-[10px] font-black text-muted uppercase tracking-widest line-clamp-2 group-hover:text-white transition-colors leading-relaxed">
+                        {invoice.assignments?.map(a => a.service?.name).join(', ')}
+                      </p>
+                    </td>
+                    <td className="">
+                      <div className="flex flex-col gap-1">
+                        <span className="text-xs font-black text-white tracking-widest">{format(new Date(invoice.appointmentDate), 'MMM dd, yyyy')}</span>
+                        <span className="text-[9px] font-black text-muted uppercase tracking-[0.3em] opacity-0 group-hover:opacity-100 transition-all">
                           {format(new Date(invoice.appointmentDate), 'hh:mm a')}
                         </span>
                       </div>
                     </td>
-                    <td className="px-4 md:px-10 py-4 md:py-8">
-                      <p className="text-lg md:text-xl font-black text-white tracking-tighter font-luxury leading-none">${invoice.totalPrice.toLocaleString()}</p>
+                    <td className="">
+                      <p className="text-lg font-black text-white tracking-tighter font-luxury leading-none">${invoice.totalPrice.toLocaleString()}</p>
                     </td>
-                    <td className="px-4 md:px-10 py-4 md:py-8">
-                      <div className="flex flex-col gap-3 ">
+                    <td className="">
+                      <div className="flex flex-col gap-2">
                         <div className={`
-                          inline-flex items-center gap-2 px-4 py-2 rounded-xl border text-[9px] font-black uppercase tracking-[0.3em] w-fit shadow-xl
-                          ${invoice.status === 'Completed' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500' :
-                            invoice.status === 'Cancelled' ? 'bg-rose-500/10 border-rose-500/20 text-rose-500' :
-                              'bg-primary/10 border-primary/20 text-primary'}
+                          inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border text-[8px] font-black uppercase tracking-[0.2em] w-fit shadow-lg transition-all
+                          ${invoice.status === 'Completed' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500 shadow-emerald-500/5' :
+                            invoice.status === 'Cancelled' ? 'bg-rose-500/10 border-rose-500/20 text-rose-500 shadow-rose-500/5' :
+                              'bg-amber-500/10 border-primary/20 text-primary shadow-primary/5'}
                         `}>
-                          <div className={`w-1.5 h-1.5 rounded-full ${invoice.status === 'Completed' ? 'bg-emerald-500' : invoice.status === 'Cancelled' ? 'bg-rose-500' : 'bg-primary'} animate-pulse`} />
+                          <div className={`w-1 h-1 rounded-full ${invoice.status === 'Completed' ? 'bg-emerald-500' : invoice.status === 'Cancelled' ? 'bg-rose-500' : 'bg-primary'} animate-pulse`} />
                           {invoice.status}
                         </div>
                         {invoice.status !== 'Cancelled' && (
                           <div className={`
-                            inline-flex items-center gap-2 px-4 py-2 rounded-xl border text-[9px] font-black uppercase tracking-[0.3em] w-fit shadow-xl
-                            ${invoice.paymentStatus === 'Paid' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500' : 'bg-amber-500/10 border-amber-500/20 text-amber-500'}
+                            inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-[8px] font-black uppercase tracking-[0.2em] w-fit shadow-lg transition-all
+                            ${invoice.paymentStatus === 'Paid' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500 shadow-emerald-500/5' : 'bg-amber-500/10 border-amber-500/20 text-amber-500 shadow-amber-500/5'}
                           `}>
-                            {invoice.paymentStatus === 'Paid' ? <CheckCircle size={12} /> : <Clock size={12} />}
+                            {invoice.paymentStatus === 'Paid' ? <CheckCircle size={10} /> : <Clock size={10} />}
                             {invoice.paymentStatus || 'Pending'}
                           </div>
                         )}
                       </div>
                     </td>
-                    <td className="px-4 md:px-5 py-4 md:py-5">
-                      <div className="flex items-center justify-center gap-2 md:gap-4 transition-all lg:translate-x-4 lg:opacity-0 lg:group-hover:translate-x-0 lg:group-hover:opacity-100">
+                    <td className="px-6 py-6 last:rounded-r-2xl">
+                      <div className="flex items-center justify-center gap-3 transition-all">
                         {invoice.status !== 'Cancelled' && (
                           <>
                             <button
                               onClick={() => setSelectedInvoice(invoice)}
-                              className="p-3 md:p-4 bg-background border border-white/5 rounded-xl md:rounded-2xl text-muted hover:text-primary shadow-2xl transition-all hover:scale-110 active:scale-95"
+                              title="View Details"
+                              className="p-3 bg-secondary border border-white/5 rounded-xl text-muted hover:text-primary hover:border-primary/30 shadow-2xl transition-all hover:scale-110 active:scale-95 group/btn"
                             >
-                              <Eye size={16} md:size={18} />
+                              <Eye size={16} className="group-hover/btn:scale-110 transition-transform" />
                             </button>
                             <button
                               onClick={() => handleQuickExport(invoice)}
-                              className="p-3 md:p-4 bg-background border border-white/5 rounded-xl md:rounded-2xl text-muted hover:text-primary shadow-2xl transition-all hover:scale-110 active:scale-95"
+                              title="Quick Export PDF"
+                              className="p-3 bg-secondary border border-white/5 rounded-xl text-muted hover:text-primary hover:border-primary/30 shadow-2xl transition-all hover:scale-110 active:scale-95 group/btn"
                             >
-                              <Download size={16} md:size={18} />
+                              <Download size={16} className="group-hover/btn:scale-110 transition-transform" />
                             </button>
                           </>
                         )}
@@ -334,8 +338,8 @@ export default function Invoices() {
                   </motion.tr>
                 ))}
               </AnimatePresence>
-            </tbody >
-          </table >
+            </tbody>
+          </table>
         </div >
 
         {!filteredInvoices.length && (

@@ -42,6 +42,7 @@ export default function Categories() {
           toast.success('New category added');
         }
         setShowForm(false);
+        formik.resetForm();
         setEditingCategory(null);
       } catch (err) {
         toast.error(err.message || 'System error');

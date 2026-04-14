@@ -123,7 +123,7 @@ const specializationController = require('../controllers/specializationControlle
 router.post('/specializations/requests', protect, authorize('Staff'), specializationController.createSpecializationRequest);
 router.get('/specializations/my-requests', protect, authorize('Staff'), specializationController.getMySpecializationRequests);
 router.get('/specializations/all-requests', protect, authorize('Admin'), specializationController.getAllSpecializationRequests);
-router.put('/specializations/requests/:id', protect, authorize('Admin'), specializationController.updateSpecializationRequestStatus);
+router.put('/specializations/requests/:id/status', protect, authorize('Admin'), specializationController.updateSpecializationRequestStatus);
 // PRODUCT ROUTES
 // ==========================================
 router.get('/products', productController.getProducts);

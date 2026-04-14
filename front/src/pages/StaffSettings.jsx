@@ -54,7 +54,6 @@ export default function StaffSettings() {
             if (!result.error) {
                 setIsEditing(false);
                 setPreview(null);
-                toast.success('Profile updated successfully');
             }
         },
     });

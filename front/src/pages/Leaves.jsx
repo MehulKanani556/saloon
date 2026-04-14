@@ -151,7 +151,9 @@ export default function Leaves() {
                                 <th className="px-4 md:px-10 py-4 md:py-6 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Hours</th>
                                 <th className="px-4 md:px-10 py-4 md:py-6 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Reason</th>
                                 <th className="px-4 md:px-10 py-4 md:py-6 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Status</th>
-                                <th className="px-4 md:px-10 py-4 md:py-6 text-center text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Action</th>
+                                {isAdmin && (
+                                    <th className="px-4 md:px-10 py-4 md:py-6 text-center text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-primary whitespace-nowrap">Action</th>
+                                )}
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-white/5">
@@ -181,11 +183,12 @@ export default function Leaves() {
                                             {leave.status}
                                         </div>
                                     </td>
-                                    <td className="px-4 md:px-10 py-4 md:py-8">
-                                        <div className="flex justify-center">
-                                            {isAdmin && leave.status === 'Pending' ? (
-                                                <button
-                                                    onClick={() => {
+                                    {isAdmin && (
+                                        <td className="px-4 md:px-10 py-4 md:py-8">
+                                            <div className="flex justify-center">
+                                                {isAdmin && leave.status === 'Pending' ? (
+                                                    <button
+                                                        onClick={() => {
                                                         setSelectedLeave(leave);
                                                         setIsActionModalOpen(true);
                                                     }}
@@ -198,6 +201,7 @@ export default function Leaves() {
                                             )}
                                         </div>
                                     </td>
+                                    )}
                                 </tr>
                             ))}
                         </tbody>
@@ -261,7 +265,7 @@ export default function Leaves() {
                             <input
                                 ref={startDateRef}
                                 name="startDate" type="date"
-                                min={format(new Date(), 'yyyy-MM-dd')}
+                                // min={format(new Date(), 'yyyy-MM-dd')}
                                 onChange={formik.handleChange} value={formik.values.startDate}
                                 className="w-full bg-background border border-white/5 focus:border-primary/30 rounded-xl pl-14 pr-4 py-4 text-[11px] font-black outline-none text-white transition-all uppercase tracking-wider appearance-none"
                             />

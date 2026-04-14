@@ -20,9 +20,9 @@ export const submitSpecializationRequest = createAsyncThunk('specializations/sub
     }
 });
 
-export const updateSpecializationRequestStatus = createAsyncThunk('specializations/updateStatus', async ({ id, status }, { rejectWithValue }) => {
+export const updateSpecializationRequestStatus = createAsyncThunk('specializations/updateStatus', async ({ id, status, adminReason }, { rejectWithValue }) => {
     try {
-        const { data } = await api.put(`/specializations/requests/${id}/status`, { status });
+        const { data } = await api.put(`/specializations/requests/${id}/status`, { status, adminReason });
         return data;
     } catch (error) {
         return rejectWithValue(error.response?.data?.message || 'Failed to update status');

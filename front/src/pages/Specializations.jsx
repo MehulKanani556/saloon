@@ -10,6 +10,7 @@ import { fetchServices } from '../redux/slices/serviceSlice';
 import { fetchCategories } from '../redux/slices/categorySlice';
 import { fetchSpecializationRequests, submitSpecializationRequest, updateSpecializationRequestStatus } from '../redux/slices/specializationSlice';
 import AdminHeader from '../components/ui/AdminHeader';
+import Modal from '../components/ui/Modal';
 
 export default function Specializations() {
     const dispatch = useDispatch();
@@ -17,7 +18,7 @@ export default function Specializations() {
     const { services: allServices } = useSelector((state) => state.services);
     const { categories } = useSelector((state) => state.categories);
     const { requests, loading } = useSelector((state) => state.specializations);
-    
+
     // UI State
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('all');
@@ -26,7 +27,7 @@ export default function Specializations() {
     const [selectedRequest, setSelectedRequest] = useState(null);
     const [adminReason, setAdminReason] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
-    
+
     const isAdmin = userInfo?.role === 'Admin';
     const hasPendingRequest = requests.some(r => r.status === 'Pending' && !isAdmin);
 
@@ -53,10 +54,10 @@ export default function Specializations() {
             if (values.services.length === 0 && values.specialization.length === 0 && values.bio === '') {
                 return toast.error('Please add at least one update');
             }
-            
+
             setIsSubmitting(true);
             try {
-                await dispatch(submitSpecializationRequest({ 
+                await dispatch(submitSpecializationRequest({
                     services: values.services,
                     bio: values.bio,
                     specialization: values.specialization
@@ -129,13 +130,13 @@ export default function Specializations() {
         return req.services?.filter(s => !currentServiceIds.includes(s._id || s)) || [];
     };
 
-    const filteredRequests = isAdmin 
-    ? requests.filter(r => {
-        const matchesSearch = r.staff?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                            r.status?.toLowerCase().includes(searchTerm.toLowerCase());
-        return matchesSearch;
-    })
-    : requests;
+    const filteredRequests = isAdmin
+        ? requests.filter(r => {
+            const matchesSearch = r.staff?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                r.status?.toLowerCase().includes(searchTerm.toLowerCase());
+            return matchesSearch;
+        })
+        : requests;
 
     if (loading) return (
         <div className="flex items-center justify-center h-[60vh]">
@@ -145,7 +146,7 @@ export default function Specializations() {
 
     return (
         <div className="space-y-6 md:space-y-12 pb-20">
-            <AdminHeader 
+            <AdminHeader
                 title="Profile & Skills"
                 subtitle="Manage your professional services and expertise"
                 icon={Scissors}
@@ -153,15 +154,20 @@ export default function Specializations() {
                     <div className="flex flex-col lg:flex-row gap-4 md:gap-6 w-full lg:w-auto">
                         {!isAdmin && (
                             <button
-                                onClick={() => setIsStaffAddModalOpen(true)}
-                                disabled={hasPendingRequest}
+                                onClick={() =>{
+                                    if(!hasPendingRequest){
+                                        setIsStaffAddModalOpen(true)
+                                    }else{
+                                        toast.error('Request is pending wait for approval');
+                                    }}
+                                }
                                 className={`flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl transition-all group font-luxury ${hasPendingRequest ? 'bg-secondary text-muted cursor-not-allowed border border-white/5' : 'bg-primary text-secondary shadow-primary/20 hover:scale-[1.05]'}`}
                             >
-                                <Plus size={16} md:size={18} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
-                                <span className="whitespace-nowrap">{hasPendingRequest ? 'REQUEST PENDING' : 'UPDATE SKILLS'}</span>
+                                    <Plus size={16} md:size={18} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
+                                <span className="whitespace-nowrap">UPDATE SKILLS</span>
                             </button>
                         )}
-                        <div className="relative group w-full lg:min-w-[300px]">
+                        {/* <div className="relative group w-full lg:min-w-[300px]">
                             <Search className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-primary transition-colors" size={16} md:size={20} />
                             <input
                                 type="text"
@@ -170,7 +176,7 @@ export default function Specializations() {
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 className="w-full bg-secondary/40 backdrop-blur-md border border-white/5 rounded-xl md:rounded-2xl px-12 md:px-16 py-3.5 md:py-5 text-[10px] md:text-[11px] font-black uppercase tracking-[0.1em] md:tracking-[0.2em] outline-none focus:border-primary/50 shadow-3xl transition-all text-white placeholder:text-white/10"
                             />
-                        </div>
+                        </div> */}
                     </div>
                 }
             />
@@ -178,12 +184,12 @@ export default function Specializations() {
             {!isAdmin && (
                 <div className="space-y-4 md:space-y-8">
                     <div className="flex items-center justify-between">
-                         <div>
+                        <div>
                             <h3 className="text-lg md:text-xl font-black text-white uppercase tracking-tighter font-luxury">Current Services</h3>
                             <p className="text-[8px] md:text-[10px] font-black text-primary uppercase tracking-[0.4em] mt-1">Confirmed on your professional profile</p>
                         </div>
                     </div>
-                    
+
                     {userInfo?.specialization?.length > 0 && (
                         <div className="flex flex-wrap gap-2 md:gap-3 pb-2 md:pb-4">
                             {userInfo.specialization.map(tag => (
@@ -291,166 +297,154 @@ export default function Specializations() {
             </div>
 
             {/* Modal: Request Updates */}
-            {isStaffAddModalOpen && (
-                <div className="fixed inset-0 z-[200] flex items-center justify-center p-2 sm:p-12">
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} onClick={() => setIsStaffAddModalOpen(false)} className="absolute inset-0 bg-background/80 backdrop-blur-xl" />
-                    <motion.div initial={{ opacity: 0, scale: 0.95, y: 30 }} animate={{ opacity: 1, scale: 1, y: 0 }} className="bg-secondary relative z-20 w-full max-w-4xl rounded-xl md:rounded-3xl border border-white/5 shadow-3xl overflow-hidden p-6 md:p-12 flex flex-col max-h-[92vh]">
-                        <div className="flex items-center justify-between mb-8 md:mb-12 shrink-0">
-                            <div className="min-w-0 pr-4">
-                                <h3 className="text-xl md:text-3xl font-black text-white uppercase tracking-tighter font-luxury truncate md:whitespace-normal">Update Profile</h3>
-                                <p className="text-[8px] md:text-[10px] font-black text-primary uppercase tracking-[0.3em] md:tracking-[0.4em] mt-2 md:mt-3">Request to add services or expertise to your profile</p>
-                            </div>
-                            <button onClick={() => setIsStaffAddModalOpen(false)} className="p-2 md:p-4 rounded-xl md:rounded-2xl bg-white/5 text-muted hover:text-white transition-all shrink-0"><X size={18} md:size={20} /></button>
+            <Modal
+                isOpen={isStaffAddModalOpen}
+                onClose={() => setIsStaffAddModalOpen(false)}
+                title="Update Profile"
+                subtitle="Request to add services or expertise to your profile"
+                maxWidth="max-w-4xl"
+                footer={
+                    <button
+                        onClick={formik.handleSubmit}
+                        disabled={isSubmitting}
+                        className="w-full flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury disabled:opacity-50"
+                    >
+                        <span className="whitespace-nowrap">{isSubmitting ? 'SENDING...' : 'SEND REQUEST'}</span>
+                        <Sparkles size={16} md:size={18} className="group-hover:rotate-12 transition-transform" />
+                    </button>
+                }
+            >
+                <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 md:gap-12 pb-8">
+                    <div className="lg:col-span-3 space-y-8">
+                        <div className="flex flex-wrap gap-3">
+                            <button onClick={() => setSelectedCategory('all')} className={`px-5 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest border transition-all ${selectedCategory === 'all' ? 'bg-primary text-secondary border-primary shadow-xl shadow-primary/20' : 'bg-background text-muted border-white/5 hover:border-white/20'}`}>ALL</button>
+                            {categories.map(cat => (
+                                <button key={cat._id} onClick={() => setSelectedCategory(cat._id)} className={`px-5 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest border transition-all ${selectedCategory === cat._id ? 'bg-primary text-secondary border-primary shadow-xl shadow-primary/20' : 'bg-background text-muted border-white/5 hover:border-white/20'}`}>{cat.name}</button>
+                            ))}
                         </div>
 
-                        <div className="flex-1 overflow-y-auto custom-scrollbar">
-                            <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 md:gap-12 pb-8">
-                                <div className="lg:col-span-3 space-y-8">
-                                    <div className="flex flex-wrap gap-3">
-                                        <button onClick={() => setSelectedCategory('all')} className={`px-5 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest border transition-all ${selectedCategory === 'all' ? 'bg-primary text-secondary border-primary shadow-xl shadow-primary/20' : 'bg-background text-muted border-white/5 hover:border-white/20'}`}>ALL</button>
-                                        {categories.map(cat => (
-                                            <button key={cat._id} onClick={() => setSelectedCategory(cat._id)} className={`px-5 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest border transition-all ${selectedCategory === cat._id ? 'bg-primary text-secondary border-primary shadow-xl shadow-primary/20' : 'bg-background text-muted border-white/5 hover:border-white/20'}`}>{cat.name}</button>
-                                        ))}
-                                    </div>
-
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                        {filteredServices.map(service => {
-                                            const isSelected = formik.values.services.includes(service._id);
-                                            const isAlreadyApproved = userInfo?.services?.some(s => (s._id || s) === service._id);
-                                            return (
-                                                <div 
-                                                    key={service._id} 
-                                                    onClick={() => !isAlreadyApproved && handleToggleService(service._id)}
-                                                    className={`p-6 rounded-2xl border transition-all duration-300 relative group overflow-hidden ${isAlreadyApproved ? 'bg-emerald-500/5 border-emerald-500/10 cursor-not-allowed opacity-40' : isSelected ? 'bg-primary/10 border-primary ring-1 ring-primary shadow-xl shadow-primary/10 cursor-pointer' : 'bg-background border-white/5 hover:border-primary/20 cursor-pointer'}`}
-                                                >
-                                                    <div className="flex items-center gap-4">
-                                                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${isSelected ? 'bg-primary text-secondary' : 'bg-secondary text-muted'}`}>
-                                                            <Scissors size={16} />
-                                                        </div>
-                                                        <div className="flex flex-col">
-                                                            <span className="text-[11px] font-black text-white uppercase tracking-widest">{service.name}</span>
-                                                            <span className="text-[8px] font-black text-primary uppercase tracking-[0.3em] md:tracking-[0.4em]">${service.price}</span>
-                                                        </div>
-                                                    </div>
-                                                    {isAlreadyApproved && <div className="absolute top-2 right-2 px-2 py-1 bg-emerald-500/20 text-emerald-500 rounded text-[7px] font-black uppercase tracking-widest">Active</div>}
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-
-                                <div className="lg:col-span-2 space-y-10">
-                                    <div className="space-y-4">
-                                        <div className="flex items-center gap-4 text-primary bg-primary/10 px-6 py-4 rounded-2xl border border-primary/20 border-dashed ">
-                                            <ListPlus size={20} />
-                                            <span className="text-[10px] font-black uppercase tracking-widest">{formik.values.services.length} Services Selected</span>
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-4">
-                                        <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em] leading-none mb-3 font-luxury">Professional Notes</p>
-                                        <textarea 
-                                            {...formik.getFieldProps('bio')}
-                                            placeholder="Briefly describe your update..."
-                                            className="w-full bg-background border border-white/5 focus:border-primary/30 rounded-2xl px-6 py-6 text-xs font-bold outline-none transition-all text-white shadow-inner placeholder:text-white/5 resize-none min-h-[180px]"
-                                        />
-                                        {formik.touched.bio && formik.errors.bio && <p className="text-rose-500 text-[8px] font-black uppercase tracking-widest">{formik.errors.bio}</p>}
-                                    </div>
-
-                                    <div className="space-y-4">
-                                        <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em] leading-none mb-3 font-luxury">Additional Expertise</p>
-                                        <div className="flex flex-wrap gap-3 mb-4">
-                                            {formik.values.specialization.map(tag => (
-                                                <span key={tag} className="flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 text-primary rounded-xl text-[8px] font-black uppercase tracking-widest">
-                                                    {tag} <X size={10} className="cursor-pointer hover:text-white" onClick={() => removeSpec(tag)} />
-                                                </span>
-                                            ))}
-                                        </div>
-                                        <input 
-                                            type="text"
-                                            {...formik.getFieldProps('specInput')}
-                                            onKeyDown={handleAddSpec}
-                                            placeholder="Add skill... (Press Enter)"
-                                            className="w-full bg-background border border-white/5 focus:border-primary/30 rounded-xl px-4 md:px-6 py-3.5 md:py-4 text-[10px] font-black uppercase tracking-widest outline-none transition-all text-white shadow-inner placeholder:text-white/5"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="pt-6 md:pt-10 border-t border-white/5 mt-auto shrink-0">
-                            <button 
-                                onClick={formik.handleSubmit}
-                                disabled={isSubmitting}
-                                className="w-full flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-primary text-secondary rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-xl shadow-primary/20 hover:scale-[1.05] transition-all group font-luxury disabled:opacity-50"
-                            > 
-                                <span className="whitespace-nowrap">{isSubmitting ? 'SENDING...' : 'SEND REQUEST'}</span>
-                                <Sparkles size={16} md:size={18} className="group-hover:rotate-12 transition-transform" />
-                            </button>
-                        </div>
-                    </motion.div>
-                </div>
-            )}
-
-            {/* Admin Modal */}
-            {isAdmin && isActionModalOpen && selectedRequest && (
-                <div className="fixed inset-0 z-[200] flex items-center justify-center p-2 sm:p-12">
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} onClick={() => setIsActionModalOpen(false)} className="absolute inset-0 bg-background/80 backdrop-blur-xl" />
-                    <motion.div initial={{ opacity: 0, scale: 0.95, y: 30 }} animate={{ opacity: 1, scale: 1, y: 0 }} className="bg-secondary relative z-20 w-full max-w-2xl rounded-xl md:rounded-3xl border border-white/5 shadow-3xl overflow-hidden p-6 md:p-12 flex flex-col max-h-[92vh]">
-                        <div className="flex items-center justify-between mb-8 md:mb-12 shrink-0">
-                            <div className="min-w-0 pr-4">
-                                <h3 className="text-xl md:text-3xl font-black text-white uppercase tracking-tighter font-luxury truncate md:whitespace-normal">Review Request</h3>
-                                <p className="text-[8px] md:text-[10px] font-black text-primary uppercase tracking-[0.3em] md:tracking-[0.4em] mt-2 md:mt-3">Processing update for {selectedRequest.staff?.name}</p>
-                            </div>
-                            <button onClick={() => setIsActionModalOpen(false)} className="p-2 md:p-4 rounded-xl md:rounded-2xl bg-white/5 text-muted hover:text-white transition-all shrink-0"><X size={18} md:size={20} /></button>
-                        </div>
-                        <div className="flex-1 space-y-8 md:space-y-12 overflow-y-auto custom-scrollbar">
-                            <div className="p-6 bg-white/5 rounded-2xl border border-white/5">
-                                <p className="text-[9px] font-black text-primary uppercase tracking-[0.4em] mb-4 ">Staff Note</p>
-                                <div className="flex items-start gap-4">
-                                     <div className="flex-1 space-y-2">
-                                        <p className="text-sm font-black text-white italic font-luxury leading-relaxed uppercase tracking-widest">"{selectedRequest.bio || 'General update'}"</p>
-                                     </div>
-                                </div>
-                            </div>
-
-                            <div className="space-y-6">
-                                <div className="flex items-center justify-between">
-                                    <p className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.4em] mb-2 ">New Services</p>
-                                    <span className="px-3 py-1 bg-emerald-500/10 text-emerald-500 rounded-lg text-[9px] font-black">+{getNewServices(selectedRequest).length} Services</span>
-                                </div>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    {getNewServices(selectedRequest).map(s => (
-                                        <div key={s._id} className="flex items-center gap-4 p-5 bg-emerald-500/10 rounded-xl border border-emerald-500/20 shadow-lg shadow-emerald-500/5 animate-in slide-in-from-bottom-2 duration-500">
-                                            <div className="w-10 h-10 rounded-lg bg-emerald-500 text-secondary flex items-center justify-center">
-                                                <Scissors size={18} />
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {filteredServices.map(service => {
+                                const isSelected = formik.values.services.includes(service._id);
+                                const isAlreadyApproved = userInfo?.services?.some(s => (s._id || s) === service._id);
+                                return (
+                                    <div
+                                        key={service._id}
+                                        onClick={() => !isAlreadyApproved && handleToggleService(service._id)}
+                                        className={`p-6 rounded-2xl border transition-all duration-300 relative group overflow-hidden ${isAlreadyApproved ? 'bg-emerald-500/5 border-emerald-500/10 cursor-not-allowed opacity-40' : isSelected ? 'bg-primary/10 border-primary ring-1 ring-primary shadow-xl shadow-primary/10 cursor-pointer' : 'bg-background border-white/5 hover:border-primary/20 cursor-pointer'}`}
+                                    >
+                                        <div className="flex items-center gap-4">
+                                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${isSelected ? 'bg-primary text-secondary' : 'bg-secondary text-muted'}`}>
+                                                <Scissors size={16} />
                                             </div>
                                             <div className="flex flex-col">
-                                                <span className="text-[11px] font-black text-white uppercase tracking-widest">{s.name}</span>
-                                                <span className="text-[8px] font-black text-emerald-500/70 uppercase tracking-widest">NEW SKILL</span>
+                                                <span className="text-[11px] font-black text-white uppercase tracking-widest">{service.name}</span>
+                                                <span className="text-[8px] font-black text-primary uppercase tracking-[0.3em] md:tracking-[0.4em]">${service.price}</span>
                                             </div>
                                         </div>
-                                    ))}
-                                    {getNewServices(selectedRequest).length === 0 && (
-                                        <div className="col-span-full py-8 text-center bg-white/5 rounded-xl border border-dashed border-white/10">
-                                            <p className="text-[9px] font-black text-muted uppercase tracking-[0.3em]">No new services</p>
-                                        </div>
-                                    )}
+                                        {isAlreadyApproved && <div className="absolute top-2 right-2 px-2 py-1 bg-emerald-500/20 text-emerald-500 rounded text-[7px] font-black uppercase tracking-widest">Active</div>}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    <div className="lg:col-span-2 space-y-10">
+                        <div className="space-y-4">
+                            <div className="flex items-center gap-4 text-primary bg-primary/10 px-6 py-4 rounded-2xl border border-primary/20 border-dashed ">
+                                <ListPlus size={20} />
+                                <span className="text-[10px] font-black uppercase tracking-widest">{formik.values.services.length} Services Selected</span>
+                            </div>
+                        </div>
+
+                        <div className="space-y-4">
+                            <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em] leading-none mb-3 font-luxury">Professional Notes</p>
+                            <textarea
+                                {...formik.getFieldProps('bio')}
+                                placeholder="Briefly describe your update..."
+                                className="w-full bg-background border border-white/5 focus:border-primary/30 rounded-2xl px-6 py-6 text-xs font-bold outline-none transition-all text-white shadow-inner placeholder:text-white/5 resize-none min-h-[180px]"
+                            />
+                            {formik.touched.bio && formik.errors.bio && <p className="text-rose-500 text-[8px] font-black uppercase tracking-widest">{formik.errors.bio}</p>}
+                        </div>
+
+                        <div className="space-y-4">
+                            <p className="text-[10px] font-black text-muted uppercase tracking-[0.4em] leading-none mb-3 font-luxury">Additional Expertise</p>
+                            <div className="flex flex-wrap gap-3 mb-4">
+                                {formik.values.specialization.map(tag => (
+                                    <span key={tag} className="flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 text-primary rounded-xl text-[8px] font-black uppercase tracking-widest">
+                                        {tag} <X size={10} className="cursor-pointer hover:text-white" onClick={() => removeSpec(tag)} />
+                                    </span>
+                                ))}
+                            </div>
+                            <input
+                                type="text"
+                                {...formik.getFieldProps('specInput')}
+                                onKeyDown={handleAddSpec}
+                                placeholder="Add skill... (Press Enter)"
+                                className="w-full bg-background border border-white/5 focus:border-primary/30 rounded-xl px-4 md:px-6 py-3.5 md:py-4 text-[10px] font-black uppercase tracking-widest outline-none transition-all text-white shadow-inner placeholder:text-white/5"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </Modal>
+
+            {/* Admin Modal */}
+            <Modal
+                isOpen={isAdmin && isActionModalOpen && !!selectedRequest}
+                onClose={() => setIsActionModalOpen(false)}
+                title="Review Request"
+                subtitle={selectedRequest ? `Processing update for ${selectedRequest.staff?.name}` : ''}
+                maxWidth="max-w-2xl"
+                footer={
+                    <div className="grid grid-cols-2 gap-4 md:gap-8 w-full">
+                        <button onClick={() => handleAdminAction(selectedRequest._id, 'Approved')} className="py-4 md:py-5 bg-emerald-500 text-white rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-[11px] tracking-[0.3em] md:tracking-[0.4em] shadow-xl shadow-emerald-500/20 active:scale-95 font-luxury"> Approve </button>
+                        <button onClick={() => handleAdminAction(selectedRequest._id, 'Rejected')} className="py-4 md:py-5 bg-rose-500 text-white rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-[11px] tracking-[0.3em] md:tracking-[0.4em] shadow-xl shadow-rose-500/20 active:scale-95 font-luxury"> Reject </button>
+                    </div>
+                }
+            >
+                {selectedRequest && (
+                    <div className="flex-1 space-y-8 md:space-y-12">
+                        <div className="p-6 bg-white/5 rounded-2xl border border-white/5">
+                            <p className="text-[9px] font-black text-primary uppercase tracking-[0.4em] mb-4 ">Staff Note</p>
+                            <div className="flex items-start gap-4">
+                                <div className="flex-1 space-y-2">
+                                    <p className="text-sm font-black text-white italic font-luxury leading-relaxed uppercase tracking-widest">"{selectedRequest.bio || 'General update'}"</p>
                                 </div>
                             </div>
+                        </div>
 
-                            <div className="space-y-4">
-                                <p className="text-[9px] font-black text-muted uppercase tracking-[0.4em] pl-2">Feedback (Optional)</p>
-                                <textarea value={adminReason} onChange={(e) => setAdminReason(e.target.value)} placeholder="Add feedback for the staff..." className="w-full bg-background/50 border border-white/5 rounded-xl px-6 py-4 text-[10px] font-black uppercase tracking-widest outline-none text-white transition-all placeholder:text-white/5 resize-none min-h-[100px]" />
+                        <div className="space-y-6">
+                            <div className="flex items-center justify-between">
+                                <p className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.4em] mb-2 ">New Services</p>
+                                <span className="px-3 py-1 bg-emerald-500/10 text-emerald-500 rounded-lg text-[9px] font-black">+{getNewServices(selectedRequest).length} Services</span>
+                            </div>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                {getNewServices(selectedRequest).map(s => (
+                                    <div key={s._id} className="flex items-center gap-4 p-5 bg-emerald-500/10 rounded-xl border border-emerald-500/20 shadow-lg shadow-emerald-500/5 animate-in slide-in-from-bottom-2 duration-500">
+                                        <div className="w-10 h-10 rounded-lg bg-emerald-500 text-secondary flex items-center justify-center">
+                                            <Scissors size={18} />
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <span className="text-[11px] font-black text-white uppercase tracking-widest">{s.name}</span>
+                                            <span className="text-[8px] font-black text-emerald-500/70 uppercase tracking-widest">NEW SKILL</span>
+                                        </div>
+                                    </div>
+                                ))}
+                                {getNewServices(selectedRequest).length === 0 && (
+                                    <div className="col-span-full py-8 text-center bg-white/5 rounded-xl border border-dashed border-white/10">
+                                        <p className="text-[9px] font-black text-muted uppercase tracking-[0.3em]">No new services</p>
+                                    </div>
+                                )}
                             </div>
                         </div>
-                        <div className="grid grid-cols-2 gap-4 md:gap-8 pt-6 md:pt-8 border-t border-white/5 mt-auto shrink-0">
-                            <button onClick={() => handleAdminAction(selectedRequest._id, 'Approved')} className="py-4 md:py-5 bg-emerald-500 text-white rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-[11px] tracking-[0.3em] md:tracking-[0.4em] shadow-xl shadow-emerald-500/20 active:scale-95 font-luxury"> Approve </button>
-                            <button onClick={() => handleAdminAction(selectedRequest._id, 'Rejected')} className="py-4 md:py-5 bg-rose-500 text-white rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-[11px] tracking-[0.3em] md:tracking-[0.4em] shadow-xl shadow-rose-500/20 active:scale-95 font-luxury"> Reject </button>
+
+                        <div className="space-y-4">
+                            <p className="text-[9px] font-black text-muted uppercase tracking-[0.4em] pl-2">Feedback (Optional)</p>
+                            <textarea value={adminReason} onChange={(e) => setAdminReason(e.target.value)} placeholder="Add feedback for the staff..." className="w-full bg-background/50 border border-white/5 rounded-xl px-6 py-4 text-[10px] font-black uppercase tracking-widest outline-none text-white transition-all placeholder:text-white/5 resize-none min-h-[100px]" />
                         </div>
-                    </motion.div>
-                </div>
-            )}
+                    </div>
+                )}
+            </Modal>
         </div>
     );
 }
