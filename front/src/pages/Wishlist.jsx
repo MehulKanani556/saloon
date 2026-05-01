@@ -2,8 +2,8 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { Trash2, ShoppingCart, Heart, ArrowRight, Star, ShoppingBag, ArrowLeft, Clock, Sparkles } from 'lucide-react';
-import { removeFromWishlist } from '../redux/slices/wishlistSlice';
-import { addToCart } from '../redux/slices/cartSlice';
+import { removeFromWishlist, syncWishlist } from '../redux/slices/wishlistSlice';
+import { addToCart, syncCart } from '../redux/slices/cartSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { IMAGE_URL } from '../utils/BASE_URL';
 import toast from 'react-hot-toast';
@@ -13,11 +13,39 @@ export default function Wishlist() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { wishlistItems } = useSelector((state) => state.wishlist);
+    const { cartItems } = useSelector((state) => state.cart);
+    const { userInfo } = useSelector((state) => state.auth);
 
     const handleAddToCart = (item) => {
         dispatch(addToCart(item));
         dispatch(removeFromWishlist(item._id));
+        
+        if (userInfo) {
+            // Update Cart
+            const existItem = cartItems.find((x) => x._id === item._id);
+            let updatedCart;
+            if (existItem) {
+                updatedCart = cartItems.map((x) => x._id === existItem._id ? { ...item, qty: existItem.qty + 1 } : x);
+            } else {
+                updatedCart = [...cartItems, { ...item, qty: 1 }];
+            }
+            dispatch(syncCart(updatedCart));
+
+            // Update Wishlist
+            const updatedWishlist = wishlistItems.filter(x => x._id !== item._id);
+            dispatch(syncWishlist(updatedWishlist));
+        }
+
         toast.success(`Success! ${item.name} moved to your Shopping Cart`);
+    };
+
+    const handleRemoveFromWishlist = (id) => {
+        dispatch(removeFromWishlist(id));
+        if (userInfo) {
+            const updatedWishlist = wishlistItems.filter(item => item._id !== id);
+            dispatch(syncWishlist(updatedWishlist));
+        }
+        toast.success('Removed from wishlist');
     };
 
     return (
@@ -93,10 +121,7 @@ export default function Wishlist() {
                                         {/* Remove Button */}
                                         <div className="absolute top-2 left-0 z-10">
                                             <button
-                                                onClick={() => {
-                                                    dispatch(removeFromWishlist(item._id));
-                                                    toast.success('Removed from wishlist');
-                                                }}
+                                                onClick={() => handleRemoveFromWishlist(item._id)}
                                                 className="p-3 bg-background/80 hover:bg-rose-500/20 hover:text-rose-500 border border-white/10 rounded-xl text-muted transition-all backdrop-blur-md shadow-xl"
                                                 title="Remove from Wishlist"
                                             >

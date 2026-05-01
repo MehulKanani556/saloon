@@ -19,8 +19,8 @@ import {
 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProductById, submitProductReview, fetchProducts } from '../redux/slices/productSlice';
-import { addToCart } from '../redux/slices/cartSlice';
-import { addToWishlist, removeFromWishlist } from '../redux/slices/wishlistSlice';
+import { addToCart, syncCart } from '../redux/slices/cartSlice';
+import { addToWishlist, removeFromWishlist, syncWishlist } from '../redux/slices/wishlistSlice';
 import toast from 'react-hot-toast';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -76,17 +76,37 @@ export default function ProductDetail() {
         }
     }, [product, allProducts, id]);
 
+    const { cartItems } = useSelector(state => state.cart);
+
     const handleAddToCart = () => {
+        if (!userInfo) return toast.error('Please login to add to cart');
         dispatch(addToCart({ ...product, qty: quantity }));
+
+        // Calculate updated cart for immediate sync
+        const existItem = cartItems.find((x) => x._id === product._id);
+        let updatedCart;
+        if (existItem) {
+            updatedCart = cartItems.map((x) =>
+                x._id === existItem._id ? { ...product, qty: existItem.qty + quantity } : x
+            );
+        } else {
+            updatedCart = [...cartItems, { ...product, qty: quantity }];
+        }
+        dispatch(syncCart(updatedCart));
         toast.success(`${product.name} added to cart`);
     };
 
     const handleWishlist = () => {
+        if (!userInfo) return toast.error('Please login to use wishlist');
         if (isWishlisted) {
             dispatch(removeFromWishlist(id));
+            const updatedWishlist = wishlistItems.filter(x => x._id !== id);
+            dispatch(syncWishlist(updatedWishlist));
             toast.success('Removed from wishlist');
         } else {
             dispatch(addToWishlist(product));
+            const updatedWishlist = [...wishlistItems, product];
+            dispatch(syncWishlist(updatedWishlist));
             toast.success('Added to wishlist');
         }
     };

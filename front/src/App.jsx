@@ -41,8 +41,8 @@ import DeleteAccount from './pages/DeleteAccount'
 import ProductDetail from './pages/ProductDetail'
 import MyOrders from './pages/MyOrders'
 
-import { syncCart } from './redux/slices/cartSlice'
-import { syncWishlist } from './redux/slices/wishlistSlice'
+import { syncCart, fetchCart } from './redux/slices/cartSlice'
+import { syncWishlist, fetchWishlist } from './redux/slices/wishlistSlice'
 
 const WrappedLayout = ({ children, isAuthPage, isLandingPage }) => {
   if (isAuthPage || isLandingPage) return <>{children}</>;
@@ -67,8 +67,17 @@ const AppContent = () => {
       const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
       const wishlistItems = JSON.parse(localStorage.getItem('wishlistItems') || '[]');
 
-      if (cartItems?.length) dispatch(syncCart(cartItems));
-      if (wishlistItems?.length) dispatch(syncWishlist(wishlistItems));
+      if (cartItems?.length) {
+        dispatch(syncCart(cartItems)).then(() => dispatch(fetchCart()));
+      } else {
+        dispatch(fetchCart());
+      }
+
+      if (wishlistItems?.length) {
+        dispatch(syncWishlist(wishlistItems)).then(() => dispatch(fetchWishlist()));
+      } else {
+        dispatch(fetchWishlist());
+      }
     }
   }, [dispatch]);
 

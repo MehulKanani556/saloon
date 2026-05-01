@@ -2,8 +2,12 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../utils/api';
 
 export const syncCart = createAsyncThunk('cart/sync', async (cartItems) => {
-    const { data } = await api.post('/cart/sync', { cart: cartItems });
-    return data.cart;
+    await api.post('/cart/sync', { cartItems });
+});
+
+export const fetchCart = createAsyncThunk('cart/fetch', async () => {
+    const { data } = await api.get('/cart');
+    return data;
 });
 
 const initialState = {
@@ -44,9 +48,13 @@ const cartSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
-        builder.addCase(syncCart.fulfilled, (state, action) => {
+        builder.addCase(fetchCart.fulfilled, (state, action) => {
             state.cartItems = action.payload;
             localStorage.setItem('cartItems', JSON.stringify(action.payload));
+        });
+        builder.addCase('auth/logout', (state) => {
+            state.cartItems = [];
+            localStorage.removeItem('cartItems');
         });
     }
 });

@@ -2,7 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, ShoppingCart, ArrowLeft, Receipt } from 'lucide-react';
-import { removeFromCart, updateCartQty, clearCart } from '../redux/slices/cartSlice';
+import { removeFromCart, updateCartQty, clearCart, syncCart } from '../redux/slices/cartSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { IMAGE_URL } from '../utils/BASE_URL';
 import UserPanelLayout from '../components/public/UserPanelLayout';
@@ -11,6 +11,30 @@ export default function Cart() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { cartItems } = useSelector((state) => state.cart);
+    const { userInfo } = useSelector((state) => state.auth);
+
+    const handleRemoveFromCart = (id) => {
+        dispatch(removeFromCart(id));
+        if (userInfo) {
+            const updatedCart = cartItems.filter(item => item._id !== id);
+            dispatch(syncCart(updatedCart));
+        }
+    };
+
+    const handleUpdateQty = (id, qty) => {
+        dispatch(updateCartQty({ id, qty }));
+        if (userInfo) {
+            const updatedCart = cartItems.map(item => item._id === id ? { ...item, qty } : item);
+            dispatch(syncCart(updatedCart));
+        }
+    };
+
+    const handleClearCart = () => {
+        dispatch(clearCart());
+        if (userInfo) {
+            dispatch(syncCart([]));
+        }
+    };
 
     const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0);
     const tax = subtotal * 0.1;
@@ -76,7 +100,7 @@ export default function Cart() {
                                                     <h3 className="text-[13px] md:text-sm font-bold text-white uppercase tracking-wide truncate pr-4">{item.name}</h3>
                                                 </div>
                                                 <button
-                                                    onClick={() => dispatch(removeFromCart(item._id))}
+                                                    onClick={() => handleRemoveFromCart(item._id)}
                                                     className="p-2 text-muted/20 hover:text-red-500 transition-colors shrink-0"
                                                 >
                                                     <Trash2 size={16} />
@@ -86,14 +110,14 @@ export default function Cart() {
                                             <div className="flex items-end justify-between mt-4">
                                                 <div className="flex items-center gap-4 bg-white/5 rounded-xl px-3 py-2 border border-white/5">
                                                     <button
-                                                        onClick={() => dispatch(updateCartQty({ id: item._id, qty: Math.max(1, item.qty - 1) }))}
+                                                        onClick={() => handleUpdateQty(item._id, Math.max(1, item.qty - 1))}
                                                         className="text-muted/60 hover:text-white transition-colors"
                                                     >
                                                         <Minus size={12} />
                                                     </button>
                                                     <span className="text-[11px] font-bold w-6 text-center text-white">{item.qty}</span>
                                                     <button
-                                                        onClick={() => dispatch(updateCartQty({ id: item._id, qty: item.qty + 1 }))}
+                                                        onClick={() => handleUpdateQty(item._id, item.qty + 1)}
                                                         className="text-muted/60 hover:text-white transition-colors"
                                                     >
                                                         <Plus size={12} />
@@ -111,7 +135,7 @@ export default function Cart() {
 
                             <div className="flex items-center justify-between px-2 pt-2">
                                 <button
-                                    onClick={() => dispatch(clearCart())}
+                                    onClick={handleClearCart}
                                     className="text-[10px] font-bold text-muted/30 uppercase tracking-[0.2em] hover:text-red-500 transition-colors flex items-center gap-2 group"
                                 >
                                     <Trash2 size={14} className="group-hover:scale-110 transition-transform" />

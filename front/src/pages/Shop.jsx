@@ -8,8 +8,8 @@ import {
 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts } from '../redux/slices/productSlice';
-import { addToCart } from '../redux/slices/cartSlice';
-import { addToWishlist, removeFromWishlist } from '../redux/slices/wishlistSlice';
+import { addToCart, syncCart } from '../redux/slices/cartSlice';
+import { addToWishlist, removeFromWishlist, syncWishlist } from '../redux/slices/wishlistSlice';
 import { IMAGE_URL } from '../utils/BASE_URL';
 import PublicNavbar from '../components/public/PublicNavbar';
 import PublicFooter from '../components/public/PublicFooter';
@@ -71,23 +71,45 @@ const PageHero = () => {
 const LuxuryItem = ({ name, price, category, image, _id, delay, item }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.auth);
+  const { cartItems } = useSelector((state) => state.cart);
   const { wishlistItems } = useSelector((state) => state.wishlist);
   const isWishlisted = wishlistItems.some((x) => x._id === _id);
 
   const handleWishlist = (e) => {
     e.stopPropagation();
+    if (!userInfo) return toast.error('Please login to use favorites');
+
     if (isWishlisted) {
       dispatch(removeFromWishlist(_id));
+      const updatedWishlist = wishlistItems.filter(x => x._id !== _id);
+      dispatch(syncWishlist(updatedWishlist));
       toast.success('Removed from favorites');
     } else {
       dispatch(addToWishlist(item));
+      const updatedWishlist = [...wishlistItems, item];
+      dispatch(syncWishlist(updatedWishlist));
       toast.success('Added to favorites');
     }
   };
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
+    if (!userInfo) return toast.error('Please login to add to cart');
+
     dispatch(addToCart(item));
+    
+    // Calculate updated cart for immediate sync
+    const existItem = cartItems.find((x) => x._id === item._id);
+    let updatedCart;
+    if (existItem) {
+        updatedCart = cartItems.map((x) =>
+            x._id === existItem._id ? { ...item, qty: existItem.qty + 1 } : x
+        );
+    } else {
+        updatedCart = [...cartItems, { ...item, qty: 1 }];
+    }
+    dispatch(syncCart(updatedCart));
     toast.success(`${name} added to cart`);
   };
 

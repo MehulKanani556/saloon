@@ -7,7 +7,6 @@ export const loginUser = createAsyncThunk('auth/login', async (credentials, { re
         const { data } = await api.post('/auth/login', credentials);
         localStorage.setItem('token', data.accessToken);
         localStorage.setItem('userInfo', JSON.stringify(data));
-        toast.success(`Welcome back, ${data.name}!`);
         return data;
     } catch (error) {
         toast.error(error.response?.data?.message || 'Login failed');
@@ -31,7 +30,6 @@ export const signupUser = createAsyncThunk('auth/signup', async (credentials, { 
         const { data } = await api.post('/auth/register', credentials);
         localStorage.setItem('token', data.accessToken);
         localStorage.setItem('userInfo', JSON.stringify(data));
-        toast.success(`Success! Welcome ${data.name}!`);
         return data;
     } catch (error) {
         toast.error(error.response?.data?.message || 'Registration failed');

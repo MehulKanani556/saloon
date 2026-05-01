@@ -2,8 +2,12 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../utils/api';
 
 export const syncWishlist = createAsyncThunk('wishlist/sync', async (items) => {
-    const { data } = await api.post('/wishlist/sync', { wishlist: items });
-    return data.wishlist;
+    await api.post('/wishlist/sync', { wishlistItems: items });
+});
+
+export const fetchWishlist = createAsyncThunk('wishlist/fetch', async () => {
+    const { data } = await api.get('/wishlist');
+    return data;
 });
 
 const initialState = {
@@ -31,9 +35,13 @@ const wishlistSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
-        builder.addCase(syncWishlist.fulfilled, (state, action) => {
+        builder.addCase(fetchWishlist.fulfilled, (state, action) => {
             state.wishlistItems = action.payload;
             localStorage.setItem('wishlistItems', JSON.stringify(action.payload));
+        });
+        builder.addCase('auth/logout', (state) => {
+            state.wishlistItems = [];
+            localStorage.removeItem('wishlistItems');
         });
     }
 });
